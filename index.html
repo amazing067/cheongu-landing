@@ -13,7 +13,6 @@
   <meta property="og:image" content="/assets/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="format-detection" content="telephone=no" />
-
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold border border-slate-200 hover:bg-slate-50 transition; }
@@ -24,18 +23,8 @@
     .kbd { @apply text-[10px] px-1.5 py-0.5 border rounded bg-slate-50; }
     .sticky-head { @apply sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-slate-200; }
     .muted { @apply text-slate-500; }
+    .skeleton { @apply animate-pulse bg-slate-100 rounded-xl h-10; }
   </style>
-
-  <!-- JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"CollectionPage",
-    "name":"청구닷컴 | 보험금 청구 링크 허브",
-    "description":"보험금 청구에 필요한 양식과 고객센터 링크를 빠르게 찾고 다운로드.",
-    "isAccessibleForFree": true
-  }
-  </script>
 </head>
 <body class="bg-slate-50 text-slate-900">
   <!-- Header -->
@@ -72,71 +61,31 @@
     <div class="mt-4 grid sm:grid-cols-3 gap-3">
       <a class="card hover:bg-slate-50" href="#top-pdf"><div class="muted text-sm">빠른 링크</div><div class="font-semibold mt-1">자주 찾는 PDF</div></a>
       <a class="card hover:bg-slate-50" href="#mobile-claim"><div class="muted text-sm">모바일</div><div class="font-semibold mt-1">모바일/온라인 청구</div></a>
-      <a class="card hover:bg-slate-50" href="#how"><div class="muted text-sm">가이드</div><div class="font-semibold mt-1">이용방법</div></a>
+      <a class="card hover:bg-slate-50" href="#how"><div class="muted text-sm">이용방법</div><div class="font-semibold mt-1">이용방법</div></a>
     </div>
   </section>
 
   <!-- Links -->
-  <main class="max-w-5xl mx-auto px-5 pb-20" id="links">
-    <h2 class="text-xl font-bold">회사별 링크 & 다운로드</h2>
-    <p class="mt-1 text-sm muted">샘플 링크입니다. 실제 배포 시 최신본으로 교체합니다.</p>
+  <main class="max-w-5xl mx-auto px-5 pb-20">
+    <section id="links">
+      <h2 class="text-xl font-bold">회사별 링크 & 다운로드</h2>
+      <p class="mt-1 text-sm muted">`data/links.json`을 수정하면 자동으로 반영됩니다.</p>
 
-    <div id="carrier-list" class="mt-4 grid gap-4">
-      <!-- Samsung -->
-      <article class="card flex flex-col gap-3" data-name="삼성화재" data-tags="손해보험 pdf 고객센터 모바일청구">
-        <div class="flex items-center justify-between">
-          <div class="font-semibold">삼성화재</div>
-          <div class="flex items-center gap-2">
-            <button class="btn btn-sm copy" type="button" data-target="https://example.com/pdf/samsung-claim.pdf" title="링크 복사">링크복사</button>
-            <span class="pill">손해</span><span class="pill">PDF</span>
-          </div>
-        </div>
-        <div class="grid sm:grid-cols-3 gap-2">
-          <a class="btn btn-primary" href="https://example.com/pdf/samsung-claim.pdf" download>청구서 PDF 다운로드</a>
-          <a class="btn" href="https://example.com/support/samsung" target="_blank" rel="noopener">고객센터</a>
-          <a class="btn" href="https://example.com/mobile/samsung" target="_blank" rel="noopener">모바일 청구</a>
-        </div>
-      </article>
-
-      <!-- Hyundai -->
-      <article class="card flex flex-col gap-3" data-name="현대해상" data-tags="손해보험 pdf 고객센터 모바일청구">
-        <div class="flex items-center justify-between">
-          <div class="font-semibold">현대해상</div>
-          <div class="flex items-center gap-2">
-            <button class="btn btn-sm copy" type="button" data-target="https://example.com/pdf/hyundai-claim.pdf" title="링크 복사">링크복사</button>
-            <span class="pill">손해</span><span class="pill">PDF</span>
-          </div>
-        </div>
-        <div class="grid sm:grid-cols-3 gap-2">
-          <a class="btn btn-primary" href="https://example.com/pdf/hyundai-claim.pdf" download>청구서 PDF 다운로드</a>
-          <a class="btn" href="https://example.com/support/hyundai" target="_blank" rel="noopener">고객센터</a>
-          <a class="btn" href="https://example.com/mobile/hyundai" target="_blank" rel="noopener">모바일 청구</a>
-        </div>
-      </article>
-
-      <!-- Meritz -->
-      <article class="card flex flex-col gap-3" data-name="메리츠화재" data-tags="손해보험 pdf 고객센터">
-        <div class="flex items-center justify-between">
-          <div class="font-semibold">메리츠화재</div>
-          <div class="flex items-center gap-2">
-            <button class="btn btn-sm copy" type="button" data-target="https://example.com/pdf/meritz-claim.pdf" title="링크 복사">링크복사</button>
-            <span class="pill">손해</span><span class="pill">PDF</span>
-          </div>
-        </div>
-        <div class="grid sm:grid-cols-3 gap-2">
-          <a class="btn btn-primary" href="https://example.com/pdf/meritz-claim.pdf" download>청구서 PDF 다운로드</a>
-          <a class="btn" href="https://example.com/support/meritz" target="_blank" rel="noopener">고객센터</a>
-          <a class="btn" href="https://example.com/mobile/meritz" target="_blank" rel="noopener">모바일 청구</a>
-        </div>
-      </article>
-    </div>
+      <!-- Skeleton while loading -->
+      <div id="carrier-list" class="mt-4 grid gap-4">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      </div>
+      <div id="empty" class="hidden mt-4 text-sm muted">표시할 항목이 없습니다.</div>
+    </section>
 
     <!-- Top PDFs -->
     <section id="top-pdf" class="mt-12">
       <h3 class="text-lg font-bold">자주 찾는 PDF</h3>
-      <div class="mt-3 grid md:grid-cols-2 gap-3">
-        <a class="btn" href="https://example.com/pdf/hospital-claim-form.pdf" download>입원/통원 청구서</a>
-        <a class="btn" href="https://example.com/pdf/cancer-diagnosis-form.pdf" download>암 진단 확인서</a>
+      <div id="top-pdf-list" class="mt-3 grid md:grid-cols-2 gap-3">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
       </div>
       <p class="mt-2 text-xs muted">* 실제 PDF로 교체 예정.</p>
     </section>
@@ -183,47 +132,98 @@
     </div>
   </footer>
 
-  <!-- JS: no Korean strings -->
+  <!-- JS (no Korean strings in JS) -->
   <script>
   (function () {
     const $ = (s, el=document) => el.querySelector(s);
     const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
-
+    const listEl = $("#carrier-list");
+    const emptyEl = $("#empty");
+    const topPdfEl = $("#top-pdf-list");
     const q = $("#q");
     const clearBtn = $("#clear");
-    const list = $("#carrier-list");
-    const items = $$(".card[data-name]", list);
+
+    // fetch JSON with cache-busting
+    async function loadData() {
+      const res = await fetch("/data/links.json?ts=" + Date.now(), { cache: "no-store" });
+      if (!res.ok) throw new Error("failed to load");
+      return res.json();
+    }
+
+    function cardTemplate(item) {
+      const pills = [item.type ? `<span class="pill">${item.type}</span>` : ""].join("");
+      const copyBtn = `<button class="btn btn-sm copy" type="button" data-target="${(item.links && item.links.pdf) || ""}" title="copy">링크복사</button>`;
+      return `
+      <article class="card flex flex-col gap-3" data-name="${item.name}" data-tags="${(item.tags||[]).join(" ")}">
+        <div class="flex items-center justify-between">
+          <div class="font-semibold">${item.name}</div>
+          <div class="flex items-center gap-2">
+            ${copyBtn}${pills}
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-2">
+          ${item.links?.pdf ? `<a class="btn btn-primary" href="${item.links.pdf}" download>청구서 PDF 다운로드</a>` : `<button class="btn" disabled>PDF 준비중</button>`}
+          ${item.links?.support ? `<a class="btn" href="${item.links.support}" target="_blank" rel="noopener">고객센터</a>` : `<button class="btn" disabled>고객센터</button>`}
+          ${item.links?.mobile ? `<a class="btn" href="${item.links.mobile}" target="_blank" rel="noopener">모바일 청구</a>` : `<button class="btn" disabled>모바일 청구</button>`}
+        </div>
+      </article>`;
+    }
+
+    function renderCarriers(arr) {
+      if (!arr || arr.length === 0) {
+        listEl.innerHTML = "";
+        emptyEl.classList.remove("hidden");
+        return;
+      }
+      emptyEl.classList.add("hidden");
+      listEl.innerHTML = arr.map(cardTemplate).join("");
+      bindCopyButtons();
+    }
+
+    function renderTopPdfs(arr) {
+      if (!arr || arr.length === 0) { topPdfEl.innerHTML = ""; return; }
+      topPdfEl.innerHTML = arr.map(x => `<a class="btn" href="${x.url}" download>${x.label}</a>`).join("");
+    }
 
     function filter() {
       const v = (q.value || "").toLowerCase().trim();
-      items.forEach(el => {
+      $$(".card[data-name]", listEl).forEach(el => {
         const key = (el.dataset.name + " " + (el.dataset.tags || "")).toLowerCase();
         el.style.display = key.includes(v) ? "" : "none";
       });
     }
-    q.addEventListener("input", filter);
-    clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
 
-    // shortcuts
+    function bindCopyButtons() {
+      $$(".copy", listEl).forEach(btn => {
+        btn.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(btn.dataset.target || "");
+            btn.textContent = "복사됨";
+            setTimeout(() => (btn.textContent = "링크복사"), 1200);
+          } catch (e) { alert("복사 실패"); }
+        });
+      });
+    }
+
+    // shortcuts and clear
     document.addEventListener("keydown", (e) => {
       if (e.key === "/") { e.preventDefault(); q.focus(); }
       if (e.key === "Escape") { q.value = ""; filter(); }
     });
+    clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
+    q.addEventListener("input", filter);
 
-    // copy buttons
-    $$(".copy").forEach(btn => {
-      btn.addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(btn.dataset.target);
-          btn.textContent = "복사됨";
-          setTimeout(() => (btn.textContent = "링크복사"), 1200);
-        } catch (e) {
-          alert("복사 실패");
-        }
+    // init
+    loadData()
+      .then(json => {
+        renderCarriers(json.carriers || []);
+        renderTopPdfs(json.top_pdfs || []);
+      })
+      .catch(() => {
+        listEl.innerHTML = `<div class="text-sm text-red-600">데이터 로드 실패: /data/links.json</div>`;
+        topPdfEl.innerHTML = "";
       });
-    });
 
-    // year
     $("#y").textContent = new Date().getFullYear();
   })();
   </script>
