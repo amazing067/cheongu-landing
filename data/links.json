@@ -1,0 +1,38 @@
+{
+  "carriers": [
+    {
+      "name": "삼성화재",
+      "type": "손해",
+      "tags": ["pdf", "고객센터", "모바일청구"],
+      "links": {
+        "pdf": "https://example.com/pdf/samsung-claim.pdf",
+        "support": "https://example.com/support/samsung",
+        "mobile": "https://example.com/mobile/samsung"
+      }
+    },
+    {
+      "name": "현대해상",
+      "type": "손해",
+      "tags": ["pdf", "고객센터", "모바일청구"],
+      "links": {
+        "pdf": "https://example.com/pdf/hyundai-claim.pdf",
+        "support": "https://example.com/support/hyundai",
+        "mobile": "https://example.com/mobile/hyundai"
+      }
+    },
+    {
+      "name": "메리츠화재",
+      "type": "손해",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "pdf": "https://example.com/pdf/meritz-claim.pdf",
+        "support": "https://example.com/support/meritz",
+        "mobile": "https://example.com/mobile/meritz"
+      }
+    }
+  ],
+  "top_pdfs": [
+    { "label": "입원/통원 청구서", "url": "https://example.com/pdf/hospital-claim-form.pdf" },
+    { "label": "암 진단 확인서", "url": "https://example.com/pdf/cancer-diagnosis-form.pdf" }
+  ]
+}
