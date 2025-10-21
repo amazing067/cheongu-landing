@@ -29,7 +29,17 @@
         "support": "https://example.com/support/meritz",
         "mobile": "https://example.com/mobile/meritz"
       }
+    },
+     {
+      "name": "KB손해보험",
+      "type": "손해",
+      "tags": ["pdf", "고객센터", "모바일청구"],
+      "links": {
+        "pdf": "https://example.com/pdf/kb-claim.pdf",
+        "support": "https://example.com/support/kb",
+        "mobile": "https://example.com/mobile/kb"
     }
+}
   ],
   "top_pdfs": [
     { "label": "입원/통원 청구서", "url": "https://example.com/pdf/hospital-claim-form.pdf" },
