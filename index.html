@@ -13,25 +13,70 @@
   <meta property="og:image" content="/assets/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="format-detection" content="telephone=no" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold border border-slate-200 hover:bg-slate-50 transition; }
-    .btn-primary { @apply bg-black text-white border-black hover:opacity-90; }
+    /* Tailwind helpers */
+    .btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold border border-slate-200 hover:bg-white/60 transition shadow-sm; }
+    .btn-primary { @apply bg-slate-900 text-white border-slate-900 hover:opacity-90 shadow; }
     .btn-sm { @apply px-3 py-2 text-xs; }
-    .card { @apply rounded-2xl border border-slate-200 p-5 shadow-sm bg-white; }
-    .pill { @apply text-[11px] px-2 py-1 rounded-full border border-slate-200; }
+    .card { @apply rounded-2xl border border-slate-200 p-5 shadow-sm bg-white/80 backdrop-blur; }
+    .pill { @apply text-[11px] px-2 py-1 rounded-full border border-slate-200 bg-white/70; }
     .kbd { @apply text-[10px] px-1.5 py-0.5 border rounded bg-slate-50; }
-    .sticky-head { @apply sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-slate-200; }
-    .muted { @apply text-slate-500; }
+    .sticky-head { @apply sticky top-0 z-40 bg-white/70 backdrop-blur border-b border-slate-200; }
+    .muted { @apply text-slate-600; }
     .skeleton { @apply animate-pulse bg-slate-100 rounded-xl h-10; }
+
+    /* Cute gradient background */
+    body {
+      background: radial-gradient(1200px 600px at 10% -10%, #f0f9ff 0%, transparent 60%),
+                  radial-gradient(1000px 500px at 90% 0%, #fdf2f8 0%, transparent 65%),
+                  linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+
+    /* Floating emoji confetti (pure CSS) */
+    .confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .confetti i { position: absolute; opacity: .45; font-style: normal; animation: float 10s linear infinite; }
+    .confetti i:nth-child(1){ left:8%; top:10%; animation-duration:11s; }
+    .confetti i:nth-child(2){ left:18%; top:30%; animation-duration:12s; }
+    .confetti i:nth-child(3){ left:80%; top:18%; animation-duration:10s; }
+    .confetti i:nth-child(4){ left:88%; top:42%; animation-duration:13s; }
+    .confetti i:nth-child(5){ left:50%; top:8%; animation-duration:12.5s; }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(20px) rotate(8deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    /* Mascot badge */
+    .badge {
+      @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 bg-white/80 shadow-sm;
+    }
   </style>
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"CollectionPage",
+    "name":"청구닷컴 | 보험금 청구 링크 허브",
+    "description":"보험금 청구에 필요한 양식과 고객센터 링크를 빠르게 찾고 다운로드.",
+    "isAccessibleForFree": true
+  }
+  </script>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="text-slate-900">
+  <!-- Floating cute emojis -->
+  <div class="confetti select-none">
+    <i>✨</i><i>💡</i><i>📎</i><i>💊</i><i>📄</i>
+  </div>
+
   <!-- Header -->
   <header class="sticky-head">
     <div class="max-w-5xl mx-auto px-5 py-3 flex items-center gap-3">
       <a class="text-lg font-extrabold" href="/">청구닷컴</a>
       <span class="pill">베타</span>
+      <span class="badge hidden sm:inline-flex">🐣 처음 오셨나요? <span class="hidden md:inline">아래 빠른 링크부터 눌러보세요!</span></span>
       <div class="ml-auto flex items-center gap-2">
         <a class="btn btn-sm" href="#links">다운로드</a>
         <a class="btn btn-sm" href="#how">이용방법</a>
@@ -40,28 +85,43 @@
   </header>
 
   <!-- Hero -->
-  <section class="max-w-5xl mx-auto px-5 pt-10 pb-6">
-    <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">
-      보험금 청구서·고객센터 링크, <span class="underline decoration-2 underline-offset-4">한 곳에서 바로</span>
-    </h1>
-    <p class="mt-2 muted">광고·팝업 없이, 필요한 링크만 빠르게 찾고 다운로드하세요.</p>
+  <section class="relative">
+    <div class="max-w-5xl mx-auto px-5 pt-10 pb-6">
+      <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">
+        보험금 청구서·고객센터 링크,
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-600 to-sky-600">한 곳에서 바로</span>
+      </h1>
+      <p class="mt-2 muted">광고·팝업 없이, 필요한 링크만 빠르게 찾고 다운로드하세요. 귀엽고 산뜻한 청구 허브 🐧</p>
 
-    <!-- Search -->
-    <div class="mt-6 card" role="search">
-      <label class="text-sm font-medium">검색</label>
-      <div class="mt-2 grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
-        <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-3" placeholder="회사명·키워드 (예: 삼성화재, 고객센터, PDF)">
-        <button id="clear" class="btn" type="button" title="지우기">지우기</button>
-        <a class="btn" href="#links">바로가기</a>
+      <!-- Search -->
+      <div class="mt-6 card" role="search">
+        <label class="text-sm font-medium">검색</label>
+        <div class="mt-2 grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
+          <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-3" placeholder="회사명·키워드 (예: 삼성화재, 고객센터, PDF)">
+          <button id="clear" class="btn" type="button" title="지우기">지우기</button>
+          <a class="btn" href="#links">바로가기</a>
+        </div>
+        <div class="mt-2 text-xs muted">단축키: <span class="kbd">/</span> 검색 포커스, <span class="kbd">Esc</span> 지우기</div>
       </div>
-      <div class="mt-2 text-xs muted">단축키: <span class="kbd">/</span> 검색 포커스, <span class="kbd">Esc</span> 지우기</div>
-    </div>
 
-    <!-- Quick -->
-    <div class="mt-4 grid sm:grid-cols-3 gap-3">
-      <a class="card hover:bg-slate-50" href="#top-pdf"><div class="muted text-sm">빠른 링크</div><div class="font-semibold mt-1">자주 찾는 PDF</div></a>
-      <a class="card hover:bg-slate-50" href="#mobile-claim"><div class="muted text-sm">모바일</div><div class="font-semibold mt-1">모바일/온라인 청구</div></a>
-      <a class="card hover:bg-slate-50" href="#how"><div class="muted text-sm">이용방법</div><div class="font-semibold mt-1">이용방법</div></a>
+      <!-- Quick -->
+      <div class="mt-4 grid sm:grid-cols-3 gap-3">
+        <a class="card hover:bg-white" href="#top-pdf">
+          <div class="muted text-sm">빠른 링크</div>
+          <div class="font-semibold mt-1">자주 찾는 PDF <span>📄</span></div>
+          <p class="text-xs muted mt-1">입원/통원, 암진단서 등을 바로 다운로드</p>
+        </a>
+        <a class="card hover:bg-white" href="#mobile-claim">
+          <div class="muted text-sm">모바일</div>
+          <div class="font-semibold mt-1">모바일/온라인 청구 <span>📱</span></div>
+          <p class="text-xs muted mt-1">본인인증 후 사진·PDF 업로드</p>
+        </a>
+        <a class="card hover:bg-white" href="#how">
+          <div class="muted text-sm">가이드</div>
+          <div class="font-semibold mt-1">이용방법 <span>🧭</span></div>
+          <p class="text-xs muted mt-1">2단계 요약: 찾기 → 다운로드</p>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -69,7 +129,7 @@
   <main class="max-w-5xl mx-auto px-5 pb-20">
     <section id="links">
       <h2 class="text-xl font-bold">회사별 링크 & 다운로드</h2>
-      <p class="mt-1 text-sm muted">`data/links.json`을 수정하면 자동으로 반영됩니다.</p>
+      <p class="mt-1 text-sm muted">`data/links.json`을 수정하면 자동 반영됩니다.</p>
 
       <!-- Skeleton while loading -->
       <div id="carrier-list" class="mt-4 grid gap-4">
@@ -120,10 +180,10 @@
   </main>
 
   <!-- Footer -->
-  <footer class="border-t border-slate-200 bg-white">
+  <footer class="border-t border-slate-200 bg-white/70 backdrop-blur">
     <div class="max-w-5xl mx-auto px-5 py-8 text-sm muted">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>© <span id="y"></span> 청구닷컴</div>
+        <div>© <span id="y"></span> 청구닷컴 · 귀여운 링크 허브 🐧</div>
         <div class="flex items-center gap-3">
           <a class="btn" href="#">문의</a>
           <a class="btn" href="#">개인정보처리방침</a>
@@ -143,7 +203,6 @@
     const q = $("#q");
     const clearBtn = $("#clear");
 
-    // fetch JSON with cache-busting
     async function loadData() {
       const res = await fetch("/data/links.json?ts=" + Date.now(), { cache: "no-store" });
       if (!res.ok) throw new Error("failed to load");
@@ -152,7 +211,13 @@
 
     function cardTemplate(item) {
       const pills = [item.type ? `<span class="pill">${item.type}</span>` : ""].join("");
-      const copyBtn = `<button class="btn btn-sm copy" type="button" data-target="${(item.links && item.links.pdf) || ""}" title="copy">링크복사</button>`;
+      const copyBtn = `
+        <button class="btn btn-sm copy"
+                type="button"
+                data-target="${(item.links && item.links.pdf) || ""}"
+                data-text-copy="링크복사"
+                data-text-copied="복사됨"
+                title="copy">링크복사</button>`;
       return `
       <article class="card flex flex-col gap-3" data-name="${item.name}" data-tags="${(item.tags||[]).join(" ")}">
         <div class="flex items-center justify-between">
@@ -198,8 +263,8 @@
         btn.addEventListener("click", async () => {
           try {
             await navigator.clipboard.writeText(btn.dataset.target || "");
-            btn.textContent = "복사됨";
-            setTimeout(() => (btn.textContent = "링크복사"), 1200);
+            btn.textContent = btn.dataset.textCopied || "Done";
+            setTimeout(() => (btn.textContent = btn.dataset.textCopy || "Copy"), 1200);
           } catch (e) { alert("복사 실패"); }
         });
       });
