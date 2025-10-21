@@ -1,35 +1,119 @@
 {
   "carriers": [
-    { "name": "삼성화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "현대해상", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "DB손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "KB손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "메리츠화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "롯데손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "흥국화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "하나손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "농협손해보험", "type": "손해", "tags": ["NH","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "카카오페이손해보험", "type": "손해", "tags": ["디지털","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "신한EZ손해보험", "type": "손해", "tags": ["디지털","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "캐롯손해보험", "type": "손해", "tags": ["디지털","다이렉트","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "MG손해보험", "type": "손해", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "AIG손해보험", "type": "손해", "tags": ["글로벌","pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "라이나손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
-      "pdf": "",
-      "support": "https://www.chubb.com/kr-kr/",
+    { "name": "삼성화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "https://direct.samsungfire.com/claim/PP040202_001.html",
+      "support": "https://www.samsungfire.com/claim/P_P03_01_02_011.html",
+      "mobile": "https://direct.samsungfire.com/m/claim/MP040202_001.html"
+    }},
+    { "name": "현대해상", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "https://www.hi.co.kr/data/CL/amends01.pdf",
+      "support": "https://www.hi.co.kr/serviceAction.do?menuId=100631",
+      "mobile": "https://direct.hi.co.kr/service.do?m=a264739757"
+    }},
+    { "name": "DB손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "https://www.idbins.com/xici/lib/download/ba31.pdf",
+      "support": "https://www.idbins.com/pc/bizxpress/ct/dc/FWCUSV1301.shtm",
       "mobile": ""
-    } },
-    { "name": "한화손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    }},
+    { "name": "KB손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "",
+      "support": "https://www.kbinsure.co.kr/CG205010001.ec",
+      "mobile": "https://www.kbinsure.co.kr/CG212010002.ec"
+    }},
+    { "name": "메리츠화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "https://cmdown.meritzfire.com/manager/cm/document/meritzfire_claim_form.pdf",
+      "support": "https://m.meritzfire.com/compensation/longterm-insurance/request.do",
+      "mobile": "https://m.meritzfire.com/compensation/longterm-insurance/request.do"
+    }},
+    { "name": "롯데손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "",
+      "support": "https://www.lotteins.co.kr/web/C/C/B/ccb202.jsp",
+      "mobile": "https://m.lotteins.co.kr/web/C/M/A/cma037_info.jsp"
+    }},
+    { "name": "흥국화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "https://www.heungkukfire.co.kr/common/downfile/insuranceApplication_common.pdf",
+      "support": "https://www.heungkukfire.co.kr/FRW/compensation/accidentDocInfo.do",
+      "mobile": "https://m.heungkukfire.co.kr/reward/ltrm/CCLLO0201_M01/CCLLO0201_M01.do"
+    }},
+    { "name": "하나손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "",
+      "support": "https://www.hanainsure.co.kr/w/claim/healthReward/rewardDocCarGuide",
+      "mobile": "https://www.hanainsure.co.kr/w/claim/healthReward/accidentReceipt"
+    }},
+    { "name": "농협손해보험", "type": "손해", "tags": ["NH","pdf","모바일청구"], "links": {
+      "pdf": "https://www.nhfire.co.kr/customer/bilgdcm/retrieveBilgDcmList.nhfire",
+      "support": "https://www.nhfire.co.kr/customer/guide/insuranceClaimGuide.nhfire",
+      "mobile": "https://www.nhfire.co.kr/cyber/acd/AcdSimUserStep1.nhfire"
+    }},
+    { "name": "카카오페이손해보험", "type": "손해", "tags": ["디지털","pdf","모바일청구"], "links": {
+      "pdf": "https://kakaopayinscorp.co.kr/%EB%B3%B4%ED%97%98%EA%B8%88%EC%B2%AD%EA%B5%AC%EC%84%9C.pdf",
+      "support": "https://kakaopayinscorp.co.kr/customer-center/claim-info",
+      "mobile": "https://kakaopayinscorp.co.kr/customer-center/claim-info"
+    }},
+    { "name": "신한EZ손해보험", "type": "손해", "tags": ["디지털","pdf","모바일청구"], "links": {
+      "pdf": "",
+      "support": "https://www.shinhanez.co.kr/static/cus/CUS50000M01.html",
+      "mobile": "https://www.shinhanez.co.kr/static/cus/CUS50000M01.html"
+    }},
+    { "name": "캐롯손해보험", "type": "손해", "tags": ["디지털","다이렉트","모바일청구"], "links": {
+      "pdf": "",
+      "support": "https://www.carrotins.com/desktop/reward/claim/guide/",
+      "mobile": "https://www.carrotins.com/mobile/reward/claim/apply/"
+    }},
+    { "name": "MG손해보험", "type": "손해", "tags": ["pdf","고객센터"], "links": {
+      "pdf": "https://www.mggeneralins.com/webdocs/resources/files/rw031010dm/inbohum_chunggu.pdf",
+      "support": "",
+      "mobile": ""
+    }},
+    { "name": "AIG손해보험", "type": "손해", "tags": ["글로벌","pdf","고객센터"], "links": {
+      "pdf": "",
+      "support": "https://www.aig.co.kr/wt/dpwtm025.html?menuId=MS216",
+      "mobile": "https://www.aig.co.kr/wm/content.html?contentId=DPWMS404&menuId=MS404"
+    }},
+    { "name": "라이나손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "https://www.chubb.com/kr-kr/claims/individual-insurance.html",
+      "support": "https://www.chubb.com/kr-kr/claims.html",
+      "mobile": "https://m.acedirect.co.kr/jsp/directM/customercenter/common/Main2.jsp"
+    }},
+    { "name": "한화손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "https://www.hwgeneralins.com/upload/download/customer/insurance.pdf",
+      "support": "https://m.hwgeneralins.com/",
+      "mobile": "https://m.hwgeneralins.com/"
+    }},
 
-    { "name": "삼성생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "한화생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "교보생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "미래에셋생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "신한라이프", "type": "생명", "tags": ["오렌지통합","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "KB라이프생명", "type": "생명", "tags": ["KB","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "삼성생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "https://direct.samsunglife.com/customerSupport/insuranceClaimInformation/CustomerSupportInsuranceClaimInformationView",
+      "support": "https://www.samsunglife.com/individual/mysamsunglife/insurance/internet/MDP-MYINT020110M",
+      "mobile": "https://direct.samsunglife.com/customerSupport/insuranceClaimInformation/CustomerSupportInsuranceClaimInformationView"
+    }},
+    { "name": "한화생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "https://www.hanwhalife.com/static/main/myPage/insurance/accident/document/MY_INAPADC_T10000.jsp",
+      "support": "https://www.hanwhalife.com/main/myPage/insurance/accident/MY_INAP000_P10000.do",
+      "mobile": "https://www.hanwhalife.com/static/mobile/customerCenter/MCU_ACIN000_P10000.htm"
+    }},
+    { "name": "교보생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "https://www.kyobo.com/dgt/web/customer/support/need-papers/list",
+      "support": "https://www.kyobo.com/dgt/web/dti/insurance/accInq/intro",
+      "mobile": "https://www.kyobo.com/dgt/web/dti/insurance/accInq/intro"
+    }},
+    { "name": "미래에셋생명", "type": "생명", "tags": ["pdf","고객센터"], "links": {
+      "pdf": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MNT-CC-012",
+      "support": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MO-CB-300000-100000",
+      "mobile": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MO-CB-300000-100000"
+    }},
+    { "name": "KB라이프생명", "type": "생명", "tags": ["KB","pdf","모바일청구"], "links": {
+      "pdf": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do",
+      "support": "https://www.kblife.co.kr/",
+      "mobile": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do"
+    }},
+
     { "name": "농협생명", "type": "생명", "tags": ["NH","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
     { "name": "하나생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
-    { "name": "DB생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "DB생명", "type": "생명", "tags": ["pdf","고객센터"], "links": {
+      "pdf": "https://www.idblife.com/support/guide/acbf_clm",
+      "support": "https://www.idblife.com/support/guide/acbf_clm",
+      "mobile": "https://www.idblife.com/support/guide/acbf_clm"
+    } },
     { "name": "KDB생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
     { "name": "ABL생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
     { "name": "흥국생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
