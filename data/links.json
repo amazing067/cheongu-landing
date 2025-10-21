@@ -1,48 +1,52 @@
 {
   "carriers": [
-    {
-      "name": "삼성화재",
-      "type": "손해",
-      "tags": ["pdf", "고객센터", "모바일청구"],
-      "links": {
-        "pdf": "https://example.com/pdf/samsung-claim.pdf",
-        "support": "https://example.com/support/samsung",
-        "mobile": "https://example.com/mobile/samsung"
-      }
-    },
-    {
-      "name": "현대해상",
-      "type": "손해",
-      "tags": ["pdf", "고객센터", "모바일청구"],
-      "links": {
-        "pdf": "https://example.com/pdf/hyundai-claim.pdf",
-        "support": "https://example.com/support/hyundai",
-        "mobile": "https://example.com/mobile/hyundai"
-      }
-    },
-    {
-      "name": "메리츠화재",
-      "type": "손해",
-      "tags": ["pdf", "고객센터"],
-      "links": {
-        "pdf": "https://example.com/pdf/meritz-claim.pdf",
-        "support": "https://example.com/support/meritz",
-        "mobile": "https://example.com/mobile/meritz"
-      }
-    },
-     {
-      "name": "KB손해보험",
-      "type": "손해",
-      "tags": ["pdf", "고객센터", "모바일청구"],
-      "links": {
-        "pdf": "https://example.com/pdf/kb-claim.pdf",
-        "support": "https://example.com/support/kb",
-        "mobile": "https://example.com/mobile/kb"
-    }
-}
+    { "name": "삼성화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "현대해상", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "DB손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "KB손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "메리츠화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "롯데손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "흥국화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "하나손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "농협손해보험", "type": "손해", "tags": ["NH","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "카카오페이손해보험", "type": "손해", "tags": ["디지털","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "신한EZ손해보험", "type": "손해", "tags": ["디지털","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "캐롯손해보험", "type": "손해", "tags": ["디지털","다이렉트","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "MG손해보험", "type": "손해", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "AIG손해보험", "type": "손해", "tags": ["글로벌","pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "라이나손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
+      "pdf": "",
+      "support": "https://www.chubb.com/kr-kr/",
+      "mobile": ""
+    } },
+    { "name": "한화손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+
+    { "name": "삼성생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "한화생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "교보생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "미래에셋생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "신한라이프", "type": "생명", "tags": ["오렌지통합","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "KB라이프생명", "type": "생명", "tags": ["KB","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "농협생명", "type": "생명", "tags": ["NH","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "하나생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "DB생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "KDB생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "ABL생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "흥국생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "메트라이프생명", "type": "생명", "tags": ["MetLife","pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "AIA생명", "type": "생명", "tags": ["AIA","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "처브라이프(Chubb Life)", "type": "생명", "tags": ["Chubb","pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "BNP파리바카디프생명", "type": "생명", "tags": ["Cardif","pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "푸본현대생명", "type": "생명", "tags": ["FubonHyundai","pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "라이나생명(시그나)", "type": "생명", "tags": ["Cigna","pdf","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "아이엠(iM)라이프생명", "type": "생명", "tags": ["DGB","iM","pdf"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "동양생명", "type": "생명", "tags": ["Tongyang","pdf","고객센터"], "links": { "pdf": "", "support": "", "mobile": "" } },
+    { "name": "교보라이프플래닛생명", "type": "생명", "tags": ["다이렉트","온라인","모바일청구"], "links": { "pdf": "", "support": "", "mobile": "" } }
   ],
   "top_pdfs": [
-    { "label": "입원/통원 청구서", "url": "https://example.com/pdf/hospital-claim-form.pdf" },
-    { "label": "암 진단 확인서", "url": "https://example.com/pdf/cancer-diagnosis-form.pdf" }
+    { "label": "입원/통원 청구서", "url": "" },
+    { "label": "암 진단 확인서", "url": "" },
+    { "label": "수술 확인서", "url": "" },
+    { "label": "개인(신용)정보 동의서", "url": "" }
   ]
 }
