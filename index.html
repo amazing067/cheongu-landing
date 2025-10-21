@@ -3,161 +3,147 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>청구닷컴 | 보험금 청구서 링크 허브</title>
+  <title>청구닷컴 | 보험금 청구 링크 허브</title>
   <meta name="description" content="보험금 청구에 필요한 서류·양식을 한 곳에서 빠르게 찾고 다운로드하세요. 광고·팝업 없이 깔끔한 링크 허브." />
   <link rel="icon" href="/assets/favicon.png" />
-  <meta property="og:title" content="청구닷컴 | 보험금 청구서 링크 허브" />
+  <meta property="og:title" content="청구닷컴 | 보험금 청구 링크 허브" />
   <meta property="og:description" content="광고 없이, 빠르게. 보험금 청구서 PDF와 고객센터 링크 모음." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://amazing067.github.io/cheongu-landing/" />
-  <meta property="og:image" content="https://amazing067.github.io/cheongu-landing/assets/og-image.png" />
+  <meta property="og:url" content="https://xn--2e0br60d.com/" />
+  <meta property="og:image" content="/assets/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="format-detection" content="telephone=no" />
 
-  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     .btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold border border-slate-200 hover:bg-slate-50 transition; }
     .btn-primary { @apply bg-black text-white border-black hover:opacity-90; }
+    .btn-sm { @apply px-3 py-2 text-xs; }
     .card { @apply rounded-2xl border border-slate-200 p-5 shadow-sm bg-white; }
     .pill { @apply text-[11px] px-2 py-1 rounded-full border border-slate-200; }
-    .k-search input { outline: none; }
+    .kbd { @apply text-[10px] px-1.5 py-0.5 border rounded bg-slate-50; }
+    .sticky-head { @apply sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-slate-200; }
+    .muted { @apply text-slate-500; }
   </style>
 
-  <script>
-    // simple client-side filter (no Korean strings in JS)
-    document.addEventListener("DOMContentLoaded", function () {
-      const q = document.getElementById("q");
-      const list = document.getElementById("carrier-list");
-      const items = Array.from(list.querySelectorAll("[data-name]"));
-      function filter() {
-        const v = (q.value || "").toLowerCase().trim();
-        items.forEach(el => {
-          const key = (el.dataset.name + " " + (el.dataset.tags || "")).toLowerCase();
-          el.style.display = key.includes(v) ? "" : "none";
-        });
-      }
-      q.addEventListener("input", filter);
-      filter();
-    });
-  </script>
-
+  <!-- JSON-LD -->
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
+    "@context":"https://schema.org",
     "@type":"CollectionPage",
-    "name":"청구닷컴 | 보험금 청구서 링크 허브",
+    "name":"청구닷컴 | 보험금 청구 링크 허브",
     "description":"보험금 청구에 필요한 양식과 고객센터 링크를 빠르게 찾고 다운로드.",
     "isAccessibleForFree": true
   }
   </script>
 </head>
 <body class="bg-slate-50 text-slate-900">
-  <header class="max-w-5xl mx-auto px-5 pt-10 pb-6">
-    <div class="flex items-center justify-between">
-      <a class="flex items-center gap-2" href="/">
-        <span class="text-xl font-extrabold tracking-tight">청구닷컴</span>
-        <span class="pill">베타</span>
-      </a>
-      <nav class="flex items-center gap-2">
-        <a class="btn" href="#how">이용방법</a>
-        <a class="btn" href="#links">다운로드</a>
-      </nav>
-    </div>
-    <h1 class="mt-8 text-3xl sm:text-4xl font-extrabold leading-tight">
-      보험금 청구서·고객센터 링크, <span class="underline decoration-2 underline-offset-4">한 곳에서 바로</span>
-    </h1>
-    <p class="mt-3 text-slate-600">광고·팝업 없이, 필요한 링크만 빠르게 찾고 다운로드하세요.</p>
-
-    <div class="k-search mt-6">
-      <div class="card">
-        <label class="text-sm font-medium">검색</label>
-        <div class="mt-2 flex items-center gap-3">
-          <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-3"
-                 placeholder="회사명·담보·키워드를 입력하세요 (예: 삼성화재, 암진단, 청구서)">
-          <a class="btn" href="#links">바로가기</a>
-        </div>
-        <div class="mt-2 text-xs text-slate-500">Tip: ‘고객센터’, ‘모바일청구’, ‘PDF’ 같은 키워드로도 찾을 수 있어요.</div>
+  <!-- Header -->
+  <header class="sticky-head">
+    <div class="max-w-5xl mx-auto px-5 py-3 flex items-center gap-3">
+      <a class="text-lg font-extrabold" href="/">청구닷컴</a>
+      <span class="pill">베타</span>
+      <div class="ml-auto flex items-center gap-2">
+        <a class="btn btn-sm" href="#links">다운로드</a>
+        <a class="btn btn-sm" href="#how">이용방법</a>
       </div>
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-5 pb-20" id="links">
-    <!-- Quick Actions -->
-    <section class="grid sm:grid-cols-3 gap-4">
-      <a class="card hover:bg-slate-50" href="#top-pdf"><div class="text-sm text-slate-500">빠른 링크</div><div class="mt-1 font-semibold">자주 찾는 PDF</div></a>
-      <a class="card hover:bg-slate-50" href="#mobile-claim"><div class="text-sm text-slate-500">모바일</div><div class="mt-1 font-semibold">모바일/온라인 청구</div></a>
-      <a class="card hover:bg-slate-50" href="#how"><div class="text-sm text-slate-500">가이드</div><div class="mt-1 font-semibold">이용방법</div></a>
-    </section>
+  <!-- Hero -->
+  <section class="max-w-5xl mx-auto px-5 pt-10 pb-6">
+    <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">
+      보험금 청구서·고객센터 링크, <span class="underline decoration-2 underline-offset-4">한 곳에서 바로</span>
+    </h1>
+    <p class="mt-2 muted">광고·팝업 없이, 필요한 링크만 빠르게 찾고 다운로드하세요.</p>
 
-    <!-- Carriers -->
-    <section class="mt-10">
-      <h2 class="text-xl font-bold">회사별 링크 & 다운로드</h2>
-      <p class="mt-1 text-slate-600 text-sm">아래는 샘플입니다. 실제 링크는 나중에 교체합니다.</p>
-
-      <div id="carrier-list" class="mt-4 grid gap-4">
-        <!-- SAMPLE ITEM -->
-        <article class="card flex flex-col gap-3" data-name="삼성화재" data-tags="손해보험 pdf 고객센터 모바일청구">
-          <div class="flex items-center justify-between">
-            <div class="font-semibold">삼성화재</div>
-            <div class="flex items-center gap-2">
-              <span class="pill">손해</span>
-              <span class="pill">PDF</span>
-            </div>
-          </div>
-          <div class="grid sm:grid-cols-3 gap-2">
-            <a class="btn" href="https://example.com/pdf/samsung-claim.pdf" download>청구서 PDF 다운로드</a>
-            <a class="btn" href="https://example.com/support/samsung" target="_blank" rel="noopener">고객센터</a>
-            <a class="btn" href="https://example.com/mobile/samsung" target="_blank" rel="noopener">모바일 청구</a>
-          </div>
-        </article>
-
-        <article class="card flex flex-col gap-3" data-name="현대해상" data-tags="손해보험 pdf 고객센터 모바일청구">
-          <div class="flex items-center justify-between">
-            <div class="font-semibold">현대해상</div>
-            <div class="flex items-center gap-2">
-              <span class="pill">손해</span>
-              <span class="pill">PDF</span>
-            </div>
-          </div>
-          <div class="grid sm:grid-cols-3 gap-2">
-            <a class="btn" href="https://example.com/pdf/hyundai-claim.pdf" download>청구서 PDF 다운로드</a>
-            <a class="btn" href="https://example.com/support/hyundai" target="_blank" rel="noopener">고객센터</a>
-            <a class="btn" href="https://example.com/mobile/hyundai" target="_blank" rel="noopener">모바일 청구</a>
-          </div>
-        </article>
-
-        <article class="card flex flex-col gap-3" data-name="메리츠화재" data-tags="손해보험 pdf 고객센터">
-          <div class="flex items-center justify-between">
-            <div class="font-semibold">메리츠화재</div>
-            <div class="flex items-center gap-2">
-              <span class="pill">손해</span>
-              <span class="pill">PDF</span>
-            </div>
-          </div>
-          <div class="grid sm:grid-cols-3 gap-2">
-            <a class="btn" href="https://example.com/pdf/meritz-claim.pdf" download>청구서 PDF 다운로드</a>
-            <a class="btn" href="https://example.com/support/meritz" target="_blank" rel="noopener">고객센터</a>
-            <a class="btn" href="https://example.com/mobile/meritz" target="_blank" rel="noopener">모바일 청구</a>
-          </div>
-        </article>
+    <!-- Search -->
+    <div class="mt-6 card" role="search">
+      <label class="text-sm font-medium">검색</label>
+      <div class="mt-2 grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
+        <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-3" placeholder="회사명·키워드 (예: 삼성화재, 고객센터, PDF)">
+        <button id="clear" class="btn" type="button" title="지우기">지우기</button>
+        <a class="btn" href="#links">바로가기</a>
       </div>
-    </section>
+      <div class="mt-2 text-xs muted">단축키: <span class="kbd">/</span> 검색 포커스, <span class="kbd">Esc</span> 지우기</div>
+    </div>
+
+    <!-- Quick -->
+    <div class="mt-4 grid sm:grid-cols-3 gap-3">
+      <a class="card hover:bg-slate-50" href="#top-pdf"><div class="muted text-sm">빠른 링크</div><div class="font-semibold mt-1">자주 찾는 PDF</div></a>
+      <a class="card hover:bg-slate-50" href="#mobile-claim"><div class="muted text-sm">모바일</div><div class="font-semibold mt-1">모바일/온라인 청구</div></a>
+      <a class="card hover:bg-slate-50" href="#how"><div class="muted text-sm">가이드</div><div class="font-semibold mt-1">이용방법</div></a>
+    </div>
+  </section>
+
+  <!-- Links -->
+  <main class="max-w-5xl mx-auto px-5 pb-20" id="links">
+    <h2 class="text-xl font-bold">회사별 링크 & 다운로드</h2>
+    <p class="mt-1 text-sm muted">샘플 링크입니다. 실제 배포 시 최신본으로 교체합니다.</p>
+
+    <div id="carrier-list" class="mt-4 grid gap-4">
+      <!-- Samsung -->
+      <article class="card flex flex-col gap-3" data-name="삼성화재" data-tags="손해보험 pdf 고객센터 모바일청구">
+        <div class="flex items-center justify-between">
+          <div class="font-semibold">삼성화재</div>
+          <div class="flex items-center gap-2">
+            <button class="btn btn-sm copy" type="button" data-target="https://example.com/pdf/samsung-claim.pdf" title="링크 복사">링크복사</button>
+            <span class="pill">손해</span><span class="pill">PDF</span>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-2">
+          <a class="btn btn-primary" href="https://example.com/pdf/samsung-claim.pdf" download>청구서 PDF 다운로드</a>
+          <a class="btn" href="https://example.com/support/samsung" target="_blank" rel="noopener">고객센터</a>
+          <a class="btn" href="https://example.com/mobile/samsung" target="_blank" rel="noopener">모바일 청구</a>
+        </div>
+      </article>
+
+      <!-- Hyundai -->
+      <article class="card flex flex-col gap-3" data-name="현대해상" data-tags="손해보험 pdf 고객센터 모바일청구">
+        <div class="flex items-center justify-between">
+          <div class="font-semibold">현대해상</div>
+          <div class="flex items-center gap-2">
+            <button class="btn btn-sm copy" type="button" data-target="https://example.com/pdf/hyundai-claim.pdf" title="링크 복사">링크복사</button>
+            <span class="pill">손해</span><span class="pill">PDF</span>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-2">
+          <a class="btn btn-primary" href="https://example.com/pdf/hyundai-claim.pdf" download>청구서 PDF 다운로드</a>
+          <a class="btn" href="https://example.com/support/hyundai" target="_blank" rel="noopener">고객센터</a>
+          <a class="btn" href="https://example.com/mobile/hyundai" target="_blank" rel="noopener">모바일 청구</a>
+        </div>
+      </article>
+
+      <!-- Meritz -->
+      <article class="card flex flex-col gap-3" data-name="메리츠화재" data-tags="손해보험 pdf 고객센터">
+        <div class="flex items-center justify-between">
+          <div class="font-semibold">메리츠화재</div>
+          <div class="flex items-center gap-2">
+            <button class="btn btn-sm copy" type="button" data-target="https://example.com/pdf/meritz-claim.pdf" title="링크 복사">링크복사</button>
+            <span class="pill">손해</span><span class="pill">PDF</span>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-2">
+          <a class="btn btn-primary" href="https://example.com/pdf/meritz-claim.pdf" download>청구서 PDF 다운로드</a>
+          <a class="btn" href="https://example.com/support/meritz" target="_blank" rel="noopener">고객센터</a>
+          <a class="btn" href="https://example.com/mobile/meritz" target="_blank" rel="noopener">모바일 청구</a>
+        </div>
+      </article>
+    </div>
 
     <!-- Top PDFs -->
     <section id="top-pdf" class="mt-12">
-      <h2 class="text-xl font-bold">자주 찾는 PDF</h2>
+      <h3 class="text-lg font-bold">자주 찾는 PDF</h3>
       <div class="mt-3 grid md:grid-cols-2 gap-3">
         <a class="btn" href="https://example.com/pdf/hospital-claim-form.pdf" download>입원/통원 청구서</a>
         <a class="btn" href="https://example.com/pdf/cancer-diagnosis-form.pdf" download>암 진단 확인서</a>
       </div>
-      <p class="mt-2 text-xs text-slate-500">* 모든 링크는 실제 배포 전 검증 및 최신본으로 교체합니다.</p>
+      <p class="mt-2 text-xs muted">* 실제 PDF로 교체 예정.</p>
     </section>
 
     <!-- Mobile Claim -->
     <section id="mobile-claim" class="mt-12">
-      <h2 class="text-xl font-bold">모바일/온라인 청구</h2>
+      <h3 class="text-lg font-bold">모바일/온라인 청구</h3>
       <div class="mt-3 card">
         <ol class="list-decimal ml-5 space-y-2 text-sm text-slate-700">
           <li>회사별 모바일 청구 링크로 접속</li>
@@ -167,25 +153,26 @@
       </div>
     </section>
 
-    <!-- How to -->
+    <!-- How-to -->
     <section id="how" class="mt-12">
-      <h2 class="text-xl font-bold">이용방법</h2>
+      <h3 class="text-lg font-bold">이용방법</h3>
       <div class="mt-3 grid md:grid-cols-2 gap-4">
         <div class="card">
           <div class="font-semibold">1) 찾기</div>
-          <p class="text-sm text-slate-600 mt-1">상단 검색창에서 회사명·키워드를 입력합니다.</p>
+          <p class="text-sm muted mt-1">상단 검색창에서 회사명·키워드를 입력합니다.</p>
         </div>
         <div class="card">
           <div class="font-semibold">2) 열기/다운로드</div>
-          <p class="text-sm text-slate-600 mt-1">‘청구서 PDF 다운로드’ 버튼으로 즉시 저장합니다.</p>
+          <p class="text-sm muted mt-1">‘청구서 PDF 다운로드’ 버튼으로 즉시 저장합니다.</p>
         </div>
       </div>
-      <p class="mt-3 text-xs text-slate-500">표기된 상호·로고는 각 회사의 자산입니다. 본 사이트는 링크 편의를 위한 허브 페이지입니다.</p>
+      <p class="mt-3 text-xs muted">표기된 상호·로고는 각 회사의 자산입니다. 본 사이트는 링크 편의를 위한 허브 페이지입니다.</p>
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="border-t border-slate-200 bg-white">
-    <div class="max-w-5xl mx-auto px-5 py-8 text-sm text-slate-600">
+    <div class="max-w-5xl mx-auto px-5 py-8 text-sm muted">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>© <span id="y"></span> 청구닷컴</div>
         <div class="flex items-center gap-3">
@@ -196,8 +183,49 @@
     </div>
   </footer>
 
+  <!-- JS: no Korean strings -->
   <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
+  (function () {
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    const q = $("#q");
+    const clearBtn = $("#clear");
+    const list = $("#carrier-list");
+    const items = $$(".card[data-name]", list);
+
+    function filter() {
+      const v = (q.value || "").toLowerCase().trim();
+      items.forEach(el => {
+        const key = (el.dataset.name + " " + (el.dataset.tags || "")).toLowerCase();
+        el.style.display = key.includes(v) ? "" : "none";
+      });
+    }
+    q.addEventListener("input", filter);
+    clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
+
+    // shortcuts
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "/") { e.preventDefault(); q.focus(); }
+      if (e.key === "Escape") { q.value = ""; filter(); }
+    });
+
+    // copy buttons
+    $$(".copy").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(btn.dataset.target);
+          btn.textContent = "복사됨";
+          setTimeout(() => (btn.textContent = "링크복사"), 1200);
+        } catch (e) {
+          alert("복사 실패");
+        }
+      });
+    });
+
+    // year
+    $("#y").textContent = new Date().getFullYear();
+  })();
   </script>
 </body>
 </html>
