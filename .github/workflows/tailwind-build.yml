@@ -1,0 +1,36 @@
+name: Build CSS
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # built CSS를 커밋하려면 필요
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # lockfile이 없으면 npm i, 있으면 npm ci
+      - name: Install deps
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm i --no-fund --no-audit
+          fi
+
+      - name: Build Tailwind
+        run: npm run build
+
+      - name: Commit built CSS
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: build tailwind css"
+          file_pattern: assets/site.css
