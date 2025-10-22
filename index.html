@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>청구닷컴 | 보험금 청구 링크 허브</title>
-  <meta name="description" content="보험금 청구에 필요한 서류·양식을 한 곳에서 빠르게 찾고 다운로드하세요. 광고·팝업 없이 깔끔한 링크 허브." />
+  <meta name="description" content="전산 접속 · 필요서류 · 보험금 청구서 PDF · 고객센터 · 모바일청구 — 광고 없이 깔끔하게." />
   <meta name="format-detection" content="telephone=no" />
   <meta property="og:title" content="청구닷컴 | 보험금 청구 링크 허브" />
-  <meta property="og:description" content="전산 접속 · 필요서류 · 보험금 청구서 PDF · 고객센터 · 모바일청구 — 광고 없이 깔끔하게." />
+  <meta property="og:description" content="보험금 청구 링크를 한 곳에서 바로." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="/assets/og-image.png" />
   <link rel="icon" href="/assets/favicon.png" />
@@ -17,15 +17,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <!-- 빌드된 Tailwind(@apply) CSS -->
-  <link rel="stylesheet" href="/assets/site.css" />
+  <!-- 빌드된 Tailwind(@apply) CSS — 캐시 버스터 추가 -->
+  <link rel="stylesheet" href="/assets/site.css?v=compact2" />
 </head>
-<body class="text-slate-900 page-bg">
-  <!-- 헤더(고정바 아님) -->
+<body class="text-slate-900 bg-slate-50">
+  <!-- 헤더 -->
   <header>
-    <div class="max-w-6xl mx-auto px-5 py-5 flex items-center gap-3">
-      <a class="text-xl font-extrabold" href="/">청구닷컴</a>
-      <span class="px-2 py-1 text-[11px] rounded-full border border-slate-200 bg-white/80">베타</span>
+    <div class="max-w-6xl mx-auto px-5 py-4 flex items-center gap-3">
+      <a class="text-xl font-extrabold no-underline" href="/">청구닷컴</a>
+      <span class="pill">베타</span>
       <nav class="ml-auto flex items-center gap-2">
         <a class="btn btn-ghost" href="#loss">손해보험사</a>
         <a class="btn btn-ghost" href="#life">생명보험사</a>
@@ -35,81 +35,88 @@
   </header>
 
   <!-- 히어로 -->
-  <section class="max-w-6xl mx-auto px-5 pt-2 pb-6">
-    <h1 class="text-4xl sm:text-5xl font-black leading-[1.1]">
+  <section class="max-w-6xl mx-auto px-5 pt-2 pb-4">
+    <h1 class="text-3xl sm:text-4xl font-black leading-tight">
       보험금 청구 링크,
-      <span style="background:linear-gradient(90deg,#d946ef,#4f46e5,#06b6d4); -webkit-background-clip:text; background-clip:text; color:transparent;">한 곳에서 바로</span>
+      <span style="background:linear-gradient(90deg,#d946ef,#7c3aed,#06b6d4);-webkit-background-clip:text;background-clip:text;color:transparent;">한 곳에서 바로</span>
     </h1>
-    <p class="mt-3 text-base sm:text-lg text-slate-700">
+    <p class="mt-2 text-slate-700">
       전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · 고객센터 · 모바일청구 — 광고 없이 깔끔하게.
     </p>
 
     <!-- 검색 -->
-    <div class="mt-6 table p-5">
+    <div class="mt-4 table p-4">
       <label class="text-sm font-semibold">검색</label>
       <div class="mt-2 grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
-        <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-3" placeholder="회사명·키워드 (예: 삼성화재, 고객센터, PDF)">
+        <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-2.5" placeholder="회사명·키워드 (예: 삼성화재, 고객센터, PDF)">
         <button id="clear" class="btn btn-ghost" type="button">지우기</button>
         <a class="btn btn-ghost" href="#loss">손해부터 보기</a>
       </div>
-      <div class="mt-2 text-xs text-slate-600">단축키: <span class="px-1.5 py-0.5 border rounded bg-slate-50 text-[10px]">/</span> 검색 포커스, <span class="px-1.5 py-0.5 border rounded bg-slate-50 text-[10px]">Esc</span> 지우기</div>
+      <div class="mt-2 text-xs text-slate-600">단축키: <span class="kbd">/</span> 검색 포커스, <span class="kbd">Esc</span> 지우기</div>
     </div>
   </section>
 
-  <main class="max-w-6xl mx-auto px-5 pb-24">
+  <main class="max-w-6xl mx-auto px-5 pb-20">
+
     <!-- 손해보험사 -->
-    <section id="loss" class="mt-12">
-      <div class="flex items-end justify-between pb-3">
+    <section id="loss" class="mt-10">
+      <div class="flex items-end justify-between pb-2">
         <div>
-          <h2 class="text-3xl md:text-4xl font-black tracking-tight">손해보험사</h2>
-          <p class="text-sm text-slate-600">표 형태로 한눈에. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
+          <h2 class="section-title">손해보험사</h2>
+          <p class="section-sub">표 형태로 한눈에. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
         </div>
-        <span id="loss-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white/80">0개</span>
+        <span id="loss-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white">0개</span>
       </div>
-      <div id="loss-list" class="table">
-        <!-- JS가 데이터로 렌더링 -->
-      </div>
-      <div id="loss-empty" class="hidden mt-4 text-sm text-slate-600">표시할 손해보험사가 없습니다.</div>
+      <div id="loss-list" class="table"></div>
+      <div id="loss-empty" class="hidden mt-3 text-sm text-slate-600">표시할 손해보험사가 없습니다.</div>
     </section>
 
     <!-- 생명보험사 -->
-    <section id="life" class="mt-12">
-      <div class="flex items-end justify-between pb-3">
+    <section id="life" class="mt-10">
+      <div class="flex items-end justify-between pb-2">
         <div>
-          <h2 class="text-3xl md:text-4xl font-black tracking-tight">생명보험사</h2>
-          <p class="text-sm text-slate-600">표 형태로 한눈에. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
+          <h2 class="section-title">생명보험사</h2>
+          <p class="section-sub">표 형태로 한눈에. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
         </div>
-        <span id="life-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white/80">0개</span>
+        <span id="life-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white">0개</span>
       </div>
-      <div id="life-list" class="table">
-        <!-- JS가 데이터로 렌더링 -->
-      </div>
-      <div id="life-empty" class="hidden mt-4 text-sm text-slate-600">표시할 생명보험사가 없습니다.</div>
+      <div id="life-list" class="table"></div>
+      <div id="life-empty" class="hidden mt-3 text-sm text-slate-600">표시할 생명보험사가 없습니다.</div>
     </section>
 
-    <!-- 보험나이 계산기 (콤팩트) -->
+    <!-- 보험나이 계산기 -->
     <section id="age" class="mt-12">
-      <h2 class="text-3xl md:text-4xl font-black tracking-tight">보험나이 계산기</h2>
-      <p class="text-sm text-slate-600">규칙: 만나이 + (최근 생일부터 6개월 경과 시 +1) · 기준일은 <strong>오늘</strong></p>
+      <h2 class="section-title">보험나이 계산기</h2>
+      <p class="section-sub">규칙: 만나이 + (최근 생일부터 6개월 경과 시 +1) · 기준일은 <strong>오늘</strong></p>
 
       <div class="max-w-[560px] mt-4 mx-auto">
         <div class="calc-card">
-          <div class="flex items-center justify-between p-4 border-b border-indigo-200/60">
+          <div class="flex items-center justify-between p-3 border-b border-indigo-200/60">
             <div class="text-base font-bold">청구닷컴 나이 계산기</div>
             <div class="text-[11px] px-2 py-0.5 rounded-full border border-indigo-200 bg-white" id="age-badge">–</div>
           </div>
 
-          <div class="p-4 grid gap-3">
+          <div class="p-3 grid gap-3">
             <div class="display">
               <div class="text-[11px] text-slate-600 flex items-center justify-between"><span>보험나이</span><span>기준: 오늘</span></div>
               <div class="display-num"><span id="age-num">--</span><span class="text-xl align-top ml-1">세</span></div>
               <div class="text-xs text-slate-600" id="age-rule">생년월일을 입력하세요</div>
             </div>
 
+            <!-- 생년월일: 연(4)→월(2)→일(2) 자동 이동 -->
             <form id="age-form" class="grid gap-2 md:grid-cols-[1fr_auto_auto] items-end">
               <div>
                 <label class="text-sm font-semibold">생년월일</label>
-                <input id="dob" type="date" class="mt-1 w-full border border-slate-300 rounded-xl px-4 py-2.5" required />
+                <div class="mt-1 flex items-center gap-2">
+                  <input id="dobY" inputmode="numeric" maxlength="4" placeholder="연도(YYYY)"
+                        class="w-[110px] border border-slate-300 rounded-xl px-3 py-2.5 text-center" />
+                  <span>–</span>
+                  <input id="dobM" inputmode="numeric" maxlength="2" placeholder="MM"
+                        class="w-[70px] border border-slate-300 rounded-xl px-3 py-2.5 text-center" />
+                  <span>–</span>
+                  <input id="dobD" inputmode="numeric" maxlength="2" placeholder="DD"
+                        class="w-[70px] border border-slate-300 rounded-xl px-3 py-2.5 text-center" />
+                </div>
               </div>
               <button type="submit" class="key key-primary">계산하기</button>
               <button type="button" id="age-reset" class="key">초기화</button>
@@ -121,7 +128,7 @@
                 <div class="text-base font-bold mt-0.5"><span id="intl-age">–</span> 세</div>
               </div>
               <div class="table p-3">
-                <div class="text-[11px] text-slate-600">다음 반(半)생일까지</div>
+                <div class="text-[11px] text-slate-600">다음 보험 상령일까지</div>
                 <div class="text-base font-semibold mt-0.5"><span id="halfleft">–</span></div>
               </div>
               <div class="table p-3">
@@ -132,15 +139,15 @@
                 </div>
               </div>
             </div>
-          </div><!-- /p-4 -->
+          </div><!-- /p-3 -->
         </div><!-- /calc-card -->
       </div><!-- /max-w -->
     </section>
   </main>
 
   <!-- 푸터 -->
-  <footer class="border-t border-slate-200 bg-white/70 backdrop-blur">
-    <div class="max-w-6xl mx-auto px-5 py-8 text-sm text-slate-600">
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-6xl mx-auto px-5 py-6 text-sm text-slate-600">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>© <span id="y"></span> 청구닷컴</div>
         <div class="flex items-center gap-3">
@@ -151,20 +158,21 @@
     </div>
   </footer>
 
-  <!-- 스크립트 -->
   <script>
   (function () {
     const $ = (s, el=document) => el.querySelector(s);
     const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
 
-    const q = $("#q");
-    const clearBtn = $("#clear");
-    const lossList = $("#loss-list");
-    const lifeList = $("#life-list");
-    const lossEmpty = $("#loss-empty");
-    const lifeEmpty = $("#life-empty");
-    const lossCount = $("#loss-count");
-    const lifeCount = $("#life-count");
+    // 검색
+    const q = $("#q"); const clearBtn = $("#clear");
+    document.addEventListener("keydown", (e) => { if (e.key === "/") { e.preventDefault(); q.focus(); } if (e.key === "Escape") { q.value = ""; filter(); } });
+    clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
+    q.addEventListener("input", filter);
+
+    // 리스트 렌더
+    const lossList = $("#loss-list"), lifeList = $("#life-list");
+    const lossEmpty = $("#loss-empty"), lifeEmpty = $("#life-empty");
+    const lossCount = $("#loss-count"), lifeCount = $("#life-count");
 
     async function loadData() {
       const res = await fetch("/data/links.json?ts=" + Date.now(), { cache: "no-store" });
@@ -172,21 +180,16 @@
       return res.json();
     }
 
-    function likelyLogoPath(name){ return `/assets/logos/${name}.png`; }
-
-  function brandCell(item) {
-    const L = item.links || {};
-    const logoSrc = item.logo || `/assets/logos/${item.name}.png`; // 투명 PNG/SVG 권장
-
-    const inner = `
-      <div class="brand">
-        <img src="${logoSrc}" alt="${item.name} 로고" class="logo"
-             onerror="this.style.display='none'" />
-        <div class="name">${item.name}</div>
-      </div>`;
-
-    return L.system ? `<a href="${L.system}" class="block">${inner}</a>` : `<div class="opacity-85">${inner}</div>`;
-  }
+    function brandCell(item) {
+      const L = item.links || {};
+      const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
+      const inner = `
+        <div class="brand">
+          <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
+          <div class="name">${item.name}</div>
+        </div>`;
+      return L.system ? `<a href="${L.system}" class="block">${inner}</a>` : `<div class="opacity-85">${inner}</div>`;
+    }
 
     function btn(label, href, cls) {
       if (!href) return `<button class="btn btn-muted" disabled>${label}</button>`;
@@ -197,9 +200,9 @@
     function row(item) {
       const L = item.links || {};
       return `
-        <div class="row row-cols" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}">
+        <div class="row row-cols" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}" data-brand="${item.name}">
           <div>${brandCell(item)}</div>
-          <div class="grid gap-2 sm:grid-cols-5">
+          <div class="grid gap-2 sm:grid-cols-3 lg:grid-cols-5">
             ${btn("전산 접속", L.system, "btn-primary")}
             ${btn("필요서류 안내", L.guide, "btn-ghost")}
             ${btn("보험금 청구서 PDF 다운로드", L.pdf, "btn-pdf")}
@@ -211,7 +214,7 @@
 
     function render(json) {
       const arr = json.carriers || [];
-      const loss = arr.filter(x => x.type === "손해");   // 순서 유지
+      const loss = arr.filter(x => x.type === "손해");
       const life = arr.filter(x => x.type === "생명");
 
       lossList.innerHTML = loss.map(row).join("");
@@ -222,7 +225,7 @@
       if (lossCount) lossCount.textContent = `${loss.length}개`;
       if (lifeCount) lifeCount.textContent = `${life.length}개`;
 
-      filter(); // 현재 검색어 반영
+      filter();
     }
 
     function filter() {
@@ -233,21 +236,10 @@
       });
     }
 
-    // 검색 UX
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "/") { e.preventDefault(); q.focus(); }
-      if (e.key === "Escape") { q.value = ""; filter(); }
+    loadData().then(render).catch(() => {
+      const err = '<div class="px-4 py-3 text-sm text-red-600">데이터 로드 실패: /data/links.json</div>';
+      lossList.innerHTML = err; lifeList.innerHTML = err;
     });
-    q.addEventListener("input", filter);
-    clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
-
-    // 데이터 로드
-    loadData()
-      .then(render)
-      .catch(() => {
-        const err = '<div class="px-4 py-3 text-sm text-red-600">데이터 로드 실패: /data/links.json</div>';
-        lossList.innerHTML = err; lifeList.innerHTML = err;
-      });
 
     // ===== 보험나이 계산기 (오늘 기준) =====
     const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -255,37 +247,51 @@
     function intlAge(dob, asof){ let a = asof.getFullYear()-dob.getFullYear(); const bThis = new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()); if(asof < bThis) a -= 1; return a; }
     function insAge(dob, asof){ const base=intlAge(dob, asof); const lastYear = asof.getFullYear() - (asof < new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()) ? 1 : 0); const last = new Date(lastYear, dob.getMonth(), dob.getDate()); const half=addMonths(last,6); const plus = asof >= half ? 1 : 0; return {base, ins: base+plus, half}; }
 
-    const dobEl = document.querySelector('#dob');
-    const form = document.querySelector('#age-form');
-    const badge = document.querySelector('#age-badge');
-    const ageNum = document.querySelector('#age-num');
-    const intlAgeEl = document.querySelector('#intl-age');
-    const ruleText = document.querySelector('#age-rule');
-    const halfLeft = document.querySelector('#halfleft');
-    const copyBtn = document.querySelector('#age-copy');
-    const linkBtn = document.querySelector('#age-link');
-    const resetBtn = document.querySelector('#age-reset');
+    const yEl = document.getElementById('dobY');
+    const mEl = document.getElementById('dobM');
+    const dEl = document.getElementById('dobD');
+    const form = document.getElementById('age-form');
+    const badge = document.getElementById('age-badge');
+    const ageNum = document.getElementById('age-num');
+    const intlAgeEl = document.getElementById('intl-age');
+    const ruleText = document.getElementById('age-rule');
+    const halfLeft = document.getElementById('halfleft');
+    const copyBtn = document.getElementById('age-copy');
+    const linkBtn = document.getElementById('age-link');
+    const resetBtn = document.getElementById('age-reset');
+
+    function onlyDigits(e){ e.target.value = e.target.value.replace(/\D/g,''); }
+    function clamp2(v, min, max){ if(!v) return ''; const n=Number(v); if(Number.isNaN(n)) return ''; return String(Math.min(max, Math.max(min, n))).padStart(2,'0'); }
+
+    yEl.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 4) mEl.focus(); });
+    mEl.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 2) { e.target.value = clamp2(e.target.value, 1, 12); dEl.focus(); } });
+    dEl.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 2) { e.target.value = clamp2(e.target.value, 1, 31); } });
+    function backspacePrev(curr, prev){ curr.addEventListener('keydown', e=>{ if(e.key==='Backspace' && !curr.value){ prev.focus(); } }); }
+    backspacePrev(mEl, yEl); backspacePrev(dEl, mEl);
+
+    function getDobString(){ const y=yEl.value; const m=mEl.value; const d=dEl.value; if(y.length===4 && m.length===2 && d.length===2) return `${y}-${m}-${d}`; return null; }
+    function safeDate(str){ const d=new Date(str); return Number.isNaN(d.getTime())?null:d; }
 
     function renderAge(){
-      const v = dobEl?.value; if(!v) return;
+      const dobStr = getDobString(); if(!dobStr) return;
+      const dob = safeDate(dobStr); if(!dob) return;
       const asof = new Date();
-      const dob = new Date(v); if(isNaN(dob)) return;
       const r = insAge(dob, asof);
       ageNum.textContent = r.ins;
       intlAgeEl.textContent = r.base;
       ruleText.textContent = (asof >= r.half) ? '오늘 기준: 최근 생일부터 6개월 경과 → +1' : '오늘 기준: 최근 생일부터 6개월 미만';
       const ms = r.half - asof;
-      halfLeft.textContent = (ms<=0) ? '이미 전환됨' : `${fmt(r.half)} (약 ${Math.floor(ms/86400000)}일 ${Math.floor((ms%86400000)/3600000)}시간 남음)`;
+      halfLeft.textContent = (ms<=0) ? '이미 상령일 지남' : `${fmt(r.half)} (약 ${Math.floor(ms/86400000)}일 ${Math.floor((ms%86400000)/3600000)}시간 남음)`;
       badge.textContent = `${r.ins}세`;
     }
 
     if (form) {
       form.addEventListener('submit', (e)=>{ e.preventDefault(); renderAge(); });
-      resetBtn.addEventListener('click', ()=>{ dobEl.value=''; ageNum.textContent='--'; intlAgeEl.textContent='–'; ruleText.textContent='생년월일을 입력하세요'; halfLeft.textContent='–'; badge.textContent='–'; });
-      copyBtn.addEventListener('click', async ()=>{ const txt=`보험나이: ${ageNum.textContent}세 (만나이 ${intlAgeEl.textContent}세, 기준일 ${fmt(new Date())})`; try{ await navigator.clipboard.writeText(txt); copyBtn.textContent='복사됨'; setTimeout(()=>copyBtn.textContent='결과 복사',1200);}catch{} });
-      linkBtn.addEventListener('click', async ()=>{ const u=new URL(location.href); if(dobEl.value) u.searchParams.set('dob', dobEl.value); const url=u.toString(); try{ await navigator.clipboard.writeText(url); linkBtn.textContent='링크 복사됨'; setTimeout(()=>linkBtn.textContent='링크 공유',1200);}catch{ alert(url);} });
-      // ?dob=YYYY-MM-DD 자동 채움
-      (function(){ const d=new URL(location.href).searchParams.get('dob'); if(d){ dobEl.value=d; renderAge(); }})();
+      resetBtn.addEventListener('click', ()=>{ yEl.value=''; mEl.value=''; dEl.value=''; ageNum.textContent='--'; intlAgeEl.textContent='–'; ruleText.textContent='생년월일을 입력하세요'; halfLeft.textContent='–'; badge.textContent='–'; yEl.focus(); });
+      copyBtn?.addEventListener('click', async ()=>{ const dobStr = getDobString() || '—'; const txt=`보험나이: ${ageNum.textContent}세 (만나이 ${intlAgeEl.textContent}세, 기준일 ${fmt(new Date())}, 생년월일 ${dobStr})`; try{ await navigator.clipboard.writeText(txt); copyBtn.textContent='복사됨'; setTimeout(()=>copyBtn.textContent='결과 복사',1200);}catch{} });
+      linkBtn?.addEventListener('click', async ()=>{ const u=new URL(location.href); const dobStr=getDobString(); if(dobStr) u.searchParams.set('dob', dobStr); const url=u.toString(); try{ await navigator.clipboard.writeText(url); linkBtn.textContent='링크 복사됨'; setTimeout(()=>linkBtn.textContent='링크 공유',1200);}catch{ alert(url); } });
+      (function(){ const p=new URL(location.href).searchParams.get('dob'); if(p && /^\d{4}-\d{2}-\d{2}$/.test(p)){ const [yy,mm,dd]=p.split('-'); yEl.value=yy; mEl.value=mm; dEl.value=dd; renderAge(); }})();
+      yEl.focus();
     }
 
     $("#y").textContent = new Date().getFullYear();
