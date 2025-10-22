@@ -2,36 +2,98 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== 디자인 시스템 (재사용 컴포넌트) ===== */
+/* =============== 글로벌 =============== */
+@layer base {
+  html { @apply scroll-smooth; }
+  body { @apply antialiased; }
+  a { @apply hover:underline underline-offset-4 decoration-slate-300; }
+  header a, .btn { @apply no-underline; } /* 헤더/버튼은 밑줄 제거 */
+}
 
-/* 버튼 */
-.btn { @apply inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border shadow-sm transition; }
-.btn-ghost { @apply border-slate-200 bg-white hover:bg-white/80; }
-.btn-primary { @apply border-brand-primary bg-brand-primary text-white hover:opacity-90; }
-.btn-pdf { @apply border-sky-600 bg-sky-600 text-white hover:opacity-90; }
-.btn-muted { @apply border-slate-200 bg-white text-slate-600 opacity-60 cursor-not-allowed; }
-
-/* 표(리스트) */
-.table { @apply overflow-hidden rounded-2xl border border-slate-200; }
-.row { @apply grid items-center gap-4 px-4 sm:px-5 py-3 odd:bg-white even:bg-slate-50 hover:bg-white border-t border-slate-200; }
-.row-cols { grid-template-columns: minmax(220px,1.2fr) 3fr; }
-
-/* 브랜드 셀 */
-.brand { @apply flex items-center gap-3; }
-.logo { @apply w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden; }
-.name { @apply text-lg md:text-xl font-extrabold text-slate-900; }
-
-/* 계산기 */
-.calc-card { @apply rounded-3xl border border-indigo-200 bg-white shadow-sm; }
-.display { @apply rounded-2xl border border-slate-200 bg-white p-4 grid gap-1; }
-.display-num { @apply text-3xl font-black tracking-wider; font-variant-numeric: tabular-nums; }
-.key { @apply rounded-xl border py-2 px-4 text-sm font-semibold bg-white hover:bg-slate-50 border-slate-200; }
-.key-primary { @apply border-brand-primary bg-brand-primary text-white hover:opacity-90; }
-
-/* 배경(은은한 그라디언트) */
+/* 은은한 배경 그라디언트 */
 .page-bg {
   background:
     radial-gradient(1000px 520px at 10% -10%, #f0f9ff 0%, transparent 60%),
     radial-gradient(900px 460px at 95% 0%, #fdf2f8 0%, transparent 65%),
     linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
 }
+
+/* =============== 버튼 =============== */
+/* 높이 44px 고정 느낌 + 라운드/그림자/포커스링 */
+.btn {
+  @apply inline-flex items-center justify-center select-none
+         rounded-xl px-4 py-2.5 text-[14px] font-semibold
+         border shadow-sm transition-all duration-150
+         focus:outline-none focus:ring-2 focus:ring-offset-2;
+  min-height: 44px;
+  line-height: 1.2;
+}
+
+/* 자주 쓰는 상태 */
+.btn-ghost  { @apply border-slate-200 bg-white text-slate-800 hover:bg-white/80 focus:ring-slate-300; }
+.btn-muted  { @apply border-slate-200 bg-white text-slate-500 opacity-60 cursor-not-allowed; }
+.btn-primary{
+  @apply border-[color:var(--tw-brand-border,theme(colors.brand.primary))]
+         text-white
+         focus:ring-[color:var(--tw-brand-ring,theme(colors.brand.ring))];
+  background-color: theme(colors.brand.primary);
+}
+.btn-primary:hover{ background-color: theme(colors.brand.primaryHover); }
+.btn-pdf     { @apply border-sky-600 bg-sky-600 text-white hover:opacity-90 focus:ring-sky-300; }
+
+/* 사이즈 옵션 */
+.btn-sm { @apply px-3 py-2 text-[13px]; min-height: 38px; }
+.btn-lg { @apply px-5 py-3 text-[15px]; min-height: 48px; }
+
+/* 아이콘과 간격 */
+.btn > svg, .btn > img { @apply mr-1.5 h-4 w-4; }
+
+/* =============== 표(리스트) =============== */
+.table {
+  @apply overflow-hidden rounded-2xl border border-slate-200 bg-white/70 backdrop-blur;
+  box-shadow: var(--tw-shadow-card, theme(boxShadow.card));
+}
+
+/* 줄 간격/지브라/호버 강조, 더 넓은 간격 */
+.row {
+  @apply grid items-center gap-5
+         px-5 py-4
+         odd:bg-white even:bg-slate-100/60
+         hover:bg-white
+         border-t border-slate-200;
+}
+.row-cols { grid-template-columns: minmax(240px,1.2fr) 3fr; }
+
+/* 왼쪽 브랜드 셀(로고+텍스트) */
+.brand { @apply flex items-center gap-3; }
+.logo  { @apply w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden; }
+.name  { @apply text-[18px] md:text-[20px] font-extrabold text-slate-900; }
+
+/* 버튼 묶음이 좁으면 자동 줄바꿈 */
+.row .grid { @apply grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2; }
+
+/* =============== 카드/보조 블록 =============== */
+.card { @apply rounded-2xl border border-slate-200 bg-white/80 backdrop-blur p-5 shadow-sm; }
+
+/* =============== 계산기 =============== */
+.calc-card { @apply rounded-3xl border bg-white shadow-sm; border-color: theme(colors.brand.ring); }
+.display   { @apply rounded-2xl border border-slate-200 bg-white p-4 grid gap-1; }
+.display-num { 
+  @apply text-[32px] font-black tracking-wider;
+  font-variant-numeric: tabular-nums;
+}
+.key { @apply rounded-xl border py-2 px-4 text-sm font-semibold bg-white hover:bg-slate-50 border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300; }
+.key-primary { 
+  @apply border text-white focus:ring-2 focus:ring-offset-2;
+  background-color: theme(colors.brand.primary);
+  border-color: theme(colors.brand.primary);
+}
+.key-primary:hover { background-color: theme(colors.brand.primaryHover); }
+
+/* =============== 섹션 타이포/간격 =============== */
+.section-title { @apply text-3xl md:text-4xl font-black tracking-tight; }
+.section-sub   { @apply text-sm text-slate-600; }
+
+/* =============== 유틸 =============== */
+.kbd { @apply text-[10px] px-1.5 py-0.5 border rounded bg-slate-50; }
+.pill{ @apply text-[11px] px-2 py-1 rounded-full border border-slate-200 bg-white/70; }
