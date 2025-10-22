@@ -58,11 +58,45 @@
     /* Buttons cell */
     .btns{ @apply grid gap-2 sm:grid-cols-5 py-3; }
 
-    /* Compact age widget */
-    .age-wrap{ @apply mt-6; }
-    .age-card{ @apply card p-4; max-width: 720px; }
-    .age-grid{ @apply grid gap-3 md:grid-cols-[1fr_auto_auto]; }
-    .age-small{ @apply grid gap-2 sm:grid-cols-3; }
+    /* ==========================
+       Compact “Calculator” Widget
+       ========================== */
+    .calc { @apply mx-auto; max-width: 560px; }
+    .calc-card {
+      position: relative;
+      @apply rounded-3xl border bg-white shadow-sm;
+      border-color: rgba(99,102,241,.25);
+      background:
+        radial-gradient(120% 120% at 100% 0%, rgba(99,102,241,.08), transparent 60%),
+        radial-gradient(120% 120% at 0% 0%, rgba(56,189,248,.08), transparent 60%),
+        #ffffffb3;
+      backdrop-filter: blur(6px);
+    }
+    .calc-head { @apply flex items-center justify-between p-4 border-b; border-color: rgba(99,102,241,.2); }
+    .calc-title { @apply text-base font-bold; }
+    .calc-chip { @apply text-[11px] px-2 py-0.5 rounded-full border bg-white; border-color: rgba(99,102,241,.3); }
+
+    .calc-body { @apply p-4 grid gap-3; }
+    .display {
+      @apply rounded-2xl border bg-slate-900 text-white p-4 grid gap-1;
+      border-color: rgba(15,23,42,.5);
+      background:
+        linear-gradient(180deg, rgba(2,6,23,.9), rgba(2,6,23,.8));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .display-line { @apply text-[11px] text-slate-300 flex items-center justify-between; }
+    .display-num { @apply text-3xl font-black tracking-wider; font-variant-numeric: tabular-nums; }
+    .display-sub { @apply text-xs text-slate-300; }
+
+    .calc-form { @apply grid gap-2 md:grid-cols-[1fr_auto_auto]; }
+    .calc-input { @apply w-full border rounded-xl px-4 py-2.5; border-color: rgba(148,163,184,.7); }
+    .calc-keys { @apply grid grid-cols-3 gap-2; }
+    .key { @apply rounded-xl border py-2 text-sm font-semibold bg-white hover:bg-slate-50; border-color: rgba(148,163,184,.6); }
+    .key-primary { @apply border-indigo-600 bg-indigo-600 text-white hover:opacity-90; }
+    .key-ghost { @apply border-slate-200 bg-white hover:bg-white/80; }
+
+    /* micro “pill” hints */
+    .tiny { @apply text-[11px] text-slate-500; }
   </style>
 </head>
 <body class="text-slate-900">
@@ -134,53 +168,67 @@
       <div id="life-empty" class="hidden mt-4 text-sm muted">표시할 생명보험사가 없습니다.</div>
     </section>
 
-    <!-- 보험나이 계산기 (Compact) -->
+    <!-- 보험나이 계산기 — Calculator 스타일 (Compact) -->
     <section id="age" class="section-wrap">
       <div class="section-head">
         <div>
           <h2 class="section-title">보험나이 계산기</h2>
-          <p class="section-sub">규칙: 만나이 + (최근 생일부터 6개월 경과 시 +1) · 기준일은 오늘</p>
+          <p class="section-sub">규칙: 만나이 + (최근 생일부터 6개월 경과 시 +1) · 기준일은 <strong>오늘</strong></p>
         </div>
-        <span id="age-badge" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white/80">–</span>
       </div>
 
-      <div class="age-wrap">
-        <div class="age-card">
-          <form id="age-form" class="age-grid items-end">
-            <div>
-              <label class="text-sm font-medium">생년월일</label>
-              <input id="dob" type="date" class="mt-1 w-full border border-slate-300 rounded-xl px-4 py-2.5" placeholder="YYYY-MM-DD" required>
-            </div>
-            <button type="submit" class="btn btn-primary h-[42px]">계산하기</button>
-            <button type="button" id="age-reset" class="btn btn-ghost h-[42px]">초기화</button>
-          </form>
+      <div class="calc mt-4">
+        <div class="calc-card">
+          <!-- Head -->
+          <div class="calc-head">
+            <div class="calc-title">청구닷컴 나이 계산기</div>
+            <div class="calc-chip" id="age-badge">–</div>
+          </div>
 
-          <div id="age-result" class="mt-4 hidden">
-            <div class="age-small">
-              <div class="card p-3">
-                <div class="text-[11px] muted">보험나이</div>
-                <div class="text-xl font-black mt-0.5"><span id="age-num">–</span> 세</div>
-                <div class="text-[11px] mt-1 text-slate-500" id="age-rule"></div>
+          <!-- Body -->
+          <div class="calc-body">
+            <!-- Display -->
+            <div class="display">
+              <div class="display-line">
+                <span>보험나이</span>
+                <span class="tiny">기준: 오늘</span>
               </div>
+              <div class="display-num"><span id="age-num">--</span><span class="text-xl align-top ml-1">세</span></div>
+              <div class="display-sub" id="age-rule">생년월일을 입력하세요</div>
+            </div>
+
+            <!-- Form/Keys -->
+            <form id="age-form" class="calc-form items-end">
+              <div>
+                <label class="text-sm font-medium">생년월일</label>
+                <input id="dob" type="date" class="calc-input" required />
+                <div class="tiny mt-1">YYYY-MM-DD</div>
+              </div>
+              <button type="submit" class="key key-primary">계산하기</button>
+              <button type="button" id="age-reset" class="key key-ghost">초기화</button>
+            </form>
+
+            <!-- Small cards -->
+            <div class="grid gap-2 md:grid-cols-3">
               <div class="card p-3">
                 <div class="text-[11px] muted">만나이</div>
                 <div class="text-base font-bold mt-0.5"><span id="intl-age">–</span> 세</div>
-                <div class="text-[11px] mt-1 text-slate-500">생일 경과 반영</div>
               </div>
               <div class="card p-3">
                 <div class="text-[11px] muted">다음 반(半)생일까지</div>
                 <div class="text-base font-semibold mt-0.5"><span id="halfleft">–</span></div>
-                <div class="text-[11px] mt-1 text-slate-500">6개월 규칙 전환까지</div>
+              </div>
+              <div class="card p-3">
+                <div class="text-[11px] muted">빠른 동작</div>
+                <div class="mt-1 grid grid-cols-2 gap-2">
+                  <button id="age-copy" class="key" type="button">결과 복사</button>
+                  <button id="age-link" class="key" type="button">링크 공유</button>
+                </div>
               </div>
             </div>
-
-            <div class="mt-3 flex flex-wrap gap-2">
-              <button id="age-copy" class="btn btn-ghost" type="button">결과 복사</button>
-              <button id="age-link" class="btn btn-ghost" type="button">링크 공유</button>
-            </div>
-          </div>
-        </div>
-      </div>
+          </div><!-- /calc-body -->
+        </div><!-- /calc-card -->
+      </div><!-- /calc -->
     </section>
   </main>
 
@@ -291,11 +339,16 @@
         lossList.innerHTML = err; lifeList.innerHTML = err;
       });
 
-    // ===== 보험나이 계산기 (compact, as-of = today) =====
+    // ===== 보험나이 계산기 (calculator style, as-of today) =====
+    const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const addMonths = (d, m) => { const x = new Date(d); const day=x.getDate(); x.setMonth(x.getMonth()+m); if (x.getDate()!==day) x.setDate(0); return x; };
+    function calcInternationalAge(dob, asof){ let age = asof.getFullYear()-dob.getFullYear(); const bdayThisYear=new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()); if(asof < bdayThisYear) age -= 1; return age; }
+    function calcInsuranceAge(dob, asof){ const base=calcInternationalAge(dob, asof); const lastYear = asof.getFullYear() - (asof < new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()) ? 1 : 0); const last = new Date(lastYear, dob.getMonth(), dob.getDate()); const half=addMonths(last,6); const plus = asof >= half ? 1 : 0; return { insAge: base+plus, base, half, plus }; }
+    function humanize(ms){ if(ms<0) ms=0; const d=Math.floor(ms/86400000); const h=Math.floor((ms%86400000)/3600000); return `${d}일 ${h}시간`; }
+
     const dobEl = document.querySelector('#dob');
     const form = document.querySelector('#age-form');
     const badge = document.querySelector('#age-badge');
-    const view = document.querySelector('#age-result');
     const ageNum = document.querySelector('#age-num');
     const intlAge = document.querySelector('#intl-age');
     const ruleText = document.querySelector('#age-rule');
@@ -304,48 +357,26 @@
     const linkBtn = document.querySelector('#age-link');
     const resetBtn = document.querySelector('#age-reset');
 
-    const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    const addMonths = (d, m) => { const x = new Date(d); const day=x.getDate(); x.setMonth(x.getMonth()+m); if (x.getDate()!==day) x.setDate(0); return x; };
-
-    function calcInternationalAge(dob, asof){
-      let age = asof.getFullYear() - dob.getFullYear();
-      const bdayThisYear = new Date(asof.getFullYear(), dob.getMonth(), dob.getDate());
-      if (asof < bdayThisYear) age -= 1;
-      return age;
-    }
-    function calcInsuranceAge(dob, asof){
-      const base = calcInternationalAge(dob, asof);
-      const lastBirthdayYear = asof.getFullYear() - (asof < new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()) ? 1 : 0);
-      const lastBirthday = new Date(lastBirthdayYear, dob.getMonth(), dob.getDate());
-      const halfBirthday = addMonths(lastBirthday, 6);
-      const plus = asof >= halfBirthday ? 1 : 0;
-      return { insAge: base + plus, base, halfBirthday, plus };
-    }
-    function humanizeDuration(ms){ if(ms<0) ms=0; const d=Math.floor(ms/86400000); const h=Math.floor((ms%86400000)/3600000); return `${d}일 ${h}시간`; }
-
     function renderAge(){
-      const dobVal = dobEl?.value;
-      if (!dobVal) return;
-      const asof = new Date(); // 항상 오늘 기준
-      const dob = new Date(dobVal);
-      if (isNaN(dob)) return;
+      const dobVal = dobEl?.value; if(!dobVal) return;
+      const asof = new Date();
+      const dob = new Date(dobVal); if(isNaN(dob)) return;
 
       const r = calcInsuranceAge(dob, asof);
       ageNum.textContent = r.insAge;
       intlAge.textContent = r.base;
       ruleText.textContent = r.plus ? '오늘 기준: 최근 생일부터 6개월 경과 → +1 반영' : '오늘 기준: 최근 생일부터 6개월 미만';
-      const halfMs = r.halfBirthday - asof;
-      halfLeft.textContent = (halfMs <= 0) ? '이미 전환됨' : `${fmt(r.halfBirthday)} (약 ${humanizeDuration(halfMs)} 남음)`;
-      badge.textContent = `${r.insAge}세`; badge.classList.remove('hidden');
-      view.classList.remove('hidden');
+      const ms = r.half - asof;
+      halfLeft.textContent = (ms <= 0) ? '이미 전환됨' : `${fmt(r.half)} (약 ${humanize(ms)} 남음)`;
+      badge.textContent = `${r.insAge}세`;
     }
 
     if (form) {
       form.addEventListener('submit', (e)=>{ e.preventDefault(); renderAge(); });
-      resetBtn.addEventListener('click', ()=>{ dobEl.value=''; view.classList.add('hidden'); badge.textContent='–'; });
+      resetBtn.addEventListener('click', ()=>{ dobEl.value=''; ageNum.textContent='--'; intlAge.textContent='–'; ruleText.textContent='생년월일을 입력하세요'; halfLeft.textContent='–'; badge.textContent='–'; });
       copyBtn.addEventListener('click', async ()=>{ const txt=`보험나이: ${ageNum.textContent}세 (만나이 ${intlAge.textContent}세, 기준일 ${fmt(new Date())})`; try{ await navigator.clipboard.writeText(txt); copyBtn.textContent='복사됨'; setTimeout(()=>copyBtn.textContent='결과 복사',1200);}catch{} });
       linkBtn.addEventListener('click', async ()=>{ const p=new URL(location.href); if(dobEl.value) p.searchParams.set('dob',dobEl.value); const url=p.toString(); try{ await navigator.clipboard.writeText(url); linkBtn.textContent='링크 복사됨'; setTimeout(()=>linkBtn.textContent='링크 공유',1200);}catch{ alert(url);} });
-      // URL 파라미터로 DOB 채우기
+      // URL 파라미터로 DOB 세팅
       (function(){ const u=new URL(location.href); const dob=u.searchParams.get('dob'); if(dob){ dobEl.value=dob; renderAge(); }})();
     }
 
