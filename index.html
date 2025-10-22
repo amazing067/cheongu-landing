@@ -17,10 +17,43 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <!-- 빌드된 Tailwind(@apply) CSS — 캐시 버스터 추가 -->
-  <link rel="stylesheet" href="/assets/site.css?v=compact2" />
+  <!-- 빌드된 Tailwind(@apply) CSS -->
+  <link rel="stylesheet" href="/assets/site.css?v=compact3" />
+
+  <!-- 핫픽스: 설계사.com 느낌의 콤팩트 테이블 & 칩 버튼 -->
+  <style id="hotfix-compact-v2">
+    body{background:#f8fafc}
+    .table{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;box-shadow:none}
+    .row{display:grid;grid-template-columns:minmax(180px,1fr) auto;align-items:center;gap:8px;padding:8px 10px;border-top:1px solid rgba(100,116,139,.25)}
+    .row:first-child{border-top-width:0}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{max-height:26px;height:auto;width:auto;object-fit:contain}
+    .name{font-size:15px;font-weight:800;color:#0f172a}
+    .row .grid{display:flex;flex-wrap:wrap;gap:8px}
+    .row .grid>a,.row .grid>button{flex:0 0 auto}
+    .btn{min-height:30px;padding:6px 10px;font-size:12px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:#0f172a}
+    .btn:hover{background:#f8fafc}
+    .btn-muted{opacity:.55;cursor:not-allowed}
+    .btn-ghost{border-color:#e2e8f0;background:#fff}
+    .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
+    .btn-primary:hover{background:#6d28d9}
+    .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:6px 12px}
+    .pill{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
+    .section-title{font-size:26px;font-weight:900;letter-spacing:-.01em}
+    .section-sub{font-size:12.5px;color:#475569}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px}
+    .kbd{font-size:10px;padding:2px 6px;border:1px solid #e2e8f0;border-radius:6px;background:#f1f5f9}
+    /* 계산기 */
+    .calc-card{border:1px solid #c7b7ff;border-radius:10px;background:#fff}
+    .display{border:1px solid #e2e8f0;border-radius:8px;padding:10px}
+    .display-num{font-size:26px;font-weight:900;letter-spacing:.02em}
+    .key{border:1px solid #e2e8f0;border-radius:8px;background:#fff;padding:6px 10px;font-size:12.5px}
+    .key:hover{background:#f8fafc}
+    .key-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
+    .key-primary:hover{background:#6d28d9}
+  </style>
 </head>
-<body class="text-slate-900 bg-slate-50">
+<body class="text-slate-900">
   <!-- 헤더 -->
   <header>
     <div class="max-w-6xl mx-auto px-5 py-4 flex items-center gap-3">
@@ -63,7 +96,7 @@
       <div class="flex items-end justify-between pb-2">
         <div>
           <h2 class="section-title">손해보험사</h2>
-          <p class="section-sub">표 형태로 한눈에. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
+          <p class="section-sub">콤팩트 표. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
         </div>
         <span id="loss-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white">0개</span>
       </div>
@@ -76,7 +109,7 @@
       <div class="flex items-end justify-between pb-2">
         <div>
           <h2 class="section-title">생명보험사</h2>
-          <p class="section-sub">표 형태로 한눈에. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
+          <p class="section-sub">콤팩트 표. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
         </div>
         <span id="life-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white">0개</span>
       </div>
@@ -123,15 +156,15 @@
             </form>
 
             <div class="grid gap-2 md:grid-cols-3">
-              <div class="table p-3">
+              <div class="card">
                 <div class="text-[11px] text-slate-600">만나이</div>
                 <div class="text-base font-bold mt-0.5"><span id="intl-age">–</span> 세</div>
               </div>
-              <div class="table p-3">
+              <div class="card">
                 <div class="text-[11px] text-slate-600">다음 보험 상령일까지</div>
                 <div class="text-base font-semibold mt-0.5"><span id="halfleft">–</span></div>
               </div>
-              <div class="table p-3">
+              <div class="card">
                 <div class="text-[11px] text-slate-600">빠른 동작</div>
                 <div class="mt-1 grid grid-cols-2 gap-2">
                   <button id="age-copy" class="key" type="button">결과 복사</button>
@@ -188,7 +221,7 @@
           <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
           <div class="name">${item.name}</div>
         </div>`;
-      return L.system ? `<a href="${L.system}" class="block">${inner}</a>` : `<div class="opacity-85">${inner}</div>`;
+      return L.system ? `<a href="${L.system}" class="block no-underline">${inner}</a>` : `<div class="opacity-85">${inner}</div>`;
     }
 
     function btn(label, href, cls) {
@@ -202,7 +235,7 @@
       return `
         <div class="row row-cols" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}" data-brand="${item.name}">
           <div>${brandCell(item)}</div>
-          <div class="grid gap-2 sm:grid-cols-3 lg:grid-cols-5">
+          <div class="grid">
             ${btn("전산 접속", L.system, "btn-primary")}
             ${btn("필요서류 안내", L.guide, "btn-ghost")}
             ${btn("보험금 청구서 PDF 다운로드", L.pdf, "btn-pdf")}
@@ -241,7 +274,7 @@
       lossList.innerHTML = err; lifeList.innerHTML = err;
     });
 
-    // ===== 보험나이 계산기 (오늘 기준) =====
+    // ===== 보험나이 계산기 (연/월/일 3칸, 오늘 기준) =====
     const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const addMonths = (d, m) => { const x = new Date(d); const day=x.getDate(); x.setMonth(x.getMonth()+m); if (x.getDate()!==day) x.setDate(0); return x; };
     function intlAge(dob, asof){ let a = asof.getFullYear()-dob.getFullYear(); const bThis = new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()); if(asof < bThis) a -= 1; return a; }
