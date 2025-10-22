@@ -13,22 +13,27 @@
   <meta property="og:image" content="/assets/og-image.png" />
   <link rel="icon" href="/assets/favicon.png" />
 
-  <!-- 폰트(선택) -->
+  <!-- (선택) 웹폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <!-- 빌드된 Tailwind(@apply) CSS -->
-  <link rel="stylesheet" href="/assets/site.css?v=compact3" />
+  <!-- 빌드된 Tailwind(@apply) CSS — 캐시 무력화 쿼리 포함 -->
+  <link rel="stylesheet" href="/assets/site.css?v=final-compact-3" />
 
-  <!-- 핫픽스: 설계사.com 느낌의 콤팩트 테이블 & 칩 버튼 -->
-  <style id="hotfix-compact-v2">
+  <!-- Hotfix: 표/버튼 콤팩트 + 로고 라운드 제거 + 계산기 정렬 -->
+  <style id="hotfix">
     body{background:#f8fafc}
-    .table{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;box-shadow:none}
+    /* 테이블 */
+    .table{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
     .row{display:grid;grid-template-columns:minmax(180px,1fr) auto;align-items:center;gap:8px;padding:8px 10px;border-top:1px solid rgba(100,116,139,.25)}
     .row:first-child{border-top-width:0}
+
+    /* 브랜드 셀 */
     .brand{display:flex;align-items:center;gap:10px}
-    .logo{max-height:26px;height:auto;width:auto;object-fit:contain}
+    .logo{max-height:26px;height:auto;width:auto;object-fit:contain;border-radius:0} /* 둥근모서리 제거 */
     .name{font-size:15px;font-weight:800;color:#0f172a}
+
+    /* 버튼(칩 형태) */
     .row .grid{display:flex;flex-wrap:wrap;gap:8px}
     .row .grid>a,.row .grid>button{flex:0 0 auto}
     .btn{min-height:30px;padding:6px 10px;font-size:12px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:#0f172a}
@@ -38,19 +43,23 @@
     .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
     .btn-primary:hover{background:#6d28d9}
     .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:6px 12px}
+
     .pill{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
     .section-title{font-size:26px;font-weight:900;letter-spacing:-.01em}
     .section-sub{font-size:12.5px;color:#475569}
     .card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px}
     .kbd{font-size:10px;padding:2px 6px;border:1px solid #e2e8f0;border-radius:6px;background:#f1f5f9}
-    /* 계산기 */
-    .calc-card{border:1px solid #c7b7ff;border-radius:10px;background:#fff}
-    .display{border:1px solid #e2e8f0;border-radius:8px;padding:10px}
-    .display-num{font-size:26px;font-weight:900;letter-spacing:.02em}
-    .key{border:1px solid #e2e8f0;border-radius:8px;background:#fff;padding:6px 10px;font-size:12.5px}
-    .key:hover{background:#f8fafc}
-    .key-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
-    .key-primary:hover{background:#6d28d9}
+
+    /* 보험나이 계산기 레이아웃 고정 */
+    #age .calc-card{border:1px solid #c7b7ff;border-radius:10px;background:#fff}
+    #age-form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+    #age-form .dob-wrap{display:flex;align-items:center;gap:8px}
+    #age-form input{height:40px;border-radius:10px;padding:0 12px;text-align:center;border:1px solid #cbd5e1}
+    #dobY{width:120px} #dobM,#dobD{width:76px}
+    #age-form .key{min-width:96px;white-space:nowrap;height:40px;line-height:38px;border-radius:10px}
+    #age-form .key-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
+    #age-form .key-primary:hover{background:#6d28d9}
+    #age .card{border:1px solid #e2e8f0;border-radius:10px}
   </style>
 </head>
 <body class="text-slate-900">
@@ -124,7 +133,7 @@
 
       <div class="max-w-[560px] mt-4 mx-auto">
         <div class="calc-card">
-          <div class="flex items-center justify-between p-3 border-b border-indigo-200/60">
+          <div class="flex items-center justify-between p-3" style="border-bottom:1px solid #c7b7ff;">
             <div class="text-base font-bold">청구닷컴 나이 계산기</div>
             <div class="text-[11px] px-2 py-0.5 rounded-full border border-indigo-200 bg-white" id="age-badge">–</div>
           </div>
@@ -136,19 +145,16 @@
               <div class="text-xs text-slate-600" id="age-rule">생년월일을 입력하세요</div>
             </div>
 
-            <!-- 생년월일: 연(4)→월(2)→일(2) 자동 이동 -->
-            <form id="age-form" class="grid gap-2 md:grid-cols-[1fr_auto_auto] items-end">
+            <!-- 연(4)→월(2)→일(2) 자동 이동 + 버튼 가로 정렬 -->
+            <form id="age-form">
               <div>
                 <label class="text-sm font-semibold">생년월일</label>
-                <div class="mt-1 flex items-center gap-2">
-                  <input id="dobY" inputmode="numeric" maxlength="4" placeholder="연도(YYYY)"
-                        class="w-[110px] border border-slate-300 rounded-xl px-3 py-2.5 text-center" />
+                <div class="dob-wrap mt-1">
+                  <input id="dobY" inputmode="numeric" maxlength="4" placeholder="연도(YYYY)" />
                   <span>–</span>
-                  <input id="dobM" inputmode="numeric" maxlength="2" placeholder="MM"
-                        class="w-[70px] border border-slate-300 rounded-xl px-3 py-2.5 text-center" />
+                  <input id="dobM" inputmode="numeric" maxlength="2" placeholder="MM" />
                   <span>–</span>
-                  <input id="dobD" inputmode="numeric" maxlength="2" placeholder="DD"
-                        class="w-[70px] border border-slate-300 rounded-xl px-3 py-2.5 text-center" />
+                  <input id="dobD" inputmode="numeric" maxlength="2" placeholder="DD" />
                 </div>
               </div>
               <button type="submit" class="key key-primary">계산하기</button>
