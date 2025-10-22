@@ -16,99 +16,25 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* Base */
-    .btn{ @apply inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border transition shadow-sm; }
-    .btn-ghost{ @apply border-slate-200 bg-white hover:bg-white/80; }
-    .btn-primary{ @apply border-indigo-600 bg-indigo-600 text-white hover:opacity-90; }   /* 전산 접속 */
-    .btn-info{ @apply border-slate-200 bg-white hover:bg-white/80; }                      /* 안내/센터/모바일 */
-    .btn-pdf{ @apply border-sky-600 bg-sky-600 text-white hover:opacity-90; }             /* 보험금 청구서 PDF */
-    .card{ @apply rounded-2xl border border-slate-200/70 bg-white/70 backdrop-blur; }
-    .muted{ @apply text-slate-600; }
-    .kbd{ @apply text-[10px] px-1.5 py-0.5 border rounded bg-slate-50; }
-
-    /* Background */
+    /* 은은한 배경 그라디언트만 커스텀 */
     body{
       background:
         radial-gradient(1000px 520px at 10% -10%, #f0f9ff 0%, transparent 60%),
         radial-gradient(900px 460px at 95% 0%, #fdf2f8 0%, transparent 65%),
         linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
     }
-
-    /* Headings */
-    .section-wrap{ @apply mt-12; }
-    .section-head{ @apply flex items-end justify-between pb-3; }
-    .section-title{ @apply text-3xl md:text-4xl font-black tracking-tight; }
-    .section-sub{ @apply text-sm muted; }
-
-    /* Table-like listing */
-    .table{ @apply mt-4 overflow-hidden rounded-2xl border border-slate-200; }
-    .row{ @apply grid items-center gap-4 px-4 sm:px-5; grid-template-columns: minmax(220px,1.2fr) 3fr; }
-    .row + .row{ @apply border-t border-slate-200; }
-    .row:nth-child(odd){ @apply bg-white/70; }
-    .row:nth-child(even){ @apply bg-white/40; }
-    .row:hover{ @apply bg-white; }
-
-    /* Brand cell */
-    .brand{ @apply flex items-center gap-3 py-3; }
-    .logo{ @apply w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden; }
-    .logo img{ width:100%; height:100%; object-fit:contain; }
-    .logo-badge{ @apply hidden w-full h-full items-center justify-center font-bold text-slate-800; }
-    .name{ @apply text-lg md:text-xl font-extrabold text-slate-900; }  /* 회사명만 굵고 크게 */
-
-    /* Buttons cell */
-    .btns{ @apply grid gap-2 sm:grid-cols-5 py-3; }
-
-    /* ==========================
-       Compact “Calculator” Widget
-       ========================== */
-    .calc { @apply mx-auto; max-width: 560px; }
-    .calc-card {
-      position: relative;
-      @apply rounded-3xl border bg-white shadow-sm;
-      border-color: rgba(99,102,241,.25);
-      background:
-        radial-gradient(120% 120% at 100% 0%, rgba(99,102,241,.08), transparent 60%),
-        radial-gradient(120% 120% at 0% 0%, rgba(56,189,248,.08), transparent 60%),
-        #ffffffb3;
-      backdrop-filter: blur(6px);
-    }
-    .calc-head { @apply flex items-center justify-between p-4 border-b; border-color: rgba(99,102,241,.2); }
-    .calc-title { @apply text-base font-bold; }
-    .calc-chip { @apply text-[11px] px-2 py-0.5 rounded-full border bg-white; border-color: rgba(99,102,241,.3); }
-
-    .calc-body { @apply p-4 grid gap-3; }
-    .display {
-      @apply rounded-2xl border bg-slate-900 text-white p-4 grid gap-1;
-      border-color: rgba(15,23,42,.5);
-      background:
-        linear-gradient(180deg, rgba(2,6,23,.9), rgba(2,6,23,.8));
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
-    }
-    .display-line { @apply text-[11px] text-slate-300 flex items-center justify-between; }
-    .display-num { @apply text-3xl font-black tracking-wider; font-variant-numeric: tabular-nums; }
-    .display-sub { @apply text-xs text-slate-300; }
-
-    .calc-form { @apply grid gap-2 md:grid-cols-[1fr_auto_auto]; }
-    .calc-input { @apply w-full border rounded-xl px-4 py-2.5; border-color: rgba(148,163,184,.7); }
-    .calc-keys { @apply grid grid-cols-3 gap-2; }
-    .key { @apply rounded-xl border py-2 text-sm font-semibold bg-white hover:bg-slate-50; border-color: rgba(148,163,184,.6); }
-    .key-primary { @apply border-indigo-600 bg-indigo-600 text-white hover:opacity-90; }
-    .key-ghost { @apply border-slate-200 bg-white hover:bg-white/80; }
-
-    /* micro “pill” hints */
-    .tiny { @apply text-[11px] text-slate-500; }
   </style>
 </head>
 <body class="text-slate-900">
-  <!-- Header (no sticky) -->
+  <!-- Header (고정바 아님) -->
   <header>
     <div class="max-w-6xl mx-auto px-5 py-4 flex items-center gap-3">
       <a class="text-lg font-extrabold" href="/">청구닷컴</a>
       <span class="px-2 py-1 text-[11px] rounded-full border border-slate-200 bg-white/70">베타</span>
       <nav class="ml-auto flex items-center gap-2">
-        <a class="btn btn-ghost text-sm" href="#loss">손해보험사</a>
-        <a class="btn btn-ghost text-sm" href="#life">생명보험사</a>
-        <a class="btn btn-ghost text-sm" href="#age">보험나이 계산기</a>
+        <a class="inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80" href="#loss">손해보험사</a>
+        <a class="inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80" href="#life">생명보험사</a>
+        <a class="inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80" href="#age">보험나이 계산기</a>
       </nav>
     </div>
   </header>
@@ -119,126 +45,119 @@
       보험금 청구 링크,
       <span class="bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-600 via-indigo-600 to-sky-600">한 곳에서 바로</span>
     </h1>
-    <p class="mt-3 text-base sm:text-lg text-slate-700">전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · 고객센터 · 모바일청구 — 광고 없이 깔끔하게.</p>
+    <p class="mt-3 text-base sm:text-lg text-slate-700">
+      전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · 고객센터 · 모바일청구 — 광고 없이 깔끔하게.
+    </p>
 
     <!-- Search -->
-    <div class="mt-6 card p-5" role="search">
+    <div class="mt-6 rounded-2xl border border-slate-200/70 bg-white/70 backdrop-blur p-5" role="search">
       <label class="text-sm font-medium">검색</label>
       <div class="mt-2 grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
         <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-3" placeholder="회사명·키워드 (예: 삼성화재, 고객센터, PDF)">
-        <button id="clear" class="btn btn-ghost" type="button" title="지우기">지우기</button>
-        <a class="btn btn-ghost" href="#loss">손해부터 보기</a>
+        <button id="clear" class="inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80" type="button">지우기</button>
+        <a class="inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80" href="#loss">손해부터 보기</a>
       </div>
-      <div class="mt-2 text-xs muted">단축키: <span class="kbd">/</span> 검색 포커스, <span class="kbd">Esc</span> 지우기</div>
+      <div class="mt-2 text-xs text-slate-600">단축키: <span class="px-1.5 py-0.5 border rounded bg-slate-50 text-[10px]">/</span> 검색 포커스, <span class="px-1.5 py-0.5 border rounded bg-slate-50 text-[10px]">Esc</span> 지우기</div>
     </div>
   </section>
 
   <main class="max-w-6xl mx-auto px-5 pb-24">
     <!-- 손해보험사 -->
-    <section id="loss" class="section-wrap">
-      <div class="section-head">
+    <section id="loss" class="mt-12">
+      <div class="flex items-end justify-between pb-3">
         <div>
-          <h2 class="section-title">손해보험사</h2>
-          <p class="section-sub">표 형태로 깔끔 분리. 비어있는 항목은 회색 버튼으로 표시됩니다.</p>
+          <h2 class="text-3xl md:text-4xl font-black tracking-tight">손해보험사</h2>
+          <p class="text-sm text-slate-600">표 형태로 깔끔 분리. 비어있는 항목은 회색 버튼으로 표시됩니다.</p>
         </div>
         <span id="loss-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white/80">0개</span>
       </div>
-      <div id="loss-list" class="table">
-        <div class="row"><div class="h-10"></div><div class="h-10"></div></div>
-        <div class="row"><div class="h-10"></div><div class="h-10"></div></div>
-        <div class="row"><div class="h-10"></div><div class="h-10"></div></div>
+
+      <!-- 표 컨테이너 -->
+      <div id="loss-list" class="rounded-2xl border border-slate-200 overflow-hidden">
+        <!-- JS가 줄을 채움; 안 보이면 데이터/JS 오류 -->
       </div>
-      <div id="loss-empty" class="hidden mt-4 text-sm muted">표시할 손해보험사가 없습니다.</div>
+      <div id="loss-empty" class="hidden mt-4 text-sm text-slate-600">표시할 손해보험사가 없습니다.</div>
     </section>
 
     <!-- 생명보험사 -->
-    <section id="life" class="section-wrap">
-      <div class="section-head">
+    <section id="life" class="mt-12">
+      <div class="flex items-end justify-between pb-3">
         <div>
-          <h2 class="section-title">생명보험사</h2>
-          <p class="section-sub">표 형태로 깔끔 분리. 비어있는 항목은 회색 버튼으로 표시됩니다.</p>
+          <h2 class="text-3xl md:text-4xl font-black tracking-tight">생명보험사</h2>
+          <p class="text-sm text-slate-600">표 형태로 깔끔 분리. 비어있는 항목은 회색 버튼으로 표시됩니다.</p>
         </div>
         <span id="life-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white/80">0개</span>
       </div>
-      <div id="life-list" class="table">
-        <div class="row"><div class="h-10"></div><div class="h-10"></div></div>
-        <div class="row"><div class="h-10"></div><div class="h-10"></div></div>
-        <div class="row"><div class="h-10"></div><div class="h-10"></div></div>
-      </div>
-      <div id="life-empty" class="hidden mt-4 text-sm muted">표시할 생명보험사가 없습니다.</div>
+
+      <div id="life-list" class="rounded-2xl border border-slate-200 overflow-hidden"></div>
+      <div id="life-empty" class="hidden mt-4 text-sm text-slate-600">표시할 생명보험사가 없습니다.</div>
     </section>
 
-    <!-- 보험나이 계산기 — Calculator 스타일 (Compact) -->
-    <section id="age" class="section-wrap">
-      <div class="section-head">
-        <div>
-          <h2 class="section-title">보험나이 계산기</h2>
-          <p class="section-sub">규칙: 만나이 + (최근 생일부터 6개월 경과 시 +1) · 기준일은 <strong>오늘</strong></p>
-        </div>
-      </div>
+    <!-- 보험나이 계산기 (컴팩트, 밝은 디스플레이) -->
+    <section id="age" class="mt-12">
+      <h2 class="text-3xl md:text-4xl font-black tracking-tight">보험나이 계산기</h2>
+      <p class="text-sm text-slate-600">규칙: 만나이 + (최근 생일부터 6개월 경과 시 +1) · 기준일은 <strong>오늘</strong></p>
 
-      <div class="calc mt-4">
-        <div class="calc-card">
-          <!-- Head -->
-          <div class="calc-head">
-            <div class="calc-title">청구닷컴 나이 계산기</div>
-            <div class="calc-chip" id="age-badge">–</div>
+      <div class="max-w-[560px] mt-4 mx-auto">
+        <div class="rounded-3xl border border-indigo-200 bg-white shadow-sm">
+          <!-- 헤더 -->
+          <div class="flex items-center justify-between p-4 border-b border-indigo-200/60">
+            <div class="text-base font-bold">청구닷컴 나이 계산기</div>
+            <div class="text-[11px] px-2 py-0.5 rounded-full border border-indigo-200 bg-white" id="age-badge">–</div>
           </div>
 
-          <!-- Body -->
-          <div class="calc-body">
-            <!-- Display -->
-            <div class="display">
-              <div class="display-line">
-                <span>보험나이</span>
-                <span class="tiny">기준: 오늘</span>
+          <!-- 바디 -->
+          <div class="p-4 grid gap-3">
+            <!-- 디스플레이 -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-4 grid gap-1">
+              <div class="text-[11px] text-slate-600 flex items-center justify-between">
+                <span>보험나이</span><span class="text-slate-500">기준: 오늘</span>
               </div>
-              <div class="display-num"><span id="age-num">--</span><span class="text-xl align-top ml-1">세</span></div>
-              <div class="display-sub" id="age-rule">생년월일을 입력하세요</div>
+              <div class="text-3xl font-black tracking-wider"><span id="age-num">--</span><span class="text-xl align-top ml-1">세</span></div>
+              <div class="text-xs text-slate-600" id="age-rule">생년월일을 입력하세요</div>
             </div>
 
-            <!-- Form/Keys -->
-            <form id="age-form" class="calc-form items-end">
+            <!-- 입력/키 -->
+            <form id="age-form" class="grid gap-2 md:grid-cols-[1fr_auto_auto] items-end">
               <div>
                 <label class="text-sm font-medium">생년월일</label>
-                <input id="dob" type="date" class="calc-input" required />
-                <div class="tiny mt-1">YYYY-MM-DD</div>
+                <input id="dob" type="date" class="mt-1 w-full border border-slate-300 rounded-xl px-4 py-2.5" required />
+                <div class="text-[11px] text-slate-500 mt-1">YYYY-MM-DD</div>
               </div>
-              <button type="submit" class="key key-primary">계산하기</button>
-              <button type="button" id="age-reset" class="key key-ghost">초기화</button>
+              <button type="submit" class="rounded-xl border border-indigo-600 bg-indigo-600 text-white py-2 px-4 font-semibold hover:opacity-90">계산하기</button>
+              <button type="button" id="age-reset" class="rounded-xl border border-slate-200 bg-white py-2 px-4 font-semibold hover:bg-slate-50">초기화</button>
             </form>
 
-            <!-- Small cards -->
             <div class="grid gap-2 md:grid-cols-3">
-              <div class="card p-3">
-                <div class="text-[11px] muted">만나이</div>
+              <div class="rounded-2xl border border-slate-200 bg-white p-3">
+                <div class="text-[11px] text-slate-600">만나이</div>
                 <div class="text-base font-bold mt-0.5"><span id="intl-age">–</span> 세</div>
               </div>
-              <div class="card p-3">
-                <div class="text-[11px] muted">다음 반(半)생일까지</div>
+              <div class="rounded-2xl border border-slate-200 bg-white p-3">
+                <div class="text-[11px] text-slate-600">다음 반(半)생일까지</div>
                 <div class="text-base font-semibold mt-0.5"><span id="halfleft">–</span></div>
               </div>
-              <div class="card p-3">
-                <div class="text-[11px] muted">빠른 동작</div>
+              <div class="rounded-2xl border border-slate-200 bg-white p-3">
+                <div class="text-[11px] text-slate-600">빠른 동작</div>
                 <div class="mt-1 grid grid-cols-2 gap-2">
-                  <button id="age-copy" class="key" type="button">결과 복사</button>
-                  <button id="age-link" class="key" type="button">링크 공유</button>
+                  <button id="age-copy" class="rounded-xl border border-slate-200 bg-white py-2 px-3 text-sm font-semibold hover:bg-slate-50" type="button">결과 복사</button>
+                  <button id="age-link" class="rounded-xl border border-slate-200 bg-white py-2 px-3 text-sm font-semibold hover:bg-slate-50" type="button">링크 공유</button>
                 </div>
               </div>
             </div>
-          </div><!-- /calc-body -->
-        </div><!-- /calc-card -->
-      </div><!-- /calc -->
+          </div><!-- /p-4 -->
+        </div><!-- /card -->
+      </div><!-- /max-w -->
     </section>
   </main>
 
   <footer class="border-t border-slate-200 bg-white/70 backdrop-blur">
-    <div class="max-w-6xl mx-auto px-5 py-8 text-sm muted">
+    <div class="max-w-6xl mx-auto px-5 py-8 text-sm text-slate-600">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>© <span id="y"></span> 청구닷컴</div>
         <div class="flex items-center gap-3">
-          <a class="btn btn-ghost" href="#">문의</a>
-          <a class="btn btn-ghost" href="#">개인정보처리방침</a>
+          <a class="inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80" href="#">문의</a>
+          <a class="inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80" href="#">개인정보처리방침</a>
         </div>
       </div>
     </div>
@@ -264,10 +183,10 @@
       return res.json();
     }
 
-    function btn(label, href, cls) {
-      if (!href) return `<button class="btn btn-ghost" disabled>${label}</button>`;
-      const isExternal = /고객센터|모바일|필요서류/.test(label);
-      return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}>${label}</a>`;
+    function btn(label, href, classes) {
+      if (!href) return `<button class="rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-slate-200 bg-white text-slate-700 opacity-60 cursor-not-allowed">${label}</button>`;
+      const ext = /고객센터|모바일|필요서류/.test(label) ? 'target="_blank" rel="noopener"' : '';
+      return `<a class="${classes}" href="${href}" ${ext}>${label}</a>`;
     }
 
     function likelyLogoPath(name){ return `/assets/logos/${name}.png`; }
@@ -276,50 +195,60 @@
       const L = item.links || {};
       const logoSrc = item.logo || likelyLogoPath(item.name);
       const inner = `
-        <div class="brand">
-          <span class="logo">
-            <img src="${logoSrc}" alt="${item.name} 로고"
-                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-            <span class="logo-badge">${item.name.slice(0,2)}</span>
+        <div class="flex items-center gap-3 py-3">
+          <span class="w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden">
+            <img src="${logoSrc}" alt="${item.name} 로고" class="w-full h-full object-contain"
+                 onerror="this.style.display='none'; this.nextElementSibling?.classList.remove('hidden')" />
+            <span class="hidden w-full h-full items-center justify-center font-bold text-slate-800">${item.name.slice(0,2)}</span>
           </span>
-          <div class="name">${item.name}</div>
+          <div class="text-lg md:text-xl font-extrabold text-slate-900">${item.name}</div>
         </div>`;
-      return L.system ? `<a class="block" href="${L.system}">${inner}</a>` : `<div class="opacity-70">${inner}</div>`;
+      return L.system ? `<a href="${L.system}" class="block">${inner}</a>` : `<div class="opacity-70">${inner}</div>`;
     }
 
     function row(item) {
       const L = item.links || {};
       return `
-        <div class="row" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}">
+        <div class="grid md:grid-cols-[minmax(220px,1.2fr)_3fr] items-center gap-4 px-4 sm:px-5 py-3 odd:bg-white even:bg-slate-50 hover:bg-white">
           <div>${brandCell(item)}</div>
-          <div class="btns">
-            ${btn("전산 접속", L.system, "btn-primary")}
-            ${btn("필요서류 안내", L.guide, "btn-info")}
-            ${btn("보험금 청구서 PDF 다운로드", L.pdf, "btn-pdf")}
-            ${btn("고객센터", L.support, "btn-info")}
-            ${btn("모바일 청구", L.mobile, "btn-info")}
+          <div class="grid gap-2 sm:grid-cols-5">
+            ${btn("전산 접속", L.system, "inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-indigo-600 bg-indigo-600 text-white hover:opacity-90")}
+            ${btn("필요서류 안내", L.guide, "inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80")}
+            ${btn("보험금 청구서 PDF 다운로드", L.pdf, "inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-sky-600 bg-sky-600 text-white hover:opacity-90")}
+            ${btn("고객센터", L.support, "inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80")}
+            ${btn("모바일 청구", L.mobile, "inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80")}
           </div>
         </div>`;
     }
 
     function render(arr) {
-      // JSON 순서 유지
-      const loss = arr.filter(x => x.type === "손해");
-      const life = arr.filter(x => x.type === "생명");
-      lossList.innerHTML = loss.map(row).join("");
-      lifeList.innerHTML = life.map(row).join("");
+      // 입력 순서 그대로
+      const loss = (arr.carriers || []).filter(x => x.type === "손해");
+      const life = (arr.carriers || []).filter(x => x.type === "생명");
+
+      lossList.innerHTML = loss.map(row).join("") || "";
+      lifeList.innerHTML = life.map(row).join("") || "";
+
+      lossList.classList.toggle("divide-y", !!loss.length);
+      lifeList.classList.toggle("divide-y", !!life.length);
+      lossList.classList.toggle("divide-slate-200", !!loss.length);
+      lifeList.classList.toggle("divide-slate-200", !!life.length);
+
       lossEmpty.classList.toggle("hidden", loss.length > 0);
       lifeEmpty.classList.toggle("hidden", life.length > 0);
-      lossCount.textContent = `${loss.length}개`;
-      lifeCount.textContent = `${life.length}개`;
-      filter();
+      if (lossCount) lossCount.textContent = `${loss.length}개`;
+      if (lifeCount) lifeCount.textContent = `${life.length}개`;
+
+      filter(); // 현재 검색어 반영
     }
 
     function filter() {
       const v = (q.value || "").toLowerCase().trim();
-      $$(".row[data-name]").forEach(el => {
-        const key = (el.dataset.name + " " + (el.dataset.tags || "")).toLowerCase();
-        el.style.display = key.includes(v) ? "" : "none";
+      $$(".grid[data-name], .grid[aria-row]").forEach(()=>{}); // no-op
+      // 간단히 버튼/브랜드 텍스트에 포함되면 보이도록:
+      Array.from(lossList.children).concat(Array.from(lifeList.children)).forEach(el => {
+        const text = el.textContent.toLowerCase();
+        el.style.display = text.includes(v) ? "" : "none";
       });
     }
 
@@ -331,15 +260,15 @@
     q.addEventListener("input", filter);
     clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
 
-    // Data load
+    // Load data
     loadData()
-      .then(json => { render(json.carriers || []); })
+      .then(json => render(json))
       .catch(() => {
         const err = '<div class="px-4 py-3 text-sm text-red-600">데이터 로드 실패: /data/links.json</div>';
         lossList.innerHTML = err; lifeList.innerHTML = err;
       });
 
-    // ===== 보험나이 계산기 (calculator style, as-of today) =====
+    // ===== 보험나이 계산기 (오늘 기준) =====
     const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const addMonths = (d, m) => { const x = new Date(d); const day=x.getDate(); x.setMonth(x.getMonth()+m); if (x.getDate()!==day) x.setDate(0); return x; };
     function calcInternationalAge(dob, asof){ let age = asof.getFullYear()-dob.getFullYear(); const bdayThisYear=new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()); if(asof < bdayThisYear) age -= 1; return age; }
@@ -361,7 +290,6 @@
       const dobVal = dobEl?.value; if(!dobVal) return;
       const asof = new Date();
       const dob = new Date(dobVal); if(isNaN(dob)) return;
-
       const r = calcInsuranceAge(dob, asof);
       ageNum.textContent = r.insAge;
       intlAge.textContent = r.base;
@@ -380,7 +308,7 @@
       (function(){ const u=new URL(location.href); const dob=u.searchParams.get('dob'); if(dob){ dobEl.value=dob; renderAge(); }})();
     }
 
-    document.querySelector('#y').textContent = new Date().getFullYear();
+    $("#y").textContent = new Date().getFullYear();
   })();
   </script>
 </body>
