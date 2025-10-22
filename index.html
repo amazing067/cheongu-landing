@@ -174,20 +174,21 @@
 
     function likelyLogoPath(name){ return `/assets/logos/${name}.png`; }
 
-    function brandCell(item) {
-      const L = item.links || {};
-      const logoSrc = item.logo || likelyLogoPath(item.name);
-      const inner = `
-        <div class="brand">
-          <span class="logo">
-            <img src="${logoSrc}" alt="${item.name} 로고" class="w-full h-full object-contain"
-                 onerror="this.style.display='none'; this.nextElementSibling?.classList.remove('hidden')" />
-            <span class="hidden w-full h-full items-center justify-center font-bold text-slate-800">${item.name.slice(0,2)}</span>
-          </span>
-          <div class="name">${item.name}</div>
-        </div>`;
-      return L.system ? `<a href="${L.system}" class="block">${inner}</a>` : `<div class="opacity-70">${inner}</div>`;
-    }
+  function brandCell(item) {
+    const L = item.links || {};
+    const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
+
+    const inner = `
+      <div class="brand">
+        <img src="${logoSrc}" alt="${item.name} 로고"
+             class="logo"
+             onerror="this.style.display='none'; this.nextElementSibling?.classList.remove('hidden')" />
+        <span class="logo-fallback">${item.name.slice(0,2)}</span>
+        <div class="name">${item.name}</div>
+      </div>`;
+
+    return L.system ? `<a href="${L.system}" class="block">${inner}</a>` : `<div class="opacity-80">${inner}</div>`;
+  }
 
     function btn(label, href, cls) {
       if (!href) return `<button class="btn btn-muted" disabled>${label}</button>`;
