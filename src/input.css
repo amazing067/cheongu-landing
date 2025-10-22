@@ -42,7 +42,7 @@
 /* 행: 컴팩트 패딩, 지브라 제거(완전 깔끔), 위쪽 구분선만 얇게 */
 .row{
   @apply grid items-center gap-3
-         px-4 py-2
+         px-2 py-1.5
          bg-white
          border-t border-slate-200;
 }
