@@ -67,7 +67,7 @@
 
 /* 로고: 원본만 표시(프레임/배경/테두리 없음) */
 .logo {
-  height: 24px;          /* 필요 시 22~28px 사이로만 조절 */
+  height: 28px;          /* 필요 시 22~28px 사이로만 조절 */
   width: auto;
   display: inline-block;
   vertical-align: middle;
