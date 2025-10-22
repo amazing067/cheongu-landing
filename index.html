@@ -14,48 +14,71 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="format-detection" content="telephone=no" />
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
-    .btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold border border-slate-200 hover:bg-white/60 transition shadow-sm; }
+    /* Utility compositions */
+    .btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold border border-slate-200/80 hover:bg-white/70 transition shadow-sm; }
     .btn-primary { @apply bg-slate-900 text-white border-slate-900 hover:opacity-90 shadow; }
     .btn-sm { @apply px-3 py-2 text-xs; }
-    .card { @apply rounded-2xl border border-slate-200 p-5 shadow-sm bg-white/80 backdrop-blur; }
-    .pill { @apply text-[11px] px-2 py-1 rounded-full border border-slate-200 bg-white/70; }
+    .card { @apply rounded-2xl border border-slate-200/70 p-5 shadow-sm bg-white/50 backdrop-blur; }
+    .pill { @apply text-[11px] px-2 py-1 rounded-full border border-slate-200/70 bg-white/70; }
     .kbd { @apply text-[10px] px-1.5 py-0.5 border rounded bg-slate-50; }
-    .sticky-head { @apply sticky top-0 z-40 bg-white/70 backdrop-blur border-b border-slate-200; }
     .muted { @apply text-slate-600; }
     .skeleton { @apply animate-pulse bg-slate-100 rounded-xl h-10; }
+
+    /* Modern background with gradient blobs */
     body {
-      background: radial-gradient(1200px 600px at 10% -10%, #f0f9ff 0%, transparent 60%),
-                  radial-gradient(1000px 500px at 90% 0%, #fdf2f8 0%, transparent 65%),
-                  linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      background:
+        radial-gradient(1100px 600px at 10% -10%, #f0f9ff 0%, transparent 60%),
+        radial-gradient(1000px 500px at 95% 0%, #fdf2f8 0%, transparent 65%),
+        linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
     }
-    .h2 { @apply text-xl font-bold; }
-    .section-head { @apply flex items-end justify-between gap-2; }
-    .subnav { @apply sticky top-[52px] z-30 bg-white/70 backdrop-blur border-y border-slate-200; }
+    .blob {
+      position: fixed; inset: -10% -10% auto auto; width: 520px; height: 520px;
+      background: conic-gradient(from 180deg at 50% 50%, #a78bfa, #60a5fa, #22d3ee, #a78bfa);
+      filter: blur(52px); opacity: .14; border-radius: 9999px; pointer-events: none;
+      animation: blobspin 18s linear infinite;
+    }
+    @keyframes blobspin { to { transform: rotate(360deg); } }
+
+    /* Header */
+    .sticky-head { @apply sticky top-0 z-40 bg-white/70 backdrop-blur border-b border-slate-200; }
+
+    /* Section headers — make them big & clear */
+    .section-title { @apply text-2xl sm:text-3xl font-black tracking-tight; }
+    .section-sub { @apply text-sm muted; }
+
+    /* Subnav */
+    .subnav { @apply sticky top-[56px] z-30 bg-white/70 backdrop-blur border-y border-slate-200; }
     .subnav a { @apply px-3 py-2 text-sm hover:underline; }
+
+    /* Card hover */
+    .card:hover { @apply shadow-md bg-white/70; transform: translateY(-1px); transition: .2s; }
   </style>
 </head>
 <body class="text-slate-900">
+  <div class="blob" aria-hidden="true"></div>
+
   <!-- Header -->
   <header class="sticky-head">
-    <div class="max-w-5xl mx-auto px-5 py-3 flex items-center gap-3">
+    <div class="max-w-6xl mx-auto px-5 py-3 flex items-center gap-3">
       <a class="text-lg font-extrabold" href="/">청구닷컴</a>
       <span class="pill">베타</span>
       <div class="ml-auto flex items-center gap-2">
-        <a class="btn btn-sm" href="#loss">손해보험</a>
-        <a class="btn btn-sm" href="#life">생명보험</a>
+        <a class="btn btn-sm" href="#loss">손해보험사</a>
+        <a class="btn btn-sm" href="#life">생명보험사</a>
         <a class="btn btn-sm" href="#how">이용방법</a>
       </div>
     </div>
   </header>
 
   <!-- Hero -->
-  <section class="max-w-5xl mx-auto px-5 pt-10 pb-6">
-    <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">
+  <section class="max-w-6xl mx-auto px-5 pt-10 pb-6">
+    <h1 class="text-4xl sm:text-5xl font-black leading-[1.1]">
       보험금 청구 링크,
-      <span class="bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-600 to-sky-600">한 곳에서 바로</span>
+      <span class="bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-600 via-indigo-600 to-sky-600">한 곳에서 바로</span>
     </h1>
-    <p class="mt-2 muted">회사 전산·필요서류·청구서 PDF·고객센터·모바일청구까지 한눈에.</p>
+    <p class="mt-3 text-base sm:text-lg text-slate-700">전산 접속·필요서류·청구서 PDF·고객센터·모바일청구까지. 광고·팝업 없이 깔끔하게.</p>
 
     <!-- Search -->
     <div class="mt-6 card" role="search">
@@ -71,10 +94,10 @@
 
   <!-- Subnav -->
   <nav class="subnav">
-    <div class="max-w-5xl mx-auto px-5 flex items-center gap-3">
-      <a href="#loss">손해보험</a>
+    <div class="max-w-6xl mx-auto px-5 flex items-center gap-3">
+      <a href="#loss">손해보험사</a>
       <span class="muted">·</span>
-      <a href="#life">생명보험</a>
+      <a href="#life">생명보험사</a>
       <span class="muted">·</span>
       <a href="#top-pdf">자주 찾는 PDF</a>
       <span class="muted">·</span>
@@ -82,51 +105,63 @@
     </div>
   </nav>
 
-  <main class="max-w-5xl mx-auto px-5 pb-20">
-    <!-- 손해보험 섹션 -->
-    <section id="loss" class="pt-10">
-      <div class="section-head">
-        <h2 class="h2">손해보험사</h2>
-        <p class="text-sm muted">회색 버튼은 아직 링크가 비어있다는 뜻입니다.</p>
+  <main class="max-w-6xl mx-auto px-5 pb-24">
+    <!-- 손해보험사 -->
+    <section id="loss" class="pt-12">
+      <div class="flex items-end justify-between">
+        <div>
+          <h2 class="section-title">손해보험사</h2>
+          <p class="section-sub mt-1">링크가 비어있으면 버튼이 회색으로 표시됩니다.</p>
+        </div>
+        <span id="loss-count" class="pill">0 개</span>
       </div>
-      <div id="loss-list" class="mt-4 grid gap-4">
+      <div id="loss-list" class="mt-5 grid gap-4">
         <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
       </div>
       <div id="loss-empty" class="hidden mt-4 text-sm muted">표시할 손해보험사가 없습니다.</div>
     </section>
 
-    <!-- 생명보험 섹션 -->
-    <section id="life" class="pt-12">
-      <div class="section-head">
-        <h2 class="h2">생명보험사</h2>
-        <p class="text-sm muted">회색 버튼은 아직 링크가 비어있다는 뜻입니다.</p>
+    <!-- 생명보험사 -->
+    <section id="life" class="pt-16">
+      <div class="flex items-end justify-between">
+        <div>
+          <h2 class="section-title">생명보험사</h2>
+          <p class="section-sub mt-1">링크가 비어있으면 버튼이 회색으로 표시됩니다.</p>
+        </div>
+        <span id="life-count" class="pill">0 개</span>
       </div>
-      <div id="life-list" class="mt-4 grid gap-4">
+      <div id="life-list" class="mt-5 grid gap-4">
         <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
       </div>
       <div id="life-empty" class="hidden mt-4 text-sm muted">표시할 생명보험사가 없습니다.</div>
     </section>
 
     <!-- Top PDFs -->
-    <section id="top-pdf" class="mt-12">
-      <h3 class="text-lg font-bold">자주 찾는 PDF</h3>
-      <div id="top-pdf-list" class="mt-3 grid md:grid-cols-2 gap-3">
+    <section id="top-pdf" class="pt-16">
+      <h3 class="text-xl sm:text-2xl font-bold">자주 찾는 PDF</h3>
+      <div id="top-pdf-list" class="mt-4 grid md:grid-cols-2 gap-3">
         <div class="skeleton"></div><div class="skeleton"></div>
       </div>
     </section>
 
     <!-- How-to -->
-    <section id="how" class="mt-12">
-      <h3 class="text-lg font-bold">이용방법</h3>
-      <div class="mt-3 grid md:grid-cols-2 gap-4">
-        <div class="card"><div class="font-semibold">1) 찾기</div><p class="text-sm muted mt-1">상단 검색창으로 필터하세요.</p></div>
-        <div class="card"><div class="font-semibold">2) 열기/다운로드</div><p class="text-sm muted mt-1">청구서 PDF는 바로 저장됩니다.</p></div>
+    <section id="how" class="pt-16">
+      <h3 class="text-xl sm:text-2xl font-bold">이용방법</h3>
+      <div class="mt-4 grid md:grid-cols-2 gap-4">
+        <div class="card">
+          <div class="font-semibold">1) 찾기</div>
+          <p class="text-sm muted mt-1">상단 검색창으로 바로 필터하세요.</p>
+        </div>
+        <div class="card">
+          <div class="font-semibold">2) 열기/다운로드</div>
+          <p class="text-sm muted mt-1">청구서 PDF는 즉시 저장됩니다.</p>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="border-t border-slate-200 bg-white/70 backdrop-blur">
-    <div class="max-w-5xl mx-auto px-5 py-8 text-sm muted">
+    <div class="max-w-6xl mx-auto px-5 py-8 text-sm muted">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>© <span id="y"></span> 청구닷컴</div>
         <div class="flex items-center gap-3">
@@ -149,6 +184,8 @@
     const lifeList = $("#life-list");
     const lossEmpty = $("#loss-empty");
     const lifeEmpty = $("#life-empty");
+    const lossCount = $("#loss-count");
+    const lifeCount = $("#life-count");
     const topPdfEl = $("#top-pdf-list");
 
     async function loadData() {
@@ -165,12 +202,11 @@
 
     function cardTemplate(item) {
       const L = item.links || {};
-      const copyBtn = `<button class="btn btn-sm copy" type="button" data-target="${L.system || ""}" data-text-copy="전산주소 복사" data-text-copied="복사됨" title="copy">전산주소 복사</button>`;
       return `
       <article class="card flex flex-col gap-3" data-name="${item.name}" data-type="${item.type}" data-tags="${(item.tags||[]).join(" ")}">
         <div class="flex items-center justify-between">
-          <div class="font-semibold">${item.name}</div>
-          <div class="flex items-center gap-2">${copyBtn}<span class="pill">${item.type||""}</span></div>
+          <div class="font-semibold text-lg">${item.name}</div>
+          <span class="pill">${item.type||""}</span>
         </div>
         <div class="grid sm:grid-cols-5 gap-2">
           ${btn("전산 접속", L.system)}
@@ -183,7 +219,7 @@
     }
 
     function renderSections(arr) {
-      // 배열 순서를 그대로 유지! (정렬 금지)
+      // 배열 순서를 그대로 유지! (정렬하지 않음)
       const loss = arr.filter(x => x.type === "손해");
       const life = arr.filter(x => x.type === "생명");
 
@@ -193,8 +229,10 @@
       lossEmpty.classList.toggle("hidden", loss.length > 0);
       lifeEmpty.classList.toggle("hidden", life.length > 0);
 
-      bindCopyButtons();
-      applySearchFilter(); // 검색 반영
+      lossCount.textContent = `${loss.length} 개`;
+      lifeCount.textContent = `${life.length} 개`;
+
+      applySearchFilter(); // 현재 검색어 반영
     }
 
     function renderTopPdfs(arr) {
@@ -210,20 +248,6 @@
       });
     }
 
-    function bindCopyButtons() {
-      $$(".copy").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          try {
-            const txt = btn.dataset.target || "";
-            if (!txt) return alert("전산 주소가 아직 없어요.");
-            await navigator.clipboard.writeText(txt);
-            btn.textContent = btn.dataset.textCopied || "복사됨";
-            setTimeout(() => (btn.textContent = btn.dataset.textCopy || "복사"), 1200);
-          } catch (e) { alert("복사 실패"); }
-        });
-      });
-    }
-
     // events
     document.addEventListener("keydown", (e) => {
       if (e.key === "/") { e.preventDefault(); q.focus(); }
@@ -236,8 +260,8 @@
     loadData()
       .then(json => { renderSections(json.carriers || []); renderTopPdfs(json.top_pdfs || []); })
       .catch(() => {
-        lossList.innerHTML = lifeList.innerHTML = `<div class="text-sm text-red-600">데이터 로드 실패: /data/links.json</div>`;
-        topPdfEl.innerHTML = "";
+        const err = `<div class="text-sm text-red-600">데이터 로드 실패: /data/links.json</div>`;
+        lossList.innerHTML = err; lifeList.innerHTML = err; topPdfEl.innerHTML = "";
       });
 
     $("#y").textContent = new Date().getFullYear();
