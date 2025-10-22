@@ -64,10 +64,16 @@
 }
 .row-cols { grid-template-columns: minmax(240px,1.2fr) 3fr; }
 
-/* 왼쪽 브랜드 셀(로고+텍스트) */
+
 .brand { @apply flex items-center gap-3; }
-.logo  { @apply w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden; }
+/* 로고: 네모 박스/테두리/배경 제거 → 원본만 노출 */
+.logo { @apply h-8 md:h-9 w-auto object-contain align-middle; }
+/* 이미지가 없을 때만 보이는 이니셜 뱃지(옵션) */
+.logo-fallback { @apply hidden inline-flex items-center justify-center h-8 w-8 rounded-lg bg-slate-100 text-slate-600 text-sm font-bold; }
+
+/* 회사명은 그대로 */
 .name  { @apply text-[18px] md:text-[20px] font-extrabold text-slate-900; }
+
 
 /* 버튼 묶음이 좁으면 자동 줄바꿈 */
 .row .grid { @apply grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2; }
