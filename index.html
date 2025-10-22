@@ -261,7 +261,7 @@
           <div class="grid">
             ${btn("전산 접속", L.system, "btn-primary")}
             ${btn("필요서류 안내", L.guide, "btn-ghost")}
-            ${L.dental ? `<a class="btn btn-dental" href="${L.dental}" download="치과치료확인서.pdf">치과치료확인서</a>` : `<button class="btn btn-muted" disabled>치과치료확인서</button>`}
+            ${L.dental ? `<a class="btn btn-dental" href="${L.dental}" download="${item.name}-치과치료확인서.pdf">치과치료확인서</a>` : `<button class="btn btn-muted" disabled>치과치료확인서</button>`}
             ${L.pdf ? `<a class="btn btn-pdf" href="${L.pdf}" download="${item.name}-보험금청구서.pdf">보험금 청구서 PDF 다운로드</a>` : `<button class="btn btn-muted" disabled>보험금 청구서 PDF 다운로드</button>`}
             ${btn("고객센터", L.support, "btn-ghost")}
             ${btn("모바일 청구", L.mobile, "btn-ghost")}
