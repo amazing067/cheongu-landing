@@ -3,112 +3,128 @@
     { "name": "삼성화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.samsungfire.com/claim/P_P03_01_02_011.html",
-      "pdf": "/assets/pdf/삼성화재-청구서.pdf",
+      "pdf": "/assets/pdf/삼성화재-보험금청구서.pdf",
+      "dental": "/assets/pdf/삼성화재 치과치료확인서.pdf",
       "support": "https://www.samsungfire.com/claim/P_P03_01_02_011.html",
       "mobile": "https://direct.samsungfire.com/m/claim/MP040202_001.html"
     }},
     { "name": "현대해상", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.hi.co.kr/serviceAction.do?menuId=100631",
-      "pdf": "/assets/pdf/현대해상-청구서.pdf",
+      "pdf": "/assets/pdf/현대해상-보험금청구서.pdf",
+      "dental": "/assets/pdf/현대해상 치과치료확인서.pdf",
       "support": "https://www.hi.co.kr/serviceAction.do?menuId=100631",
       "mobile": "https://direct.hi.co.kr/service.do?m=a264739757"
     }},
     { "name": "DB손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.idbins.com/pc/bizxpress/ct/dc/FWCUSV1301.shtm",
-      "pdf": "/assets/pdf/DB손해보험-청구서.pdf",
+      "pdf": "/assets/pdf/DB손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/DB손해보험 치과치료확인서.pdf",
       "support": "https://www.idbins.com/pc/bizxpress/ct/dc/FWCUSV1301.shtm",
       "mobile": ""
     }},
     { "name": "KB손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.kbinsure.co.kr/CG205010001.ec",
-      "pdf": "/assets/pdf/KB손해보험-청구서.pdf",
+      "pdf": "/assets/pdf/KB손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/KB손해보험 치과치료확인서.pdf",
       "support": "https://www.kbinsure.co.kr/CG205010001.ec",
       "mobile": "https://www.kbinsure.co.kr/CG212010002.ec"
     }},
     { "name": "메리츠화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://m.meritzfire.com/compensation/longterm-insurance/request.do",
-      "pdf": "/assets/pdf/메리츠화재-청구서.pdf",
+      "pdf": "/assets/pdf/메리츠화재-보험금청구서.pdf",
+      "dental": "/assets/pdf/메리츠화재 치과치료확인서.pdf",
       "support": "https://m.meritzfire.com/compensation/longterm-insurance/request.do",
       "mobile": "https://m.meritzfire.com/compensation/longterm-insurance/request.do"
     }},
     { "name": "롯데손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.lotteins.co.kr/web/C/C/B/ccb202.jsp",
-      "pdf": "/assets/pdf/롯데손해보험-청구서.pdf",
+      "pdf": "/assets/pdf/롯데손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/롯데손해보험 치과치료확인서.pdf",
       "support": "https://www.lotteins.co.kr/web/C/C/B/ccb202.jsp",
       "mobile": "https://m.lotteins.co.kr/web/C/M/A/cma037_info.jsp"
     }},
     { "name": "흥국화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.heungkukfire.co.kr/FRW/compensation/accidentDocInfo.do",
-      "pdf": "/assets/pdf/흥국화재-청구서.pdf",
+      "pdf": "/assets/pdf/흥국화재-보험금청구서.pdf",
+      "dental": "/assets/pdf/흥국화재 치과치료확인서.pdf",
       "support": "https://www.heungkukfire.co.kr/FRW/compensation/accidentDocInfo.do",
       "mobile": "https://m.heungkukfire.co.kr/reward/ltrm/CCLLO0201_M01/CCLLO0201_M01.do"
     }},
     { "name": "하나손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.hanainsure.co.kr/w/claim/healthReward/rewardDocCarGuide",
-      "pdf": "/assets/pdf/하나손해보험-청구서.pdf",
+      "pdf": "/assets/pdf/하나손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/하나손해보험 치과치료확인서.pdf",
       "support": "https://www.hanainsure.co.kr/w/claim/healthReward/rewardDocCarGuide",
       "mobile": "https://www.hanainsure.co.kr/w/claim/healthReward/accidentReceipt"
     }},
     { "name": "농협손해보험", "type": "손해", "tags": ["NH","pdf","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.nhfire.co.kr/customer/guide/insuranceClaimGuide.nhfire",
-      "pdf": "/assets/pdf/농협손해보험-청구서.pdf",
+      "pdf": "/assets/pdf/농협손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/농협손해보험 치과치료확인서.pdf",
       "support": "https://www.nhfire.co.kr/customer/guide/insuranceClaimGuide.nhfire",
       "mobile": "https://www.nhfire.co.kr/cyber/acd/AcdSimUserStep1.nhfire"
     }},
     { "name": "카카오페이손해보험", "type": "손해", "tags": ["디지털","pdf","모바일청구"], "links": {
       "system": "",
       "guide": "https://kakaopayinscorp.co.kr/customer-center/claim-info",
-      "pdf": "/assets/pdf/카카오페이손해보험-청구서.pdf",
+      "pdf": "/assets/pdf/카카오페이손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/카카오페이손해보험 치과치료확인서.pdf",
       "support": "https://kakaopayinscorp.co.kr/customer-center/claim-info",
       "mobile": "https://kakaopayinscorp.co.kr/customer-center/claim-info"
     }},
     { "name": "신한EZ손해보험", "type": "손해", "tags": ["디지털","pdf","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.shinhanez.co.kr/static/cus/CUS50000M01.html",
-      "pdf": "/assets/pdf/신한EZ손해보험-청구서.pdf",
+      "pdf": "/assets/pdf/신한EZ손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/신한EZ손해보험 치과치료확인서.pdf",
       "support": "https://www.shinhanez.co.kr/static/cus/CUS50000M01.html",
       "mobile": "https://www.shinhanez.co.kr/static/cus/CUS50000M01.html"
     }},
     { "name": "캐롯손해보험", "type": "손해", "tags": ["디지털","다이렉트","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.carrotins.com/desktop/reward/claim/guide/",
-      "pdf": "/assets/pdf/캐롯손해보험-청구서.pdf",
+      "pdf": "/assets/pdf/캐롯손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/캐롯손해보험 치과치료확인서.pdf",
       "support": "https://www.carrotins.com/desktop/reward/claim/guide/",
       "mobile": "https://www.carrotins.com/mobile/reward/claim/apply/"
     }},
     { "name": "MG손해보험", "type": "손해", "tags": ["pdf","고객센터"], "links": {
       "system": "",
       "guide": "",
-      "pdf": "/assets/pdf/MG손해보험-청구서.pdf",
+      "pdf": "/assets/pdf/MG손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/MG손해보험 치과치료확인서.pdf",
       "support": "",
       "mobile": ""
     }},
     { "name": "AIG손해보험", "type": "손해", "tags": ["글로벌","pdf","고객센터"], "links": {
       "system": "",
       "guide": "https://www.aig.co.kr/wt/dpwtm025.html?menuId=MS216",
-      "pdf": "/assets/pdf/AIG손해보험-청구서.pdf",
+      "pdf": "/assets/pdf/AIG손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/AIG손해보험 치과치료확인서.pdf",
       "support": "https://www.aig.co.kr/wt/dpwtm025.html?menuId=MS216",
       "mobile": "https://www.aig.co.kr/wm/content.html?contentId=DPWMS404&menuId=MS404"
     }},
     { "name": "라이나손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.chubb.com/kr-kr/claims/individual-insurance.html",
-      "pdf": "/assets/pdf/라이나손해보험-청구서.pdf",
+      "pdf": "/assets/pdf/라이나손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/라이나손해보험 치과치료확인서.pdf",
       "support": "https://www.chubb.com/kr-kr/claims.html",
       "mobile": "https://m.acedirect.co.kr/jsp/directM/customercenter/common/Main2.jsp"
     }},
     { "name": "한화손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://m.hwgeneralins.com/",
-      "pdf": "/assets/pdf/한화손해보험-청구서.pdf",
+      "pdf": "/assets/pdf/한화손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/한화손해보험 치과치료확인서.pdf",
       "support": "https://m.hwgeneralins.com/",
       "mobile": "https://m.hwgeneralins.com/"
     }},
@@ -116,71 +132,163 @@
     { "name": "삼성생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://direct.samsunglife.com/customerSupport/insuranceClaimInformation/CustomerSupportInsuranceClaimInformationView",
-      "pdf": "/assets/pdf/삼성생명-청구서.pdf",
+      "pdf": "/assets/pdf/삼성생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/삼성생명 치과치료확인서.pdf",
       "support": "https://www.samsunglife.com/individual/mysamsunglife/insurance/internet/MDP-MYINT020110M",
       "mobile": "https://direct.samsunglife.com/customerSupport/insuranceClaimInformation/CustomerSupportInsuranceClaimInformationView"
     }},
     { "name": "한화생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.hanwhalife.com/main/myPage/insurance/accident/MY_INAP000_P10000.do",
-      "pdf": "/assets/pdf/한화생명-청구서.pdf",
+      "pdf": "/assets/pdf/한화생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/한화생명 치과치료확인서.pdf",
       "support": "https://www.hanwhalife.com/main/myPage/insurance/accident/MY_INAP000_P10000.do",
       "mobile": "https://www.hanwhalife.com/static/mobile/customerCenter/MCU_ACIN000_P10000.htm"
     }},
     { "name": "교보생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.kyobo.com/dgt/web/customer/support/need-papers/list",
-      "pdf": "/assets/pdf/교보생명-청구서.pdf",
+      "pdf": "/assets/pdf/교보생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/교보생명 치과치료확인서.pdf",
       "support": "https://www.kyobo.com/dgt/web/dti/insurance/accInq/intro",
       "mobile": "https://www.kyobo.com/dgt/web/dti/insurance/accInq/intro"
     }},
     { "name": "미래에셋생명", "type": "생명", "tags": ["pdf","고객센터"], "links": {
       "system": "",
       "guide": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MNT-CC-012",
-      "pdf": "/assets/pdf/미래에셋생명-청구서.pdf",
+      "pdf": "/assets/pdf/미래에셋생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/미래에셋생명 치과치료확인서.pdf",
       "support": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MO-CB-300000-100000",
       "mobile": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MO-CB-300000-100000"
     }},
     { "name": "KB라이프생명", "type": "생명", "tags": ["KB","pdf","모바일청구"], "links": {
       "system": "",
       "guide": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do",
-      "pdf": "/assets/pdf/KB라이프생명-청구서.pdf",
+      "pdf": "/assets/pdf/KB라이프생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/KB라이프생명 치과치료확인서.pdf",
       "support": "https://www.kblife.co.kr/",
       "mobile": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do"
     }},
     { "name": "농협생명", "type": "생명", "tags": ["NH","pdf","모바일청구"], "links": {
       "system": "",
       "guide": "",
-      "pdf": "/assets/pdf/농협생명-청구서.pdf",
+      "pdf": "/assets/pdf/농협생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/농협생명 치과치료확인서.pdf",
       "support": "",
       "mobile": ""
     }},
     { "name": "하나생명", "type": "생명", "tags": ["pdf","고객센터"], "links": {
       "system": "",
       "guide": "",
-      "pdf": "/assets/pdf/하나생명-청구서.pdf",
+      "pdf": "/assets/pdf/하나생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/하나생명 치과치료확인서.pdf",
       "support": "",
       "mobile": ""
     }},
     { "name": "DB생명", "type": "생명", "tags": ["pdf","고객센터"], "links": {
       "system": "",
       "guide": "https://www.idblife.com/support/guide/acbf_clm",
-      "pdf": "/assets/pdf/DB생명-청구서.pdf",
+      "pdf": "/assets/pdf/DB생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/DB생명 치과치료확인서.pdf",
       "support": "https://www.idblife.com/support/guide/acbf_clm",
       "mobile": "https://www.idblife.com/support/guide/acbf_clm"
     }},
-    { "name": "KDB생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "system": "", "guide": "", "pdf": "/assets/pdf/KDB생명-청구서.pdf", "support": "", "mobile": "" }},
-    { "name": "ABL생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "system": "", "guide": "", "pdf": "/assets/pdf/ABL생명-청구서.pdf", "support": "", "mobile": "" }},
-    { "name": "흥국생명", "type": "생명", "tags": ["pdf","고객센터"], "links": { "system": "", "guide": "", "pdf": "/assets/pdf/흥국생명-청구서.pdf", "support": "", "mobile": "" }},
-    { "name": "메트라이프생명", "type": "생명", "tags": ["MetLife","pdf","고객센터"], "links": { "system": "", "guide": "", "pdf": "/assets/pdf/메트라이프생명-청구서.pdf", "support": "", "mobile": "" }},
-    { "name": "AIA생명", "type": "생명", "tags": ["AIA","pdf","모바일청구"], "links": { "system": "", "guide": "", "pdf": "/assets/pdf/AIA생명-청구서.pdf", "support": "", "mobile": "" }},
-    { "name": "처브라이프(Chubb Life)", "type": "생명", "tags": ["Chubb","pdf","고객센터"], "links": { "system": "", "guide": "", "pdf": "/assets/pdf/처브라이프-청구서.pdf", "support": "", "mobile": "" }},
-    { "name": "BNP파리바카디프생명", "type": "생명", "tags": ["Cardif","pdf","고객센터"], "links": { "system": "", "guide": "", "pdf": "/assets/pdf/카디프생명-청구서.pdf", "support": "", "mobile": "" }},
-    { "name": "푸본현대생명", "type": "생명", "tags": ["FubonHyundai","pdf","고객센터"], "links": { "system": "", "guide": "", "pdf": "/assets/pdf/푸본현대생명-청구서.pdf", "support": "", "mobile": "" }},
-    { "name": "라이나생명(시그나)", "type": "생명", "tags": ["Cigna","pdf","모바일청구"], "links": { "system": "", "guide": "", "pdf": "/assets/pdf/라이나생명-청구서.pdf", "support": "", "mobile": "" }},
-    { "name": "아이엠(iM)라이프생명", "type": "생명", "tags": ["DGB","iM","pdf"], "links": { "system": "", "guide": "", "pdf": "/assets/pdf/iM라이프-청구서.pdf", "support": "", "mobile": "" }},
-    { "name": "동양생명", "type": "생명", "tags": ["Tongyang","pdf","고객센터"], "links": { "system": "", "guide": "", "pdf": "/assets/pdf/동양생명-청구서.pdf", "support": "", "mobile": "" }},
-    { "name": "교보라이프플래닛생명", "type": "생명", "tags": ["다이렉트","온라인","모바일청구"], "links": { "system": "", "guide": "", "pdf": "/assets/pdf/교보라이프플래닛-청구서.pdf", "support": "", "mobile": "" }}
+    { "name": "KDB생명", "type": "생명", "tags": ["pdf","고객센터"], "links": {
+      "system": "",
+      "guide": "",
+      "pdf": "/assets/pdf/KDB생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/KDB생명 치과치료확인서.pdf",
+      "support": "",
+      "mobile": ""
+    }},
+    { "name": "ABL생명", "type": "생명", "tags": ["pdf","고객센터"], "links": {
+      "system": "",
+      "guide": "",
+      "pdf": "/assets/pdf/ABL생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/ABL생명 치과치료확인서.pdf",
+      "support": "",
+      "mobile": ""
+    }},
+    { "name": "흥국생명", "type": "생명", "tags": ["pdf","고객센터"], "links": {
+      "system": "",
+      "guide": "",
+      "pdf": "/assets/pdf/흥국생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/흥국생명 치과치료확인서.pdf",
+      "support": "",
+      "mobile": ""
+    }},
+    { "name": "메트라이프생명", "type": "생명", "tags": ["MetLife","pdf","고객센터"], "links": {
+      "system": "",
+      "guide": "",
+      "pdf": "/assets/pdf/메트라이프생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/메트라이프생명 치과치료확인서.pdf",
+      "support": "",
+      "mobile": ""
+    }},
+    { "name": "AIA생명", "type": "생명", "tags": ["AIA","pdf","모바일청구"], "links": {
+      "system": "",
+      "guide": "",
+      "pdf": "/assets/pdf/AIA생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/AIA생명 치과치료확인서.pdf",
+      "support": "",
+      "mobile": ""
+    }},
+    { "name": "처브라이프(Chubb Life)", "type": "생명", "tags": ["Chubb","pdf","고객센터"], "links": {
+      "system": "",
+      "guide": "",
+      "pdf": "/assets/pdf/처브라이프-보험금청구서.pdf",
+      "dental": "/assets/pdf/처브라이프 치과치료확인서.pdf",
+      "support": "",
+      "mobile": ""
+    }},
+    { "name": "BNP파리바카디프생명", "type": "생명", "tags": ["Cardif","pdf","고객센터"], "links": {
+      "system": "",
+      "guide": "",
+      "pdf": "/assets/pdf/BNP파리바카디프생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/BNP파리바카디프생명 치과치료확인서.pdf",
+      "support": "",
+      "mobile": ""
+    }},
+    { "name": "푸본현대생명", "type": "생명", "tags": ["FubonHyundai","pdf","고객센터"], "links": {
+      "system": "",
+      "guide": "",
+      "pdf": "/assets/pdf/푸본현대생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/푸본현대생명 치과치료확인서.pdf",
+      "support": "",
+      "mobile": ""
+    }},
+    { "name": "라이나생명(시그나)", "type": "생명", "tags": ["Cigna","pdf","모바일청구"], "links": {
+      "system": "",
+      "guide": "",
+      "pdf": "/assets/pdf/라이나생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/라이나생명 치과치료확인서.pdf",
+      "support": "",
+      "mobile": ""
+    }},
+    { "name": "아이엠(iM)라이프생명", "type": "생명", "tags": ["DGB","iM","pdf"], "links": {
+      "system": "",
+      "guide": "",
+      "pdf": "/assets/pdf/iM라이프생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/iM라이프생명 치과치료확인서.pdf",
+      "support": "",
+      "mobile": ""
+    }},
+    { "name": "동양생명", "type": "생명", "tags": ["Tongyang","pdf","고객센터"], "links": {
+      "system": "",
+      "guide": "",
+      "pdf": "/assets/pdf/동양생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/동양생명 치과치료확인서.pdf",
+      "support": "",
+      "mobile": ""
+    }},
+    { "name": "교보라이프플래닛생명", "type": "생명", "tags": ["다이렉트","온라인","모바일청구"], "links": {
+      "system": "",
+      "guide": "",
+      "pdf": "/assets/pdf/교보라이프플래닛생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/교보라이프플래닛생명 치과치료확인서.pdf",
+      "support": "",
+      "mobile": ""
+    }}
   ],
   "top_pdfs": [
     { "label": "입원/통원 청구서", "url": "/assets/pdf/입원통원-청구서.pdf" },
