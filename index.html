@@ -16,17 +16,17 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* Base utility compositions */
+    /* Base */
     .btn{ @apply inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border transition shadow-sm; }
     .btn-ghost{ @apply border-slate-200 bg-white hover:bg-white/80; }
-    .btn-primary{ @apply border-indigo-600 bg-indigo-600 text-white hover:opacity-90; }    /* 전산 접속 */
-    .btn-info{ @apply border-slate-200 bg-white hover:bg-white/80; }                       /* 안내/센터/모바일 */
-    .btn-pdf{ @apply border-sky-600 bg-sky-600 text-white hover:opacity-90; }              /* 보험금 청구서 PDF */
+    .btn-primary{ @apply border-indigo-600 bg-indigo-600 text-white hover:opacity-90; }   /* 전산 접속 */
+    .btn-info{ @apply border-slate-200 bg-white hover:bg-white/80; }                      /* 안내/센터/모바일 */
+    .btn-pdf{ @apply border-sky-600 bg-sky-600 text-white hover:opacity-90; }             /* 보험금 청구서 PDF */
     .card{ @apply rounded-2xl border border-slate-200/70 bg-white/70 backdrop-blur; }
     .muted{ @apply text-slate-600; }
     .kbd{ @apply text-[10px] px-1.5 py-0.5 border rounded bg-slate-50; }
 
-    /* Background: 은은한 그라디언트 */
+    /* Background */
     body{
       background:
         radial-gradient(1000px 520px at 10% -10%, #f0f9ff 0%, transparent 60%),
@@ -53,14 +53,20 @@
     .logo{ @apply w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden; }
     .logo img{ width:100%; height:100%; object-fit:contain; }
     .logo-badge{ @apply hidden w-full h-full items-center justify-center font-bold text-slate-800; }
-    .name{ @apply text-lg md:text-xl font-extrabold text-slate-900; } /* 회사명만 굵고 크게 */
+    .name{ @apply text-lg md:text-xl font-extrabold text-slate-900; }  /* 회사명만 굵고 크게 */
 
     /* Buttons cell */
     .btns{ @apply grid gap-2 sm:grid-cols-5 py-3; }
+
+    /* Compact age widget */
+    .age-wrap{ @apply mt-6; }
+    .age-card{ @apply card p-4; max-width: 720px; }
+    .age-grid{ @apply grid gap-3 md:grid-cols-[1fr_auto_auto]; }
+    .age-small{ @apply grid gap-2 sm:grid-cols-3; }
   </style>
 </head>
 <body class="text-slate-900">
-  <!-- Header (고정바 아님) -->
+  <!-- Header (no sticky) -->
   <header>
     <div class="max-w-6xl mx-auto px-5 py-4 flex items-center gap-3">
       <a class="text-lg font-extrabold" href="/">청구닷컴</a>
@@ -128,54 +134,50 @@
       <div id="life-empty" class="hidden mt-4 text-sm muted">표시할 생명보험사가 없습니다.</div>
     </section>
 
-    <!-- 보험나이 계산기 -->
+    <!-- 보험나이 계산기 (Compact) -->
     <section id="age" class="section-wrap">
       <div class="section-head">
         <div>
           <h2 class="section-title">보험나이 계산기</h2>
-          <p class="section-sub">규칙: <span class="font-medium">만나이 + (최근 생일부터 6개월 경과 시 +1)</span></p>
+          <p class="section-sub">규칙: 만나이 + (최근 생일부터 6개월 경과 시 +1) · 기준일은 오늘</p>
         </div>
         <span id="age-badge" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white/80">–</span>
       </div>
 
-      <div class="card p-5 mt-4">
-        <form id="age-form" class="grid md:grid-cols-3 gap-3 items-end">
-          <div>
-            <label class="text-sm font-medium">생년월일</label>
-            <input id="dob" type="date" class="mt-1 w-full border border-slate-300 rounded-xl px-4 py-3" placeholder="YYYY-MM-DD" required>
-          </div>
-          <div>
-            <label class="text-sm font-medium">기준일(선택)</label>
-            <input id="asof" type="date" class="mt-1 w-full border border-slate-300 rounded-xl px-4 py-3" placeholder="기본: 오늘">
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <button type="submit" class="btn btn-primary">계산하기</button>
-            <button type="button" id="age-reset" class="btn btn-ghost">초기화</button>
-          </div>
-        </form>
+      <div class="age-wrap">
+        <div class="age-card">
+          <form id="age-form" class="age-grid items-end">
+            <div>
+              <label class="text-sm font-medium">생년월일</label>
+              <input id="dob" type="date" class="mt-1 w-full border border-slate-300 rounded-xl px-4 py-2.5" placeholder="YYYY-MM-DD" required>
+            </div>
+            <button type="submit" class="btn btn-primary h-[42px]">계산하기</button>
+            <button type="button" id="age-reset" class="btn btn-ghost h-[42px]">초기화</button>
+          </form>
 
-        <div id="age-result" class="mt-5 hidden">
-          <div class="grid md:grid-cols-3 gap-3">
-            <div class="card p-4">
-              <div class="text-xs muted">보험나이</div>
-              <div class="text-2xl font-black mt-1"><span id="age-num">–</span> 세</div>
-              <div class="text-xs mt-1 text-slate-500" id="age-rule"></div>
+          <div id="age-result" class="mt-4 hidden">
+            <div class="age-small">
+              <div class="card p-3">
+                <div class="text-[11px] muted">보험나이</div>
+                <div class="text-xl font-black mt-0.5"><span id="age-num">–</span> 세</div>
+                <div class="text-[11px] mt-1 text-slate-500" id="age-rule"></div>
+              </div>
+              <div class="card p-3">
+                <div class="text-[11px] muted">만나이</div>
+                <div class="text-base font-bold mt-0.5"><span id="intl-age">–</span> 세</div>
+                <div class="text-[11px] mt-1 text-slate-500">생일 경과 반영</div>
+              </div>
+              <div class="card p-3">
+                <div class="text-[11px] muted">다음 반(半)생일까지</div>
+                <div class="text-base font-semibold mt-0.5"><span id="halfleft">–</span></div>
+                <div class="text-[11px] mt-1 text-slate-500">6개월 규칙 전환까지</div>
+              </div>
             </div>
-            <div class="card p-4">
-              <div class="text-xs muted">만나이</div>
-              <div class="text-xl font-bold mt-1"><span id="intl-age">–</span> 세</div>
-              <div class="text-xs mt-1 text-slate-500">생일 지났는지 반영</div>
-            </div>
-            <div class="card p-4">
-              <div class="text-xs muted">다음 반(半)생일까지</div>
-              <div class="text-xl font-bold mt-1"><span id="halfleft">–</span></div>
-              <div class="text-xs mt-1 text-slate-500">6개월 규칙 전환까지 남은 시간</div>
-            </div>
-          </div>
 
-          <div class="mt-4 flex flex-wrap gap-2">
-            <button id="age-copy" class="btn btn-ghost" type="button">결과 복사</button>
-            <button id="age-link" class="btn btn-ghost" type="button">링크 공유</button>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <button id="age-copy" class="btn btn-ghost" type="button">결과 복사</button>
+              <button id="age-link" class="btn btn-ghost" type="button">링크 공유</button>
+            </div>
           </div>
         </div>
       </div>
@@ -207,7 +209,6 @@
     const lifeEmpty = $("#life-empty");
     const lossCount = $("#loss-count");
     const lifeCount = $("#life-count");
-    const topPdfEl = $("#top-pdf-list");
 
     async function loadData() {
       const res = await fetch("/data/links.json?ts=" + Date.now(), { cache: "no-store" });
@@ -221,48 +222,48 @@
       return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}>${label}</a>`;
     }
 
-    function likelyLogoPath(name){ return \`/assets/logos/\${name}.png\`; }
+    function likelyLogoPath(name){ return `/assets/logos/${name}.png`; }
 
     function brandCell(item) {
       const L = item.links || {};
       const logoSrc = item.logo || likelyLogoPath(item.name);
-      const inner = \`
+      const inner = `
         <div class="brand">
           <span class="logo">
-            <img src="\${logoSrc}" alt="\${item.name} 로고"
+            <img src="${logoSrc}" alt="${item.name} 로고"
                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-            <span class="logo-badge">\${item.name.slice(0,2)}</span>
+            <span class="logo-badge">${item.name.slice(0,2)}</span>
           </span>
-          <div class="name">\${item.name}</div>
-        </div>\`;
-      return L.system ? \`<a class="block" href="\${L.system}">\${inner}</a>\` : \`<div class="opacity-70">\${inner}</div>\`;
+          <div class="name">${item.name}</div>
+        </div>`;
+      return L.system ? `<a class="block" href="${L.system}">${inner}</a>` : `<div class="opacity-70">${inner}</div>`;
     }
 
     function row(item) {
       const L = item.links || {};
-      return \`
-        <div class="row" data-name="\${item.name}" data-tags="\${(item.tags||[]).join(' ').toLowerCase()}">
-          <div>\${brandCell(item)}</div>
+      return `
+        <div class="row" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}">
+          <div>${brandCell(item)}</div>
           <div class="btns">
-            \${btn("전산 접속", L.system, "btn-primary")}
-            \${btn("필요서류 안내", L.guide, "btn-info")}
-            \${btn("보험금 청구서 PDF 다운로드", L.pdf, "btn-pdf")}
-            \${btn("고객센터", L.support, "btn-info")}
-            \${btn("모바일 청구", L.mobile, "btn-info")}
+            ${btn("전산 접속", L.system, "btn-primary")}
+            ${btn("필요서류 안내", L.guide, "btn-info")}
+            ${btn("보험금 청구서 PDF 다운로드", L.pdf, "btn-pdf")}
+            ${btn("고객센터", L.support, "btn-info")}
+            ${btn("모바일 청구", L.mobile, "btn-info")}
           </div>
-        </div>\`;
+        </div>`;
     }
 
     function render(arr) {
-      // JSON 입력 순서를 그대로 사용 (정렬 없음)
+      // JSON 순서 유지
       const loss = arr.filter(x => x.type === "손해");
       const life = arr.filter(x => x.type === "생명");
       lossList.innerHTML = loss.map(row).join("");
       lifeList.innerHTML = life.map(row).join("");
       lossEmpty.classList.toggle("hidden", loss.length > 0);
       lifeEmpty.classList.toggle("hidden", life.length > 0);
-      lossCount.textContent = \`\${loss.length}개\`;
-      lifeCount.textContent = \`\${life.length}개\`;
+      lossCount.textContent = `${loss.length}개`;
+      lifeCount.textContent = `${life.length}개`;
       filter();
     }
 
@@ -274,7 +275,7 @@
       });
     }
 
-    // 검색 단축키/클리어
+    // Search UX
     document.addEventListener("keydown", (e) => {
       if (e.key === "/") { e.preventDefault(); q.focus(); }
       if (e.key === "Escape") { q.value = ""; filter(); }
@@ -282,7 +283,7 @@
     q.addEventListener("input", filter);
     clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
 
-    // 데이터 로드
+    // Data load
     loadData()
       .then(json => { render(json.carriers || []); })
       .catch(() => {
@@ -290,9 +291,8 @@
         lossList.innerHTML = err; lifeList.innerHTML = err;
       });
 
-    // ===== 보험나이 계산기 =====
+    // ===== 보험나이 계산기 (compact, as-of = today) =====
     const dobEl = document.querySelector('#dob');
-    const asofEl = document.querySelector('#asof');
     const form = document.querySelector('#age-form');
     const badge = document.querySelector('#age-badge');
     const view = document.querySelector('#age-result');
@@ -304,7 +304,7 @@
     const linkBtn = document.querySelector('#age-link');
     const resetBtn = document.querySelector('#age-reset');
 
-    const fmt = d => \`\${d.getFullYear()}-\${String(d.getMonth()+1).padStart(2,'0')}-\${String(d.getDate()).padStart(2,'0')}\`;
+    const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const addMonths = (d, m) => { const x = new Date(d); const day=x.getDate(); x.setMonth(x.getMonth()+m); if (x.getDate()!==day) x.setDate(0); return x; };
 
     function calcInternationalAge(dob, asof){
@@ -319,41 +319,37 @@
       const lastBirthday = new Date(lastBirthdayYear, dob.getMonth(), dob.getDate());
       const halfBirthday = addMonths(lastBirthday, 6);
       const plus = asof >= halfBirthday ? 1 : 0;
-      return { insAge: base + plus, base, lastBirthday, halfBirthday, plus };
+      return { insAge: base + plus, base, halfBirthday, plus };
     }
-    function humanizeDuration(ms){ if(ms<0) ms=0; const d=Math.floor(ms/86400000); const h=Math.floor((ms%86400000)/3600000); return \`\${d}일 \${h}시간\`; }
+    function humanizeDuration(ms){ if(ms<0) ms=0; const d=Math.floor(ms/86400000); const h=Math.floor((ms%86400000)/3600000); return `${d}일 ${h}시간`; }
 
     function renderAge(){
       const dobVal = dobEl?.value;
       if (!dobVal) return;
-      const asof = asofEl?.value ? new Date(asofEl.value) : new Date();
+      const asof = new Date(); // 항상 오늘 기준
       const dob = new Date(dobVal);
-      if (isNaN(dob) || isNaN(asof)) return;
+      if (isNaN(dob)) return;
 
       const r = calcInsuranceAge(dob, asof);
       ageNum.textContent = r.insAge;
       intlAge.textContent = r.base;
-      ruleText.textContent = r.plus ? '최근 생일부터 6개월 경과 → +1 반영' : '최근 생일부터 6개월 미만';
+      ruleText.textContent = r.plus ? '오늘 기준: 최근 생일부터 6개월 경과 → +1 반영' : '오늘 기준: 최근 생일부터 6개월 미만';
       const halfMs = r.halfBirthday - asof;
-      halfLeft.textContent = (halfMs <= 0) ? '이미 전환됨' : \`\${fmt(r.halfBirthday)} (약 \${humanizeDuration(halfMs)} 남음)\`;
-      badge.textContent = \`\${r.insAge}세\`; badge.classList.remove('hidden');
+      halfLeft.textContent = (halfMs <= 0) ? '이미 전환됨' : `${fmt(r.halfBirthday)} (약 ${humanizeDuration(halfMs)} 남음)`;
+      badge.textContent = `${r.insAge}세`; badge.classList.remove('hidden');
       view.classList.remove('hidden');
     }
 
     if (form) {
       form.addEventListener('submit', (e)=>{ e.preventDefault(); renderAge(); });
-      resetBtn.addEventListener('click', ()=>{ dobEl.value=''; asofEl.value=''; view.classList.add('hidden'); badge.textContent='–'; });
-      copyBtn.addEventListener('click', async ()=>{ const txt=\`보험나이: \${ageNum.textContent}세 (만나이 \${intlAge.textContent}세, 기준일 \${asofEl.value || fmt(new Date())})\`; try{ await navigator.clipboard.writeText(txt); copyBtn.textContent='복사됨'; setTimeout(()=>copyBtn.textContent='결과 복사',1200);}catch{} });
-      linkBtn.addEventListener('click', async ()=>{ const p=new URL(location.href); if(dobEl.value) p.searchParams.set('dob',dobEl.value); if(asofEl.value) p.searchParams.set('asof',asofEl.value); const url=p.toString(); try{ await navigator.clipboard.writeText(url); linkBtn.textContent='링크 복사됨'; setTimeout(()=>linkBtn.textContent='링크 공유',1200);}catch{ alert(url);} });
-      // URL 파라미터로 미리 채우기
-      (function(){
-        const u=new URL(location.href); const dob=u.searchParams.get('dob'); const asof=u.searchParams.get('asof');
-        if(dob) dobEl.value=dob; if(asof) asofEl.value=asof; if(dob) renderAge();
-      })();
+      resetBtn.addEventListener('click', ()=>{ dobEl.value=''; view.classList.add('hidden'); badge.textContent='–'; });
+      copyBtn.addEventListener('click', async ()=>{ const txt=`보험나이: ${ageNum.textContent}세 (만나이 ${intlAge.textContent}세, 기준일 ${fmt(new Date())})`; try{ await navigator.clipboard.writeText(txt); copyBtn.textContent='복사됨'; setTimeout(()=>copyBtn.textContent='결과 복사',1200);}catch{} });
+      linkBtn.addEventListener('click', async ()=>{ const p=new URL(location.href); if(dobEl.value) p.searchParams.set('dob',dobEl.value); const url=p.toString(); try{ await navigator.clipboard.writeText(url); linkBtn.textContent='링크 복사됨'; setTimeout(()=>linkBtn.textContent='링크 공유',1200);}catch{ alert(url);} });
+      // URL 파라미터로 DOB 채우기
+      (function(){ const u=new URL(location.href); const dob=u.searchParams.get('dob'); if(dob){ dobEl.value=dob; renderAge(); }})();
     }
 
     document.querySelector('#y').textContent = new Date().getFullYear();
-
   })();
   </script>
 </body>
