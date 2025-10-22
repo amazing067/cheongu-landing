@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-mode="light" data-theme="indigo">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tailwind 비교 데모 | CDN vs @apply (표 + 계산기)</title>
+  <title>극적 비교 데모 | CDN vs @apply (테마·다크모드·유지보수)</title>
 
-  <!-- Tailwind Play CDN: 이 데모에서만 @apply 테스트용 -->
+  <!-- Tailwind Play CDN: 이 데모에서만 @apply 런타임 컴파일 허용 -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- 이 블록 안에서만 @apply가 동작(Play CDN이 런타임 컴파일) -->
+  <!-- @apply는 이 블록 안에서만 동작 -->
   <style type="text/tailwindcss">
     @layer components {
-      /* 공통 컴포넌트 (@apply 방식) */
+      /* ===== 공통 컴포넌트 (@apply) ===== */
       .btn { @apply inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border shadow-sm transition; }
       .btn-ghost { @apply border-slate-200 bg-white hover:bg-white/80; }
       .btn-primary { @apply border-indigo-600 bg-indigo-600 text-white hover:opacity-90; }
@@ -23,112 +23,74 @@
       .logo { @apply w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden; }
       .name { @apply text-lg md:text-xl font-extrabold text-slate-900; }
 
-      /* 계산기 */
       .calc-card { @apply rounded-3xl border border-indigo-200 bg-white shadow-sm; }
       .display { @apply rounded-2xl border border-slate-200 bg-white p-4 grid gap-1; }
       .display-num { @apply text-3xl font-black tracking-wider; font-variant-numeric: tabular-nums; }
       .key { @apply rounded-xl border py-2 px-4 text-sm font-semibold bg-white hover:bg-slate-50 border-slate-200; }
       .key-primary { @apply border-indigo-600 bg-indigo-600 text-white hover:opacity-90; }
+
+      /* ======= 테마 토큰 (오른쪽 패널)에 일괄 적용: data-theme / data-mode ======= */
+      /* 테마 팔레트: indigo / emerald / fuchsia */
+      [data-theme="indigo"] .btn-primary { @apply border-indigo-600 bg-indigo-600; }
+      [data-theme="indigo"] .calc-card { @apply border-indigo-200; }
+
+      [data-theme="emerald"] .btn-primary { @apply border-emerald-600 bg-emerald-600; }
+      [data-theme="emerald"] .calc-card { @apply border-emerald-200; }
+
+      [data-theme="fuchsia"] .btn-primary { @apply border-fuchsia-600 bg-fuchsia-600; }
+      [data-theme="fuchsia"] .calc-card { @apply border-fuchsia-200; }
+
+      /* 다크모드 토큰: data-mode="dark" 인 경우 */
+      [data-mode="dark"] body { @apply bg-slate-900 text-slate-100; }
+      [data-mode="dark"] .table { @apply border-slate-700; }
+      [data-mode="dark"] .row { @apply border-slate-700; }
+      [data-mode="dark"] .row.odd\:bg-white { @apply bg-slate-800; }
+      [data-mode="dark"] .row.even\:bg-slate-50 { @apply bg-slate-800/70; }
+      [data-mode="dark"] .btn-ghost { @apply border-slate-700 bg-slate-800 hover:bg-slate-700; }
+      [data-mode="dark"] .btn-pdf { @apply border-sky-500 bg-sky-500 text-white; }
+      [data-mode="dark"] .display { @apply border-slate-700 bg-slate-800; }
+      [data-mode="dark"] .calc-card { @apply bg-slate-900 border-slate-700; }
+      [data-mode="dark"] .name { @apply text-slate-100; }
     }
   </style>
 
   <style>
     body{background:linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%)}
+    [data-mode="dark"] body{background:linear-gradient(180deg,#0b1220 0%,#0a1020 100%)}
   </style>
 </head>
 <body class="text-slate-900">
-  <div class="max-w-6xl mx-auto px-5 py-10">
-    <h1 class="text-3xl font-black">CDN vs <code>@apply</code> 비교 (표 + 계산기)</h1>
-    <p class="text-slate-600 mt-1">왼쪽: **CDN 방식(유틸 클래스 직접 나열)** · 오른쪽: **@apply로 만든 컴포넌트 클래스**</p>
+  <div class="max-w-6xl mx-auto px-5 py-8">
+    <h1 class="text-3xl font-black">극적 비교: CDN vs <code>@apply</code></h1>
+    <p class="text-slate-600 mt-1">좌측은 **CDN 방식**(테마/모드 변경 시 <u>모든 요소 클래스 교체</u>), 우측은 **@apply 방식**(상위 <code>data-theme</code>/<code>data-mode</code>만 바꿔 <u>전체 일괄 적용</u>).</p>
 
-    <!-- ========== 1) 표(보험사 리스트) 비교 ========== -->
-    <h2 class="text-2xl font-bold mt-8 mb-3">1) 표 리스트</h2>
-    <div class="grid md:grid-cols-2 gap-6">
-      <!-- A) CDN RAW -->
-      <section class="rounded-2xl border border-slate-200 bg-white/70 p-5">
-        <h3 class="text-lg font-semibold mb-3">A. CDN (유틸 나열)</h3>
-        <div class="overflow-hidden rounded-2xl border border-slate-200">
-          <!-- row 1 -->
-          <div class="grid items-center gap-4 px-5 py-3 odd:bg-white even:bg-slate-50 hover:bg-white border-t border-slate-200"
-               style="grid-template-columns:minmax(220px,1.2fr) 3fr">
-            <div class="flex items-center gap-3">
-              <span class="w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden">
-                <img src="/assets/logos/삼성화재.png" class="w-full h-full object-contain" onerror="this.style.display='none'">
-              </span>
-              <div class="text-lg md:text-xl font-extrabold text-slate-900">삼성화재</div>
-            </div>
-            <div class="grid gap-2 sm:grid-cols-5">
-              <a class="inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-indigo-600 bg-indigo-600 text-white hover:opacity-90">전산 접속</a>
-              <a class="inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80">필요서류 안내</a>
-              <a class="inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-sky-600 bg-sky-600 text-white hover:opacity-90">보험금 청구서 PDF 다운로드</a>
-              <a class="inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80">고객센터</a>
-              <a class="inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80">모바일 청구</a>
-            </div>
-          </div>
-          <!-- row 2 -->
-          <div class="grid items-center gap-4 px-5 py-3 odd:bg-white even:bg-slate-50 hover:bg-white border-t border-slate-200"
-               style="grid-template-columns:minmax(220px,1.2fr) 3fr">
-            <div class="flex items-center gap-3">
-              <span class="w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden">
-                <img src="/assets/logos/현대해상.png" class="w-full h-full object-contain" onerror="this.style.display='none'">
-              </span>
-              <div class="text-lg md:text-xl font-extrabold text-slate-900">현대해상</div>
-            </div>
-            <div class="grid gap-2 sm:grid-cols-5">
-              <a class="inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-indigo-600 bg-indigo-600 text-white hover:opacity-90">전산 접속</a>
-              <a class="inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80">필요서류 안내</a>
-              <a class="inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-sky-600 bg-sky-600 text-white hover:opacity-90">보험금 청구서 PDF 다운로드</a>
-              <a class="inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80">고객센터</a>
-              <a class="inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-slate-200 bg-white hover:bg-white/80">모바일 청구</a>
-            </div>
-          </div>
-        </div>
-        <p class="text-xs text-slate-600 mt-2">HTML에 클래스가 **아주 길게** 반복됨.</p>
-      </section>
+    <!-- 글로벌 컨트롤러 -->
+    <div class="mt-4 rounded-xl border border-slate-200 bg-white p-3 flex flex-wrap items-center gap-2">
+      <span class="text-sm font-semibold mr-2">테마:</span>
+      <button class="theme-btn rounded-lg px-3 py-1.5 text-sm border border-slate-200 bg-white hover:bg-slate-50" data-theme="indigo">Indigo</button>
+      <button class="theme-btn rounded-lg px-3 py-1.5 text-sm border border-slate-200 bg-white hover:bg-slate-50" data-theme="emerald">Emerald</button>
+      <button class="theme-btn rounded-lg px-3 py-1.5 text-sm border border-slate-200 bg-white hover:bg-slate-50" data-theme="fuchsia">Fuchsia</button>
+      <span class="w-px h-6 bg-slate-200 mx-2"></span>
+      <span class="text-sm font-semibold">모드:</span>
+      <button class="mode-btn rounded-lg px-3 py-1.5 text-sm border border-slate-200 bg-white hover:bg-slate-50" data-mode="light">라이트</button>
+      <button class="mode-btn rounded-lg px-3 py-1.5 text-sm border border-slate-200 bg-white hover:bg-slate-50" data-mode="dark">다크</button>
 
-      <!-- B) @apply -->
-      <section class="rounded-2xl border border-slate-200 bg-white/70 p-5">
-        <h3 class="text-lg font-semibold mb-3">B. @apply (컴포넌트 클래스)</h3>
-        <div class="table">
-          <div class="row">
-            <div class="brand">
-              <span class="logo"><img src="/assets/logos/삼성화재.png" class="w-full h-full object-contain" onerror="this.style.display='none'"></span>
-              <div class="name">삼성화재</div>
-            </div>
-            <div class="grid gap-2 sm:grid-cols-5">
-              <a class="btn btn-primary">전산 접속</a>
-              <a class="btn btn-ghost">필요서류 안내</a>
-              <a class="btn btn-pdf">보험금 청구서 PDF 다운로드</a>
-              <a class="btn btn-ghost">고객센터</a>
-              <a class="btn btn-ghost">모바일 청구</a>
-            </div>
-          </div>
-          <div class="row">
-            <div class="brand">
-              <span class="logo"><img src="/assets/logos/현대해상.png" class="w-full h-full object-contain" onerror="this.style.display='none'"></span>
-              <div class="name">현대해상</div>
-            </div>
-            <div class="grid gap-2 sm:grid-cols-5">
-              <a class="btn btn-primary">전산 접속</a>
-              <a class="btn btn-ghost">필요서류 안내</a>
-              <a class="btn btn-pdf">보험금 청구서 PDF 다운로드</a>
-              <a class="btn btn-ghost">고객센터</a>
-              <a class="btn btn-ghost">모바일 청구</a>
-            </div>
-          </div>
-        </div>
-        <p class="text-xs text-slate-600 mt-2">HTML이 **짧고 읽기 쉬움**. 디자인 변경도 CSS 한 군데만 고치면 전역 반영.</p>
-      </section>
+      <span class="ml-auto text-xs text-slate-500">클래스 교체 수 — 좌: <b id="opsLeft">0</b>회 · 우: <b id="opsRight">0</b>회</span>
     </div>
 
-    <!-- ========== 2) 보험나이 계산기 비교 ========== -->
-    <h2 class="text-2xl font-bold mt-10 mb-3">2) 보험나이 계산기</h2>
-    <div class="grid md:grid-cols-2 gap-6">
-      <!-- A) CDN RAW -->
-      <section class="rounded-2xl border border-slate-200 bg-white/70 p-5">
-        <h3 class="text-lg font-semibold mb-3">A. CDN (유틸 나열)</h3>
+    <div class="grid md:grid-cols-2 gap-6 mt-6">
+      <!-- ================= LEFT: CDN RAW ================= -->
+      <section id="cdnPanel" class="rounded-2xl border border-slate-200 bg-white/80 p-5">
+        <h2 class="text-xl font-bold mb-3">A) CDN (유틸 직접 나열)</h2>
+
+        <h3 class="text-sm font-semibold text-slate-600 mb-2">표 리스트</h3>
+        <div class="overflow-hidden rounded-2xl border border-slate-200" id="cdnTable">
+          <!-- row template function으로 채움 -->
+        </div>
+
+        <h3 class="text-sm font-semibold text-slate-600 mt-6 mb-2">보험나이 계산기</h3>
         <div class="max-w-[520px]">
-          <div class="rounded-3xl border border-indigo-200 bg-white shadow-sm">
+          <div id="cdnCalc" class="rounded-3xl border border-indigo-200 bg-white shadow-sm">
             <div class="flex items-center justify-between p-4 border-b border-indigo-200/60">
               <div class="text-base font-bold">나이 계산기</div>
               <div class="text-[11px] px-2 py-0.5 rounded-full border border-indigo-200 bg-white" id="badgeA">–</div>
@@ -147,33 +109,25 @@
                 <button class="rounded-xl border border-indigo-600 bg-indigo-600 text-white py-2 px-4 font-semibold hover:opacity-90" type="submit">계산하기</button>
                 <button class="rounded-xl border border-slate-200 bg-white py-2 px-4 font-semibold hover:bg-slate-50" type="button" id="resetA">초기화</button>
               </form>
-              <div class="grid gap-2 md:grid-cols-3">
-                <div class="rounded-2xl border border-slate-200 bg-white p-3">
-                  <div class="text-[11px] text-slate-600">만나이</div>
-                  <div class="text-base font-bold mt-0.5"><span id="intlA">–</span> 세</div>
-                </div>
-                <div class="rounded-2xl border border-slate-200 bg-white p-3">
-                  <div class="text-[11px] text-slate-600">다음 반(半)생일까지</div>
-                  <div class="text-base font-semibold mt-0.5"><span id="halfA">–</span></div>
-                </div>
-                <div class="rounded-2xl border border-slate-200 bg-white p-3">
-                  <div class="text-[11px] text-slate-600">빠른 동작</div>
-                  <div class="mt-1 grid grid-cols-2 gap-2">
-                    <button class="rounded-xl border border-slate-200 bg-white py-2 px-3 text-sm font-semibold hover:bg-slate-50" id="copyA" type="button">복사</button>
-                    <button class="rounded-xl border border-slate-200 bg-white py-2 px-3 text-sm font-semibold hover:bg-slate-50" id="linkA" type="button">링크</button>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
+
+        <p class="text-xs text-slate-500 mt-3">테마/모드 변경 시, 이 패널은 **모든 버튼/박스의 클래스 문자열을 직접 교체**합니다.</p>
       </section>
 
-      <!-- B) @apply -->
-      <section class="rounded-2xl border border-slate-200 bg-white/70 p-5">
-        <h3 class="text-lg font-semibold mb-3">B. @apply (컴포넌트 클래스)</h3>
+      <!-- ================= RIGHT: @apply ================= -->
+      <section id="applyPanel" class="rounded-2xl border border-slate-200 bg-white/80 p-5">
+        <h2 class="text-xl font-bold mb-3">B) @apply (컴포넌트 + 토큰)</h2>
+
+        <h3 class="text-sm font-semibold text-slate-600 mb-2">표 리스트</h3>
+        <div class="table" id="applyTable">
+          <!-- row template function으로 채움 -->
+        </div>
+
+        <h3 class="text-sm font-semibold text-slate-600 mt-6 mb-2">보험나이 계산기</h3>
         <div class="max-w-[520px]">
-          <div class="calc-card">
+          <div class="calc-card" id="applyCalc">
             <div class="flex items-center justify-between p-4 border-b border-indigo-200/60">
               <div class="text-base font-bold">나이 계산기</div>
               <div class="text-[11px] px-2 py-0.5 rounded-full border border-indigo-200 bg-white" id="badgeB">–</div>
@@ -192,62 +146,168 @@
                 <button class="key key-primary" type="submit">계산하기</button>
                 <button class="key" type="button" id="resetB">초기화</button>
               </form>
-              <div class="grid gap-2 md:grid-cols-3">
-                <div class="rounded-2xl border border-slate-200 bg-white p-3">
-                  <div class="text-[11px] text-slate-600">만나이</div>
-                  <div class="text-base font-bold mt-0.5"><span id="intlB">–</span> 세</div>
-                </div>
-                <div class="rounded-2xl border border-slate-200 bg-white p-3">
-                  <div class="text-[11px] text-slate-600">다음 반(半)생일까지</div>
-                  <div class="text-base font-semibold mt-0.5"><span id="halfB">–</span></div>
-                </div>
-                <div class="rounded-2xl border border-slate-200 bg-white p-3">
-                  <div class="text-[11px] text-slate-600">빠른 동작</div>
-                  <div class="mt-1 grid grid-cols-2 gap-2">
-                    <button class="key" id="copyB" type="button">복사</button>
-                    <button class="key" id="linkB" type="button">링크</button>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div><!-- /calc-card -->
+          </div>
         </div>
+
+        <p class="text-xs text-slate-500 mt-3">테마/모드 변경 시, 이 패널은 **상위의 <code>data-theme</code>/<code>data-mode</code>만 바꿉니다**(클래스 교체 없음).</p>
       </section>
     </div>
 
-    <p class="text-sm text-slate-600 mt-8">
-      <strong>요점:</strong> 두 열은 **동일한 UI**지만, 왼쪽은 HTML 클래스가 길고 반복, 오른쪽은 **@apply**로 압축되어 유지보수성이 큼.
-      실제 운영에선 Play CDN 대신 <em>GitHub Actions</em>로 CSS를 빌드해 <code>assets/site.css</code>를 쓰는 방식을 권장.
+    <p class="text-sm text-slate-600 mt-6">
+      <strong>핵심:</strong> 좌측은 테마를 바꿀 때 **수십~수백 개 DOM 클래스 교체**가 일어나는 반면, 우측은 **상위 속성 1~2개만 변경**으로 전체 스타일이 바뀜.
+      실제 운영에선 Play CDN 대신 GitHub Actions로 CSS를 빌드하여 <code>@apply</code> 기반 토큰 설계를 추천.
     </p>
   </div>
 
-  <!-- 계산기 공용 JS (양쪽 폼에 동일 로직 주입) -->
   <script>
+    // ===== 표 데이터 (샘플) =====
+    const rows = [
+      { name: "삼성화재" }, { name: "현대해상" }, { name: "DB손해보험" }, { name: "KB손해보험" }, { name: "메리츠화재" }
+    ];
+
+    // ===== CDN 측 템플릿(긴 클래스) =====
+    const cdnBtnPrimary = "inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border text-white hover:opacity-90";
+    const cdnBtnGhost   = "inline-flex items-center justify-center rounded-lg px-3.5 py-2.5 text-sm font-semibold border bg-white hover:bg-white/80";
+    const cdnColors = {
+      indigo:  { primary: "border-indigo-600 bg-indigo-600" , calcBorder: "border-indigo-200", calcHeader: "border-indigo-200/60" },
+      emerald: { primary: "border-emerald-600 bg-emerald-600", calcBorder: "border-emerald-200", calcHeader: "border-emerald-200/60" },
+      fuchsia: { primary: "border-fuchsia-600 bg-fuchsia-600", calcBorder: "border-fuchsia-200", calcHeader: "border-fuchsia-200/60" }
+    };
+
+    function cdnRowHTML(theme) {
+      const c = cdnColors[theme] || cdnColors.indigo;
+      return `
+      <div class="grid items-center gap-4 px-5 py-3 odd:bg-white even:bg-slate-50 hover:bg-white border-t border-slate-200" style="grid-template-columns:minmax(220px,1.2fr) 3fr">
+        <div class="flex items-center gap-3">
+          <span class="w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden">
+            <img src="/assets/logos/placeholder.png" class="w-full h-full object-contain" onerror="this.style.display='none'">
+          </span>
+          <div class="text-lg md:text-xl font-extrabold text-slate-900">회사명</div>
+        </div>
+        <div class="grid gap-2 sm:grid-cols-5">
+          <a class="${cdnBtnPrimary} ${c.primary}">전산 접속</a>
+          <a class="${cdnBtnGhost}  border-slate-200">필요서류 안내</a>
+          <a class="${cdnBtnPrimary} border-sky-600 bg-sky-600">보험금 청구서 PDF 다운로드</a>
+          <a class="${cdnBtnGhost}  border-slate-200">고객센터</a>
+          <a class="${cdnBtnGhost}  border-slate-200">모바일 청구</a>
+        </div>
+      </div>`;
+    }
+
+    function hydrateCDN(theme) {
+      const table = document.getElementById('cdnTable');
+      table.innerHTML = '';
+      rows.forEach(r => { table.insertAdjacentHTML('beforeend', cdnRowHTML(theme).replace('회사명', r.name)); });
+      // 계산기 보더 색 바꾸기
+      const calc = document.getElementById('cdnCalc');
+      const c = cdnColors[theme] || cdnColors.indigo;
+      swapMany(calc, [
+        ["border-(indigo|emerald|fuchsia)-200","border-"+theme+"-200"],
+        ["border-(indigo|emerald|fuchsia)-200\\/60","border-"+theme+"-200/60"]
+      ]);
+    }
+
+    // ===== @apply 측 템플릿(짧은 클래스) =====
+    function applyRowHTML(r) {
+      return `
+        <div class="row">
+          <div class="brand">
+            <span class="logo"><img src="/assets/logos/placeholder.png" class="w-full h-full object-contain" onerror="this.style.display='none'"></span>
+            <div class="name">${r.name}</div>
+          </div>
+          <div class="grid gap-2 sm:grid-cols-5">
+            <a class="btn btn-primary">전산 접속</a>
+            <a class="btn btn-ghost">필요서류 안내</a>
+            <a class="btn btn-pdf">보험금 청구서 PDF 다운로드</a>
+            <a class="btn btn-ghost">고객센터</a>
+            <a class="btn btn-ghost">모바일 청구</a>
+          </div>
+        </div>`;
+    }
+
+    function hydrateApply() {
+      const table = document.getElementById('applyTable');
+      table.innerHTML = '<div class="table"></div>';
+      table.className = 'table';
+      const inner = rows.map(applyRowHTML).join('');
+      table.innerHTML = inner;
+    }
+
+    // ===== 테마/모드 토글: 좌(클래스 치환 다수), 우(data-속성 1~2개) =====
+    let opsLeft = 0, opsRight = 0;
+    const opsLeftEl = document.getElementById('opsLeft');
+    const opsRightEl = document.getElementById('opsRight');
+
+    function swapMany(root, replacers) {
+      // 좌측 CDN: 클래스 문자열 치환(치환 횟수 카운트)
+      const all = root.querySelectorAll('*');
+      all.forEach(el => {
+        if (!el.className) return;
+        let cls = el.className;
+        replacers.forEach(([from,to]) => {
+          const re = new RegExp(from, 'g');
+          if (re.test(cls)) {
+            const before = cls;
+            cls = cls.replace(re, to);
+            if (before !== cls) opsLeft++;
+          }
+        });
+        el.className = cls;
+      });
+      opsLeftEl.textContent = opsLeft.toString();
+    }
+
+    function setTheme(theme) {
+      // 좌: 모든 요소 클래스 치환
+      hydrateCDN(theme); // 새로 그리고 색 반영(여기서 내부적으로 swapMany 사용)
+      // 우: data-theme만 바꾸면 끝
+      document.documentElement.setAttribute('data-theme', theme);
+      opsRight++; opsRightEl.textContent = opsRight.toString();
+    }
+
+    function setMode(mode) {
+      // 좌: 다크 모드일 때 배경/텍스트/보더들을 직접 치환(간단 버전)
+      const root = document.getElementById('cdnPanel');
+      if (mode === 'dark') {
+        swapMany(root, [
+          ["bg-white","bg-slate-900"], ["text-slate-900","text-slate-100"], ["text-slate-600","text-slate-300"],
+          ["border-slate-200","border-slate-700"], ["bg-slate-50","bg-slate-800/70"]
+        ]);
+      } else {
+        // 라이트로 복구는 데모 단순화를 위해 재렌더
+        hydrateCDN(document.documentElement.getAttribute('data-theme') || 'indigo');
+      }
+
+      // 우: data-mode만 바꾸면 끝
+      document.documentElement.setAttribute('data-mode', mode);
+      opsRight++; opsRightEl.textContent = opsRight.toString();
+    }
+
+    // 초기 렌더
+    hydrateCDN('indigo');
+    hydrateApply();
+
+    // 컨트롤 바인딩
+    document.querySelectorAll('.theme-btn').forEach(b => b.addEventListener('click', () => setTheme(b.dataset.theme)));
+    document.querySelectorAll('.mode-btn').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+
+    // ====== 계산기 로직(양쪽 동일) ======
     const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const addMonths = (d, m) => { const x = new Date(d); const day=x.getDate(); x.setMonth(x.getMonth()+m); if (x.getDate()!==day) x.setDate(0); return x; };
     function intlAge(dob, asof){ let a = asof.getFullYear()-dob.getFullYear(); const bThis = new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()); if(asof < bThis) a -= 1; return a; }
-    function insAge(dob, asof){
-      const base = intlAge(dob, asof);
-      const lastYear = asof.getFullYear() - (asof < new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()) ? 1 : 0);
-      const last = new Date(lastYear, dob.getMonth(), dob.getDate());
-      const half = addMonths(last,6);
-      const plus = asof >= half ? 1 : 0;
-      return {base, ins: base+plus, half};
-    }
-    function human(ms){ if(ms<0) ms=0; const d=Math.floor(ms/86400000), h=Math.floor((ms%86400000)/3600000); return `${d}일 ${h}시간`; }
+    function insAge(dob, asof){ const base=intlAge(dob,asof); const lastYear = asof.getFullYear() - (asof < new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()) ? 1 : 0); const last = new Date(lastYear, dob.getMonth(), dob.getDate()); const half=addMonths(last,6); const plus = asof >= half ? 1 : 0; return {base, ins: base+plus, half}; }
 
-    function hook(prefix){
+    function hookCalc(prefix){
       const form = document.getElementById('form'+prefix);
       const dob = document.getElementById('dob'+prefix);
-      const reset = document.getElementById('reset'+prefix);
       const num = document.getElementById('num'+prefix);
       const intl = document.getElementById('intl'+prefix);
       const rule = document.getElementById('rule'+prefix);
       const half = document.getElementById('half'+prefix);
       const badge = document.getElementById('badge'+prefix);
-      const copy = document.getElementById('copy'+prefix);
-      const link = document.getElementById('link'+prefix);
 
+      if(!form) return;
       form.addEventListener('submit', e=>{
         e.preventDefault();
         if(!dob.value) return;
@@ -255,32 +315,16 @@
         const d = new Date(dob.value);
         const r = insAge(d, asof);
         num.textContent = r.ins;
-        intl.textContent = r.base;
+        if (intl) intl.textContent = r.base;
         rule.textContent = (asof >= r.half) ? '오늘 기준: 최근 생일부터 6개월 경과 → +1' : '오늘 기준: 최근 생일부터 6개월 미만';
         const ms = r.half - asof;
-        half.textContent = (ms<=0) ? '이미 전환됨' : `${fmt(r.half)} (약 ${human(ms)} 남음)`;
-        badge.textContent = `${r.ins}세`;
+        if (half) half.textContent = (ms<=0) ? '이미 전환됨' : `${fmt(r.half)} (약 ${Math.floor(ms/86400000)}일 ${Math.floor((ms%86400000)/3600000)}시간 남음)`;
+        if (badge) badge.textContent = `${r.ins}세`;
       });
-
-      reset.addEventListener('click', ()=>{
-        dob.value=''; num.textContent='--'; intl.textContent='–'; rule.textContent='생년월일을 입력하세요'; half.textContent='–'; badge.textContent='–';
-      });
-
-      copy.addEventListener('click', async ()=>{
-        const t = `보험나이: ${num.textContent}세 (만나이 ${intl.textContent}세, 기준일 ${fmt(new Date())})`;
-        try{ await navigator.clipboard.writeText(t); copy.textContent='복사됨'; setTimeout(()=>copy.textContent= (prefix==='A'?'복사':'복사'),1200);}catch{}
-      });
-
-      link.addEventListener('click', async ()=>{
-        const u = new URL(location.href); if(dob.value) u.searchParams.set('dob', dob.value);
-        try{ await navigator.clipboard.writeText(u.toString()); link.textContent='링크 복사됨'; setTimeout(()=>link.textContent='링크',1200);}catch{ alert(u.toString()); }
-      });
-
-      // URL 파라미터로 DOB 세팅
-      const p = new URL(location.href).searchParams.get('dob'); if(p){ dob.value=p; form.dispatchEvent(new Event('submit')); }
+      const reset = document.getElementById('reset'+prefix);
+      if (reset) reset.addEventListener('click', ()=>{ dob.value=''; num.textContent='--'; if(intl) intl.textContent='–'; rule.textContent='생년월일을 입력하세요'; if(half) half.textContent='–'; if(badge) badge.textContent='–'; });
     }
-
-    hook('A'); hook('B');
+    hookCalc('A'); hookCalc('B');
   </script>
 </body>
 </html>
