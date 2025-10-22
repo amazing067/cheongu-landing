@@ -1,10 +1,16 @@
 {
   "carriers": [
-    { "name": "삼성화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
-      "pdf": "https://direct.samsungfire.com/claim/PP040202_001.html",
-      "support": "https://www.samsungfire.com/claim/P_P03_01_02_011.html",
-      "mobile": "https://direct.samsungfire.com/m/claim/MP040202_001.html"
-    }},
+    {
+      "name": "삼성화재",
+      "type": "손해",
+      "tags": ["pdf","고객센터","모바일청구"],
+      "links": {
+        "system": "", 
+        "guide": "https://www.samsungfire.com/claim/P_P03_01_02_011.html",
+        "pdf": "/assets/pdf/삼성화재-청구서.pdf",
+        "support": "https://www.samsungfire.com/claim/P_P03_01_02_011.html",
+        "mobile": "https://direct.samsungfire.com/m/claim/MP040202_001.html"
+      }},
     { "name": "현대해상", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
       "pdf": "https://www.hi.co.kr/data/CL/amends01.pdf",
       "support": "https://www.hi.co.kr/serviceAction.do?menuId=100631",
