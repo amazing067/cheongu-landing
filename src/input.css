@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* =============== 글로벌 =============== */
+/* ===================== Base / Global ===================== */
 @layer base {
   html { @apply scroll-smooth; }
   body { @apply antialiased; }
@@ -18,88 +18,94 @@
     linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
 }
 
-/* =============== 버튼 =============== */
-/* 높이 44px 고정 느낌 + 라운드/그림자/포커스링 */
+/* ===================== Buttons ===================== */
+/* 컴팩트(사이트 전반) 높이 38px, 라운드/포커스링 포함 */
 .btn {
   @apply inline-flex items-center justify-center select-none
-         rounded-xl px-4 py-2.5 text-[14px] font-semibold
-         border shadow-sm transition-all duration-150
-         focus:outline-none focus:ring-2 focus:ring-offset-2;
-  min-height: 44px;
+         rounded-lg px-3.5 py-2 text-[13px] font-semibold
+         border shadow-sm transition duration-150
+         focus:outline-none focus:ring-2 focus:ring-offset-1;
+  min-height: 38px;
   line-height: 1.2;
 }
-
-/* 자주 쓰는 상태 */
 .btn-ghost  { @apply border-slate-200 bg-white text-slate-800 hover:bg-white/80 focus:ring-slate-300; }
 .btn-muted  { @apply border-slate-200 bg-white text-slate-500 opacity-60 cursor-not-allowed; }
 .btn-primary{
-  @apply border-[color:var(--tw-brand-border,theme(colors.brand.primary))]
-         text-white
-         focus:ring-[color:var(--tw-brand-ring,theme(colors.brand.ring))];
+  @apply text-white focus:ring-[color:var(--tw-brand-ring,theme(colors.brand.ring))];
   background-color: theme(colors.brand.primary);
+  border-color: theme(colors.brand.primary);
 }
-.btn-primary:hover{ background-color: theme(colors.brand.primaryHover); }
-.btn-pdf     { @apply border-sky-600 bg-sky-600 text-white hover:opacity-90 focus:ring-sky-300; }
+.btn-primary:hover { background-color: theme(colors.brand.primaryHover); }
+.btn-pdf { @apply border-sky-600 bg-sky-600 text-white hover:opacity-90 focus:ring-sky-300; }
 
 /* 사이즈 옵션 */
-.btn-sm { @apply px-3 py-2 text-[13px]; min-height: 38px; }
-.btn-lg { @apply px-5 py-3 text-[15px]; min-height: 48px; }
+.btn-sm { @apply px-3 py-1.5 text-[12px]; min-height: 34px; }
+.btn-lg { @apply px-4.5 py-2.5 text-[14px]; min-height: 42px; }
 
-/* 아이콘과 간격 */
+/* 아이콘 간격 */
 .btn > svg, .btn > img { @apply mr-1.5 h-4 w-4; }
 
-/* =============== 표(리스트) =============== */
+/* ===================== Tables / Lists ===================== */
 .table {
-  @apply overflow-hidden rounded-2xl border border-slate-200 bg-white/70 backdrop-blur;
-  box-shadow: var(--tw-shadow-card, theme(boxShadow.card));
+  @apply overflow-hidden rounded-xl border border-slate-200 bg-white/80 backdrop-blur;
+  box-shadow: 0 6px 24px -8px rgba(2,6,23,.12), 0 2px 6px -2px rgba(2,6,23,.08);
 }
 
-/* 줄 간격/지브라/호버 강조, 더 넓은 간격 */
+/* 줄 간격/지브라/호버 강조 — 컴팩트 버전 */
 .row {
-  @apply grid items-center gap-5
-         px-5 py-4
-         odd:bg-white even:bg-slate-100/60
+  @apply grid items-center gap-3
+         px-4 py-2.5
+         odd:bg-white even:bg-slate-100/50
          hover:bg-white
          border-t border-slate-200;
 }
-.row-cols { grid-template-columns: minmax(240px,1.2fr) 3fr; }
+/* 좌측(브랜드) : 우측(버튼영역) 비율 */
+.row-cols { grid-template-columns: minmax(200px,1.1fr) 3fr; }
 
+/* ===================== Brand Cell ===================== */
+.brand { @apply flex items-center gap-2.5; }
 
-.brand { @apply flex items-center gap-3; }
-/* 로고: 네모 박스/테두리/배경 제거 → 원본만 노출 */
-.logo { @apply h-8 md:h-9 w-auto object-contain align-middle; }
-/* 이미지가 없을 때만 보이는 이니셜 뱃지(옵션) */
-.logo-fallback { @apply hidden inline-flex items-center justify-center h-8 w-8 rounded-lg bg-slate-100 text-slate-600 text-sm font-bold; }
+/* 로고: 원본만 표시(프레임/배경/테두리 없음) */
+.logo {
+  height: 24px;          /* 필요 시 22~28px 사이로만 조절 */
+  width: auto;
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: contain;
+  image-rendering: auto;
+}
 
-/* 회사명은 그대로 */
-.name  { @apply text-[18px] md:text-[20px] font-extrabold text-slate-900; }
+/* 이니셜 뱃지는 사용 안 함 */
+.logo-fallback { display: none !important; }
 
+/* 회사명 가독성 */
+.name  { @apply text-[16px] md:text-[17px] font-extrabold text-slate-900; }
 
 /* 버튼 묶음이 좁으면 자동 줄바꿈 */
 .row .grid { @apply grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2; }
 
-/* =============== 카드/보조 블록 =============== */
+/* ===================== Cards (helpers) ===================== */
 .card { @apply rounded-2xl border border-slate-200 bg-white/80 backdrop-blur p-5 shadow-sm; }
 
-/* =============== 계산기 =============== */
-.calc-card { @apply rounded-3xl border bg-white shadow-sm; border-color: theme(colors.brand.ring); }
-.display   { @apply rounded-2xl border border-slate-200 bg-white p-4 grid gap-1; }
-.display-num { 
-  @apply text-[32px] font-black tracking-wider;
+/* ===================== Calculator ===================== */
+.calc-card { @apply rounded-2xl border bg-white shadow-sm; border-color: theme(colors.brand.ring); }
+.display   { @apply rounded-xl border border-slate-200 bg-white p-3 grid gap-1; }
+.display-num {
+  @apply text-[28px] font-black tracking-wider;
   font-variant-numeric: tabular-nums;
 }
-.key { @apply rounded-xl border py-2 px-4 text-sm font-semibold bg-white hover:bg-slate-50 border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300; }
-.key-primary { 
-  @apply border text-white focus:ring-2 focus:ring-offset-2;
+.key { @apply rounded-lg border py-1.5 px-3 text-[13px] font-semibold bg-white hover:bg-slate-50 border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-300; }
+.key-primary {
   background-color: theme(colors.brand.primary);
   border-color: theme(colors.brand.primary);
+  @apply text-white;
 }
 .key-primary:hover { background-color: theme(colors.brand.primaryHover); }
 
-/* =============== 섹션 타이포/간격 =============== */
+/* ===================== Section Typography ===================== */
 .section-title { @apply text-3xl md:text-4xl font-black tracking-tight; }
 .section-sub   { @apply text-sm text-slate-600; }
 
-/* =============== 유틸 =============== */
+/* ===================== Small Utils ===================== */
 .kbd { @apply text-[10px] px-1.5 py-0.5 border rounded bg-slate-50; }
 .pill{ @apply text-[11px] px-2 py-1 rounded-full border border-slate-200 bg-white/70; }
