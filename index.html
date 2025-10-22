@@ -16,54 +16,54 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* Utility compositions */
+    /* Base */
     .btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold border border-slate-200/80 hover:bg-white/70 transition shadow-sm; }
     .btn-primary { @apply bg-slate-900 text-white border-slate-900 hover:opacity-90 shadow; }
-    .btn-sm { @apply px-3 py-2 text-xs; }
-    .card { @apply rounded-2xl border border-slate-200/70 p-5 shadow-sm bg-white/50 backdrop-blur; }
-    .pill { @apply text-[11px] px-2 py-1 rounded-full border border-slate-200/70 bg-white/70; }
-    .kbd { @apply text-[10px] px-1.5 py-0.5 border rounded bg-slate-50; }
+    .card { @apply rounded-2xl border border-slate-200/70 p-5 shadow-sm bg-white/60 backdrop-blur; }
     .muted { @apply text-slate-600; }
+    .kbd { @apply text-[10px] px-1.5 py-0.5 border rounded bg-slate-50; }
     .skeleton { @apply animate-pulse bg-slate-100 rounded-xl h-10; }
 
-    /* Modern background with gradient blobs */
+    /* Background */
     body {
       background:
         radial-gradient(1100px 600px at 10% -10%, #f0f9ff 0%, transparent 60%),
         radial-gradient(1000px 500px at 95% 0%, #fdf2f8 0%, transparent 65%),
         linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
     }
-    .blob {
-      position: fixed; inset: -10% -10% auto auto; width: 520px; height: 520px;
-      background: conic-gradient(from 180deg at 50% 50%, #a78bfa, #60a5fa, #22d3ee, #a78bfa);
-      filter: blur(52px); opacity: .14; border-radius: 9999px; pointer-events: none;
-      animation: blobspin 18s linear infinite;
-    }
-    @keyframes blobspin { to { transform: rotate(360deg); } }
 
     /* Header */
     .sticky-head { @apply sticky top-0 z-40 bg-white/70 backdrop-blur border-b border-slate-200; }
 
-    /* Section headers — make them big & clear */
-    .section-title { @apply text-2xl sm:text-3xl font-black tracking-tight; }
-    .section-sub { @apply text-sm muted; }
+    /* Big section headings */
+    .section-title { @apply text-3xl md:text-4xl font-black tracking-tight; }
+    .section-sub   { @apply text-sm muted mt-1; }
 
     /* Subnav */
     .subnav { @apply sticky top-[56px] z-30 bg-white/70 backdrop-blur border-y border-slate-200; }
     .subnav a { @apply px-3 py-2 text-sm hover:underline; }
 
-    /* Card hover */
-    .card:hover { @apply shadow-md bg-white/70; transform: translateY(-1px); transition: .2s; }
+    /* Company row */
+    .row { @apply card hover:shadow-md hover:bg-white/70 transition; }
+    .row-inner { @apply grid gap-4 md:grid-cols-[minmax(220px,1fr)_3fr]; }
+    .brand { @apply flex items-center gap-3; }
+    .logo { @apply w-12 h-12 rounded-2xl border border-slate-200/80 bg-white/80 flex items-center justify-center overflow-hidden; }
+    .logo img { width:100%; height:100%; object-fit:contain; }
+    .logo-badge { @apply text-base font-bold text-slate-800; }
+    .brand-name { @apply font-semibold text-lg; }
+    .brand-link { @apply inline-flex items-center gap-2 text-slate-800 hover:underline; }
+    .brand-disabled { @apply cursor-not-allowed opacity-60; }
+
+    /* Buttons row */
+    .btns { @apply grid gap-2 md:grid-cols-5; }
   </style>
 </head>
 <body class="text-slate-900">
-  <div class="blob" aria-hidden="true"></div>
-
   <!-- Header -->
   <header class="sticky-head">
     <div class="max-w-6xl mx-auto px-5 py-3 flex items-center gap-3">
       <a class="text-lg font-extrabold" href="/">청구닷컴</a>
-      <span class="pill">베타</span>
+      <span class="px-2 py-1 text-[11px] rounded-full border border-slate-200 bg-white/70">베타</span>
       <div class="ml-auto flex items-center gap-2">
         <a class="btn btn-sm" href="#loss">손해보험사</a>
         <a class="btn btn-sm" href="#life">생명보험사</a>
@@ -95,12 +95,9 @@
   <!-- Subnav -->
   <nav class="subnav">
     <div class="max-w-6xl mx-auto px-5 flex items-center gap-3">
-      <a href="#loss">손해보험사</a>
-      <span class="muted">·</span>
-      <a href="#life">생명보험사</a>
-      <span class="muted">·</span>
-      <a href="#top-pdf">자주 찾는 PDF</a>
-      <span class="muted">·</span>
+      <a href="#loss">손해보험사</a><span class="muted">·</span>
+      <a href="#life">생명보험사</a><span class="muted">·</span>
+      <a href="#top-pdf">자주 찾는 PDF</a><span class="muted">·</span>
       <a href="#how">이용방법</a>
     </div>
   </nav>
@@ -108,14 +105,9 @@
   <main class="max-w-6xl mx-auto px-5 pb-24">
     <!-- 손해보험사 -->
     <section id="loss" class="pt-12">
-      <div class="flex items-end justify-between">
-        <div>
-          <h2 class="section-title">손해보험사</h2>
-          <p class="section-sub mt-1">링크가 비어있으면 버튼이 회색으로 표시됩니다.</p>
-        </div>
-        <span id="loss-count" class="pill">0 개</span>
-      </div>
-      <div id="loss-list" class="mt-5 grid gap-4">
+      <h2 class="section-title">손해보험사</h2>
+      <p class="section-sub">링크가 비어있으면 버튼이 회색으로 표시됩니다.</p>
+      <div id="loss-list" class="mt-5 grid gap-3">
         <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
       </div>
       <div id="loss-empty" class="hidden mt-4 text-sm muted">표시할 손해보험사가 없습니다.</div>
@@ -123,14 +115,9 @@
 
     <!-- 생명보험사 -->
     <section id="life" class="pt-16">
-      <div class="flex items-end justify-between">
-        <div>
-          <h2 class="section-title">생명보험사</h2>
-          <p class="section-sub mt-1">링크가 비어있으면 버튼이 회색으로 표시됩니다.</p>
-        </div>
-        <span id="life-count" class="pill">0 개</span>
-      </div>
-      <div id="life-list" class="mt-5 grid gap-4">
+      <h2 class="section-title">생명보험사</h2>
+      <p class="section-sub">링크가 비어있으면 버튼이 회색으로 표시됩니다.</p>
+      <div id="life-list" class="mt-5 grid gap-3">
         <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
       </div>
       <div id="life-empty" class="hidden mt-4 text-sm muted">표시할 생명보험사가 없습니다.</div>
@@ -148,14 +135,8 @@
     <section id="how" class="pt-16">
       <h3 class="text-xl sm:text-2xl font-bold">이용방법</h3>
       <div class="mt-4 grid md:grid-cols-2 gap-4">
-        <div class="card">
-          <div class="font-semibold">1) 찾기</div>
-          <p class="text-sm muted mt-1">상단 검색창으로 바로 필터하세요.</p>
-        </div>
-        <div class="card">
-          <div class="font-semibold">2) 열기/다운로드</div>
-          <p class="text-sm muted mt-1">청구서 PDF는 즉시 저장됩니다.</p>
-        </div>
+        <div class="card"><div class="font-semibold">1) 찾기</div><p class="text-sm muted mt-1">상단 검색창으로 바로 필터하세요.</p></div>
+        <div class="card"><div class="font-semibold">2) 열기/다운로드</div><p class="text-sm muted mt-1">청구서 PDF는 즉시 저장됩니다.</p></div>
       </div>
     </section>
   </main>
@@ -177,15 +158,12 @@
   (function () {
     const $ = (s, el=document) => el.querySelector(s);
     const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
-
     const q = $("#q");
     const clearBtn = $("#clear");
     const lossList = $("#loss-list");
     const lifeList = $("#life-list");
     const lossEmpty = $("#loss-empty");
     const lifeEmpty = $("#life-empty");
-    const lossCount = $("#loss-count");
-    const lifeCount = $("#life-count");
     const topPdfEl = $("#top-pdf-list");
 
     async function loadData() {
@@ -200,39 +178,53 @@
       return `<a class="btn ${primary ? "btn-primary": ""}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}>${label}</a>`;
     }
 
-    function cardTemplate(item) {
+    function likelyLogoPath(name) {
+      // 기본 규칙: /assets/logos/회사명.png
+      return `/assets/logos/${name}.png`;
+    }
+
+    function brandBlock(item) {
+      const L = item.links || {};
+      const logoSrc = item.logo || likelyLogoPath(item.name);
+      const brand = `
+        <div class="brand">
+          <span class="logo"><img src="${logoSrc}" alt="${item.name} 로고" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <span class="logo-badge hidden items-center justify-center w-full h-full">${item.name.slice(0,2)}</span>
+          </span>
+          <span class="brand-name">${item.name}</span>
+        </div>`;
+      // 전산 링크가 있으면 전체를 링크로, 없으면 비활성 상태
+      return L.system
+        ? `<a class="brand-link" href="${L.system}">${brand}</a>`
+        : `<div class="brand-disabled">${brand}</div>`;
+    }
+
+    function rowTemplate(item) {
       const L = item.links || {};
       return `
-      <article class="card flex flex-col gap-3" data-name="${item.name}" data-type="${item.type}" data-tags="${(item.tags||[]).join(" ")}">
-        <div class="flex items-center justify-between">
-          <div class="font-semibold text-lg">${item.name}</div>
-          <span class="pill">${item.type||""}</span>
-        </div>
-        <div class="grid sm:grid-cols-5 gap-2">
-          ${btn("전산 접속", L.system)}
-          ${btn("필요서류 안내", L.guide)}
-          ${btn("청구서 PDF 다운로드", L.pdf, true)}
-          ${btn("고객센터", L.support)}
-          ${btn("모바일 청구", L.mobile)}
+      <article class="row" data-name="${item.name}" data-type="${item.type}" data-tags="${(item.tags||[]).join(" ")}">
+        <div class="row-inner">
+          <div>${brandBlock(item)}</div>
+          <div class="btns">
+            ${btn("필요서류 안내", L.guide)}
+            ${btn("청구서 PDF 다운로드", L.pdf, true)}
+            ${btn("고객센터", L.support)}
+            ${btn("모바일 청구", L.mobile)}
+            ${btn("전산 접속", L.system)}
+          </div>
         </div>
       </article>`;
     }
 
-    function renderSections(arr) {
-      // 배열 순서를 그대로 유지! (정렬하지 않음)
+    function render(arr) {
+      // 배열 순서 그대로 유지 (정렬 없음)
       const loss = arr.filter(x => x.type === "손해");
       const life = arr.filter(x => x.type === "생명");
-
-      lossList.innerHTML = loss.map(cardTemplate).join("");
-      lifeList.innerHTML = life.map(cardTemplate).join("");
-
+      lossList.innerHTML = loss.map(rowTemplate).join("");
+      lifeList.innerHTML = life.map(rowTemplate).join("");
       lossEmpty.classList.toggle("hidden", loss.length > 0);
       lifeEmpty.classList.toggle("hidden", life.length > 0);
-
-      lossCount.textContent = `${loss.length} 개`;
-      lifeCount.textContent = `${life.length} 개`;
-
-      applySearchFilter(); // 현재 검색어 반영
+      applySearchFilter();
     }
 
     function renderTopPdfs(arr) {
@@ -242,7 +234,7 @@
 
     function applySearchFilter() {
       const v = (q.value || "").toLowerCase().trim();
-      $$(".card[data-name]").forEach(el => {
+      $$(".row[data-name]").forEach(el => {
         const key = (el.dataset.name + " " + (el.dataset.tags || "")).toLowerCase();
         el.style.display = key.includes(v) ? "" : "none";
       });
@@ -258,7 +250,7 @@
 
     // init
     loadData()
-      .then(json => { renderSections(json.carriers || []); renderTopPdfs(json.top_pdfs || []); })
+      .then(json => { render(json.carriers || []); renderTopPdfs(json.top_pdfs || []); })
       .catch(() => {
         const err = `<div class="text-sm text-red-600">데이터 로드 실패: /data/links.json</div>`;
         lossList.innerHTML = err; lifeList.innerHTML = err; topPdfEl.innerHTML = "";
