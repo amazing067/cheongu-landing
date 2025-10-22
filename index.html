@@ -52,7 +52,6 @@
     </h1>
     <p class="mt-2 muted">회사 전산·필요서류·청구서 PDF·고객센터·모바일청구까지 한눈에.</p>
 
-    <!-- Search + Tabs -->
     <div class="mt-6 card" role="search">
       <div class="grid sm:grid-cols-[1fr_auto] gap-3">
         <div>
@@ -79,7 +78,7 @@
   <main class="max-w-5xl mx-auto px-5 pb-20" id="links">
     <section>
       <h2 class="text-xl font-bold">회사별 링크 & 다운로드</h2>
-      <p class="mt-1 text-sm muted">버튼이 회색이면 해당 링크가 아직 비어있다는 뜻이에요.</p>
+      <p class="mt-1 text-sm muted">회색 버튼은 아직 링크가 비어있다는 뜻입니다.</p>
 
       <div id="carrier-list" class="mt-4 grid gap-4">
         <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
@@ -91,17 +90,6 @@
       <h3 class="text-lg font-bold">자주 찾는 PDF</h3>
       <div id="top-pdf-list" class="mt-3 grid md:grid-cols-2 gap-3">
         <div class="skeleton"></div><div class="skeleton"></div>
-      </div>
-    </section>
-
-    <section id="mobile-claim" class="mt-12">
-      <h3 class="text-lg font-bold">모바일/온라인 청구</h3>
-      <div class="mt-3 card">
-        <ol class="list-decimal ml-5 space-y-2 text-sm text-slate-700">
-          <li>회사별 모바일 청구 링크로 접속</li>
-          <li>본인 인증 후 사진·PDF 업로드</li>
-          <li>제출 완료 문자 수신 확인</li>
-        </ol>
       </div>
     </section>
 
@@ -126,7 +114,6 @@
     </div>
   </footer>
 
-  <!-- JS (no Korean strings in JS) -->
   <script>
   (function () {
     const $ = (s, el=document) => el.querySelector(s);
@@ -137,7 +124,7 @@
     const q = $("#q");
     const clearBtn = $("#clear");
     const tabs = $$(".tabs .t");
-    let tab = "손해"; // default
+    let tab = "손해"; // 기본은 손해보험
 
     async function loadData() {
       const res = await fetch("/data/links.json?ts=" + Date.now(), { cache: "no-store" });
@@ -147,13 +134,14 @@
 
     function btn(label, href, primary=false) {
       if (!href) return `<button class="btn" disabled>${label}</button>`;
-      return `<a class="btn ${primary ? "btn-primary": ""}" href="${href}" ${label.includes("고객센터")||label.includes("모바일")||label.includes("필요서류") ? 'target="_blank" rel="noopener"' : ''}>${label}</a>`;
+      const isExternal = /고객센터|모바일|필요서류/.test(label);
+      return `<a class="btn ${primary ? "btn-primary": ""}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}>${label}</a>`;
     }
 
     function cardTemplate(item) {
       const pills = [item.type ? `<span class="pill">${item.type}</span>` : ""].join("");
-      const copyBtn = `<button class="btn btn-sm copy" type="button" data-target="${(item.links && item.links.system) || ""}" data-text-copy="전산주소 복사" data-text-copied="복사됨" title="copy">전산주소 복사</button>`;
       const L = item.links || {};
+      const copyBtn = `<button class="btn btn-sm copy" type="button" data-target="${L.system || ""}" data-text-copy="전산주소 복사" data-text-copied="복사됨" title="copy">전산주소 복사</button>`;
       return `
       <article class="card flex flex-col gap-3" data-name="${item.name}" data-type="${item.type}" data-tags="${(item.tags||[]).join(" ")}">
         <div class="flex items-center justify-between">
@@ -182,7 +170,7 @@
       emptyEl.classList.add("hidden");
       listEl.innerHTML = filtered.map(cardTemplate).join("");
       bindCopyButtons();
-      filter(); // apply search filter
+      filter();
     }
 
     function renderTopPdfs(arr) {
@@ -212,7 +200,7 @@
       });
     }
 
-    // Tabs
+    // 탭 전환
     tabs.forEach(t => t.addEventListener("click", () => {
       tabs.forEach(x => x.classList.remove("active"));
       t.classList.add("active");
@@ -220,22 +208,15 @@
       renderCarriers(window.__DATA__.carriers || []);
     }));
 
-    // shortcuts and clear
+    // 단축키/클리어
     document.addEventListener("keydown", (e) => { if (e.key === "/") { e.preventDefault(); q.focus(); } if (e.key === "Escape") { q.value = ""; filter(); }});
     clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
     q.addEventListener("input", filter);
 
-    // init
+    // 초기화
     loadData()
-      .then(json => {
-        window.__DATA__ = json;
-        renderCarriers(json.carriers || []);
-        renderTopPdfs(json.top_pdfs || []);
-      })
-      .catch(() => {
-        listEl.innerHTML = `<div class="text-sm text-red-600">데이터 로드 실패: /data/links.json</div>`;
-        topPdfEl.innerHTML = "";
-      });
+      .then(json => { window.__DATA__ = json; renderCarriers(json.carriers || []); renderTopPdfs(json.top_pdfs || []); })
+      .catch(() => { listEl.innerHTML = `<div class="text-sm text-red-600">데이터 로드 실패: /data/links.json</div>`; topPdfEl.innerHTML = ""; });
 
     $("#y").textContent = new Date().getFullYear();
   })();
