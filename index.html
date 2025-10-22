@@ -29,22 +29,27 @@
                   radial-gradient(1000px 500px at 90% 0%, #fdf2f8 0%, transparent 65%),
                   linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
     }
-    .tabs .t { @apply px-4 py-2 rounded-xl border transition text-sm; }
-    .tabs .t.active { @apply bg-slate-900 text-white border-slate-900 shadow; }
+    .h2 { @apply text-xl font-bold; }
+    .section-head { @apply flex items-end justify-between gap-2; }
+    .subnav { @apply sticky top-[52px] z-30 bg-white/70 backdrop-blur border-y border-slate-200; }
+    .subnav a { @apply px-3 py-2 text-sm hover:underline; }
   </style>
 </head>
 <body class="text-slate-900">
+  <!-- Header -->
   <header class="sticky-head">
     <div class="max-w-5xl mx-auto px-5 py-3 flex items-center gap-3">
       <a class="text-lg font-extrabold" href="/">청구닷컴</a>
       <span class="pill">베타</span>
       <div class="ml-auto flex items-center gap-2">
-        <a class="btn btn-sm" href="#links">다운로드</a>
+        <a class="btn btn-sm" href="#loss">손해보험</a>
+        <a class="btn btn-sm" href="#life">생명보험</a>
         <a class="btn btn-sm" href="#how">이용방법</a>
       </div>
     </div>
   </header>
 
+  <!-- Hero -->
   <section class="max-w-5xl mx-auto px-5 pt-10 pb-6">
     <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">
       보험금 청구 링크,
@@ -52,40 +57,57 @@
     </h1>
     <p class="mt-2 muted">회사 전산·필요서류·청구서 PDF·고객센터·모바일청구까지 한눈에.</p>
 
+    <!-- Search -->
     <div class="mt-6 card" role="search">
-      <div class="grid sm:grid-cols-[1fr_auto] gap-3">
-        <div>
-          <label class="text-sm font-medium">검색</label>
-          <div class="mt-2 grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
-            <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-3" placeholder="회사명·키워드 (예: 삼성화재, 고객센터, PDF)">
-            <button id="clear" class="btn" type="button" title="지우기">지우기</button>
-            <a class="btn" href="#links">바로가기</a>
-          </div>
-          <div class="mt-2 text-xs muted">단축키: <span class="kbd">/</span> 검색 포커스, <span class="kbd">Esc</span> 지우기</div>
-        </div>
-        <div>
-          <label class="text-sm font-medium">구분</label>
-          <div class="tabs mt-2 flex gap-2">
-            <button class="t active" data-tab="손해">손해보험</button>
-            <button class="t" data-tab="생명">생명보험</button>
-            <button class="t" data-tab="전체">전체</button>
-          </div>
-        </div>
+      <label class="text-sm font-medium">검색</label>
+      <div class="mt-2 grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
+        <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-3" placeholder="회사명·키워드 (예: 삼성화재, 고객센터, PDF)">
+        <button id="clear" class="btn" type="button" title="지우기">지우기</button>
+        <a class="btn" href="#loss">손해부터 보기</a>
       </div>
+      <div class="mt-2 text-xs muted">단축키: <span class="kbd">/</span> 검색 포커스, <span class="kbd">Esc</span> 지우기</div>
     </div>
   </section>
 
-  <main class="max-w-5xl mx-auto px-5 pb-20" id="links">
-    <section>
-      <h2 class="text-xl font-bold">회사별 링크 & 다운로드</h2>
-      <p class="mt-1 text-sm muted">회색 버튼은 아직 링크가 비어있다는 뜻입니다.</p>
+  <!-- Subnav -->
+  <nav class="subnav">
+    <div class="max-w-5xl mx-auto px-5 flex items-center gap-3">
+      <a href="#loss">손해보험</a>
+      <span class="muted">·</span>
+      <a href="#life">생명보험</a>
+      <span class="muted">·</span>
+      <a href="#top-pdf">자주 찾는 PDF</a>
+      <span class="muted">·</span>
+      <a href="#how">이용방법</a>
+    </div>
+  </nav>
 
-      <div id="carrier-list" class="mt-4 grid gap-4">
+  <main class="max-w-5xl mx-auto px-5 pb-20">
+    <!-- 손해보험 섹션 -->
+    <section id="loss" class="pt-10">
+      <div class="section-head">
+        <h2 class="h2">손해보험사</h2>
+        <p class="text-sm muted">회색 버튼은 아직 링크가 비어있다는 뜻입니다.</p>
+      </div>
+      <div id="loss-list" class="mt-4 grid gap-4">
         <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
       </div>
-      <div id="empty" class="hidden mt-4 text-sm muted">표시할 항목이 없습니다.</div>
+      <div id="loss-empty" class="hidden mt-4 text-sm muted">표시할 손해보험사가 없습니다.</div>
     </section>
 
+    <!-- 생명보험 섹션 -->
+    <section id="life" class="pt-12">
+      <div class="section-head">
+        <h2 class="h2">생명보험사</h2>
+        <p class="text-sm muted">회색 버튼은 아직 링크가 비어있다는 뜻입니다.</p>
+      </div>
+      <div id="life-list" class="mt-4 grid gap-4">
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+      <div id="life-empty" class="hidden mt-4 text-sm muted">표시할 생명보험사가 없습니다.</div>
+    </section>
+
+    <!-- Top PDFs -->
     <section id="top-pdf" class="mt-12">
       <h3 class="text-lg font-bold">자주 찾는 PDF</h3>
       <div id="top-pdf-list" class="mt-3 grid md:grid-cols-2 gap-3">
@@ -93,10 +115,11 @@
       </div>
     </section>
 
+    <!-- How-to -->
     <section id="how" class="mt-12">
       <h3 class="text-lg font-bold">이용방법</h3>
       <div class="mt-3 grid md:grid-cols-2 gap-4">
-        <div class="card"><div class="font-semibold">1) 찾기</div><p class="text-sm muted mt-1">검색 또는 탭으로 필터하세요.</p></div>
+        <div class="card"><div class="font-semibold">1) 찾기</div><p class="text-sm muted mt-1">상단 검색창으로 필터하세요.</p></div>
         <div class="card"><div class="font-semibold">2) 열기/다운로드</div><p class="text-sm muted mt-1">청구서 PDF는 바로 저장됩니다.</p></div>
       </div>
     </section>
@@ -114,17 +137,19 @@
     </div>
   </footer>
 
+  <!-- JS -->
   <script>
   (function () {
     const $ = (s, el=document) => el.querySelector(s);
     const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
-    const listEl = $("#carrier-list");
-    const emptyEl = $("#empty");
-    const topPdfEl = $("#top-pdf-list");
+
     const q = $("#q");
     const clearBtn = $("#clear");
-    const tabs = $$(".tabs .t");
-    let tab = "손해"; // 기본은 손해보험
+    const lossList = $("#loss-list");
+    const lifeList = $("#life-list");
+    const lossEmpty = $("#loss-empty");
+    const lifeEmpty = $("#life-empty");
+    const topPdfEl = $("#top-pdf-list");
 
     async function loadData() {
       const res = await fetch("/data/links.json?ts=" + Date.now(), { cache: "no-store" });
@@ -139,14 +164,13 @@
     }
 
     function cardTemplate(item) {
-      const pills = [item.type ? `<span class="pill">${item.type}</span>` : ""].join("");
       const L = item.links || {};
       const copyBtn = `<button class="btn btn-sm copy" type="button" data-target="${L.system || ""}" data-text-copy="전산주소 복사" data-text-copied="복사됨" title="copy">전산주소 복사</button>`;
       return `
       <article class="card flex flex-col gap-3" data-name="${item.name}" data-type="${item.type}" data-tags="${(item.tags||[]).join(" ")}">
         <div class="flex items-center justify-between">
           <div class="font-semibold">${item.name}</div>
-          <div class="flex items-center gap-2">${copyBtn}${pills}</div>
+          <div class="flex items-center gap-2">${copyBtn}<span class="pill">${item.type||""}</span></div>
         </div>
         <div class="grid sm:grid-cols-5 gap-2">
           ${btn("전산 접속", L.system)}
@@ -158,19 +182,19 @@
       </article>`;
     }
 
-    function renderCarriers(arr) {
-      const filtered = arr
-        .filter(x => tab==="전체" ? true : (x.type===tab))
-        .sort((a,b)=>a.name.localeCompare(b.name, "ko"));
-      if (filtered.length === 0) {
-        listEl.innerHTML = "";
-        emptyEl.classList.remove("hidden");
-        return;
-      }
-      emptyEl.classList.add("hidden");
-      listEl.innerHTML = filtered.map(cardTemplate).join("");
+    function renderSections(arr) {
+      // 배열 순서를 그대로 유지! (정렬 금지)
+      const loss = arr.filter(x => x.type === "손해");
+      const life = arr.filter(x => x.type === "생명");
+
+      lossList.innerHTML = loss.map(cardTemplate).join("");
+      lifeList.innerHTML = life.map(cardTemplate).join("");
+
+      lossEmpty.classList.toggle("hidden", loss.length > 0);
+      lifeEmpty.classList.toggle("hidden", life.length > 0);
+
       bindCopyButtons();
-      filter();
+      applySearchFilter(); // 검색 반영
     }
 
     function renderTopPdfs(arr) {
@@ -178,16 +202,16 @@
       topPdfEl.innerHTML = arr.map(x => `<a class="btn" href="${x.url}" download>${x.label}</a>`).join("");
     }
 
-    function filter() {
+    function applySearchFilter() {
       const v = (q.value || "").toLowerCase().trim();
-      $$(".card[data-name]", listEl).forEach(el => {
+      $$(".card[data-name]").forEach(el => {
         const key = (el.dataset.name + " " + (el.dataset.tags || "")).toLowerCase();
         el.style.display = key.includes(v) ? "" : "none";
       });
     }
 
     function bindCopyButtons() {
-      $$(".copy", listEl).forEach(btn => {
+      $$(".copy").forEach(btn => {
         btn.addEventListener("click", async () => {
           try {
             const txt = btn.dataset.target || "";
@@ -200,23 +224,21 @@
       });
     }
 
-    // 탭 전환
-    tabs.forEach(t => t.addEventListener("click", () => {
-      tabs.forEach(x => x.classList.remove("active"));
-      t.classList.add("active");
-      tab = t.dataset.tab;
-      renderCarriers(window.__DATA__.carriers || []);
-    }));
+    // events
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "/") { e.preventDefault(); q.focus(); }
+      if (e.key === "Escape") { q.value = ""; applySearchFilter(); }
+    });
+    q.addEventListener("input", applySearchFilter);
+    clearBtn.addEventListener("click", () => { q.value = ""; applySearchFilter(); q.focus(); });
 
-    // 단축키/클리어
-    document.addEventListener("keydown", (e) => { if (e.key === "/") { e.preventDefault(); q.focus(); } if (e.key === "Escape") { q.value = ""; filter(); }});
-    clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
-    q.addEventListener("input", filter);
-
-    // 초기화
+    // init
     loadData()
-      .then(json => { window.__DATA__ = json; renderCarriers(json.carriers || []); renderTopPdfs(json.top_pdfs || []); })
-      .catch(() => { listEl.innerHTML = `<div class="text-sm text-red-600">데이터 로드 실패: /data/links.json</div>`; topPdfEl.innerHTML = ""; });
+      .then(json => { renderSections(json.carriers || []); renderTopPdfs(json.top_pdfs || []); })
+      .catch(() => {
+        lossList.innerHTML = lifeList.innerHTML = `<div class="text-sm text-red-600">데이터 로드 실패: /data/links.json</div>`;
+        topPdfEl.innerHTML = "";
+      });
 
     $("#y").textContent = new Date().getFullYear();
   })();
