@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>청구닷컴 | 보험금 청구 링크 허브</title>
-  <meta name="description" content="전산 접속 · 필요서류 · 보험금 청구서 PDF · 치과치료확인서 · 홈페이지 · 인콜 모니터링 · 보험금청구 FAX · 약관 확인 — 광고 없이 깔끔하게." />
+  <meta name="description" content="전산 접속 · 필요서류 · 보험금 청구서 PDF · 치과치료확인서 · 홈페이지 · 고객센터 · 인콜 모니터링 · 보험금청구 FAX — 광고 없이 깔끔하게." />
   <meta name="format-detection" content="telephone=no" />
   <meta property="og:title" content="청구닷컴 | 보험금 청구 링크 허브" />
   <meta property="og:description" content="보험금 청구 링크를 한 곳에서 바로." />
@@ -18,67 +18,57 @@
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
 
   <!-- Tailwind(@apply) 빌드 CSS — 캐시 무력화 -->
-  <link rel="stylesheet" href="/assets/site.css?v=comment-support-1" />
+  <link rel="stylesheet" href="/assets/site.css?v=final-compact-6" />
 
-  <!-- Hotfix / 테이블·버튼·계산기·로고 -->
-  <style>
+  <!-- Hotfix: 표/버튼 콤팩트 + 로고 프레임 완전 제거 + 계산기 정렬 + 치과 버튼 스타일 -->
+  <style id="hotfix">
+    :root{--indigo:#7c3aed;--indigo-d:#6d28d9;--sky:#0ea5e9;--emerald:#10b981;--slate:#0f172a}
     body{background:#f8fafc}
-    .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-    /* 표 */
+    /* ===== 표(테이블) ===== */
     .table{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
-    .row{display:grid;grid-template-columns:240px 1fr;align-items:center;gap:10px;padding:8px 10px;border-top:1px solid rgba(100,116,139,.25)}
+    .row{display:grid;grid-template-columns:minmax(220px,1fr) auto;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid rgba(100,116,139,.25)}
     .row:first-child{border-top-width:0}
 
-    /* 로고 칸 (가운데 정렬, 프레임 없음) */
-    .brand-cell{display:flex;align-items:center;justify-content:center;min-height:32px}
-    .brand{display:flex;align-items:center;gap:10px;min-width:0;white-space:nowrap}
-    .logo{max-height:26px!important;height:auto!important;width:auto!important;object-fit:contain!important;border-radius:0!important;background:transparent!important;border:0!important;padding:0!important;box-shadow:none!important;outline:none!important;filter:none!important}
-    .name{font-size:15px;font-weight:800;color:#0f172a}.name.sr-only{display:inline}
+    /* ===== 브랜드 셀 ===== */
+    .brand{display:flex;align-items:center;gap:12px;justify-content:center}
+    .brand-inner{display:flex;align-items:center;gap:12px}
+    /* 로고: 어떤 프레임/배경/그림자도 없이 원본만 보여주기 */
+    .logo{
+      max-height:26px !important; height:auto !important; width:auto !important;
+      object-fit:contain !important; border-radius:0 !important; background:transparent !important;
+      border:0 !important; padding:0 !important; box-shadow:none !important; outline:none !important; filter:none !important;
+    }
+    .name{font-size:16px;font-weight:800;color:var(--slate)}
+    .name.sr-only{position:absolute !important;left:-9999px !important}
 
-    /* 버튼(칩) */
-    .row .grid{display:flex;flex-wrap:wrap;gap:8px;margin-left:4px;align-items:center}
-    .row .grid>a,.row .grid>button,.row .grid>span{flex:0 0 auto}
-    .btn{min-height:30px;padding:6px 10px;font-size:12px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none}
+    /* ===== 버튼(칩 형태) ===== */
+    .row .grid{display:flex;flex-wrap:wrap;gap:8px}
+    .row .grid>a,.row .grid>button{flex:0 0 auto}
+    .btn{min-height:30px;padding:6px 10px;font-size:12px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:var(--slate)}
     .btn:hover{background:#f8fafc}
     .btn-muted{opacity:.55;cursor:not-allowed}
     .btn-ghost{border-color:#e2e8f0;background:#fff}
-    .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
-    .btn-primary:hover{background:#6d28d9}
-    .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:6px 12px}
-    .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:6px 12px}
-    .btn-dental:hover{filter:brightness(.95)}
-    .btn-home{background:#0ea5e9;border-color:#0ea5e9;color:#fff}
-    .btn-monitor{background:#06b6d4;border-color:#06b6d4;color:#fff}
-    .btn-fax{background:#64748b;border-color:#64748b;color:#fff}
-    .btn-terms{background:#94a3b8;border-color:#94a3b8;color:#fff}
-
-    /* 번호 배지(바깥 표시) */
-    .numtag{font-size:12px;line-height:1;padding:6px 8px;border-radius:999px;border:1px solid #e2e8f0;background:#f8fafc;color:#0f172a}
-    .numtag .ico{margin-right:4px;opacity:.8}
-
+    .btn-primary{background:var(--indigo);border-color:var(--indigo);color:#fff}
+    .btn-primary:hover{background:var(--indigo-d)}
+    .btn-pdf{background:var(--sky);border-color:var(--sky);color:#fff;padding:6px 12px}
+    .btn-dental{background:var(--emerald);border-color:var(--emerald);color:#fff;padding:6px 12px}
     .pill{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
     .section-title{font-size:26px;font-weight:900;letter-spacing:-.01em}
     .section-sub{font-size:12.5px;color:#475569}
     .card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px}
     .kbd{font-size:10px;padding:2px 6px;border:1px solid #e2e8f0;border-radius:6px;background:#f1f5f9}
 
-    /* 계산기 */
+    /* ===== 보험나이 계산기 ===== */
     #age .calc-card{border:1px solid #c7b7ff;border-radius:10px;background:#fff}
     #age-form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
     #age-form .dob-wrap{display:flex;align-items:center;gap:8px}
     #age-form input{height:40px;border-radius:10px;padding:0 12px;text-align:center;border:1px solid #cbd5e1}
     #dobY{width:120px} #dobM,#dobD{width:76px}
-    #age-form .key{min-width:96px;white-space:nowrap;height:40px;line-height:38px;border-radius:10px;border:1px solid #e2e8f0;background:#fff}
-    #age-form .key-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
-    #age-form .key-primary:hover{background:#6d28d9}
+    #age-form .key{min-width:96px;white-space:nowrap;height:40px;line-height:38px;border-radius:10px}
+    #age-form .key-primary{background:var(--indigo);border-color:var(--indigo);color:#fff}
+    #age-form .key-primary:hover{background:var(--indigo-d)}
     #age .card{border:1px solid #e2e8f0;border-radius:10px}
-
-    @media (max-width: 640px){
-      .row{grid-template-columns:1fr;align-items:start}
-      .row .grid{margin-left:0}
-      .brand-cell{justify-content:flex-start}
-    }
   </style>
 </head>
 <body class="text-slate-900">
@@ -102,14 +92,14 @@
       <span style="background:linear-gradient(90deg,#d946ef,#7c3aed,#06b6d4);-webkit-background-clip:text;background-clip:text;color:transparent;">한 곳에서 바로</span>
     </h1>
     <p class="mt-2 text-slate-700">
-      전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · <span class="font-semibold">치과치료확인서</span> · 홈페이지 · 인콜 모니터링 · 보험금청구 FAX · 약관 확인 — 광고 없이 깔끔하게.
+      전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · <span class="font-semibold">치과치료확인서</span> · 홈페이지 · 고객센터 · 인콜 모니터링 · 보험금청구 FAX — 광고 없이 깔끔하게.
     </p>
 
     <!-- 검색 -->
     <div class="mt-4 table p-4">
       <label class="text-sm font-semibold">검색</label>
       <div class="mt-2 grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
-        <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-2.5" placeholder="회사명·키워드 (예: 삼성화재, PDF, 약관)">
+        <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-2.5" placeholder="회사명·키워드 (예: 삼성화재, 고객센터, PDF)">
         <button id="clear" class="btn btn-ghost" type="button">지우기</button>
         <a class="btn btn-ghost" href="#loss">손해부터 보기</a>
       </div>
@@ -164,7 +154,7 @@
               <div class="text-xs text-slate-600" id="age-rule">생년월일을 입력하세요</div>
             </div>
 
-            <!-- 연(4)→월(2)→일(2) 자동 이동 -->
+            <!-- 연(4)→월(2)→일(2) 자동 이동 + 버튼 가로 정렬 -->
             <form id="age-form">
               <div>
                 <label class="text-sm font-semibold">생년월일</label>
@@ -221,87 +211,65 @@
     const $ = (s, el=document) => el.querySelector(s);
     const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
 
-    /* ===== 검색 ===== */
+    // 검색
     const q = $("#q"); const clearBtn = $("#clear");
-    document.addEventListener("keydown", (e) => { if (e.key === "/") { e.preventDefault(); q?.focus(); } if (e.key === "Escape") { if(q){ q.value = ""; filter(); } } });
-    clearBtn?.addEventListener("click", () => { if(!q) return; q.value = ""; filter(); q.focus(); });
-    q?.addEventListener("input", filter);
+    document.addEventListener("keydown", (e) => { if (e.key === "/") { e.preventDefault(); q.focus(); } if (e.key === "Escape") { q.value = ""; filter(); } });
+    clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
+    q.addEventListener("input", filter);
 
-    /* ===== 리스트 렌더 준비 ===== */
+    // 리스트 영역
     const lossList = $("#loss-list"), lifeList = $("#life-list");
     const lossEmpty = $("#loss-empty"), lifeEmpty = $("#life-empty");
+    const lossCount = $("#loss-count"), lifeCount = $("#life-count");
 
-    // ★ 주석 지원 로더: /** ... */ 블록주석 + 라인 시작의 // 주석 제거
-    function stripComments(jsonText){
-      // 블록 주석 제거
-      let t = jsonText.replace(/\/\*[\s\S]*?\*\//g, '');
-      // 라인 시작의 // 주석 제거 (URL 보호: 줄 맨 앞만 처리)
-      t = t.replace(/^\s*\/\/.*$/gm, '');
-      return t;
-    }
     async function loadData() {
       const res = await fetch("/data/links.json?ts=" + Date.now(), { cache: "no-store" });
       if (!res.ok) throw new Error("failed to load");
-      const text = await res.text();
-      const cleaned = stripComments(text);
-      return JSON.parse(cleaned);
+      return res.json();
     }
 
-    /* ===== 셀/버튼 ===== */
     function brandCell(item) {
       const L = item.links || {};
       const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
+      // 시인성 위해 회사명은 시각적으로 숨김 가능: class="name sr-only"
       const inner = `
-        <div class="brand">
+        <div class="brand-inner">
           <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
-          <span class="name sr-only">${item.name}</span>
+          <div class="name">${item.name}</div>
         </div>`;
-      const sys = L.system || L["전산접속"] || "";
-      return sys ? `<a href="${sys}" class="block no-underline" target="_blank" rel="noopener">${inner}</a>` : `<div class="opacity-85">${inner}</div>`;
+      return L.system ? `<a href="${L.system}" class="brand block no-underline" target="_blank" rel="noopener">${inner}</a>` : `<div class="brand">${inner}</div>`;
     }
 
-    function btn(label, href, cls) {
-      if (!href) return `<button class="btn btn-muted" disabled>${label}</button>`;
-      const newtab = /필요서류|약관|홈페이지/.test(label);
-      const downloadAttr = /PDF|확인서/.test(label) ? ` download="${label}.pdf"` : "";
-      return `<a class="btn ${cls}" href="${href}" ${newtab ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
-    }
-    function btnTel(label, number, cls){
-      if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
-      const tel = String(number).replace(/\s+/g,'');
-      return `<a class="btn ${cls}" href="tel:${tel}">${label} ${number}</a>`;
-    }
-    function numtag(label, value, icon){
-      if(!value) return '';
-      return `<span class="numtag"><span class="ico">${icon||''}</span>${label} ${value}</span>`;
+    function telClean(num){ return (num||"").replace(/[^\d+]/g,""); }
+    function a(href,label,cls,opts={}){
+      if(!href) return `<button class="btn btn-muted" disabled>${label}</button>`;
+      const ext = opts.ext ?? true;
+      const dl = opts.dl ? ` download="${opts.dl}"` : "";
+      const t = ext ? ` target="_blank" rel="noopener"` : "";
+      return `<a class="btn ${cls||""}" href="${href}"${t}${dl}>${label}</a>`;
     }
 
     function row(item) {
       const L = item.links || {};
-      const v_system  = L.system  || L["전산접속"]      || "";
-      const v_guide   = L.guide   || L["필요서류안내"]  || L["필요서류"] || "";
-      const v_pdf     = L.pdf     || L["보험금청구서"]  || L["보험금 청구서"] || "";
-      const v_dental  = L.dental  || L["치과치료확인서"]|| L["치과"]    || "";
-      const v_home    = L.support || L["홈페이지"]      || L["고객센터"] || "";
-      const v_monitor = L.monitor || L["인콜모니터링"]  || L["인콜"]    || "";
-      const v_fax     = L.fax     || L["보험금청구FAX"] || L["청구FAX"] || L["팩스"] || "";
-      const v_terms   = L.terms   || L["약관확인"]      || L["약관"]    || "";
+      const parts = [];
+
+      // 전산접속(보라) / 필요서류 / PDF / 치과 / 약관 / 홈페이지 / 고객센터전화 / 인콜 / FAX
+      parts.push( a(L.system, "전산 접속", "btn-primary") );
+      parts.push( a(L.guide, "필요서류 안내", "btn-ghost") );
+      parts.push( L.pdf ? a(L.pdf, "보험금 청구서 PDF 다운로드", "btn-pdf", {dl: `${item.name}-보험금청구서.pdf`, ext:false}) : `<button class="btn btn-muted" disabled>보험금 청구서 PDF 다운로드</button>` );
+      parts.push( L.dental ? a(L.dental, "치과치료확인서", "btn-dental", {dl: `${item.name}-치과치료확인서.pdf`, ext:false}) : `<button class="btn btn-muted" disabled>치과치료확인서</button>` );
+      parts.push( a(L.terms, "약관 확인", "btn-ghost") );
+      parts.push( a(L.support, "홈페이지", "btn-ghost") );
+
+      // 전화류(내부에서만 tel:)
+      if (L.cs) parts.push( a(`tel:${telClean(L.cs)}`, `고객센터 ${L.cs}`, "") );
+      if (L.monitor) parts.push( a(`tel:${telClean(L.monitor)}`, `인콜 모니터링 ${L.monitor}`, "") );
+      if (L.fax) parts.push( a(`tel:${telClean(L.fax)}`, `보험금청구 FAX ${L.fax}`, "") );
 
       return `
         <div class="row" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}" data-brand="${item.name}">
-          <div class="brand-cell">${brandCell(item)}</div>
-          <div class="grid">
-            ${btn("전산 접속", v_system, "btn-primary")}
-            ${btn("필요서류 안내", v_guide, "btn-ghost")}
-            ${v_pdf ? `<a class="btn btn-pdf" href="${v_pdf}" download="${item.name}-보험금청구서.pdf">보험금 청구서 PDF 다운로드</a>` : `<button class="btn btn-muted" disabled>보험금 청구서 PDF 다운로드</button>`}
-            ${v_dental ? `<a class="btn btn-dental" href="${v_dental}" download="${item.name}-치과치료확인서.pdf">치과치료확인서</a>` : `<button class="btn btn-muted" disabled>치과치료확인서</button>`}
-            ${btn("홈페이지", v_home, "btn-home")}
-            ${btnTel("인콜 모니터링", v_monitor, "btn-monitor")}
-            ${btnTel("보험금청구 FAX", v_fax, "btn-fax")}
-            ${btn("약관 확인", v_terms, "btn-terms")}
-            ${numtag("인콜", v_monitor, "☎")}
-            ${numtag("FAX", v_fax, "📠")}
-          </div>
+          <div>${brandCell(item)}</div>
+          <div class="grid">${parts.join("")}</div>
         </div>`;
     }
 
@@ -310,17 +278,19 @@
       const loss = arr.filter(x => x.type === "손해");
       const life = arr.filter(x => x.type === "생명");
 
-      $("#loss-list").innerHTML = loss.map(row).join("");
-      $("#life-list").innerHTML = life.map(row).join("");
+      lossList.innerHTML = loss.map(row).join("");
+      lifeList.innerHTML = life.map(row).join("");
 
-      $("#loss-empty").classList.toggle("hidden", loss.length > 0);
-      $("#life-empty").classList.toggle("hidden", life.length > 0);
+      lossEmpty.classList.toggle("hidden", loss.length > 0);
+      lifeEmpty.classList.toggle("hidden", life.length > 0);
+      if (lossCount) lossCount.textContent = `${loss.length}개`;
+      if (lifeCount) lifeCount.textContent = `${life.length}개`;
 
       filter();
     }
 
     function filter() {
-      const v = (q?.value || "").toLowerCase().trim();
+      const v = (q.value || "").toLowerCase().trim();
       $$(".row[data-name]").forEach(el => {
         const key = (el.dataset.name + " " + (el.dataset.tags || "")).toLowerCase();
         el.style.display = key.includes(v) ? "" : "none";
@@ -329,10 +299,10 @@
 
     loadData().then(render).catch(() => {
       const err = '<div class="px-4 py-3 text-sm text-red-600">데이터 로드 실패: /data/links.json</div>';
-      $("#loss-list").innerHTML = err; $("#life-list").innerHTML = err;
+      lossList.innerHTML = err; lifeList.innerHTML = err;
     });
 
-    /* 보험나이 계산기 */
+    // ===== 보험나이 계산기 =====
     const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const addMonths = (d, m) => { const x = new Date(d); const day=x.getDate(); x.setMonth(x.getMonth()+m); if (x.getDate()!==day) x.setDate(0); return x; };
     function intlAge(dob, asof){ let a = asof.getFullYear()-dob.getFullYear(); const bThis = new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()); if(asof < bThis) a -= 1; return a; }
