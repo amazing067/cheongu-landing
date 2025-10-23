@@ -200,108 +200,152 @@
       </div><!-- /max-w -->
     </section>
 
-    <!-- 실손의료비 간편 계산기 -->
-    <section id="medcalc" class="mt-14">
-      <div class="section-head">
-        <h2 class="section-title">실손의료비 간편 계산기</h2>
-        <p class="section-sub">환자부담총액(실제 납부액)만 입력하세요. 세대/의료기관에 따른 공제를 자동 반영합니다.</p>
-      </div>
+<!-- 실손의료비 간편 계산기 -->
+<section id="medcalc" class="mt-14">
+  <div class="section-head">
+    <h2 class="section-title">실손의료비 간편 계산기</h2>
+    <p class="section-sub">환자부담총액(실제 납부액)만 입력하세요. 세대/의료기관에 따른 공제를 자동 반영합니다.</p>
+  </div>
 
-      <div class="max-w-3xl mx-auto">
-        <section class="bg-white rounded-2xl shadow p-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-2">
+  <div class="max-w-3xl mx-auto">
+    <section class="bg-white rounded-2xl shadow p-6">
+      <!-- 헤더 박스: 두 셀렉트를 같은 줄에 -->
+      <div class="flex flex-col md:flex-row md:items-end md:gap-6 gap-4">
+        <!-- 세대 선택 -->
+        <div class="flex-1">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
               <span class="pill pill-indigo">세대 선택</span>
-              <div class="text-xl text-slate-900" id="currentLabel">현재 선택: <span class="text-indigo-700 font-extrabold">4세대(현행)</span></div>
-              <select id="genSelect" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg mt-2">
-                <option value="4th-basic" selected>4세대(현행)</option>
-                <option value="3rd-standard">3세대(표준)</option>
-                <option value="2nd-legacy">2세대</option>
-              </select>
+              <span class="text-[12px] font-semibold text-indigo-700/90" id="currentLabel">
+                현재 선택: <span class="text-indigo-700 font-extrabold">4세대(현행)</span>
+              </span>
             </div>
-            <div class="space-y-2">
+          </div>
+          <select id="genSelect"
+                  class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base md:text-lg">
+            <option value="4th-basic" selected>4세대(현행)</option>
+            <option value="3rd-standard">3세대(표준)</option>
+            <option value="2nd-legacy">2세대</option>
+          </select>
+        </div>
+
+        <!-- 구분선(모바일 전용) -->
+        <div class="h-px bg-slate-200 md:hidden"></div>
+
+        <!-- 의료기관 유형 -->
+        <div class="flex-1">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
               <span class="pill pill-emerald">의료기관 유형</span>
-              <div class="text-xl font-extrabold text-slate-900">급여 공제 자동 적용</div>
-              <select id="facilitySelect" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg mt-2">
-                <option value="clinic" selected>의원</option>
-                <option value="hospital">병원</option>
-                <option value="general">종합병원</option>
-                <option value="tertiary">상급종합병원</option>
-              </select>
+              <span class="text-[12px] font-semibold text-emerald-700/90">급여 공제 자동 적용</span>
             </div>
           </div>
-          <div id="dedSummary" class="mt-2 text-xs text-slate-600"></div>
-
-          <div class="mt-6 grid grid-cols-1 gap-5">
-            <div>
-              <label class="block text-base font-bold mb-1 text-slate-800">환자부담총액 - 급여(원)</label>
-              <input id="inpCoveredCo" type="text" inputmode="numeric" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg" placeholder="예: 30,000" />
-              <p class="text-xs text-slate-500 mt-1">영수증의 “요양급여 본인부담금” 합계</p>
-            </div>
-            <div>
-              <label class="block text-base font-bold mb-1 text-slate-800">환자부담총액 - 비급여(원)</label>
-              <input id="inpNonCovered" type="text" inputmode="numeric" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg" placeholder="예: 70,000" />
-              <p class="text-xs text-slate-500 mt-1">영수증의 “비급여/전액본인부담/비급여 재료대” 합계(제증명료 등 비보장 제외)</p>
-            </div>
-          </div>
-
-          <details class="mt-6">
-            <summary class="cursor-pointer text-slate-700 font-semibold">고급 설정(자동 입력값 확인/수정)</summary>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-              <div>
-                <label class="block text-base font-bold mb-1 text-slate-800">급여 보상(%)</label>
-                <input id="advCoveredRate" type="number" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg" />
-              </div>
-              <div>
-                <label class="block text-base font-bold mb-1 text-slate-800">비급여 보상(%)</label>
-                <input id="advNonCoveredRate" type="number" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg" />
-              </div>
-              <div>
-                <label class="block text-base font-bold mb-1 text-slate-800">1회 한도(원)</label>
-                <input id="advPerCap" type="text" inputmode="numeric" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg" value="0" />
-              </div>
-              <div>
-                <label class="block text-base font-bold mb-1 text-slate-800">급여 공제(원)</label>
-                <input id="advDedCovered" type="text" inputmode="numeric" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg" value="0" />
-                <p class="text-xs text-slate-500 mt-1">의료기관 유형에 따라 자동 설정</p>
-              </div>
-              <div>
-                <label class="block text-base font-bold mb-1 text-slate-800">비급여 공제(원)</label>
-                <input id="advDedNonCovered" type="text" inputmode="numeric" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg" value="0" />
-                <p class="text-xs text-slate-500 mt-1">2세대는 ‘최소공제 vs 20%’ 규칙이 적용되어 이 값이 자동 무시됩니다.</p>
-              </div>
-              <div>
-                <label class="block text-base font-bold mb-1 text-slate-800">도수·주사·체외(1회 한도)</label>
-                <input id="advPhysioCap" type="text" inputmode="numeric" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg" value="0" />
-              </div>
-              <div>
-                <label class="block text-base font-bold mb-1 text-slate-800">연간 한도(남은액)</label>
-                <input id="advAnnualRemain" type="text" inputmode="numeric" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg" value="999,999,999" />
-              </div>
-            </div>
-          </details>
-
-          <div class="mt-8 flex items-center gap-4">
-            <button id="btnCalc" class="gbtn gbtn-calc">
-              <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-              계산하기
-            </button>
-            <button id="btnReset" class="gbtn gbtn-reset">
-              <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-              초기화
-            </button>
-            <button id="btnExample" class="gbtn gbtn-ghost">예시 입력</button>
-          </div>
-
-          <div id="boxResult" class="mt-6 bg-slate-50 border border-slate-200 rounded-2xl p-5">
-            <div class="text-slate-700 text-sm">예상 수령액</div>
-            <div class="mt-2 text-4xl font-extrabold" id="txtPayout">0원</div>
-            <ul class="mt-3 text-slate-700 text-base space-y-1" id="listExplain"></ul>
-          </div>
-          <p class="mt-4 text-xs text-slate-500">※ 참고용 계산 결과입니다. 실제 지급은 약관·심사에 따라 달라질 수 있습니다.</p>
-        </section>
+          <select id="facilitySelect"
+                  class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base md:text-lg">
+            <option value="clinic" selected>의원</option>
+            <option value="hospital">병원</option>
+            <option value="general">종합병원</option>
+            <option value="tertiary">상급종합병원</option>
+          </select>
+        </div>
       </div>
+
+      <!-- 공제 요약 -->
+      <div id="dedSummary" class="mt-3 text-[12px] text-slate-600"></div>
+
+      <!-- 입력 필드 -->
+      <div class="mt-6 grid grid-cols-1 gap-5">
+        <div>
+          <label class="block text-base font-bold mb-1 text-slate-800">환자부담총액 - 급여(원)</label>
+          <input id="inpCoveredCo" type="text" inputmode="numeric"
+                 class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base md:text-lg"
+                 placeholder="예: 30,000" />
+          <p class="text-xs text-slate-500 mt-1">영수증의 “요양급여 본인부담금” 합계</p>
+        </div>
+        <div>
+          <label class="block text-base font-bold mb-1 text-slate-800">환자부담총액 - 비급여(원)</label>
+          <input id="inpNonCovered" type="text" inputmode="numeric"
+                 class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base md:text-lg"
+                 placeholder="예: 70,000" />
+          <p class="text-xs text-slate-500 mt-1">영수증의 “비급여/전액본인부담/비급여 재료대” 합계(제증명료 등 비보장 제외)</p>
+        </div>
+      </div>
+
+      <!-- 고급 설정 -->
+      <details class="mt-6">
+        <summary class="cursor-pointer text-slate-700 font-semibold">고급 설정(자동 입력값 확인/수정)</summary>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <div>
+            <label class="block text-base font-bold mb-1 text-slate-800">급여 보상(%)</label>
+            <input id="advCoveredRate" type="number"
+                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base md:text-lg" />
+          </div>
+          <div>
+            <label class="block text-base font-bold mb-1 text-slate-800">비급여 보상(%)</label>
+            <input id="advNonCoveredRate" type="number"
+                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base md:text-lg" />
+          </div>
+          <div>
+            <label class="block text-base font-bold mb-1 text-slate-800">1회 한도(원)</label>
+            <input id="advPerCap" type="text" inputmode="numeric"
+                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base md:text-lg" value="0" />
+          </div>
+          <div>
+            <label class="block text-base font-bold mb-1 text-slate-800">급여 공제(원)</label>
+            <input id="advDedCovered" type="text" inputmode="numeric"
+                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base md:text-lg" value="0" />
+            <p class="text-xs text-slate-500 mt-1">의료기관 유형에 따라 자동 설정</p>
+          </div>
+          <div>
+            <label class="block text-base font-bold mb-1 text-slate-800">비급여 공제(원)</label>
+            <input id="advDedNonCovered" type="text" inputmode="numeric"
+                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base md:text-lg" value="0" />
+            <p class="text-xs text-slate-500 mt-1">2세대는 ‘최소공제 vs 20%’ 규칙이 적용되어 이 값이 자동 무시됩니다.</p>
+          </div>
+          <div>
+            <label class="block text-base font-bold mb-1 text-slate-800">도수·주사·체외(1회 한도)</label>
+            <input id="advPhysioCap" type="text" inputmode="numeric"
+                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base md:text-lg" value="0" />
+          </div>
+          <div>
+            <label class="block text-base font-bold mb-1 text-slate-800">연간 한도(남은액)</label>
+            <input id="advAnnualRemain" type="text" inputmode="numeric"
+                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base md:text-lg" value="999,999,999" />
+          </div>
+        </div>
+      </details>
+
+      <!-- 버튼 -->
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <button id="btnCalc" class="gbtn gbtn-calc px-5 py-3 text-[15px]">
+          <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="18" height="18" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          계산하기
+        </button>
+        <button id="btnReset" class="gbtn gbtn-reset px-5 py-3 text-[15px]">
+          <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="18" height="18" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          초기화
+        </button>
+        <button id="btnExample" class="gbtn gbtn-ghost px-5 py-3 text-[15px]">예시 입력</button>
+      </div>
+
+      <!-- 결과 -->
+      <div id="boxResult" class="mt-6 bg-slate-50 border border-slate-200 rounded-2xl p-5">
+        <div class="text-slate-700 text-sm">예상 수령액</div>
+        <div class="mt-2 text-4xl font-extrabold" id="txtPayout">0원</div>
+        <ul class="mt-3 text-slate-700 text-base space-y-1" id="listExplain"></ul>
+      </div>
+      <p class="mt-4 text-xs text-slate-500">※ 참고용 계산 결과입니다. 실제 지급은 약관·심사에 따라 달라질 수 있습니다.</p>
     </section>
+  </div>
+</section>
+
   </main>
 
   <!-- 푸터 -->
