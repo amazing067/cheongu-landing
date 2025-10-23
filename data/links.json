@@ -113,7 +113,7 @@
       "mobile": "https://www.aig.co.kr/wm/content.html?contentId=DPWMS404&menuId=MS404"
     }},
     { "name": "라이나손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
-      "system": "https://sso.aig.co.kr/gaLogin/gaLogin.jsp",
+      "system": "https://ga.linagi.com/html/gap/GA/GAZ911M0.html",
       "guide": "https://www.chubb.com/kr-kr/claims/individual-insurance.html",
       "pdf": "/assets/pdf/라이나손해보험-보험금청구서.pdf",
       "dental": "/assets/pdf/라이나손해보험 치과치료확인서.pdf",
