@@ -19,11 +19,11 @@
         // mobile = 모바일청구 (사용 안 하면 빈 문자열)
         "mobile": "https://direct.samsungfire.com/m/claim/MP040202_001.html",
         // monitor = 인콜 모니터링 번호 (전화)
-        "monitor": "",
+        "monitor": "1566-0553",
         // fax = 보험금청구 FAX 번호 (전화)
-        "fax": "",
+        "fax": "0505-162-0872",
         // terms = 약관 확인 페이지
-        "terms": ""
+        "terms": "https://www.samsungfire.com/vh/page/VH.HPIF0103.do"
       }
     },
     {
@@ -37,8 +37,8 @@
         "dental": "/assets/pdf/현대해상 치과치료확인서.pdf",
         "support": "https://www.hi.co.kr/serviceAction.do",
         "mobile": "https://direct.hi.co.kr/service.do?m=a264739757",
-        "monitor": "",
-        "fax": "",
+        "monitor": "1577-3223",
+        "fax": "0507-774-6060",
         "terms": ""
       }
     },
