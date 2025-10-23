@@ -241,14 +241,6 @@
       "support": "",
       "mobile": ""
     }},
-    { "name": "BNP파리바카디프생명", "type": "생명", "tags": ["Cardif","pdf","고객센터"], "links": {
-      "system": "",
-      "guide": "",
-      "pdf": "/assets/pdf/BNP파리바카디프생명-보험금청구서.pdf",
-      "dental": "/assets/pdf/BNP파리바카디프생명 치과치료확인서.pdf",
-      "support": "",
-      "mobile": ""
-    }},
     { "name": "푸본현대생명", "type": "생명", "tags": ["FubonHyundai","pdf","고객센터"], "links": {
       "system": "",
       "guide": "",
