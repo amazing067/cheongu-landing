@@ -18,7 +18,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
 
   <!-- Tailwind(@apply) 빌드 CSS -->
-  <link rel="stylesheet" href="/assets/site.css?v=final-compact-6" />
+  <link rel="stylesheet" href="/assets/site.css?v=final-compact-7" />
 
   <!-- Hotfix -->
   <style id="hotfix">
@@ -35,10 +35,11 @@
       max-height:28px !important;width:auto !important;object-fit:contain !important;
       background:transparent !important;border:0 !important;padding:0 !important;box-shadow:none !important
     }
-    .name{font-size:16px;font-weight:900;color:#0f172a}
+    /* 회사명은 화면에서 숨기되 검색 가능해야 해서 DOM은 유지 */
+    .name{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;overflow:hidden !important;clip:rect(1px,1px,1px,1px) !important;white-space:nowrap !important}
 
     /* 버튼(칩) */
-    .row .grid{display:flex;flex-wrap:wrap;gap:8px}
+    .row .grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end} /* ← 버튼 우측 정렬 */
     .btn{min-height:30px;padding:6px 10px;font-size:12px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none}
     .btn:hover{background:#f8fafc}
     .btn-muted{opacity:.55;cursor:not-allowed}
@@ -67,6 +68,17 @@
     #age-form .key-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
     #age-form .key-primary:hover{background:#6d28d9}
     #age .card{border:1px solid #e2e8f0;border-radius:10px;padding:12px;background:#fff}
+
+    /* 실손 계산기: 첨부본 스타일 맞춤(버튼 그라데이션/카드 라운드/섹션 간격) */
+    .gbtn{display:inline-flex;align-items:center;justify-content:center;border-radius:16px;padding:12px 28px;font-weight:700;box-shadow:0 6px 14px rgba(15,23,42,.06);color:#fff}
+    .gbtn-calc{background:linear-gradient(90deg,#0ea5e9,#2563eb)}
+    .gbtn-reset{background:linear-gradient(90deg,#10b981,#0d9488)}
+    .gbtn-ghost{background:linear-gradient(90deg,#e5e7eb,#f1f5f9);color:#0f172a}
+    #medcalc section{border-radius:16px;box-shadow:0 8px 20px rgba(2,6,23,.06)}
+    #currentLabel{font-weight:800}
+    .pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fff}
+    .pill-indigo{background:#4f46e5}
+    .pill-emerald{background:#059669}
   </style>
 </head>
 <body class="text-slate-900">
@@ -199,8 +211,8 @@
         <section class="bg-white rounded-2xl shadow p-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-2">
-              <div class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white">세대 선택</div>
-              <div class="text-xl font-extrabold text-slate-900" id="currentLabel">현재 선택: <span class="text-indigo-700">4세대(현행)</span></div>
+              <span class="pill pill-indigo">세대 선택</span>
+              <div class="text-xl text-slate-900" id="currentLabel">현재 선택: <span class="text-indigo-700 font-extrabold">4세대(현행)</span></div>
               <select id="genSelect" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg mt-2">
                 <option value="4th-basic" selected>4세대(현행)</option>
                 <option value="3rd-standard">3세대(표준)</option>
@@ -208,7 +220,7 @@
               </select>
             </div>
             <div class="space-y-2">
-              <div class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider bg-emerald-600 text-white">의료기관 유형</div>
+              <span class="pill pill-emerald">의료기관 유형</span>
               <div class="text-xl font-extrabold text-slate-900">급여 공제 자동 적용</div>
               <select id="facilitySelect" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg mt-2">
                 <option value="clinic" selected>의원</option>
@@ -256,7 +268,7 @@
               <div>
                 <label class="block text-base font-bold mb-1 text-slate-800">비급여 공제(원)</label>
                 <input id="advDedNonCovered" type="text" inputmode="numeric" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg" value="0" />
-                <p class="text-xs text-slate-500 mt-1">세대/의료기관에 따라 자동 설정</p>
+                <p class="text-xs text-slate-500 mt-1">2세대는 ‘최소공제 vs 20%’ 규칙이 적용되어 이 값이 자동 무시됩니다.</p>
               </div>
               <div>
                 <label class="block text-base font-bold mb-1 text-slate-800">도수·주사·체외(1회 한도)</label>
@@ -270,9 +282,15 @@
           </details>
 
           <div class="mt-8 flex items-center gap-4">
-            <button id="btnCalc" class="btn btn-primary" style="padding:10px 18px;font-size:14px">계산하기</button>
-            <button id="btnReset" class="btn" style="padding:10px 18px;font-size:14px">초기화</button>
-            <button id="btnExample" class="btn btn-ghost" style="padding:10px 18px;font-size:14px">예시 입력</button>
+            <button id="btnCalc" class="gbtn gbtn-calc">
+              <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              계산하기
+            </button>
+            <button id="btnReset" class="gbtn gbtn-reset">
+              <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+              초기화
+            </button>
+            <button id="btnExample" class="gbtn gbtn-ghost">예시 입력</button>
           </div>
 
           <div id="boxResult" class="mt-6 bg-slate-50 border border-slate-200 rounded-2xl p-5">
@@ -327,7 +345,7 @@
       const inner = `
         <div class="brand">
           <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
-          <div class="name">${item.name}</div>
+          <span class="name">${item.name}</span> <!-- 화면 비표시(검색용 유지) -->
         </div>`;
       return L.system ? `<a href="${L.system}" class="block no-underline">${inner}</a>` : `<div class="opacity-85">${inner}</div>`;
     }
@@ -449,7 +467,7 @@
 
     $("#y").textContent = new Date().getFullYear();
 
-    // ===== 실손 계산기 로직 (요청 반영: 상급종병 비급여 공제 세대별) =====
+    // ===== 실손 계산기 로직 =====
     const KRW = new Intl.NumberFormat('ko-KR');
     const byId = (id)=> document.getElementById(id);
     const inputs = {
@@ -463,23 +481,19 @@
       physioCap: byId('advPhysioCap'),
       annualRemain: byId('advAnnualRemain')
     };
+
+    // 기본 프리셋(2세대 비급여 규칙은 별도 처리)
     const presets = {
       '4th-basic': { label: '4세대(현행)', coveredRate: 0.8, nonCoveredRate: 0.7, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 15000, physioPerVisitCap: 0, annualRemain: 999999999 },
       '3rd-standard': { label: '3세대(표준)', coveredRate: 0.9, nonCoveredRate: 0.8, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 20000, physioPerVisitCap: 0, annualRemain: 999999999 },
-      '2nd-legacy': { label: '2세대', coveredRate: 0.9, nonCoveredRate: 0.8, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 30000, physioPerVisitCap: 0, annualRemain: 999999999 }
+      '2nd-legacy': { label: '2세대', coveredRate: 0.9, nonCoveredRate: 1.0, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 0, physioPerVisitCap: 0, annualRemain: 999999999 }
     };
+
+    // 의료기관별 급여 공제(방문 1회)
     const facilityCoveredDed = { clinic:10000, hospital:15000, general:20000, tertiary:20000 };
 
-    // 상급종합병원 비급여 공제(요청): 4세대 30000 / 3세대 20000 / 2세대 15000
-    function getNonCoveredDed(genKey, fac){
-      if(fac === 'tertiary'){
-        if(genKey==='4th-basic') return 30000;
-        if(genKey==='3rd-standard') return 20000;
-        if(genKey==='2nd-legacy') return 15000;
-      }
-      // 그 외는 기존 세대 기본값 유지
-      return presets[genKey]?.nonCoveredDeductible ?? 15000;
-    }
+    // 2세대 전용 비급여 "최소공제 vs 20%"의 최소공제 기준(의료기관별)
+    const facilityNonMinDed_2nd = { clinic:10000, hospital:15000, general:20000, tertiary:20000 };
 
     function onlyDigits(s){ return String(s||'').replace(/[^0-9]/g, ''); }
     function toNumber(text){ return Number(onlyDigits(text)||0); }
@@ -497,9 +511,15 @@
     const dedSummary = byId('dedSummary');
 
     function updateDedSummary(){
-      const cov = toNumber(inputs.dedCov.value);
-      const non = toNumber(inputs.dedNon.value);
-      dedSummary.textContent = `적용 공제(방문 1회): 급여 ${fmtKRW(cov)}원 / 비급여 ${fmtKRW(non)}원`;
+      const key = genSelect.value;
+      if(key === '2nd-legacy'){
+        const minTxt = `의원 10,000원 / 병원 15,000원 / 종합·상급 20,000원`;
+        dedSummary.textContent = `적용 공제(방문 1회): 급여 ${fmtKRW(toNumber(inputs.dedCov.value))}원 / 비급여 ‘최소공제(${minTxt})’와 ‘비급여의 20%’ 중 큰 금액`;
+      } else {
+        const cov = toNumber(inputs.dedCov.value);
+        const non = toNumber(inputs.dedNon.value);
+        dedSummary.textContent = `적용 공제(방문 1회): 급여 ${fmtKRW(cov)}원 / 비급여 ${fmtKRW(non)}원`;
+      }
     }
 
     function applyGen(key){
@@ -509,47 +529,84 @@
       inputs.perCap.value = fmtKRW(p.perVisitCap||0);
       inputs.physioCap.value = fmtKRW(p.physioPerVisitCap||0);
       inputs.annualRemain.value = fmtKRW(p.annualRemain||999999999);
-      // 공제는 각각 계산
+
+      // 급여 공제는 의료기관별
       inputs.dedCov.value = fmtKRW(facilityCoveredDed[facilitySelect.value] ?? 10000);
-      inputs.dedNon.value = fmtKRW(getNonCoveredDed(key, facilitySelect.value));
-      const lbl = byId('currentLabel'); if(lbl) lbl.innerHTML = `현재 선택: <span class="text-indigo-700">${p.label}</span>`;
+
+      // 비급여 공제: 2세대는 입력란을 0으로 두고 규칙 설명, 3·4세대는 세대 기본값
+      if(key === '2nd-legacy'){
+        inputs.dedNon.value = fmtKRW(0);
+      } else {
+        inputs.dedNon.value = fmtKRW(p.nonCoveredDeductible||0);
+      }
+
+      const lbl = byId('currentLabel'); if(lbl) lbl.innerHTML = `현재 선택: <span class="text-indigo-700 font-extrabold">${p.label}</span>`;
       updateDedSummary();
     }
 
     function applyFacility(fac){
       inputs.dedCov.value = fmtKRW(facilityCoveredDed[fac] ?? 10000);
-      inputs.dedNon.value = fmtKRW(getNonCoveredDed(genSelect.value, fac));
+      // 2세대는 dedNon을 화면상 0 유지(규칙으로 계산), 그 외는 기존 세대 규칙으로 업데이트
+      if(genSelect.value !== '2nd-legacy'){
+        const key = genSelect.value;
+        inputs.dedNon.value = fmtKRW(presets[key]?.nonCoveredDeductible ?? 0);
+      }
       updateDedSummary();
     }
 
-    // init
+    // 초기화
     applyGen('4th-basic');
     genSelect?.addEventListener('change', ()=> applyGen(genSelect.value));
     facilitySelect?.addEventListener('change', ()=> applyFacility(facilitySelect.value));
 
-    // Example
-    byId('btnExample')?.addEventListener('click', ()=>{ inputs.coveredCo.value = fmtKRW(30000); inputs.nonCov.value = fmtKRW(70000); const box = byId('boxResult'); if(box){ box.classList.add('ring-2','ring-amber-300'); setTimeout(()=> box.classList.remove('ring-2','ring-amber-300'), 500); } });
+    // 예시
+    byId('btnExample')?.addEventListener('click', ()=>{
+      inputs.coveredCo.value = fmtKRW(30000); inputs.nonCov.value = fmtKRW(70000);
+      const box = byId('boxResult'); if(box){ box.classList.add('ring-2','ring-amber-300'); setTimeout(()=> box.classList.remove('ring-2','ring-amber-300'), 500); }
+    });
 
     function calc(){
       const coveredCo = toNumber(inputs.coveredCo.value);
       const nonCovAmt = toNumber(inputs.nonCov.value);
       if(coveredCo === 0 && nonCovAmt === 0){ alert('금액을 입력하세요'); return; }
 
+      const key = genSelect.value;
       const covRate = Number(inputs.covRate.value||0)/100;
-      const nonRate = Number(inputs.nonRate.value||0)/100;
+      let nonRate = Number(inputs.nonRate.value||0)/100; // 2세대는 1.0으로 세팅되어 있음
       const perCap = toNumber(inputs.perCap.value);
       const dedCov = toNumber(inputs.dedCov.value);
-      const dedNon = toNumber(inputs.dedNon.value);
+      // 2세대 외에는 입력란 사용
+      const dedNonInput = toNumber(inputs.dedNon.value);
       const physioCap = toNumber(inputs.physioCap.value);
       const annualRemain = toNumber(inputs.annualRemain.value) || 999999999;
 
+      // 급여
       const covBase = Math.max(0, coveredCo - dedCov);
-      const nonBase = Math.max(0, Math.max(0, nonCovAmt - dedNon));
-
       const covPay = covBase * covRate;
-      let nonPay = nonBase * nonRate;
+
+      // 비급여
+      let nonBase = 0, nonPay = 0, nonDedUsed = 0, nonExpl = '';
+      if(key === '2nd-legacy'){
+        const minFixed = facilityNonMinDed_2nd[facilitySelect.value] ?? 20000;
+        const twentyPct = Math.floor(nonCovAmt * 0.20);
+        const appliedDed = Math.max(minFixed, twentyPct);            // ‘최소공제 vs 20%’ 중 큰 금액
+        nonBase = Math.max(0, nonCovAmt - appliedDed);
+        nonRate = 1.0;                                              // 공제 후 잔액 100% 적용(중복 20% 방지)
+        nonPay = nonBase * nonRate;
+        nonDedUsed = appliedDed;
+        nonExpl = `비급여 공제(2세대 규칙): 최소공제 ${fmtKRW(minFixed)}원 vs 20% ${fmtKRW(twentyPct)}원 → 적용 ${fmtKRW(appliedDed)}원`;
+      } else {
+        const dedNon = dedNonInput;
+        nonBase = Math.max(0, nonCovAmt - dedNon);
+        nonPay = nonBase * nonRate;
+        nonDedUsed = dedNon;
+        nonExpl = `비급여 공제: ${fmtKRW(dedNon)}원`;
+      }
+
+      // 도수·주사·체외 1회 한도
       if(physioCap>0) nonPay = Math.min(nonPay, physioCap);
 
+      // 합계 및 한도
       let payout = covPay + nonPay;
       if(perCap>0) payout = Math.min(payout, perCap);
       payout = Math.min(payout, annualRemain);
@@ -559,7 +616,7 @@
       const lines = [
         `급여 보상: ${fmtKRW(covPay)}원 (기준 ${fmtKRW(covBase)}원 × ${Math.round(covRate*100)}%)`,
         `비급여 보상: ${fmtKRW(nonPay)}원 (기준 ${fmtKRW(nonBase)}원 × ${Math.round(nonRate*100)}%)`,
-        `적용 공제: 급여 ${fmtKRW(dedCov)}원 / 비급여 ${fmtKRW(dedNon)}원`
+        `적용 공제: 급여 ${fmtKRW(dedCov)}원 / ${nonExpl}`
       ];
       if(perCap>0) lines.push(`1회 한도 적용: 최대 ${fmtKRW(perCap)}원`);
       if(physioCap>0) lines.push(`도수·주사·체외 한도 적용: 최대 ${fmtKRW(physioCap)}원`);
@@ -569,7 +626,12 @@
     }
 
     byId('btnCalc')?.addEventListener('click', calc);
-    byId('btnReset')?.addEventListener('click', ()=>{ [inputs.coveredCo, inputs.nonCov].forEach(el=> el.value=''); genSelect.value='4th-basic'; facilitySelect.value='clinic'; applyGen('4th-basic'); applyFacility('clinic'); byId('txtPayout').textContent='0원'; byId('listExplain').innerHTML=''; });
+    byId('btnReset')?.addEventListener('click', ()=>{
+      [inputs.coveredCo, inputs.nonCov].forEach(el=> el.value='');
+      genSelect.value='4th-basic'; facilitySelect.value='clinic';
+      applyGen('4th-basic'); applyFacility('clinic');
+      byId('txtPayout').textContent='0원'; byId('listExplain').innerHTML='';
+    });
   })();
   </script>
 </body>
