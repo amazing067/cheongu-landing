@@ -33,7 +33,7 @@
       "mobile": "https://www.kbinsure.co.kr/CG212010002.ec"
     }},
     { "name": "메리츠화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
-      "system": "http://sales.meritzfire.com/salesportal/Layout/MeritzSales.jsp	",
+      "system": "http://sales.meritzfire.com/salesportal/Layout/MeritzSales.jsp",
       "guide": "https://m.meritzfire.com/compensation/longterm-insurance/request.do",
       "pdf": "/assets/pdf/메리츠화재-보험금청구서.pdf",
       "dental": "/assets/pdf/메리츠화재 치과치료확인서.pdf",
@@ -121,7 +121,7 @@
       "mobile": "https://m.acedirect.co.kr/jsp/directM/customercenter/common/Main2.jsp"
     }},
     { "name": "한화손해보험", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
-      "system": "https://portal.hwgeneralins.com/",
+      "system": "https://portal.hwgeneralins.com",
       "guide": "https://m.hwgeneralins.com/",
       "pdf": "/assets/pdf/한화손해보험-보험금청구서.pdf",
       "dental": "/assets/pdf/한화손해보험 치과치료확인서.pdf",
@@ -154,7 +154,7 @@
       "mobile": "https://www.kyobo.com/dgt/web/dti/insurance/accInq/intro"
     }},
     { "name": "미래에셋생명", "type": "생명", "tags": ["pdf","고객센터"], "links": {
-      "system": "https://www.loveageplan.com/",
+      "system": "https://www.loveageplan.com",
       "guide": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MNT-CC-012",
       "pdf": "/assets/pdf/미래에셋생명-보험금청구서.pdf",
       "dental": "/assets/pdf/미래에셋생명 치과치료확인서.pdf",
@@ -258,7 +258,7 @@
       "mobile": ""
     }},
     { "name": "iM라이프생명", "type": "생명", "tags": ["DGB","iM","pdf"], "links": {
-      "system": "https://fgs.imlifeins.co.kr:8443/",
+      "system": "https://fgs.imlifeins.co.kr:8443",
       "guide": "",
       "pdf": "/assets/pdf/iM라이프생명-보험금청구서.pdf",
       "dental": "/assets/pdf/iM라이프생명 치과치료확인서.pdf",
