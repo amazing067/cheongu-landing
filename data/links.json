@@ -130,7 +130,7 @@
     }},
 
     { "name": "삼성생명", "type": "생명", "tags": ["pdf","고객센터","모바일청구"], "links": {
-      "system": "https://ga.samsunglife.com	",
+      "system": "https://ga.samsunglife.com",
       "guide": "https://direct.samsunglife.com/customerSupport/insuranceClaimInformation/CustomerSupportInsuranceClaimInformationView",
       "pdf": "/assets/pdf/삼성생명-보험금청구서.pdf",
       "dental": "/assets/pdf/삼성생명 치과치료확인서.pdf",
