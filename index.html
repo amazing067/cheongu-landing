@@ -21,65 +21,81 @@
   <link rel="stylesheet" href="/assets/site.css?v=final-compact-7" />
 
   <!-- Hotfix -->
-  <style id="hotfix">
-    body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-    .maxw{max-width:72rem;margin:0 auto}
-    /* 표 */
-    .table{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
-    .row{display:grid;grid-template-columns:minmax(220px,1fr) auto;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid rgba(100,116,139,.25)}
-    .row:first-child{border-top-width:0}
+<style id="hotfix">
+  /* 기본 */
+  body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  .maxw{max-width:72rem;margin:0 auto}
 
-    /* 브랜드 셀 */
-    .brand{display:flex;align-items:center;gap:10px;min-height:36px}
-    .logo{
-      max-height:28px !important;width:auto !important;object-fit:contain !important;
-      background:transparent !important;border:0 !important;padding:0 !important;box-shadow:none !important
+  /* 표(밀집 모드) */
+  .table{background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden}
+  .row{
+    display:grid;grid-template-columns:minmax(200px,1fr) auto;
+    align-items:center;gap:8px;
+    padding:6px 10px;                 /* ↓ 행 높이 줄임 */
+    border-top:1px solid rgba(100,116,139,.22)
+  }
+  .row:first-child{border-top-width:0}
+
+  /* 브랜드 셀: 로고만 보이게, 이름은 검색용으로 DOM 유지 */
+  .brand{display:flex;align-items:center;gap:8px;min-height:28px}
+  .logo{
+    max-height:22px !important;       /* ↓ 로고 높이 줄임 */
+    width:auto !important;object-fit:contain !important;
+    background:transparent !important;border:0 !important;padding:0 !important;box-shadow:none !important
+  }
+  .name{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;overflow:hidden !important;clip:rect(1px,1px,1px,1px) !important;white-space:nowrap !important}
+
+  /* 버튼(칩) */
+  .row .grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end} /* 오른쪽 정렬 + 간격 축소 */
+  .btn{min-height:26px;padding:4px 8px;font-size:11px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none}
+  .btn:hover{background:#f8fafc}
+  .btn-muted{opacity:.55;cursor:not-allowed}
+  .btn-ghost{border-color:#e2e8f0;background:#fff}
+  .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
+  .btn-primary:hover{background:#6d28d9}
+  .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:4px 10px}
+  .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:4px 10px}
+  .btn-call{border-color:#cbd5e1;background:#fff}
+  .btn-call .num{font-weight:800}
+  .chip{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
+
+  .section-title{font-size:28px;font-weight:900;letter-spacing:-.01em}
+  .section-sub{font-size:12.5px;color:#475569}
+  .section-head{display:flex;flex-direction:column;align-items:center;gap:6px;margin:28px 0 12px}
+
+  /* 보험나이 계산기(기존) */
+  #age .calc-card{border:1px solid #c7b7ff;border-radius:10px;background:#fff}
+  #age-form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+  #age-form .dob-wrap{display:flex;align-items:center;gap:8px}
+  #age-form input{height:40px;border-radius:10px;padding:0 12px;text-align:center;border:1px solid #cbd5e1}
+  #dobY{width:120px} #dobM,#dobD{width:76px}
+  #age-form .key{min-width:96px;white-space:nowrap;height:40px;line-height:38px;border-radius:10px;border:1px solid #cbd5e1;background:#fff}
+  #age-form .key-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
+  #age-form .key-primary:hover{background:#6d28d9}
+  #age .card{border:1px solid #e2e8f0;border-radius:10px;padding:12px;background:#fff}
+
+  /* 실손 계산기(버튼 스타일) */
+  .gbtn{display:inline-flex;align-items:center;justify-content:center;border-radius:16px;padding:12px 28px;font-weight:700;box-shadow:0 6px 14px rgba(15,23,42,.06);color:#fff}
+  .gbtn-calc{background:linear-gradient(90deg,#0ea5e9,#2563eb)}
+  .gbtn-reset{background:linear-gradient(90deg,#10b981,#0d9488)}
+  .gbtn-ghost{background:linear-gradient(90deg,#e5e7eb,#f1f5f9);color:#0f172a}
+  #medcalc section{border-radius:16px;box-shadow:0 8px 20px rgba(2,6,23,.06)}
+  #currentLabel{font-weight:800}
+  .pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fff}
+  .pill-indigo{background:#4f46e5}
+  .pill-emerald{background:#059669}
+
+  /* ===== 패널 2열 강제 (Tailwind 유틸이 없어도 동작) ===== */
+  /* 현재 마크업: <section id="calc-panels"> 안의 첫 번째 자식 div가 .grid */
+  @media (min-width:1024px){
+    #calc-panels > .grid{
+      display:grid !important;
+      grid-template-columns:1fr 1fr !important; /* 2열 */
+      gap:24px !important;
+      align-items:start !important;
     }
-    /* 회사명은 화면에서 숨기되 검색 가능해야 해서 DOM은 유지 */
-    .name{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;overflow:hidden !important;clip:rect(1px,1px,1px,1px) !important;white-space:nowrap !important}
-
-    /* 버튼(칩) */
-    .row .grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
-    .btn{min-height:30px;padding:6px 10px;font-size:12px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none}
-    .btn:hover{background:#f8fafc}
-    .btn-muted{opacity:.55;cursor:not-allowed}
-    .btn-ghost{border-color:#e2e8f0;background:#fff}
-    .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
-    .btn-primary:hover{background:#6d28d9}
-    .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:6px 12px}
-    .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:6px 12px}
-    .btn-call{border-color:#cbd5e1;background:#fff}
-    .btn-call .num{font-weight:800}
-    .chip{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
-
-    .section-title{font-size:28px;font-weight:900;letter-spacing:-.01em}
-    .section-sub{font-size:12.5px;color:#475569}
-
-    /* 타이틀 센터 + 위아래 여백 */
-    .section-head{display:flex;flex-direction:column;align-items:center;gap:6px;margin:28px 0 12px}
-
-    /* 보험나이 계산기 */
-    #age .calc-card{border:1px solid #c7b7ff;border-radius:10px;background:#fff}
-    #age-form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
-    #age-form .dob-wrap{display:flex;align-items:center;gap:8px}
-    #age-form input{height:40px;border-radius:10px;padding:0 12px;text-align:center;border:1px solid #cbd5e1}
-    #dobY{width:120px} #dobM,#dobD{width:76px}
-    #age-form .key{min-width:96px;white-space:nowrap;height:40px;line-height:38px;border-radius:10px;border:1px solid #cbd5e1;background:#fff}
-    #age-form .key-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
-    #age-form .key-primary:hover{background:#6d28d9}
-    #age .card{border:1px solid #e2e8f0;border-radius:10px;padding:12px;background:#fff}
-
-    /* 실손 계산기: 버튼 그라데이션/카드 라운드 */
-    .gbtn{display:inline-flex;align-items:center;justify-content:center;border-radius:16px;padding:12px 28px;font-weight:700;box-shadow:0 6px 14px rgba(15,23,42,.06);color:#fff}
-    .gbtn-calc{background:linear-gradient(90deg,#0ea5e9,#2563eb)}
-    .gbtn-reset{background:linear-gradient(90deg,#10b981,#0d9488)}
-    .gbtn-ghost{background:linear-gradient(90deg,#e5e7eb,#f1f5f9);color:#0f172a}
-    #medcalc section{border-radius:16px;box-shadow:0 8px 20px rgba(2,6,23,.06)}
-    #currentLabel{font-weight:800}
-    .pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fff}
-    .pill-indigo{background:#4f46e5}
-    .pill-emerald{background:#059669}
-  </style>
+  }
+</style>
 </head>
 <body class="text-slate-900">
   <!-- 헤더 -->
