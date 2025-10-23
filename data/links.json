@@ -272,7 +272,7 @@
       "dental": "/assets/pdf/동양생명 치과치료확인서.pdf",
       "support": "",
       "mobile": ""
-    }}
+    }},
   ],
   "top_pdfs": [
     { "label": "입원/통원 청구서", "url": "/assets/pdf/입원통원-청구서.pdf" },
