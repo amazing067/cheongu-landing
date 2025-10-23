@@ -18,19 +18,34 @@
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
 
   <!-- Tailwind(@apply) 빌드 CSS — 캐시 무력화 -->
-  <link rel="stylesheet" href="/assets/site.css?v=final-compact-5" />
+  <link rel="stylesheet" href="/assets/site.css?v=final-compact-6" />
 
-  <!-- Hotfix: 표/버튼 콤팩트 + 로고 프레임 완전 제거 + 계산기 정렬 + 치과 버튼 스타일 -->
+  <!-- Hotfix: 표/버튼 콤팩트 + 로고 프레임 완전 제거 + 계산기 정렬 + 시각적 숨김 클래스 -->
   <style id="hotfix">
     body{background:#f8fafc}
 
+    /* ===== 화면에는 숨기되 DOM/검색엔진/스크린리더에는 남기는 클래스 ===== */
+    .sr-only{
+      position:absolute !important;
+      width:1px;height:1px;padding:0;margin:-1px;
+      overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+    }
+
     /* ===== 표(테이블) ===== */
     .table{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
-    .row{display:grid;grid-template-columns:minmax(180px,1fr) auto;align-items:center;gap:8px;padding:8px 10px;border-top:1px solid rgba(100,116,139,.25)}
+    /* 왼쪽: 브랜드 고정폭, 오른쪽: 버튼들 가변폭 — 버튼이 로고 칸으로 달라붙지 않게 분리 */
+    .row{
+      display:grid;
+      grid-template-columns: 240px 1fr;
+      align-items:center;
+      gap:10px;
+      padding:8px 10px;           /* 행 높이 콤팩트 */
+      border-top:1px solid rgba(100,116,139,.25)
+    }
     .row:first-child{border-top-width:0}
 
     /* ===== 브랜드 셀 ===== */
-    .brand{display:flex;align-items:center;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0;white-space:nowrap}
     /* 로고: 어떤 프레임/배경/그림자도 없이 원본만 보여주기 */
     .logo{
       max-height:26px !important;
@@ -45,12 +60,14 @@
       outline:none !important;
       filter:none !important;
     }
+    /* 회사명은 검색용으로 남기되 화면에서는 숨김 */
     .name{font-size:15px;font-weight:800;color:#0f172a}
+    .name.sr-only{display:inline} /* 접근성 유지용 */
 
     /* ===== 버튼(칩 형태) ===== */
-    .row .grid{display:flex;flex-wrap:wrap;gap:8px}
+    .row .grid{display:flex;flex-wrap:wrap;gap:8px;margin-left:4px}
     .row .grid>a,.row .grid>button{flex:0 0 auto}
-    .btn{min-height:30px;padding:6px 10px;font-size:12px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:#0f172a}
+    .btn{min-height:30px;padding:6px 10px;font-size:12px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none}
     .btn:hover{background:#f8fafc}
     .btn-muted{opacity:.55;cursor:not-allowed}
     .btn-ghost{border-color:#e2e8f0;background:#fff}
@@ -72,10 +89,16 @@
     #age-form .dob-wrap{display:flex;align-items:center;gap:8px}
     #age-form input{height:40px;border-radius:10px;padding:0 12px;text-align:center;border:1px solid #cbd5e1}
     #dobY{width:120px} #dobM,#dobD{width:76px}
-    #age-form .key{min-width:96px;white-space:nowrap;height:40px;line-height:38px;border-radius:10px}
+    #age-form .key{min-width:96px;white-space:nowrap;height:40px;line-height:38px;border-radius:10px;border:1px solid #e2e8f0;background:#fff}
     #age-form .key-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
     #age-form .key-primary:hover{background:#6d28d9}
     #age .card{border:1px solid #e2e8f0;border-radius:10px}
+
+    /* 모바일에서는 1열로(로고 위 / 버튼 아래) */
+    @media (max-width: 640px){
+      .row{ grid-template-columns: 1fr; align-items:start; }
+      .row .grid{ margin-left:0; }
+    }
   </style>
 </head>
 <body class="text-slate-900">
@@ -238,17 +261,18 @@
     function brandCell(item) {
       const L = item.links || {};
       const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
+      // 회사명은 sr-only로 화면에서 숨김(검색/접근성 유지)
       const inner = `
         <div class="brand">
           <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
-          <div class="name">${item.name}</div>
+          <span class="name sr-only">${item.name}</span>
         </div>`;
-      return L.system ? `<a href="${L.system}" class="block no-underline">${inner}</a>` : `<div class="opacity-85">${inner}</div>`;
+      return L.system ? `<a href="${L.system}" class="block no-underline" target="_blank" rel="noopener">${inner}</a>` : `<div class="opacity-85">${inner}</div>`;
     }
 
     function btn(label, href, cls) {
       if (!href) return `<button class="btn btn-muted" disabled>${label}</button>`;
-      const isExternal = /고객센터|모바일|필요서류/.test(label);
+      const isExternal = /고객센터|모바일|필요서류|전산/.test(label);
       const downloadAttr = /PDF|확인서/.test(label) ? ` download="${label}.pdf"` : "";
       return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
     }
