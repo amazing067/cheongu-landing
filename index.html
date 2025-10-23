@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>청구닷컴 | 보험금 청구 링크 허브</title>
-  <meta name="description" content="전산 접속 · 필요서류 · 보험금 청구서 PDF · 치과치료확인서 · 고객센터 · 모바일청구 — 광고 없이 깔끔하게." />
+  <meta name="description" content="전산 접속 · 필요서류 · 보험금 청구서 PDF · 치과치료확인서 · 고객센터/인콜 · 청구 FAX · 약관 확인 — 광고 없이 깔끔하게." />
   <meta name="format-detection" content="telephone=no" />
   <meta property="og:title" content="청구닷컴 | 보험금 청구 링크 허브" />
   <meta property="og:description" content="보험금 청구 링크를 한 곳에서 바로." />
@@ -18,54 +18,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
 
   <!-- Tailwind(@apply) 빌드 CSS — 캐시 무력화 -->
-  <link rel="stylesheet" href="/assets/site.css?v=final-compact-7" />
+  <link rel="stylesheet" href="/assets/site.css?v=final-compact-8" />
 
   <!-- Hotfix -->
   <style id="hotfix">
     body{background:#f8fafc}
+    .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-    /* 화면에는 숨기되 DOM/검색엔진/스크린리더에는 남김 */
-    .sr-only{
-      position:absolute !important;
-      width:1px;height:1px;padding:0;margin:-1px;
-      overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
-    }
-
-    /* 표(테이블) */
+    /* 표 */
     .table{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
-    .row{
-      display:grid;
-      grid-template-columns: 240px 1fr;   /* 왼쪽: 로고칸, 오른쪽: 버튼칸 */
-      align-items:center;
-      gap:10px;
-      padding:8px 10px;
-      border-top:1px solid rgba(100,116,139,.25)
-    }
+    .row{display:grid;grid-template-columns:240px 1fr;align-items:center;gap:10px;padding:8px 10px;border-top:1px solid rgba(100,116,139,.25)}
     .row:first-child{border-top-width:0}
 
-    /* 왼쪽 로고칸 자체를 중앙정렬 */
-    .brand-cell{
-      display:flex; align-items:center; justify-content:center;
-      min-height:32px; /* 너무 납작해지지 않게 살짝 확보 */
-    }
-
-    /* 브랜드 내부 */
+    /* 로고 칸: 가운데 정렬 */
+    .brand-cell{display:flex;align-items:center;justify-content:center;min-height:32px}
     .brand{display:flex;align-items:center;gap:10px;min-width:0;white-space:nowrap}
-    .logo{
-      max-height:26px !important;
-      height:auto !important;
-      width:auto !important;
-      object-fit:contain !important;
-      border-radius:0 !important;
-      background:transparent !important;
-      border:0 !important;
-      padding:0 !important;
-      box-shadow:none !important;
-      outline:none !important;
-      filter:none !important;
-    }
-    .name{font-size:15px;font-weight:800;color:#0f172a}
-    .name.sr-only{display:inline}
+    .logo{max-height:26px!important;height:auto!important;width:auto!important;object-fit:contain!important;border-radius:0!important;background:transparent!important;border:0!important;padding:0!important;box-shadow:none!important;outline:none!important;filter:none!important}
+    .name{font-size:15px;font-weight:800;color:#0f172a}.name.sr-only{display:inline}
 
     /* 버튼(칩) */
     .row .grid{display:flex;flex-wrap:wrap;gap:8px;margin-left:4px}
@@ -79,6 +48,10 @@
     .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:6px 12px}
     .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:6px 12px}
     .btn-dental:hover{filter:brightness(.95)}
+    .btn-call{background:#0ea5e9;border-color:#0ea5e9;color:#fff}
+    .btn-monitor{background:#06b6d4;border-color:#06b6d4;color:#fff}
+    .btn-copy{background:#94a3b8;border-color:#94a3b8;color:#fff}
+    .btn-terms{background:#64748b;border-color:#64748b;color:#fff}
 
     .pill{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
     .section-title{font-size:26px;font-weight:900;letter-spacing:-.01em}
@@ -86,7 +59,7 @@
     .card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px}
     .kbd{font-size:10px;padding:2px 6px;border:1px solid #e2e8f0;border-radius:6px;background:#f1f5f9}
 
-    /* 보험나이 계산기 */
+    /* 나이 계산기 */
     #age .calc-card{border:1px solid #c7b7ff;border-radius:10px;background:#fff}
     #age-form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
     #age-form .dob-wrap{display:flex;align-items:center;gap:8px}
@@ -97,11 +70,10 @@
     #age-form .key-primary:hover{background:#6d28d9}
     #age .card{border:1px solid #e2e8f0;border-radius:10px}
 
-    /* 모바일: 1열(로고 위 / 버튼 아래) */
     @media (max-width: 640px){
-      .row{ grid-template-columns: 1fr; align-items:start; }
-      .row .grid{ margin-left:0; }
-      .brand-cell{ justify-content:flex-start; } /* 모바일에서는 왼쪽 정렬이 자연스러움 */
+      .row{grid-template-columns:1fr;align-items:start}
+      .row .grid{margin-left:0}
+      .brand-cell{justify-content:flex-start}
     }
   </style>
 </head>
@@ -126,7 +98,7 @@
       <span style="background:linear-gradient(90deg,#d946ef,#7c3aed,#06b6d4);-webkit-background-clip:text;background-clip:text;color:transparent;">한 곳에서 바로</span>
     </h1>
     <p class="mt-2 text-slate-700">
-      전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · <span class="font-semibold">치과치료확인서</span> · 고객센터 · 모바일청구 — 광고 없이 깔끔하게.
+      전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · <span class="font-semibold">치과치료확인서</span> · 고객센터/인콜 · 청구 FAX · 약관 확인 — 광고 없이 깔끔하게.
     </p>
 
     <!-- 검색 -->
@@ -188,7 +160,7 @@
               <div class="text-xs text-slate-600" id="age-rule">생년월일을 입력하세요</div>
             </div>
 
-            <!-- 연(4)→월(2)→일(2) 자동 이동 + 버튼 가로 정렬 -->
+            <!-- 연(4)→월(2)→일(2) 자동 이동 -->
             <form id="age-form">
               <div>
                 <label class="text-sm font-semibold">생년월일</label>
@@ -275,23 +247,34 @@
 
     function btn(label, href, cls) {
       if (!href) return `<button class="btn btn-muted" disabled>${label}</button>`;
-      const isExternal = /고객센터|모바일|필요서류|전산/.test(label);
+      const isExternal = /필요서류|약관/.test(label);  // 외부 페이지 새창
       const downloadAttr = /PDF|확인서/.test(label) ? ` download="${label}.pdf"` : "";
       return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
+    }
+    function btnTel(label, number, cls){
+      if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
+      const tel = number.replace(/\s+/g,'');
+      return `<a class="btn ${cls}" href="tel:${tel}">${label} ${number}</a>`;
+    }
+    function btnCopy(label, value, cls){
+      if (!value) return `<button class="btn btn-muted" disabled>${label}</button>`;
+      return `<button class="btn ${cls} copy-btn" type="button" data-copy="${value}">${label} ${value}</button>`;
     }
 
     function row(item) {
       const L = item.links || {};
       return `
-        <div class="row row-cols" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}" data-brand="${item.name}">
+        <div class="row" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}" data-brand="${item.name}">
           <div class="brand-cell">${brandCell(item)}</div>
           <div class="grid">
             ${btn("전산 접속", L.system, "btn-primary")}
             ${btn("필요서류 안내", L.guide, "btn-ghost")}
-            ${L.dental ? `<a class="btn btn-dental" href="${L.dental}" download="${item.name}-치과치료확인서.pdf">치과치료확인서</a>` : `<button class="btn btn-muted" disabled>치과치료확인서</button>`}
             ${L.pdf ? `<a class="btn btn-pdf" href="${L.pdf}" download="${item.name}-보험금청구서.pdf">보험금 청구서 PDF 다운로드</a>` : `<button class="btn btn-muted" disabled>보험금 청구서 PDF 다운로드</button>`}
-            ${btn("고객센터", L.support, "btn-ghost")}
-            ${btn("모바일 청구", L.mobile, "btn-ghost")}
+            ${L.dental ? `<a class="btn btn-dental" href="${L.dental}" download="${item.name}-치과치료확인서.pdf">치과치료확인서</a>` : `<button class="btn btn-muted" disabled>치과치료확인서</button>`}
+            ${btnTel("고객센터", L.phone, "btn-call")}
+            ${btnTel("인콜 모니터링", L.monitor, "btn-monitor")}
+            ${btnCopy("청구 FAX", L.fax, "btn-copy")}
+            ${btn("약관 확인", L.terms, "btn-terms")}
           </div>
         </div>`;
     }
@@ -323,6 +306,20 @@
     loadData().then(render).catch(() => {
       const err = '<div class="px-4 py-3 text-sm text-red-600">데이터 로드 실패: /data/links.json</div>';
       lossList.innerHTML = err; lifeList.innerHTML = err;
+    });
+
+    // 공용: 복사 버튼(청구 FAX 등)
+    document.addEventListener('click', async (e)=>{
+      const btn = e.target.closest('.copy-btn');
+      if(!btn) return;
+      try{
+        await navigator.clipboard.writeText(btn.dataset.copy||"");
+        const old = btn.textContent;
+        btn.textContent = '복사됨';
+        setTimeout(()=>{ btn.textContent = old; }, 1200);
+      }catch{
+        alert(btn.dataset.copy||"");
+      }
     });
 
     /* 보험나이 계산기 */
