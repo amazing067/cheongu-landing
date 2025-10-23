@@ -217,7 +217,7 @@
       "support": "",
       "mobile": ""
     }},
-    { "name": "메트라이프생명", "type": "생명", "tags": ["MetLife","pdf","고객센터"], "links": {
+    { "name": "메트라이프", "type": "생명", "tags": ["MetLife","pdf","고객센터"], "links": {
       "system": "",
       "guide": "",
       "pdf": "/assets/pdf/메트라이프생명-보험금청구서.pdf",
@@ -233,7 +233,7 @@
       "support": "",
       "mobile": ""
     }},
-    { "name": "처브라이프(Chubb Life)", "type": "생명", "tags": ["Chubb","pdf","고객센터"], "links": {
+    { "name": "처브라이프", "type": "생명", "tags": ["Chubb","pdf","고객센터"], "links": {
       "system": "",
       "guide": "",
       "pdf": "/assets/pdf/처브라이프-보험금청구서.pdf",
@@ -257,7 +257,7 @@
       "support": "",
       "mobile": ""
     }},
-    { "name": "아이엠(iM)라이프생명", "type": "생명", "tags": ["DGB","iM","pdf"], "links": {
+    { "name": "iM라이프생명", "type": "생명", "tags": ["DGB","iM","pdf"], "links": {
       "system": "",
       "guide": "",
       "pdf": "/assets/pdf/iM라이프생명-보험금청구서.pdf",
@@ -273,7 +273,7 @@
       "support": "",
       "mobile": ""
     }},
-    { "name": "교보라이프플래닛생명", "type": "생명", "tags": ["다이렉트","온라인","모바일청구"], "links": {
+    { "name": "교보생명", "type": "생명", "tags": ["다이렉트","온라인","모바일청구"], "links": {
       "system": "",
       "guide": "",
       "pdf": "/assets/pdf/교보라이프플래닛생명-보험금청구서.pdf",
