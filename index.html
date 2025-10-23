@@ -39,7 +39,7 @@
   /* 브랜드 셀: 로고만 보이게, 이름은 검색용으로 DOM 유지 */
   .brand{display:flex;align-items:center;gap:8px;min-height:28px}
   .logo{
-    max-height:28px !important;       /* ↓ 로고 높이 줄임 */
+    max-height:26px !important;       /* ↓ 로고 높이 줄임 */
     width:auto !important;object-fit:contain !important;
     background:transparent !important;border:0 !important;padding:0 !important;box-shadow:none !important
   }
@@ -47,7 +47,7 @@
 
   /* 버튼(칩) */
   .row .grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end} /* 오른쪽 정렬 + 간격 축소 */
-  .btn{min-height:26px;padding:4px 8px;font-size:12px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none}
+  .btn{min-height:24px;padding:3px 7px;font-size:12px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none}
   .btn:hover{background:#f8fafc}
   .btn-muted{opacity:.55;cursor:not-allowed}
   .btn-ghost{border-color:#e2e8f0;background:#fff}
@@ -56,7 +56,7 @@
   .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:4px 10px}
   .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:4px 10px}
   .btn-call{border-color:#cbd5e1;background:#fff}
-  .btn-call .num{font-weight:800}
+  .btn-call .num{font-weight:800; margin-left:6px;}
   .chip{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
 
   .section-title{font-size:28px;font-weight:900;letter-spacing:-.01em}
