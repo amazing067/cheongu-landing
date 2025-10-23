@@ -18,35 +18,39 @@
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
 
   <!-- Tailwind(@apply) 빌드 CSS — 캐시 무력화 -->
-  <link rel="stylesheet" href="/assets/site.css?v=final-compact-6" />
+  <link rel="stylesheet" href="/assets/site.css?v=final-compact-7" />
 
-  <!-- Hotfix: 표/버튼 콤팩트 + 로고 프레임 완전 제거 + 계산기 정렬 + 시각적 숨김 클래스 -->
+  <!-- Hotfix -->
   <style id="hotfix">
     body{background:#f8fafc}
 
-    /* ===== 화면에는 숨기되 DOM/검색엔진/스크린리더에는 남기는 클래스 ===== */
+    /* 화면에는 숨기되 DOM/검색엔진/스크린리더에는 남김 */
     .sr-only{
       position:absolute !important;
       width:1px;height:1px;padding:0;margin:-1px;
       overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
     }
 
-    /* ===== 표(테이블) ===== */
+    /* 표(테이블) */
     .table{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
-    /* 왼쪽: 브랜드 고정폭, 오른쪽: 버튼들 가변폭 — 버튼이 로고 칸으로 달라붙지 않게 분리 */
     .row{
       display:grid;
-      grid-template-columns: 240px 1fr;
+      grid-template-columns: 240px 1fr;   /* 왼쪽: 로고칸, 오른쪽: 버튼칸 */
       align-items:center;
       gap:10px;
-      padding:8px 10px;           /* 행 높이 콤팩트 */
+      padding:8px 10px;
       border-top:1px solid rgba(100,116,139,.25)
     }
     .row:first-child{border-top-width:0}
 
-    /* ===== 브랜드 셀 ===== */
+    /* 왼쪽 로고칸 자체를 중앙정렬 */
+    .brand-cell{
+      display:flex; align-items:center; justify-content:center;
+      min-height:32px; /* 너무 납작해지지 않게 살짝 확보 */
+    }
+
+    /* 브랜드 내부 */
     .brand{display:flex;align-items:center;gap:10px;min-width:0;white-space:nowrap}
-    /* 로고: 어떤 프레임/배경/그림자도 없이 원본만 보여주기 */
     .logo{
       max-height:26px !important;
       height:auto !important;
@@ -60,11 +64,10 @@
       outline:none !important;
       filter:none !important;
     }
-    /* 회사명은 검색용으로 남기되 화면에서는 숨김 */
     .name{font-size:15px;font-weight:800;color:#0f172a}
-    .name.sr-only{display:inline} /* 접근성 유지용 */
+    .name.sr-only{display:inline}
 
-    /* ===== 버튼(칩 형태) ===== */
+    /* 버튼(칩) */
     .row .grid{display:flex;flex-wrap:wrap;gap:8px;margin-left:4px}
     .row .grid>a,.row .grid>button{flex:0 0 auto}
     .btn{min-height:30px;padding:6px 10px;font-size:12px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none}
@@ -74,7 +77,7 @@
     .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
     .btn-primary:hover{background:#6d28d9}
     .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:6px 12px}
-    .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:6px 12px} /* 치과치료확인서 */
+    .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:6px 12px}
     .btn-dental:hover{filter:brightness(.95)}
 
     .pill{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
@@ -83,7 +86,7 @@
     .card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px}
     .kbd{font-size:10px;padding:2px 6px;border:1px solid #e2e8f0;border-radius:6px;background:#f1f5f9}
 
-    /* ===== 보험나이 계산기 레이아웃 고정 ===== */
+    /* 보험나이 계산기 */
     #age .calc-card{border:1px solid #c7b7ff;border-radius:10px;background:#fff}
     #age-form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
     #age-form .dob-wrap{display:flex;align-items:center;gap:8px}
@@ -94,10 +97,11 @@
     #age-form .key-primary:hover{background:#6d28d9}
     #age .card{border:1px solid #e2e8f0;border-radius:10px}
 
-    /* 모바일에서는 1열로(로고 위 / 버튼 아래) */
+    /* 모바일: 1열(로고 위 / 버튼 아래) */
     @media (max-width: 640px){
       .row{ grid-template-columns: 1fr; align-items:start; }
       .row .grid{ margin-left:0; }
+      .brand-cell{ justify-content:flex-start; } /* 모바일에서는 왼쪽 정렬이 자연스러움 */
     }
   </style>
 </head>
@@ -261,7 +265,6 @@
     function brandCell(item) {
       const L = item.links || {};
       const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
-      // 회사명은 sr-only로 화면에서 숨김(검색/접근성 유지)
       const inner = `
         <div class="brand">
           <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
@@ -281,7 +284,7 @@
       const L = item.links || {};
       return `
         <div class="row row-cols" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}" data-brand="${item.name}">
-          <div>${brandCell(item)}</div>
+          <div class="brand-cell">${brandCell(item)}</div>
           <div class="grid">
             ${btn("전산 접속", L.system, "btn-primary")}
             ${btn("필요서류 안내", L.guide, "btn-ghost")}
@@ -322,7 +325,7 @@
       lossList.innerHTML = err; lifeList.innerHTML = err;
     });
 
-    // ===== 보험나이 계산기 (연/월/일 3칸, 오늘 기준) =====
+    /* 보험나이 계산기 */
     const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const addMonths = (d, m) => { const x = new Date(d); const day=x.getDate(); x.setMonth(x.getMonth()+m); if (x.getDate()!==day) x.setDate(0); return x; };
     function intlAge(dob, asof){ let a = asof.getFullYear()-dob.getFullYear(); const bThis = new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()); if(asof < bThis) a -= 1; return a; }
