@@ -272,14 +272,6 @@
       "dental": "/assets/pdf/동양생명 치과치료확인서.pdf",
       "support": "",
       "mobile": ""
-    }},
-    { "name": "교보생명", "type": "생명", "tags": ["다이렉트","온라인","모바일청구"], "links": {
-      "system": "",
-      "guide": "",
-      "pdf": "/assets/pdf/교보라이프플래닛생명-보험금청구서.pdf",
-      "dental": "/assets/pdf/교보라이프플래닛생명 치과치료확인서.pdf",
-      "support": "",
-      "mobile": ""
     }}
   ],
   "top_pdfs": [
