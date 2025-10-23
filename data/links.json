@@ -172,8 +172,8 @@
     { "name": "농협생명", "type": "생명", "tags": ["NH","pdf","모바일청구"], "links": {
       "system": "https://www.nhlife.co.kr/nhsmart.nhl",
       "guide": "",
-      "pdf": "/assets/pdf/농협생명-보험금청구서.pdf",
-      "dental": "/assets/pdf/농협생명 치과치료확인서.pdf",
+      "pdf": "/assets/pdf/NH농협생명-보험금청구서.pdf",
+      "dental": "/assets/pdf/NH농협생명 치과치료확인서.pdf",
       "support": "",
       "mobile": ""
     }},
