@@ -67,8 +67,8 @@
     { "name": "농협손해보험", "type": "손해", "tags": ["NH","pdf","모바일청구"], "links": {
       "system": "",
       "guide": "https://www.nhfire.co.kr/customer/guide/insuranceClaimGuide.nhfire",
-      "pdf": "/assets/pdf/농협손해보험-보험금청구서.pdf",
-      "dental": "/assets/pdf/농협손해보험 치과치료확인서.pdf",
+      "pdf": "/assets/pdf/NH농협손해보험-보험금청구서.pdf",
+      "dental": "/assets/pdf/NH농협손해보험 치과치료확인서.pdf",
       "support": "https://www.nhfire.co.kr/customer/guide/insuranceClaimGuide.nhfire",
       "mobile": "https://www.nhfire.co.kr/cyber/acd/AcdSimUserStep1.nhfire"
     }},
