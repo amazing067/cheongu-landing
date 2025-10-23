@@ -1,7 +1,7 @@
 {
   "carriers": [
     { "name": "삼성화재", "type": "손해", "tags": ["pdf","고객센터","모바일청구"], "links": {
-      "system": "",
+      "system": "https://erp.samsungfire.com/irj/servlet/prt/portal/prtroot/logon.LogonPage",
       "guide": "https://www.samsungfire.com/v2/html/claim/01/C_010_030_001.html?_v=202510231242",
       "pdf": "/assets/pdf/삼성화재-보험금청구서.pdf",
       "dental": "/assets/pdf/삼성화재 치과치료확인서.pdf",
