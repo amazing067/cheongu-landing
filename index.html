@@ -18,13 +18,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
 
   <!-- Tailwind(@apply) 빌드 CSS -->
-  <link rel="stylesheet" href="/assets/site.css?v=final-compact-11" />
+  <link rel="stylesheet" href="/assets/site.css?v=final-compact-12" />
 
   <!-- Hotfix -->
   <style id="hotfix">
     /* ===== 기본 ===== */
     body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-    .maxw{max-width:80rem;margin:0 auto} /* ← 전체 폭 살짝 넓힘(72→80rem) */
+    .maxw{max-width:80rem;margin:0 auto} /* 전체 폭 살짝 넓힘 */
+
+    /* ===== 히어로 검색 중앙 + 빠른 버튼 ===== */
+    .hero-search{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:16px}
+    .search-card{width:100%;max-width:640px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px}
+    .search-title{font-size:13px;font-weight:700;margin-bottom:6px}
+    .quick-ctas{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+    .cta{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:10px 16px;font-weight:800;font-size:14px;text-decoration:none}
+    .cta-primary{color:#fff;background:linear-gradient(90deg,#7c3aed,#2563eb);box-shadow:0 6px 14px rgba(2,6,23,.08)}
+    .cta-emerald{color:#fff;background:linear-gradient(90deg,#10b981,#059669);box-shadow:0 6px 14px rgba(2,6,23,.08)}
+    .cta-ghost{color:#0f172a;background:#fff;border:1px solid #e2e8f0}
+    .cta:hover{filter:brightness(1.02)}
 
     /* ===== 표(2단 버튼 + 콤팩트 행) ===== */
     .table{background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden}
@@ -75,7 +86,7 @@
     #age .display-num{font-size:28px;font-weight:900}
     #age .card{border:1px solid #e2e8f0;border-radius:10px;padding:10px;background:#fff}
 
-    /* DOB 입력 + 버튼(아래, 시각적 중앙/높이 맞춤 40px) */
+    /* DOB 입력 + 버튼(아래, 중앙/높이 맞춤 40px) */
     #age-form{display:block}
     #age-form .dob-wrap{display:flex;gap:8px;align-items:center;margin-top:6px;justify-content:center}
     #age-form input{height:40px;border-radius:10px;padding:0 12px;text-align:center;border:1px solid #cbd5e1;font-size:14px}
@@ -89,13 +100,13 @@
     .gbtn{display:inline-flex;align-items:center;justify-content:center;border-radius:14px;padding:10px 18px;font-weight:700;box-shadow:0 6px 14px rgba(15,23,42,.06);color:#fff;font-size:14px}
     .gbtn-calc{background:linear-gradient(90deg,#0ea5e9,#2563eb)}
     .gbtn-reset{background:linear-gradient(90deg,#10b981,#0d9488)}
-    .gbtn-ghost{background:linear-gradient(90deg,#e5e7eb,#f1f5f9);color:#0f172a}
+    .gbtn-ghost{background:linear-gradient(90deg,#e2e7eb,#f1f5f9);color:#0f172a}
     #medcalc .mc-card{border:1px solid #e2e8f0;background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%);border-radius:14px}
     .pill{display:inline-flex;align-items:center;border-radius:999px;padding:3px 9px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fff}
     .pill-indigo{background:#4f46e5}
     .pill-emerald{background:#059669}
 
-    /* 세대/의료기관 2열 고정 + 타이틀을 위로(배지 → 제목 → 셀렉트) */
+    /* 세대/의료기관 2열 고정 + 타이틀 위(배지 → 제목 → 셀렉트) */
     #medcalc .selector-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
     #medcalc .selector-box{display:flex;flex-direction:column;gap:6px}
     #medcalc .selector-badge{display:inline-flex}
@@ -120,6 +131,7 @@
         <a class="btn btn-ghost" href="#loss">손해보험사</a>
         <a class="btn btn-ghost" href="#life">생명보험사</a>
         <a class="btn btn-ghost" href="#calc-panels">계산 도구</a>
+        <a class="btn btn-ghost" href="#medcalc">실손 계산기</a>
       </nav>
     </div>
   </header>
@@ -134,15 +146,25 @@
       전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · <span class="font-semibold">치과치료확인서</span> · 고객센터 · 인콜 모니터링 · 보험금청구 FAX — 광고 없이 깔끔하게.
     </p>
 
-    <!-- 검색 -->
-    <div class="mt-4 table p-4">
-      <label class="text-sm font-semibold">검색</label>
-      <div class="mt-2 grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
-        <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-2.5" placeholder="회사명·키워드 (예: 삼성화재, 고객센터, PDF)">
-        <button id="clear" class="btn btn-ghost" type="button">지우기</button>
-        <a class="btn btn-ghost" href="#loss">손해부터 보기</a>
+    <!-- 검색(가운데) + 빠른 이동 버튼 -->
+    <div class="hero-search">
+      <div class="search-card">
+        <div class="search-title">검색</div>
+        <div class="grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
+          <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-2.5" placeholder="회사명·키워드 (예: 삼성, 고객센터, PDF)">
+          <button id="clear" class="btn btn-ghost" type="button">지우기</button>
+          <a class="btn btn-ghost" href="#loss">손해부터 보기</a>
+        </div>
+        <div class="mt-2 text-xs text-slate-600">단축키: <span class="chip">/</span> 검색 포커스, <span class="chip">Esc</span> 지우기</div>
       </div>
-      <div class="mt-2 text-xs text-slate-600">단축키: <span class="chip">/</span> 검색 포커스, <span class="chip">Esc</span> 지우기</div>
+
+      <!-- 빠른 이동 CTA 4개 -->
+      <div class="quick-ctas">
+        <a href="#loss" class="cta cta-primary">손해보험사</a>
+        <a href="#life" class="cta cta-primary">생명보험사</a>
+        <a href="#calc-panels" class="cta cta-ghost">계산 도구</a>
+        <a href="#medcalc" class="cta cta-emerald">실손 계산기</a>
+      </div>
     </div>
   </section>
 
@@ -524,7 +546,6 @@
     const presets = {
       '4th-basic':    { label: '4세대(현행)', coveredRate: 0.8, nonCoveredRate: 0.7, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 15000, physioPerVisitCap: 0, annualRemain: 999999999 },
       '3rd-standard': { label: '3세대(표준)',  coveredRate: 0.9, nonCoveredRate: 0.8, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 20000, physioPerVisitCap: 0, annualRemain: 999999999 },
-      // 2세대: 전체금액 공제(최소공제 vs 20% 중 큰 값) — 계산 단계에서 처리
       '2nd-legacy':   { label: '2세대',       coveredRate: 0.9, nonCoveredRate: 1.0, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 0,     physioPerVisitCap: 0, annualRemain: 999999999 }
     };
 
