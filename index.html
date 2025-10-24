@@ -18,13 +18,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
 
   <!-- Tailwind(@apply) 빌드 CSS -->
-  <link rel="stylesheet" href="/assets/site.css?v=final-compact-10" />
+  <link rel="stylesheet" href="/assets/site.css?v=final-compact-11" />
 
   <!-- Hotfix -->
   <style id="hotfix">
     /* ===== 기본 ===== */
     body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-    .maxw{max-width:72rem;margin:0 auto}
+    .maxw{max-width:80rem;margin:0 auto} /* ← 전체 폭 살짝 넓힘(72→80rem) */
 
     /* ===== 표(2단 버튼 + 콤팩트 행) ===== */
     .table{background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden}
@@ -38,7 +38,7 @@
 
     .brand{display:flex;align-items:center;gap:8px;min-height:24px}
     .logo{max-height:20px !important;width:auto !important;object-fit:contain !important;background:transparent !important;border:0 !important;padding:0 !important;box-shadow:none !important}
-    /* 회사명은 화면 비표시(검색용 유지) */
+    /* 회사명 화면 비표시(검색용 유지) */
     .name{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;overflow:hidden !important;clip:rect(1px,1px,1px,1px) !important;white-space:nowrap !important}
 
     .btn{min-height:26px;padding:4px 8px;font-size:11px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none;white-space:nowrap}
@@ -50,7 +50,7 @@
     .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:4px 10px}
     .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:4px 10px}
     .btn-call{border-color:#cbd5e1;background:#fff}
-    .btn-call .num{font-weight:800;margin-left:6px} /* ← 전화번호 앞 한 칸 띄움 */
+    .btn-call .num{font-weight:800;margin-left:6px} /* 번호 앞 한 칸 */
 
     .row .stack{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
     .row .grid-top,.row .grid-bottom{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
@@ -74,13 +74,14 @@
     #age .calc-card{border:1px solid #c7b7ff;border-radius:12px;background:#fff}
     #age .display-num{font-size:28px;font-weight:900}
     #age .card{border:1px solid #e2e8f0;border-radius:10px;padding:10px;background:#fff}
-    /* DOB 입력 + 버튼(아래, 중앙정렬) */
+
+    /* DOB 입력 + 버튼(아래, 시각적 중앙/높이 맞춤 40px) */
     #age-form{display:block}
-    #age-form .dob-wrap{display:flex;gap:8px;align-items:center;margin-top:6px}
-    #age-form input{height:36px;border-radius:10px;padding:0 10px;text-align:center;border:1px solid #cbd5e1;font-size:14px}
-    #dobY{width:110px} #dobM,#dobD{width:68px}
-    #age-form .age-actions{display:flex;gap:8px;justify-content:center;margin-top:10px}
-    #age-form .key{min-width:96px;height:36px;line-height:34px;border-radius:10px;border:1px solid #cbd5e1;background:#fff}
+    #age-form .dob-wrap{display:flex;gap:8px;align-items:center;margin-top:6px;justify-content:center}
+    #age-form input{height:40px;border-radius:10px;padding:0 12px;text-align:center;border:1px solid #cbd5e1;font-size:14px}
+    #dobY{width:120px} #dobM,#dobD{width:72px}
+    #age-form .age-actions{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:10px}
+    #age-form .key{min-width:104px;height:40px;line-height:40px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;text-align:center}
     #age-form .key-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
     #age-form .key-primary:hover{background:#6d28d9}
 
@@ -93,11 +94,12 @@
     .pill{display:inline-flex;align-items:center;border-radius:999px;padding:3px 9px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fff}
     .pill-indigo{background:#4f46e5}
     .pill-emerald{background:#059669}
-    /* 세대/의료기관 2열 고정 + 컴팩트 */
-    #medcalc .selector-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:end}
+
+    /* 세대/의료기관 2열 고정 + 타이틀을 위로(배지 → 제목 → 셀렉트) */
+    #medcalc .selector-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
     #medcalc .selector-box{display:flex;flex-direction:column;gap:6px}
-    #medcalc .selector-title{display:flex;align-items:center;gap:10px}
-    #medcalc .selector-title h4{margin:0;font-size:16px;font-weight:800;color:#0f172a}
+    #medcalc .selector-badge{display:inline-flex}
+    #medcalc .selector-heading{margin:0;font-size:16px;font-weight:800;color:#0f172a}
     #medcalc .mc-select{width:100%;border-radius:12px;border:1px solid #cbd5e1;padding:10px 12px;font-size:15px}
 
     /* ===== 컴팩트 모드(전체 축소) ===== */
@@ -198,7 +200,7 @@
 
                 <!-- 입력 + 버튼(아래 중앙) -->
                 <form id="age-form">
-                  <label class="text-sm font-semibold">생년월일</label>
+                  <label class="text-sm font-semibold text-center block">생년월일</label>
                   <div class="dob-wrap">
                     <input id="dobY" inputmode="numeric" maxlength="4" placeholder="연도(YYYY)" />
                     <span>–</span>
@@ -236,13 +238,11 @@
 
           <div class="panel-card">
             <section class="bg-white rounded-2xl shadow p-5 h-full mc-card">
-              <!-- 세대/의료기관: 같은 줄 2열 -->
+              <!-- 세대/의료기관: 같은 줄 2열 (배지→제목→셀렉트 순서) -->
               <div class="selector-row">
                 <div class="selector-box">
-                  <div class="selector-title">
-                    <span class="pill pill-indigo">세대 선택</span>
-                    <h4 id="currentLabel">현재 선택: <span class="text-indigo-700">4세대(현행)</span></h4>
-                  </div>
+                  <span class="selector-badge pill pill-indigo">세대 선택</span>
+                  <h4 class="selector-heading" id="currentLabel">현재 선택: <span class="text-indigo-700">4세대(현행)</span></h4>
                   <select id="genSelect" class="mc-select">
                     <option value="4th-basic" selected>4세대(현행)</option>
                     <option value="3rd-standard">3세대(표준)</option>
@@ -250,10 +250,8 @@
                   </select>
                 </div>
                 <div class="selector-box">
-                  <div class="selector-title">
-                    <span class="pill pill-emerald">의료기관 유형</span>
-                    <h4>급여 공제 자동 적용</h4>
-                  </div>
+                  <span class="selector-badge pill pill-emerald">의료기관 유형</span>
+                  <h4 class="selector-heading">급여 공제 자동 적용</h4>
                   <select id="facilitySelect" class="mc-select">
                     <option value="clinic" selected>의원</option>
                     <option value="hospital">병원</option>
