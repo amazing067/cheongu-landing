@@ -190,26 +190,7 @@ footer > .maxw,
   width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.92);
   box-shadow:0 0 0 2px rgba(255,255,255,.18) inset;
 }
-/* === 보험나이 계산기: 버튼을 입력칸과 같은 줄로 (>=640px) === */
-#age-form{display:grid; gap:10px;}
-#age-form label{ text-align:center; }
-
-@media (min-width:640px){
-  /* 1행: 라벨 / 2행: 입력칸 + 버튼들 */
-  #age-form{
-    grid-template-columns: auto auto;
-    grid-template-rows: auto auto;
-    align-items:center;
-    justify-content:center;
-  }
-  #age-form label{ grid-column: 1 / -1; }           /* 라벨은 전체 너비 */
-  #age-form .dob-wrap{ grid-column: 1 / 2; }        /* 왼쪽: 생년월일 입력칸 */
-  #age-form .age-actions{
-    grid-column: 2 / 3;                              /* 오른쪽: 버튼 묶음 */
-    display:flex; gap:10px; margin-top:0;            /* 위로 끌어올림 */
-    justify-content:flex-start; align-items:center;
-  }
-}
+    
 /* === 실손 계산기 콤팩트 업그레이드 === */
 #medcalc .mc-card{
   padding:14px; border-radius:12px;                 /* 카드 패딩/라운드 축소 */
