@@ -57,6 +57,15 @@
   .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:4px 10px}
   .btn-call{border-color:#cbd5e1;background:#fff}
   .btn-call .num{font-weight:800; margin-left:6px;}
+  /* 표(행 높이 일정 + 버튼 1줄 고정) */
+.row{min-height:48px;}             /* 행 최소 높이 */
+.row .grid{
+  flex-wrap:nowrap;                /* 줄바꿈 금지 → 1줄 유지 */
+  overflow-x:auto;                 /* 넘치면 가로 스크롤 */
+  scrollbar-width:none;
+}
+.row .grid::-webkit-scrollbar{display:none;}
+.btn{white-space:nowrap;}          /* 버튼 내부 텍스트 줄바꿈 방지 */
   .chip{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
 
   .section-title{font-size:28px;font-weight:900;letter-spacing:-.01em}
@@ -75,11 +84,38 @@
   #age .card{border:1px solid #e2e8f0;border-radius:10px;padding:12px;background:#fff}
 
   /* 실손 계산기(버튼 스타일) */
-  .gbtn{display:inline-flex;align-items:center;justify-content:center;border-radius:16px;padding:12px 28px;font-weight:700;box-shadow:0 6px 14px rgba(15,23,42,.06);color:#fff}
+  .gbtn{display:inline-flex;align-items:center;justify-content:center;border-radius:14px;padding:12px 28px;font-weight:700;box-shadow:0 6px 14px rgba(15,23,42,.06);color:#fff}
   .gbtn-calc{background:linear-gradient(90deg,#0ea5e9,#2563eb)}
   .gbtn-reset{background:linear-gradient(90deg,#10b981,#0d9488)}
   .gbtn-ghost{background:linear-gradient(90deg,#e5e7eb,#f1f5f9);color:#0f172a}
   #medcalc section{border-radius:16px;box-shadow:0 8px 20px rgba(2,6,23,.06)}
+  /* 실손 카드 꾸밈 */
+#medcalc .mc-card{
+  border:1px solid #e2e8f0;       /* 테두리 */
+  background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%); /* 은은한 배경 */
+}
+
+/* 2열 그리드 간격/디바이더, 동일높이(이미 있다면 유지) */
+#calc-grid{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(380px,1fr)) !important;
+  gap:28px !important;
+  align-items:stretch !important;
+}
+@media (min-width:1024px){
+  #calc-grid{position:relative;}
+  #calc-grid::before{
+    content:"";position:absolute;top:0;bottom:0;left:50%;
+    width:1px;transform:translateX(-.5px);
+    background:linear-gradient(180deg,rgba(148,163,184,0),rgba(148,163,184,.35),rgba(148,163,184,0));
+    pointer-events:none;
+  }
+}
+/* 패널 래퍼 */
+.panel{display:flex;flex-direction:column;min-height:100%;}
+.panel-card{flex:1;}
+.panel .section-head{margin-top:0 !important;margin-bottom:10px !important}
+
   #currentLabel{font-weight:800}
   .pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fff}
   .pill-indigo{background:#4f46e5}
@@ -253,7 +289,7 @@
       </div>
 
       <div class="panel-card">
-        <section class="bg-white rounded-2xl shadow p-6 h-full">
+    <section class="bg-white rounded-2xl shadow p-5 h-full mc-card">
           <!-- 상단 컨트롤: 같은 줄 정렬 -->
           <div class="flex flex-col md:flex-row md:items-end md:gap-6 gap-4">
             <!-- 세대 선택 -->
@@ -536,18 +572,35 @@
       const ms = r.half - asof;
       halfLeft.textContent = (ms<=0) ? '이미 상령일 지남' : `${fmt(r.half)} (약 ${Math.floor(ms/86400000)}일 ${Math.floor((ms%86400000)/3600000)}시간 남음)`;
       badge.textContent = `${r.ins}세`;
-    }
+      syncPanelHeights();              // ← 추가: 오른쪽 패널 높이 맞춤
+}
+
 
     if (form) {
       form.addEventListener('submit', (e)=>{ e.preventDefault(); renderAge(); });
-      resetBtn?.addEventListener('click', ()=>{ yEl.value=''; mEl.value=''; dEl.value=''; ageNum.textContent='--'; intlAgeEl.textContent='–'; ruleText.textContent='생년월일을 입력하세요'; halfLeft.textContent='–'; badge.textContent='–'; yEl.focus(); });
-      copyBtn?.addEventListener('click', async ()=>{ const dobStr = getDobString() || '—'; const txt=`보험나이: ${ageNum.textContent}세 (만나이 ${intlAgeEl.textContent}세, 기준일 ${fmt(new Date())}, 생년월일 ${dobStr})`; try{ await navigator.clipboard.writeText(txt); copyBtn.textContent='복사됨'; setTimeout(()=>copyBtn.textContent='결과 복사',1200);}catch{} });
-      linkBtn?.addEventListener('click', async ()=>{ const u=new URL(location.href); const dobStr=getDobString(); if(dobStr) u.searchParams.set('dob', dobStr); const url=u.toString(); try{ await navigator.clipboard.writeText(url); linkBtn.textContent='링크 복사됨'; setTimeout(()=>linkBtn.textContent='링크 공유',1200);}catch{ alert(url); } });
-      (function(){ const p=new URL(location.href).searchParams.get('dob'); if(p && /^\d{4}-\d{2}-\d{2}$/.test(p)){ const [yy,mm,dd]=p.split('-'); yEl.value=yy; mEl.value=mm; dEl.value=dd; renderAge(); }})();
-      yEl?.focus();
-    }
+      resetBtn?.addEventListener('click', ()=>{
+      yEl.value=''; mEl.value=''; dEl.value='';
+      ageNum.textContent='--'; intlAgeEl.textContent='–';
+      ruleText.textContent='생년월일을 입력하세요'; halfLeft.textContent='–';
+      badge.textContent='–'; yEl.focus();
+      syncPanelHeights();              // ← 추가: 리셋 후에도 높이 재동기화
+});
+
 
     $("#y").textContent = new Date().getFullYear();
+    // ===== 좌(보험나이) 높이에 우(실손) 맞추기 =====
+function syncPanelHeights(){
+  const left = document.querySelector('#age .calc-card');
+  const right = document.querySelector('#medcalc .mc-card');
+  if(!left || !right) return;
+  // 리셋 후 다시 지정(반응형/입력 변화 대응)
+  right.style.minHeight = '';
+  const h = Math.ceil(left.getBoundingClientRect().height);
+  right.style.minHeight = h + 'px';
+}
+window.addEventListener('load', syncPanelHeights);
+window.addEventListener('resize', ()=>{ clearTimeout(window.__sync_t); window.__sync_t=setTimeout(syncPanelHeights, 120); });
+
 
     // ===== 실손 계산기 로직 =====
     const KRW = new Intl.NumberFormat('ko-KR');
