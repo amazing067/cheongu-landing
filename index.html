@@ -56,10 +56,10 @@
   display:grid;
   grid-template-columns:minmax(200px,1fr) minmax(520px,2fr);
   align-items:center;
-  gap:8px;
-  padding:8px 10px;
+  gap:6px;
+  padding:6px 8px;
   border-top:1px solid rgba(100,116,139,.22);
-  min-height:64px;
+  min-height:50px;
 }
 .row:first-child{border-top-width:0}
 
@@ -108,7 +108,7 @@
 @container carrierlist (min-width: 1100px){
   .row{
     grid-template-columns: 260px 1fr;
-    min-height:58px;
+    min-height:50px;
   }
   .row .stack{
     flex-direction:row;
@@ -121,11 +121,17 @@
   .row .grid-bottom{
     display:contents;
   }
-
   /* 넓은 화면에서 로고 살짝 키우기(옵션) */
   .logo{ max-height: 32px !important; }
 }
-
+/* ← 새로 추가: 컨테이너 쿼리 미지원 브라우저 폴백 */
+  .table.cw-wide .row{ grid-template-columns:260px 1fr; min-height:50px; }
+  .table.cw-wide .row .stack{
+    flex-direction:row; align-items:center; justify-content:flex-end; gap:8px; flex-wrap:wrap;
+  }
+  .table.cw-wide .row .grid-top,
+  .table.cw-wide .row .grid-bottom{ display:contents; }
+  .table.cw-wide .logo{ max-height:32px !important; }
   .chip{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
 
   .section-title{font-size:28px;font-weight:900;letter-spacing:-.01em}
@@ -579,6 +585,9 @@ img[alt*="AIG손해보험"]{ max-height:32px !important; }
       if (lifeCount) lifeCount.textContent = `${life.length}개`;
 
       filter();
+      // 데이터가 표에 렌더된 뒤 폭 감지 시작(폴백)
+      attachWideMode(document.getElementById('loss-list'));
+      attachWideMode(document.getElementById('life-list'));
     }
 
     function filter() {
@@ -834,6 +843,18 @@ if (annualRemain>0 && annualRemain<999999999) explain.push(`연간 잔여 한도
       applyGen('4th-basic'); applyFacility('clinic');
       byId('txtPayout').textContent='0원'; byId('listExplain').innerHTML='';
     });
+    // ── 폴백: 테이블 폭을 감지해 .cw-wide 클래스를 토글 ──
+function attachWideMode(tableEl, threshold=1100){
+  if (!tableEl) return;
+  const ro = new ResizeObserver(entries=>{
+    for (const e of entries){
+      const w = e.contentBoxSize?.[0]?.inlineSize ?? e.contentRect.width;
+      if (w >= threshold) tableEl.classList.add('cw-wide');
+      else tableEl.classList.remove('cw-wide');
+    }
+  });
+  ro.observe(tableEl);
+}
   })();
   </script>
 </body>
