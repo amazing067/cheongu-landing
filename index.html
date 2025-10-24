@@ -49,6 +49,7 @@
   width:100%;
   max-width: 1200px;      /* ✅ 큰 화면에서 너무 넓어지지 않도록 */
   margin:0 auto;          /* ✅ 표 자체를 항상 가운데 정렬 */
+  container-type: inline-size;  /* ✅ 컨테이너 쿼리용 선언 추가 */
 }
 .row{
   display:grid;
@@ -66,24 +67,6 @@
   .table{ max-width: 1280px; }
 }
 
-/* 아주 넓은 화면에서 “두 줄 버튼”을 한 줄 배치 — [추가] */
-@media (min-width:1440px){
-  .row{
-    grid-template-columns: 260px 1fr;  /* 로고/버튼 영역 비율 조정 */
-    min-height:58px;
-  }
-  .row .stack{
-    display:flex;
-    flex-direction:row;
-    align-items:center;
-    justify-content:flex-end;
-    gap:8px;
-    flex-wrap:wrap; /* 버튼 많을 땐 자연스럽게 줄바꿈 */
-  }
-  /* grid-top/bottom의 래퍼를 없애서 한 줄로 자연스럽게 붙이기 */
-  .row .grid-top,
-  .row .grid-bottom{ display:contents; }
-}
   /* === 로고 크기/클리핑 보정 (교체본) === */
 .brand{
   display:flex; align-items:center; gap:8px;
@@ -119,6 +102,31 @@
 
   .row .stack{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
   .row .grid-top,.row .grid-bottom{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  /* === 컨테이너 폭 기준: 표가 넓어지면 한 줄로 전환 === */
+/* .table 에 container-type: inline-size; 가 선언돼 있어야 동작합니다! */
+@container (min-width: 1000px){
+  /* 로고 영역을 조금 넓히고 버튼 영역은 유동 */
+  .row{
+    grid-template-columns: 260px 1fr;
+    min-height:58px;
+  }
+  /* 두 줄(위/아래)을 한 줄처럼 이어 붙임 */
+  .row .stack{
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-end;
+    gap:8px;
+    flex-wrap:wrap; /* 버튼 많으면 자연 줄바꿈 */
+  }
+  .row .grid-top,
+  .row .grid-bottom{
+    display:contents; /* 래퍼 제거 효과 */
+  }
+
+  /* 넓은 화면에서 로고 살짝 키우기(옵션) */
+  .logo{ max-height: 28px; }
+}
+
   .chip{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
 
   .section-title{font-size:28px;font-weight:900;letter-spacing:-.01em}
