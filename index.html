@@ -104,7 +104,7 @@
   .row .grid-top,.row .grid-bottom{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
   /* === 컨테이너 폭 기준: 표가 넓어지면 한 줄로 전환 === */
 /* .table 에 container-type: inline-size; 가 선언돼 있어야 동작합니다! */
-@container (min-width: 1000px){
+@container (min-width: 1100px){
   /* 로고 영역을 조금 넓히고 버튼 영역은 유동 */
   .row{
     grid-template-columns: 260px 1fr;
@@ -124,7 +124,7 @@
   }
 
   /* 넓은 화면에서 로고 살짝 키우기(옵션) */
-  .logo{ max-height: 28px; }
+  .logo{ max-height: 32px; }
 }
 
   .chip{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
