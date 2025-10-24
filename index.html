@@ -191,6 +191,28 @@
   .qbtn-age {background:linear-gradient(135deg,#a855f7 0%,#7c3aed 100%);}  /* 보험나이 */
   .qbtn-med {background:linear-gradient(135deg,#06b6d4 0%,#0ea5e9 100%);}  /* 실손 */
   .qbtn .dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 0 0 2px rgba(255,255,255,.18) inset}
+/* === 레이아웃 컨테이너 중앙/폭 한도 (강력 추천) === */
+header > .maxw,
+section > .maxw,
+main.maxw,
+footer > .maxw,
+.maxw{
+  max-width: 88rem;     /* ≈ 1408px. 취향에 따라 72~96rem로 조절 OK */
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+@media (min-width: 1600px){
+  header > .maxw,
+  section > .maxw,
+  main.maxw,
+  footer > .maxw,
+  .maxw{ max-width: 92rem; } /* 초광폭에서 살짝 더 풀어줌(≈1472px) */
+}
+
 </style>
 
 </head>
