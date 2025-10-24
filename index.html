@@ -815,7 +815,7 @@ if (nonPct !== null) {
   const pctKRW = Math.floor(nonCovAmt * nonPct);
   explain.push(`비급여 공제: 고정 ${fmtKRW(nonFixed)}원 vs ${Math.round(nonPct*100)}% ${fmtKRW(pctKRW)}원 → 적용 ${fmtKRW(appliedNonDed)}원`);
 }
-explain.push(`비급여 보상: ${fmtKRW(nonPay)}원 (기준 ${fmtKRW(nonBase)}원, 3·4세대는 비율 미적용)`);
+explain.push(`비급여 보상: ${fmtKRW(nonPay)}원 (기준 ${fmtKRW(nonBase)}원)`);
 explain.push(`적용 공제: 급여 ${fmtKRW(dedCov)}원 / 비급여 ${fmtKRW(appliedNonDed)}원`);
 if (physioCap>0) explain.push(`도수·주사·체외 1회 한도: 최대 ${fmtKRW(physioCap)}원`);
 if (perCap>0)    explain.push(`1회 한도: 최대 ${fmtKRW(perCap)}원`);
