@@ -40,18 +40,50 @@
   .search-card{width:100%;max-width:640px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px}
   .search-title{font-size:13px;font-weight:700;margin-bottom:6px}
 
-  /* ===== 표(2단 버튼 + 콤팩트 행) ===== */
-  .table{
-    background:#fff;border:1px solid #e2e8f0;border-radius:8px;
-    overflow:hidden;width:100%;margin:0 auto;
-  }
-  .row{
-    display:grid;grid-template-columns:minmax(200px,1fr) minmax(520px,2fr);
-    align-items:center;gap:8px;padding:8px 10px;
-    border-top:1px solid rgba(100,116,139,.22);min-height:64px;
-  }
-  .row:first-child{border-top-width:0}
+/* 표(2단 버튼 + 콤팩트 행) — [교체본] */
+.table{
+  background:#fff;
+  border:1px solid #e2e8f0;
+  border-radius:8px;
+  overflow:hidden;
+  width:100%;
+  max-width: 1200px;      /* ✅ 큰 화면에서 너무 넓어지지 않도록 */
+  margin:0 auto;          /* ✅ 표 자체를 항상 가운데 정렬 */
+}
+.row{
+  display:grid;
+  grid-template-columns:minmax(200px,1fr) minmax(520px,2fr);
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-top:1px solid rgba(100,116,139,.22);
+  min-height:64px;
+}
+.row:first-child{border-top-width:0}
 
+/* 초광폭에서(>1600px) 표 폭을 조금 더 허용 — [추가] */
+@media (min-width:1600px){
+  .table{ max-width: 1280px; }
+}
+
+/* 아주 넓은 화면에서 “두 줄 버튼”을 한 줄 배치 — [추가] */
+@media (min-width:1440px){
+  .row{
+    grid-template-columns: 260px 1fr;  /* 로고/버튼 영역 비율 조정 */
+    min-height:58px;
+  }
+  .row .stack{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-end;
+    gap:8px;
+    flex-wrap:wrap; /* 버튼 많을 땐 자연스럽게 줄바꿈 */
+  }
+  /* grid-top/bottom의 래퍼를 없애서 한 줄로 자연스럽게 붙이기 */
+  .row .grid-top,
+  .row .grid-bottom{ display:contents; }
+}
   .brand{display:flex;align-items:center;gap:8px;min-height:24px}
   .logo{max-height:20px !important;width:auto !important;object-fit:contain !important;background:transparent !important;border:0 !important;padding:0 !important;box-shadow:none !important}
   /* 회사명 화면 비표시(검색용 유지) */
@@ -612,16 +644,17 @@
     const dedSummary = byId('dedSummary');
 
     function updateDedSummary(){
-      const key = genSelect.value;
-      if(key === '2nd-legacy'){
-        dedSummary.textContent = '공제(1회): 전체금액 기준 → 최소공제(의원 10,000원 / 병원 15,000원 / 종합·상급 20,000원)와 전체금액의 20% 중 큰 금액 1회 공제';
-      } else {
-        const cov = toNumber(inputs.dedCov.value);
-        const non = toNumber(inputs.dedNon.value);
-        dedSummary.textContent = `공제(1회): 급여 ${fmtKRW(cov)}원 / 비급여 ${fmtKRW(non)}원`;
-      }
-    }
-
+  const key = genSelect.value;
+  if(key === '2nd-legacy'){
+    dedSummary.textContent = '공제(1회): 전체금액 기준 → 최소공제(의원 10,000원 / 병원 15,000원 / 종합·상급 20,000원)와 전체금액의 20% 중 큰 금액 1회 공제';
+  } else if (key === '3rd-standard'){
+    const cov = toNumber(inputs.dedCov.value);
+    dedSummary.textContent = `공제(1회): 급여 ${fmtKRW(cov)}원 / 비급여 (20,000원 vs 비급여의 20%) 중 큰 금액`;
+  } else if (key === '4th-basic'){
+    const cov = toNumber(inputs.dedCov.value);
+    dedSummary.textContent = `공제(1회): 급여 ${fmtKRW(cov)}원 / 비급여 (30,000원 vs 비급여의 30%) 중 큰 금액`;
+  }
+}
     function applyGen(key){
       const p = presets[key]; if(!p) return;
       inputs.covRate.value = Math.round((p.coveredRate||0)*100);
