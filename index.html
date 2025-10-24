@@ -48,13 +48,25 @@
     .cta:hover{filter:brightness(1.02)}
 
     /* ===== 표(2단 버튼 + 콤팩트 행) ===== */
-    .table{background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden,width:100%}
-    .row{
-      display:grid;grid-template-columns:minmax(200px,1fr) auto;
-      align-items:center;gap:8px;
-      padding:8px 10px;border-top:1px solid rgba(100,116,139,.22);
-      min-height:64px;
-    }
+.table{
+  background:#fff;
+  border:1px solid #e2e8f0;
+  border-radius:8px;
+  overflow:hidden;
+  width:100%;
+  margin:0 auto;   /* 컨테이너보다 좁아질 때도 중앙 정렬 */
+}
+
+.row{
+  display:grid;
+  grid-template-columns:minmax(200px,1fr) minmax(520px,2fr); /* 2열도 넓게 펼쳐지도록 */
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-top:1px solid rgba(100,116,139,.22);
+  min-height:64px;
+}
+
     .row:first-child{border-top-width:0}
 
     .brand{display:flex;align-items:center;gap:8px;min-height:24px}
