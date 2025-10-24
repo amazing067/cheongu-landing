@@ -620,7 +620,7 @@
     };
 
     const presets = {
-      '4th-basic':    { label: '4세대(현행)', coveredRate: 0.8, nonCoveredRate: 0.7, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 15000, physioPerVisitCap: 0, annualRemain: 999999999 },
+      '4th-basic':    { label: '4세대(현행)', coveredRate: 0.8, nonCoveredRate: 0.7, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 30000, physioPerVisitCap: 0, annualRemain: 999999999 },
       '3rd-standard': { label: '3세대(표준)',  coveredRate: 0.9, nonCoveredRate: 0.8, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 20000, physioPerVisitCap: 0, annualRemain: 999999999 },
       '2nd-legacy':   { label: '2세대',       coveredRate: 0.9, nonCoveredRate: 1.0, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 0,     physioPerVisitCap: 0, annualRemain: 999999999 }
     };
@@ -731,24 +731,48 @@
         if(perCap>0)    explain.push(`1회 한도: 최대 ${fmtKRW(perCap)}원`);
         if(annualRemain>0 && annualRemain<999999999) explain.push(`연간 잔여 한도: ${fmtKRW(annualRemain)}원`);
       } else {
-        const covBase = Math.max(0, coveredCo - dedCov);
-        const covPay  = covBase * covRate;
+        // ── 2세대가 아닌 경우(3·4세대) 비급여 공제 규칙 반영 ──
+const covBase = Math.max(0, coveredCo - dedCov);
+const covPay  = covBase * covRate;
 
-        const nonBase = Math.max(0, nonCovAmt - dedNon);
-        let   nonPay  = nonBase * nonRate;
-        if(physioCap>0) nonPay = Math.min(nonPay, physioCap);
+// 3세대/4세대 비급여 공제: 고정금액 vs 비급여 전체의 비율 중 큰 금액
+let appliedNonDed = dedNon;  // 기본값(고급설정에서 사용자가 바꿨을 수도 있으니 보존)
 
-        payout = covPay + nonPay;
-        if(perCap>0) payout = Math.min(payout, perCap);
-        payout = Math.min(payout, annualRemain);
+// 비율·고정 기준 계산(화면 설명용)
+let nonPct = null, nonFixed = null;
+if (key === '3rd-standard') {
+  nonPct = 0.20; nonFixed = 20000;
+  appliedNonDed = Math.max(nonFixed, Math.floor(nonCovAmt * nonPct));
+} else if (key === '4th-basic') {
+  nonPct = 0.30; nonFixed = 30000;
+  appliedNonDed = Math.max(nonFixed, Math.floor(nonCovAmt * nonPct));
+}
 
-        byId('txtPayout').textContent = fmtKRW(payout) + '원';
-        explain.push(`급여 보상: ${fmtKRW(covPay)}원 (기준 ${fmtKRW(covBase)}원 × ${Math.round(covRate*100)}%)`);
-        explain.push(`비급여 보상: ${fmtKRW(nonPay)}원 (기준 ${fmtKRW(nonBase)}원 × ${Math.round(nonRate*100)}%)`);
-        explain.push(`적용 공제: 급여 ${fmtKRW(dedCov)}원 / 비급여 ${fmtKRW(dedNon)}원`);
-        if(physioCap>0) explain.push(`도수·주사·체외 1회 한도: 최대 ${fmtKRW(physioCap)}원`);
-        if(perCap>0)    explain.push(`1회 한도: 최대 ${fmtKRW(perCap)}원`);
-        if(annualRemain>0 && annualRemain<999999999) explain.push(`연간 잔여 한도: ${fmtKRW(annualRemain)}원`);
+// 비급여 보상
+const nonBase = Math.max(0, nonCovAmt - appliedNonDed);
+let   nonPay  = nonBase * nonRate;
+if (physioCap > 0) nonPay = Math.min(nonPay, physioCap);
+
+// 합계 및 상한 적용
+payout = covPay + nonPay;
+if (perCap > 0) payout = Math.min(payout, perCap);
+payout = Math.min(payout, annualRemain);
+
+// 결과/설명
+byId('txtPayout').textContent = fmtKRW(payout) + '원';
+explain.push(`급여 보상: ${fmtKRW(covPay)}원 (기준 ${fmtKRW(covBase)}원 × ${Math.round(covRate*100)}%)`);
+
+if (nonPct !== null) {
+  const pctKRW = Math.floor(nonCovAmt * nonPct);
+  explain.push(`비급여 공제: 고정 ${fmtKRW(nonFixed)}원 vs ${Math.round(nonPct*100)}% ${fmtKRW(pctKRW)}원 → 적용 ${fmtKRW(appliedNonDed)}원`);
+}
+explain.push(`비급여 보상: ${fmtKRW(nonPay)}원 (기준 ${fmtKRW(nonBase)}원 × ${Math.round(nonRate*100)}%)`);
+explain.push(`적용 공제: 급여 ${fmtKRW(dedCov)}원 / 비급여 ${fmtKRW(appliedNonDed)}원`);
+if (physioCap>0) explain.push(`도수·주사·체외 1회 한도: 최대 ${fmtKRW(physioCap)}원`);
+if (perCap>0)    explain.push(`1회 한도: 최대 ${fmtKRW(perCap)}원`);
+if (annualRemain>0 && annualRemain<999999999) explain.push(`연간 잔여 한도: ${fmtKRW(annualRemain)}원`);
+
+
       }
 
       const ul = byId('listExplain'); ul.innerHTML = '';
