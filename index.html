@@ -117,6 +117,19 @@
     body.mode-compact .section-title{font-size:24px}
     body.mode-compact #age .display-num{font-size:24px}
     body.mode-compact .gbtn{padding:8px 14px;font-size:13px;border-radius:12px}
+    /* === 중앙 정렬 강제 + 초광폭 보정 (맨 끝에 추가) === */
+.maxw{ margin-left:auto !important; margin-right:auto !important; }
+@media (min-width:1600px){ .maxw{ max-width:88rem; } }
+
+/* === 빠른이동 버튼 스타일 & 색상 4종 === */
+.quick-nav{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.qbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.02em;color:#fff;text-decoration:none}
+.qbtn-loss{background:linear-gradient(90deg,#6366f1,#3b82f6)}     /* 손해보험사: 인디고-블루 */
+.qbtn-life{background:linear-gradient(90deg,#10b981,#059669)}     /* 생명보험사: 에메랄드 */
+.qbtn-age{background:linear-gradient(90deg,#a855f7,#7c3aed)}      /* 보험나이: 퍼플 */
+.qbtn-med{background:linear-gradient(90deg,#06b6d4,#0ea5e9)}      /* 실손계산기: 시안-스카이 */
+.qbtn:hover{filter:brightness(.96)}
+
   </style>
 </head>
 
@@ -130,7 +143,7 @@
       <nav class="ml-auto flex items-center gap-2">
         <a class="btn btn-ghost" href="#loss">손해보험사</a>
         <a class="btn btn-ghost" href="#life">생명보험사</a>
-        <a class="btn btn-ghost" href="#calc-panels">계산 도구</a>
+        <a class="btn btn-ghost" href="#calc-panels">보험나이 계산기</a>
         <a class="btn btn-ghost" href="#medcalc">실손 계산기</a>
       </nav>
     </div>
@@ -159,12 +172,12 @@
       </div>
 
       <!-- 빠른 이동 CTA 4개 -->
-      <div class="quick-ctas">
-        <a href="#loss" class="cta cta-primary">손해보험사</a>
-        <a href="#life" class="cta cta-primary">생명보험사</a>
-        <a href="#calc-panels" class="cta cta-ghost">계산 도구</a>
-        <a href="#medcalc" class="cta cta-emerald">실손 계산기</a>
-      </div>
+     <div class="quick-nav">
+       <a href="#loss" class="qbtn qbtn-loss">손해보험사</a>
+       <a href="#life" class="qbtn qbtn-life">생명보험사</a>
+       <a href="#age"  class="qbtn qbtn-age">보험나이 계산기</a>
+       <a href="#medcalc" class="qbtn qbtn-med">실손의료비 계산기</a>
+     </div>
     </div>
   </section>
 
