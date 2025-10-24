@@ -190,6 +190,55 @@ footer > .maxw,
   width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.92);
   box-shadow:0 0 0 2px rgba(255,255,255,.18) inset;
 }
+/* === 보험나이 계산기: 버튼을 입력칸과 같은 줄로 (>=640px) === */
+#age-form{display:grid; gap:10px;}
+#age-form label{ text-align:center; }
+
+@media (min-width:640px){
+  /* 1행: 라벨 / 2행: 입력칸 + 버튼들 */
+  #age-form{
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    align-items:center;
+    justify-content:center;
+  }
+  #age-form label{ grid-column: 1 / -1; }           /* 라벨은 전체 너비 */
+  #age-form .dob-wrap{ grid-column: 1 / 2; }        /* 왼쪽: 생년월일 입력칸 */
+  #age-form .age-actions{
+    grid-column: 2 / 3;                              /* 오른쪽: 버튼 묶음 */
+    display:flex; gap:10px; margin-top:0;            /* 위로 끌어올림 */
+    justify-content:flex-start; align-items:center;
+  }
+}
+/* === 실손 계산기 콤팩트 업그레이드 === */
+#medcalc .mc-card{
+  padding:14px; border-radius:12px;                 /* 카드 패딩/라운드 축소 */
+}
+#medcalc .selector-row{ gap:12px; }                  /* 상단 두 셀렉트 간 간격 축소 */
+#medcalc .selector-heading{ font-size:14px; }        /* 제목 살짝 작게 */
+#medcalc .mc-select{
+  padding:8px 10px; font-size:14px; height:38px;     /* 셀렉트 높이 축소 */
+}
+
+/* 입력 영역 전체 축소 */
+#medcalc input[type="text"],
+#medcalc input[type="number"]{
+  height:38px; padding:8px 10px; font-size:14px;
+}
+#medcalc .mc-card .grid{ gap:10px; }                 /* 필드 간격 축소 */
+#dedSummary{ margin-top:6px; }                       /* 공제 요약 간격 축소 */
+
+/* 버튼도 살짝 작게 */
+#medcalc .gbtn{ padding:8px 14px; font-size:13px; border-radius:12px; }
+#medcalc .mt-6{ margin-top:10px !important; }       /* 버튼 블록 위 여백 축소 */
+
+/* 결과 박스도 컴팩트하게 */
+#medcalc #boxResult{ padding:12px; border-radius:12px; }
+#medcalc #txtPayout{ font-size:1.75rem; }            /* 3xl → 약간 축소 */
+
+/* 버튼/인풋 높이 맞춰서 미세 정렬 */
+#age-form input{ height:38px; line-height:38px; }
+#age-form .key{ height:38px; line-height:38px; }
 
   </style>
 </head>
