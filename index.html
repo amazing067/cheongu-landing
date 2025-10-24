@@ -84,8 +84,25 @@
   .row .grid-top,
   .row .grid-bottom{ display:contents; }
 }
-  .brand{display:flex;align-items:center;gap:8px;min-height:24px}
-  .logo{max-height:20px !important;width:auto !important;object-fit:contain !important;background:transparent !important;border:0 !important;padding:0 !important;box-shadow:none !important}
+  /* === 로고 크기/클리핑 보정 (교체본) === */
+.brand{
+  display:flex; align-items:center; gap:8px;
+  min-height:30px;                  /* 24px → 30px: 로고 눌림 방지 */
+}
+.logo{
+  display:block !important;         /* inline 이미지 베이스라인 여백 제거 */
+  height:auto !important;
+  max-height:28px !important;       /* 20px → 28px (필요시 26~30px로 조정) */
+  width:auto !important;
+  object-fit:contain !important;
+  background:transparent !important;
+  border:0 !important; padding:0 !important; box-shadow:none !important;
+}
+/* 넓은 화면에서 살짝 더 키우기 (선택) */
+@media (min-width:1280px){
+  .logo{ max-height:30px !important; }
+}
+
   /* 회사명 화면 비표시(검색용 유지) */
   .name{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;overflow:hidden !important;clip:rect(1px,1px,1px,1px) !important;white-space:nowrap !important}
 
@@ -212,7 +229,7 @@ footer > .maxw,
   footer > .maxw,
   .maxw{ max-width: 92rem; } /* 초광폭에서 살짝 더 풀어줌(≈1472px) */
 }
-
+img[alt*="AIG손해보험"]{ max-height:32px !important; }
 </style>
 
 </head>
