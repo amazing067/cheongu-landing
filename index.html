@@ -117,18 +117,57 @@
     body.mode-compact .section-title{font-size:24px}
     body.mode-compact #age .display-num{font-size:24px}
     body.mode-compact .gbtn{padding:8px 14px;font-size:13px;border-radius:12px}
-    /* === 중앙 정렬 강제 + 초광폭 보정 (맨 끝에 추가) === */
-.maxw{ margin-left:auto !important; margin-right:auto !important; }
-@media (min-width:1600px){ .maxw{ max-width:88rem; } }
 
-/* === 빠른이동 버튼 스타일 & 색상 4종 === */
-.quick-nav{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.qbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.02em;color:#fff;text-decoration:none}
-.qbtn-loss{background:linear-gradient(90deg,#6366f1,#3b82f6)}     /* 손해보험사: 인디고-블루 */
-.qbtn-life{background:linear-gradient(90deg,#10b981,#059669)}     /* 생명보험사: 에메랄드 */
-.qbtn-age{background:linear-gradient(90deg,#a855f7,#7c3aed)}      /* 보험나이: 퍼플 */
-.qbtn-med{background:linear-gradient(90deg,#06b6d4,#0ea5e9)}      /* 실손계산기: 시안-스카이 */
-.qbtn:hover{filter:brightness(.96)}
+/* ========== 중앙 정렬(최종) + 초광폭 보정 + 좌우 패딩 ========== */
+/* 헤더/섹션/메인/푸터 안의 .maxw 전부를 한 방에 커버(우선순위↑) */
+header > .maxw,
+section > .maxw,
+main.maxw,
+footer > .maxw,
+.maxw{
+  max-width: 88rem;
+  width: 100%;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+@media (min-width:1600px){
+  header > .maxw,
+  section > .maxw,
+  main.maxw,
+  footer > .maxw,
+  .maxw{ max-width: 92rem; } /* 필요시 90~96rem 범위에서 기호대로 */
+}
+/* ========== 빠른 이동 버튼: 아이콘/그림자/호버/포커스 포함 ========== */
+.quick-nav{
+  margin-top:16px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+}
+.qbtn{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:10px 16px; border-radius:999px;
+  font-size:13.5px; font-weight:900; letter-spacing:.02em;
+  color:#fff; text-decoration:none; line-height:1;
+  box-shadow:0 6px 18px rgba(2,6,23,.10), inset 0 0 0 1px rgba(255,255,255,.12);
+  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+.qbtn:hover{ transform:translateY(-1px); filter:brightness(.98);
+  box-shadow:0 10px 22px rgba(2,6,23,.14), inset 0 0 0 1px rgba(255,255,255,.16);
+}
+.qbtn:focus-visible{ outline:3px solid rgba(59,130,246,.55); outline-offset:2px; }
+
+/* 4가지 서로 다른 컬러 */
+.qbtn-loss{background:linear-gradient(135deg,#4f46e5 0%,#3b82f6 100%);}  /* 손해 */
+.qbtn-life{background:linear-gradient(135deg,#10b981 0%,#059669 100%);}  /* 생명 */
+.qbtn-age {background:linear-gradient(135deg,#a855f7 0%,#7c3aed 100%);}  /* 보험나이 */
+.qbtn-med {background:linear-gradient(135deg,#06b6d4 0%,#0ea5e9 100%);}  /* 실손 */
+
+/* 텍스트 앞 작은 아이콘 점 */
+.qbtn .dot{
+  width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.92);
+  box-shadow:0 0 0 2px rgba(255,255,255,.18) inset;
+}
 
   </style>
 </head>
@@ -173,11 +212,12 @@
 
       <!-- 빠른 이동 CTA 4개 -->
      <div class="quick-nav">
-       <a href="#loss" class="qbtn qbtn-loss">손해보험사</a>
-       <a href="#life" class="qbtn qbtn-life">생명보험사</a>
-       <a href="#age"  class="qbtn qbtn-age">보험나이 계산기</a>
-       <a href="#medcalc" class="qbtn qbtn-med">실손의료비 계산기</a>
+       <a href="#loss"    class="qbtn qbtn-loss"><span class="dot"></span>손해보험사</a>
+       <a href="#life"    class="qbtn qbtn-life"><span class="dot"></span>생명보험사</a>
+       <a href="#age"     class="qbtn qbtn-age"><span class="dot"></span>보험나이 계산기</a>
+       <a href="#medcalc" class="qbtn qbtn-med"><span class="dot"></span>실손의료비 계산기</a>
      </div>
+
     </div>
   </section>
 
