@@ -278,6 +278,41 @@ footer > .maxw,
   font-feature-settings: 'tnum';
   min-width: auto !important;    /* 행 정렬용 고정폭 제거(센터링을 위해) */
 }
+/* ====== 전화 버튼 3종 고정폭 + 간격/폰트 보정 ====== */
+
+/* 공통 버튼(폰트/패딩 살짝 축소 → 줄바꿈 예방) */
+.btn{ font-size:10px; padding:2px 6px; }              /* 10.5px→10px, 3x6→2x6 */
+.row .grid-bottom{ gap:4px; }                          /* 6px→4px */
+
+/* 숫자칸: 기본 고정폭 축소(모든 전화 버튼 공통) */
+.btn-call .num{
+  min-width: 9ch;                                      /* 12ch→9ch */
+  font-weight: 600;                                    /* 너무 진한 느낌 완화 */
+}
+
+/* 고객센터/인콜은 중앙정렬 + 내용만큼만 */
+.btn-call--center{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:2px; padding:2px 8px; min-width:auto;            /* 고정폭 제거 */
+}
+
+/* === 3종 전화 버튼의 좌우 ‘총폭’을 고정해 한 줄 유지 === */
+:root{
+  --w-cs:   168px;   /* 고객센터 */
+  --w-mon:  188px;   /* 인콜 모니터링 */
+  --w-fax:  212px;   /* 보험금청구 FAX (가장 김) */
+}
+
+/* 라벨+숫자를 이 폭 안에서 자동 줄맞춤 */
+.btn-call--cs  { width: var(--w-cs); }
+.btn-call--mon { width: var(--w-mon); }
+.btn-call--fax { width: var(--w-fax); }
+
+/* 버튼 안에서 중앙 정렬이 흔들리지 않도록 */
+.btn-call--cs, .btn-call--mon, .btn-call--fax{
+  display:inline-flex; align-items:center; justify-content:center;
+  white-space:nowrap;
+}
 
 </style>
 
@@ -577,12 +612,21 @@ footer > .maxw,
       return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
     }
 
-    // 전화 버튼(고객센터/인콜은 전용 스타일 부여, FAX는 기존 그대로)
+    // 전화 버튼(라벨에 따라 고정폭 클래스를 자동 부여)
 function phoneBtn(label, number) {
   if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
   const tel = number.replace(/[^0-9]/g,'');
-  const extra = /고객센터|인콜/.test(label) ? ' btn-call--center' : '';
-  return `<a class="btn btn-call${extra}" href="tel:${tel}"><span class="label">${label}</span> <span class="num">${number}</span></a>`;
+
+  // 고객센터/인콜은 가운데 정렬 보정 클래스
+  let cls = 'btn-call';
+  if (/고객센터|인콜/.test(label)) cls += ' btn-call--center';
+
+  // 3종 전화 버튼 폭 고정 클래스
+  if (/고객센터/.test(label))      cls += ' btn-call--cs';
+  else if (/인콜/.test(label))      cls += ' btn-call--mon';
+  else if (/FAX/.test(label))       cls += ' btn-call--fax';
+
+  return `<a class="${cls}" href="tel:${tel}"><span class="label">${label}</span> <span class="num">${number}</span></a>`;
 }
 
     // 표 한 행(상단: 공통 링크 / 하단: 전화)
