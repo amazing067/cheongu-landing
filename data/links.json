@@ -154,9 +154,9 @@
         "pdf": "/assets/pdf/카카오페이손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/카카오페이손해보험 치과치료확인서.pdf",
         "support": "https://kakaopayinscorp.co.kr/customer-center/claim-info",
-        "cs": "1833-5110",
-        "monitor": "",
-        "fax": "",
+        "cs": "1544-0022",
+        "monitor": "1544-0022",
+        "fax": "고객센터 전화",
         "terms": ""
       }
     },
@@ -187,8 +187,8 @@
         "dental": "/assets/pdf/캐롯손해보험 치과치료확인서.pdf",
         "support": "https://www.carrotins.com/desktop/reward/claim/guide/",
         "cs": "1566-0300",
-        "monitor": "",
-        "fax": "고객센터 전",
+        "monitor": "1566-0300",
+        "fax": "고객센터 전화",
         "terms": ""
       }
     },
