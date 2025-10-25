@@ -322,23 +322,6 @@
       }
     },
     {
-      "name": "신한라이프",
-      "type": "생명",
-      "tags": ["신한라이", "고객센터"],
-      "links": {
-        "system": "https://ga.shinhanlife.co.kr:11043/colomga010m.msv",
-        "guide": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do",
-        "pdf": "/assets/pdf/신한라이프-보험금청구서.pdf",
-        "dental": "/assets/pdf/신한라이프       "pdf": "/assets/pdf/교보생명-보험금청구서.pdf",
-        "dental": "/assets/pdf/교보생명 치과치료확인서.pdf",
-        "support": "https://www.kyobo.com/dgt/web/dti/insurance/accInq/intro",
-        "cs": "1588-1001",
-        "monitor": "1588-1636",
-        "fax": "고객센터 전화",
-        "terms": ""
-      }
-    },
-    {
       "name": "미래에셋생명",
       "type": "생명",
       "tags": ["pdf", "고객센터"],
