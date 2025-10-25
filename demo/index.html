@@ -7,7 +7,6 @@
   <title>청구닷컴 | 보험금 청구 링크 허브</title>
   <meta name="description" content="전산 접속 · 필요서류 · 보험금 청구서 PDF · 치과치료확인서 · 고객센터 · 인콜 모니터링 · 보험금청구 FAX " />
   <meta name="format-detection" content="telephone=no" />
-  <!-- Open Graph 기본 -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="청구닷컴" />
   <meta property="og:title" content="청구닷컴 | 보험금 청구 링크 허브" />
@@ -16,12 +15,6 @@
   <meta property="og:image" content="https://청구.com/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-
-  <!-- Twitter/X 카드(겸용) -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="청구닷컴 | 보험금 청구 링크 허브" />
-  <meta name="twitter:description" content="보험금 청구 링크를 한 곳에서 바로." />
-  <meta name="twitter:image" content="https://청구.com/assets/og-image.png" />
 
   <!-- Pretendard -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,12 +27,28 @@
   /* ===== 기본 ===== */
   body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
 
-  /* ===== 히어로 검색 중앙 + 빠른 버튼 ===== */
+  /* ===== 히어로 검색 중앙 + 내부 버튼 ===== */
   .hero-search{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:16px}
   .search-card{width:100%;max-width:640px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px}
   .search-title{font-size:13px;font-weight:700;margin-bottom:6px}
 
-  /* 표(2단 버튼 + 콤팩트 행) — [교체본] */
+  /* 검색 카드 안의 작은 버튼 */
+  .search-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
+  .mini-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 12px;border-radius:999px;border:1px solid transparent;
+    font-size:13px;font-weight:800;letter-spacing:.01em;line-height:1;text-decoration:none;
+    box-shadow:0 4px 10px rgba(2,6,23,.06);
+    transition:transform .15s ease, filter .15s ease, box-shadow .15s ease;
+    color:#fff;
+  }
+  .mini-btn:hover{transform:translateY(-1px);filter:brightness(.98);box-shadow:0 8px 18px rgba(2,6,23,.10)}
+  .mini-purple{background:linear-gradient(135deg,#a855f7,#7c3aed)}
+  .mini-cyan{background:linear-gradient(135deg,#06b6d4,#0ea5e9)}
+  .mini-amber{background:linear-gradient(135deg,#f59e0b,#f97316)}
+  .mini-slate{background:linear-gradient(135deg,#64748b,#475569)}
+
+  /* 표(2단 버튼 + 콤팩트 행) */
   .table{
     background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;width:100%;
     max-width:1200px;margin:0 auto;container-type:inline-size;container-name:carrierlist;
@@ -51,12 +60,11 @@
   .row:first-child{border-top-width:0}
   @media (min-width:1600px){ .table{ max-width:1280px; } }
 
-  /* === 로고 크기/클리핑 보정 === */
+  /* 로고 */
   .brand{ display:flex; align-items:center; gap:8px; min-height:30px; }
   .logo{ display:block !important; height:auto !important; max-height:30px !important; width:auto !important; object-fit:contain !important; background:transparent !important; border:0 !important; padding:0 !important; box-shadow:none !important; }
   @media (min-width:1280px){ .logo{ max-height:32px !important; } }
 
-  /* 회사명 화면 비표시(검색용 유지) */
   .name{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;overflow:hidden !important;clip:rect(1px,1px,1px,1px) !important;white-space:nowrap !important}
 
   .btn{min-height:24px;padding:3px 6px;font-size:10.5px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none;white-space:nowrap}
@@ -73,7 +81,6 @@
   .row .stack{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
   .row .grid-top,.row .grid-bottom{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 
-  /* 컨테이너 폭 기준 */
   @container carrierlist (min-width:1100px){
     .row{ grid-template-columns:220px 1fr; min-height:46px; }
     .row .stack{ flex-direction:row !important; align-items:center; justify-content:flex-end; gap:6px; flex-wrap:wrap; }
@@ -138,29 +145,15 @@
   #medcalc #boxResult{padding:12px;border-radius:12px}
   #medcalc #txtPayout{font-size:1.75rem}
 
-  /* ===== 빠른 이동 버튼 ===== */
-  .quick-nav{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-  .qbtn{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:999px;font-size:13.5px;font-weight:900;letter-spacing:.02em;color:#fff;text-decoration:none;line-height:1;box-shadow:0 6px 18px rgba(2,6,23,.10), inset 0 0 0 1px rgba(255,255,255,.12);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;}
-  .qbtn:hover{transform:translateY(-1px);filter:brightness(.98);box-shadow:0 10px 22px rgba(2,6,23,.14), inset 0 0 0 1px rgba(255,255,255,.16)}
-  .qbtn:focus-visible{outline:3px solid rgba(59,130,246,.55);outline-offset:2px}
-  .qbtn-loss{background:linear-gradient(135deg,#4f46e5 0%,#3b82f6 100%);}
-  .qbtn-life{background:linear-gradient(135deg,#10b981 0%,#059669 100%);}
-  .qbtn-age {background:linear-gradient(135deg,#a855f7 0%,#7c3aed 100%);}
-  .qbtn-med {background:linear-gradient(135deg,#06b6d4 0%,#0ea5e9 100%);}
-  .qbtn .dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 0 0 2px rgba(255,255,255,.18) inset}
-
   /* === 레이아웃 컨테이너 중앙/폭 한도 === */
   header > .maxw, section > .maxw, main.maxw, footer > .maxw, .maxw{ max-width: 88rem; width: 100%; margin-left: auto; margin-right: auto; padding-left: 16px; padding-right: 16px; box-sizing: border-box; }
   @media (min-width:1600px){ header > .maxw, section > .maxw, main.maxw, footer > .maxw, .maxw{ max-width: 92rem; } }
 
   /* ===== 전화번호 버튼 정렬(숫자 폭 고정 + 줄바꿈 방지) ===== */
-  .btn-call { white-space: nowrap; }               /* 버튼 자체 줄바꿈 금지 */
+  .btn-call { white-space: nowrap; }
   .btn-call .num{
-    display: inline-block;
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: 'tnum';
-    min-width: 12ch;
-    text-align: left;
+    display: inline-block; font-variant-numeric: tabular-nums; font-feature-settings: 'tnum';
+    min-width: 12ch; text-align: left;
   }
   /* ✅ 고객센터/인콜 전용: 가운데 정렬 */
   .btn-call.center{ justify-content:center; }
@@ -169,7 +162,6 @@
 
 </head>
 
-<!-- ✅ 컴팩트 모드 -->
 <body class="text-slate-900 mode-compact">
   <!-- 헤더 -->
   <header>
@@ -195,7 +187,7 @@
       전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · <span class="font-semibold">치과치료확인서</span> · 고객센터 · 인콜 모니터링 · 보험금청구 FAX
     </p>
 
-    <!-- 검색(가운데) + 빠른 이동 버튼 -->
+    <!-- 검색(가운데) + 내부 버튼 -->
     <div class="hero-search">
       <div class="search-card">
         <div class="search-title">검색</div>
@@ -205,16 +197,15 @@
           <a class="btn btn-ghost" href="#loss">손해부터 보기</a>
         </div>
         <div class="mt-2 text-xs text-slate-600">단축키: <span class="chip">/</span> 검색 포커스, <span class="chip">Esc</span> 지우기</div>
+
+        <!-- ✅ 검색 카드 안 버튼 묶음 -->
+        <div class="search-actions">
+          <a href="#age" class="mini-btn mini-purple" title="보험나이 계산기로 이동">보험나이 계산기</a>
+          <a href="#medcalc" class="mini-btn mini-cyan" title="실손의료비 계산기로 이동">실손의료비 계산기</a>
+          <button class="mini-btn mini-amber" type="button" onclick="openPopup('/tools/op-surgery-codes.html', 980, 720)" title="종수술분류표 팝업">종수술분류표</button>
+          <button class="mini-btn mini-slate" type="button" onclick="openPopup('/tools/tertiary-hospitals.html', 980, 720)" title="전국 상급종합병원 리스트 팝업">전국 상급종합병원 리스트</button>
+        </div>
       </div>
-
-      <!-- 빠른 이동 CTA 4개 -->
-     <div class="quick-nav">
-       <a href="#loss"    class="qbtn qbtn-loss"><span class="dot"></span>손해보험사</a>
-       <a href="#life"    class="qbtn qbtn-life"><span class="dot"></span>생명보험사</a>
-       <a href="#age"     class="qbtn qbtn-age"><span class="dot"></span>보험나이 계산기</a>
-       <a href="#medcalc" class="qbtn qbtn-med"><span class="dot"></span>실손의료비 계산기</a>
-     </div>
-
     </div>
   </section>
 
@@ -427,6 +418,14 @@
     const $ = (s, el=document) => el.querySelector(s);
     const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
 
+    // 팝업 오픈(종수술/상급종합)
+    window.openPopup = function(url, w=980, h=720){
+      const y = Math.max(0, (window.outerHeight - h) / 2 + (window.screenY||0));
+      const x = Math.max(0, (window.outerWidth  - w) / 2 + (window.screenX||0));
+      const opt = `popup=yes,scrollbars=yes,resizable=yes,width=${w},height=${h},left=${x},top=${y}`;
+      window.open(url, '_blank', opt);
+    };
+
     // 검색
     const q = $("#q"); const clearBtn = $("#clear");
     document.addEventListener("keydown", (e) => { if (e.key === "/") { e.preventDefault(); q.focus(); } if (e.key === "Escape") { q.value = ""; filter(); } });
@@ -463,7 +462,7 @@
       return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
     }
 
-    // 전화 버튼(한 칸 띄운 번호) — 고객센터/인콜만 가운데 정렬 클래스 부여
+    // 전화 버튼(고객센터/인콜만 가운데 정렬)
     function phoneBtn(label, number) {
       if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
       const tel = number.replace(/[^0-9]/g,'');
@@ -471,7 +470,7 @@
       return `<a class="btn btn-call${centerClass}" href="tel:${tel}">${label} <span class="num">${number}</span></a>`;
     }
 
-    // 표 한 행(상단: 공통 링크 / 하단: 전화)
+    // 표 한 행
     function row(item) {
       const L = item.links || {};
       return `
@@ -509,7 +508,6 @@
       if (lifeCount) lifeCount.textContent = `${life.length}개`;
 
       filter();
-      // 폭 감지(폴백)
       attachWideMode(document.getElementById('loss-list'));
       attachWideMode(document.getElementById('life-list'));
     }
@@ -713,7 +711,7 @@
         const covBase = Math.max(0, coveredCo - dedCov);
         const covPay  = covBase * covRate;
 
-        let appliedNonDed = dedNon;  // 기본값
+        let appliedNonDed = dedNon;
         let nonPct = null, nonFixed = null;
         if (key === '3rd-standard') { nonPct = 0.20; nonFixed = 20000; appliedNonDed = Math.max(nonFixed, Math.floor(nonCovAmt * nonPct)); }
         else if (key === '4th-basic') { nonPct = 0.30; nonFixed = 30000; appliedNonDed = Math.max(nonFixed, Math.floor(nonCovAmt * nonPct)); }
@@ -751,7 +749,7 @@
       document.getElementById('txtPayout').textContent='0원'; document.getElementById('listExplain').innerHTML='';
     });
 
-    // 폴백: 테이블 폭을 감지해 .cw-wide 클래스를 토글
+    // 폭 감지 폴백
     function attachWideMode(tableEl, threshold=1100){
       if (!tableEl) return;
       const ro = new ResizeObserver(entries=>{
