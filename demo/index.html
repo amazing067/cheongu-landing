@@ -181,6 +181,45 @@ footer > .maxw,
 #medcalc .mt-6{margin-top:10px !important}
 #medcalc #boxResult{padding:12px;border-radius:12px}
 #medcalc #txtPayout{font-size:1.75rem}
+/* ====== COMPACT TIGHT PATCH (줄간/버튼/로고 축소) ====== */
+:root{
+  --btn-h: 24px;   /* 28 → 24 (버튼 기본 높이) */
+  --gap:   4px;    /* 6 → 4  (버튼 간격)      */
+  --w-cs:  156px;  /* 고객센터 폭 168 → 156   */
+  --w-mon: 176px;  /* 인콜 모니터링 188 → 176 */
+}
+
+/* 표 자체 폭 살짝 축소(가로로도 덜 커 보이게) */
+.table{ max-width: 1120px; }           /* 1200 → 1120 */
+@media (min-width:1600px){ .table{ max-width: 1200px; } }
+
+/* 행 높이·패딩 줄이기 */
+.row{
+  min-height: 40px;                    /* 46 → 40 */
+  padding: 2px 4px;                    /* 4 6 → 2 4 */
+}
+
+/* 와이드 그리드 첫 컬럼 축소(로고 칸) */
+@container carrierlist (min-width:1100px){
+  .row{ grid-template-columns: 200px minmax(0,1fr); }  /* 220 → 200 */
+}
+.table.cw-wide .row{ grid-template-columns: 200px minmax(0,1fr); }
+
+/* 로고 살짝 축소 */
+.logo{ max-height: 28px; }             /* 30→28 */
+@media (min-width:1280px){ .logo{ max-height: 30px; } }  /* 32→30 */
+
+/* 버튼 폰트/패딩 축소 */
+.btn{ font-size: 10px; height: var(--btn-h); padding: 0 6px; }
+.btn-pdf, .btn-dental{ padding: 0 7px; }
+
+/* 버튼 묶음 간격 축소 + 넘침 방지 유지 */
+.row .stack{ gap: var(--gap); }
+.row .grid-top, .row .grid-bottom{ gap: var(--gap); max-height: var(--btn-h); }
+
+/* 전화 버튼 안 간격 살짝만 줄이기 */
+.btn-call .label{ margin-right: 2px; }
+
 </style>
 </head>
 
