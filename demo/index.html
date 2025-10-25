@@ -613,21 +613,15 @@ footer > .maxw,
       return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
     }
 
-    // 전화 버튼(라벨에 따라 고정폭 클래스를 자동 부여)
+// 전화 버튼(고객센터/인콜은 가운데 정렬만 적용)
 function phoneBtn(label, number) {
   if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
-  const tel = number.replace(/[^0-9]/g,'');
-
-  // 고객센터/인콜은 가운데 정렬 보정 클래스
-  let cls = 'btn-call';
-  if (/고객센터|인콜/.test(label)) cls += ' btn-call--center';
-
-  // 3종 전화 버튼 폭 고정 클래스
-  if (/고객센터/.test(label))      cls += ' btn-call--cs';
-  else if (/인콜/.test(label))      cls += ' btn-call--mon';
-  else if (/FAX/.test(label))       cls += ' btn-call--fax';
-
-  return `<a class="${cls}" href="tel:${tel}"><span class="label">${label}</span> <span class="num">${number}</span></a>`;
+  const tel = number.replace(/[^0-9]/g, '');
+  const extra = /고객센터|인콜/.test(label) ? ' btn-call--center' : '';
+  return `<a class="btn btn-call${extra}" href="tel:${tel}">
+            <span class="label">${label}</span>
+            <span class="num">${number}</span>
+          </a>`;
 }
 
     // 표 한 행(상단: 공통 링크 / 하단: 전화)
