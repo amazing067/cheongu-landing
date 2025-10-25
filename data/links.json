@@ -322,6 +322,80 @@
       }
     },
     {
+      "name": "신한라이프",
+      "type": "생명",
+      "tags": ["신한라이", "고객센터"],
+      "links": {
+        "system": "https://ga.shinhanlife.co.kr:11043/colomga010m.msv",
+        "guide": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do",
+        "pdf": "/assets/pdf/신한라이프-보험금청구서.pdf",
+        "dental": "/assets/pdf/신한라이프     }
+    },
+    {
+      "name": "교보생명",
+      "type": "생명",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://sso.kyobo.com:5443/3rdParty/certLoginFormPage.jsp?NONCE=IEYi%2BWEDGPC8Lx4dVfrv9mRFtqk39DlGqrZkYUtprogEY0YcgGAnby%2BdWxAHmjZNrbqzq0zcT0Gt0A3axB%2BNsg%3D%3D&UURL=https%3A%2F%2Fsso.kyobo.com%3A5443%2Fnls3%2Ffcs",
+        "guide": "https://www.kyobo.com/dgt/web/customer/support/need-papers/list",
+        "pdf": "/assets/pdf/교보생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/교보생명 치과치료확인서.pdf",
+        "support": "https://www.kyobo.com/dgt/web/dti/insurance/accInq/intro",
+        "cs": "1588-1001",
+        "monitor": "1588-1636",
+        "fax": "고객센터 전화",
+        "terms": ""
+      }
+    },
+    {
+      "name": "미래에셋생명",
+      "type": "생명",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://www.loveageplan.com",
+        "guide": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MNT-CC-012",
+        "pdf": "/assets/pdf/미래에셋생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/미래에셋생명 치과치료확인서.pdf",
+        "support": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MO-CB-300000-100000",
+        "cs": "1588-0220",
+        "monitor": "1588-0220",
+        "fax": "고객센터 전화",
+        "terms": ""
+      }
+    },
+    {
+      "name": "KB라이프생명",
+      "type": "생명",
+      "tags": ["KB", "pdf"],
+      "links": {
+        "system": "https://sfa.kblife.co.kr/login/main",
+        "guide": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do",
+        "pdf": "/assets/pdf/KB라이프생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/KB라이프생명 치과치료확인서.pdf",
+        "support": "https://www.kblife.co.kr/",
+        "cs": "1588-3374",
+        "monitor": "1566-2730",
+        "fax": "02-390-4629",
+        "terms": ""
+      }
+    },
+    {
+      "name": "신한라이프",
+      "type": "생명",
+      "tags": ["신한라이", "고객센터"],
+      "links": {
+        "system": "https://ga.shinhanlife.co.kr:11043/colomga010m.msv",
+        "guide": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do",
+        "pdf": "/assets/pdf/신한라이프-보험금청구서.pdf",
+        "dental": "/assets/pdf/신한라이프 치과치료확인서.pdf",
+        "support": "https://www.shinhanlife.co.kr/hp/cdha0010.do",
+        "cs": "1588-5580",
+        "monitor": "1522-2285",
+        "fax": "고객센터 전화",
+        "terms": ""
+      }
+    },
+    {
       "name": "농협생명",
       "type": "생명",
       "tags": ["NH", "pdf"],
