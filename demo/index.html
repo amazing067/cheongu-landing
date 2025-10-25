@@ -247,10 +247,10 @@ footer > .maxw,
 .btn-call { white-space: nowrap; }               /* 버튼 자체 줄바꿈 금지 */
 .btn-call .num{
   display: inline-block;
-  font-variant-numeric: tabular-nums;            /* 숫자 고정폭 (Pretendard 지원) */
-  font-feature-settings: 'tnum';                  /* 일부 브라우저 보강 */
-  min-width: 12ch;                                /* ← 숫자칸 고정폭. 필요시 13~14ch로 조절 */
-  text-align: left;                               /* 하이픈 위치 유지 */
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+  min-width: 9ch;         /* 12ch → 9ch (폭 25% 절감) */
+  text-align: left;
 }
 /* ============ 전화 버튼 가독성 업(데모 전용) ============ */
 
@@ -262,18 +262,18 @@ footer > .maxw,
 
 /* 고객센터/인콜 전용: 버튼 내부 꽉 차고 중앙 정렬 */
 .btn-call--center{
-  display: inline-flex;          /* 내부 정렬 위해 flex */
+  display: inline-flex;
   align-items: center;
-  justify-content: center;       /* 가운데 정렬 */
-  gap: 6px;
-  min-width: 152px;              /* 버튼 가로 최소폭(원하면 160~168으로 조절) */
-  padding: 4px 10px;             /* 약간 여유 */
+  justify-content: center;
+  gap: 2px;            /* 6px → 2px : 라벨-숫자 간격 축소 */
+  min-width: auto;     /* 152px 고정폭 제거 → 내용만큼만 */
+  padding: 2px 8px;    /* 4x10 → 2x8 : 세로/가로 여백 축소 */
   text-align: center;
 }
 
 /* 전용 버튼의 숫자: 살짝 더 크고 선명 */
 .btn-call--center .num{
-  font-size: 12.5px;             /* 숫자 크기↑ */
+  font-size: 12px;             /* 숫자 크기↑ */
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum';
   min-width: auto !important;    /* 행 정렬용 고정폭 제거(센터링을 위해) */
