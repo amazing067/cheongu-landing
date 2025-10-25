@@ -56,10 +56,10 @@
   display:grid;
   grid-template-columns:minmax(200px,1fr) minmax(520px,2fr);
   align-items:center;
-  gap:6px;
-  padding:6px 8px;
+  gap:4px;
+  padding:4px 6px;
   border-top:1px solid rgba(100,116,139,.22);
-  min-height:50px;
+  min-height:46px;
 }
 .row:first-child{border-top-width:0}
 
@@ -90,14 +90,14 @@
   /* 회사명 화면 비표시(검색용 유지) */
   .name{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;overflow:hidden !important;clip:rect(1px,1px,1px,1px) !important;white-space:nowrap !important}
 
-  .btn{min-height:26px;padding:4px 8px;font-size:11px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none;white-space:nowrap}
+  .btn{min-height:24px;padding:3px 6px;font-size:10.5px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none;white-space:nowrap}
   .btn:hover{background:#f1f5f9}
   .btn-muted{opacity:.55;cursor:not-allowed}
   .btn-ghost{border-color:#e2e8f0;background:#fff}
   .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
   .btn-primary:hover{background:#6d28d9}
-  .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:4px 10px}
-  .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:4px 10px}
+  .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:3px 8px}
+  .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:3px 8px}
   .btn-call{border-color:#cbd5e1;background:#fff}
   .btn-call .num{font-weight:800;margin-left:6px}
 
@@ -107,30 +107,29 @@
 /* .table 에 container-type: inline-size; 가 선언돼 있어야 동작합니다! */
 @container carrierlist (min-width: 1100px){
   .row{
-    grid-template-columns: 260px 1fr;
-    min-height:50px;
+    grid-template-columns: 220px 1fr; /* 260 → 220 */
+    min-height:46px;                  /* 50 → 46 */
   }
   .row .stack{
-    flex-direction:row;
+    flex-direction:row !important;
     align-items:center;
     justify-content:flex-end;
-    gap:8px;
+    gap:6px;                          /* 8 → 6 */
     flex-wrap:wrap;
   }
   .row .grid-top,
   .row .grid-bottom{
-    display:contents;
+    display:contents !important;
   }
-  /* 넓은 화면에서 로고 살짝 키우기(옵션) */
   .logo{ max-height: 32px !important; }
 }
 /* ← 새로 추가: 컨테이너 쿼리 미지원 브라우저 폴백 */
-  .table.cw-wide .row{ grid-template-columns:260px 1fr; min-height:50px; }
+  .table.cw-wide .row{ grid-template-columns:220px 1fr; min-height:46px; }
   .table.cw-wide .row .stack{
-    flex-direction:row; align-items:center; justify-content:flex-end; gap:8px; flex-wrap:wrap;
-  }
+  flex-direction:row !important; align-items:center; justify-content:flex-end; gap:6px; flex-wrap:wrap;
+}
   .table.cw-wide .row .grid-top,
-  .table.cw-wide .row .grid-bottom{ display:contents; }
+  .table.cw-wide .row .grid-bottom{ display:contents !important; }
   .table.cw-wide .logo{ max-height:32px !important; }
   .chip{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
 
@@ -565,6 +564,7 @@ footer > .maxw,
               ${phoneBtn("고객센터", L.cs)}
               ${phoneBtn("인콜 모니터링", L.monitor)}
               ${phoneBtn("보험금청구 FAX", L.fax)}
+              ${btn("약관확인", L.terms, "btn-ghost")}
             </div>
           </div>
         </div>`;
