@@ -23,7 +23,6 @@
   <meta name="twitter:description" content="보험금 청구 링크를 한 곳에서 바로." />
   <meta name="twitter:image" content="https://청구.com/assets/og-image.png" />
 
-
   <!-- Pretendard -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -39,55 +38,38 @@
   .hero-search{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:16px}
   .search-card{width:100%;max-width:640px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px}
   .search-title{font-size:13px;font-weight:700;margin-bottom:6px}
-  /* (추가) 검색 카드 안에 들어온 빠른 이동 버튼 간격 */
-  .search-card .quick-nav{margin-top:10px}
 
   /* 표(2단 버튼 + 콤팩트 행) — [교체본] */
-.table{
-  background:#fff;
-  border:1px solid #e2e8f0;
-  border-radius:8px;
-  overflow:hidden;
-  width:100%;
-  max-width: 1200px;      /* ✅ 큰 화면에서 너무 넓어지지 않도록 */
-  margin:0 auto;          /* ✅ 표 자체를 항상 가운데 정렬 */
-  container-type: inline-size;  /* ✅ 컨테이너 쿼리용 선언 추가 */
-  container-name: carrierlist;   /* ← 컨테이너 이름 부여 */
-}
-.row{
-  display:grid;
-  grid-template-columns:minmax(200px,1fr) minmax(520px,2fr);
-  align-items:center;
-  gap:4px;
-  padding:4px 6px;
-  border-top:1px solid rgba(100,116,139,.22);
-  min-height:46px;
-}
-.row:first-child{border-top-width:0}
+  .table{
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:8px;
+    overflow:hidden;
+    width:100%;
+    max-width: 1200px;
+    margin:0 auto;
+    container-type: inline-size;
+    container-name: carrierlist;
+  }
+  .row{
+    display:grid;
+    grid-template-columns:minmax(200px,1fr) minmax(520px,2fr);
+    align-items:center;
+    gap:4px;
+    padding:4px 6px;
+    border-top:1px solid rgba(100,116,139,.22);
+    min-height:46px;
+  }
+  .row:first-child{border-top-width:0}
 
-/* 초광폭에서(>1600px) 표 폭을 조금 더 허용 — [추가] */
-@media (min-width:1600px){
-  .table{ max-width: 1280px; }
-}
+  @media (min-width:1600px){
+    .table{ max-width: 1280px; }
+  }
 
-  /* === 로고 크기/클리핑 보정 (교체본) === */
-.brand{
-  display:flex; align-items:center; gap:8px;
-  min-height:30px;                  /* 24px → 30px: 로고 눌림 방지 */
-}
-.logo{
-  display:block !important;         /* inline 이미지 베이스라인 여백 제거 */
-  height:auto !important;
-  max-height:30px !important;       /* 20px → 28px (필요시 26~30px로 조정) */
-  width:auto !important;
-  object-fit:contain !important;
-  background:transparent !important;
-  border:0 !important; padding:0 !important; box-shadow:none !important;
-}
-/* 넓은 화면에서 살짝 더 키우기 (선택) */
-@media (min-width:1280px){
-  .logo{ max-height:32px !important; }
-}
+  /* === 로고 === */
+  .brand{ display:flex; align-items:center; gap:8px; min-height:30px; }
+  .logo{ display:block !important; height:auto !important; max-height:30px !important; width:auto !important; object-fit:contain !important; background:transparent !important; border:0 !important; padding:0 !important; box-shadow:none !important; }
+  @media (min-width:1280px){ .logo{ max-height:32px !important; } }
 
   /* 회사명 화면 비표시(검색용 유지) */
   .name{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;overflow:hidden !important;clip:rect(1px,1px,1px,1px) !important;white-space:nowrap !important}
@@ -105,33 +87,18 @@
 
   .row .stack{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
   .row .grid-top,.row .grid-bottom{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-  /* === 컨테이너 폭 기준: 표가 넓어지면 한 줄로 전환 === */
-@container carrierlist (min-width: 1100px){
-  .row{
-    grid-template-columns: 220px 1fr; /* 260 → 220 */
-    min-height:46px;                  /* 50 → 46 */
+
+  @container carrierlist (min-width: 1100px){
+    .row{ grid-template-columns: 220px 1fr; min-height:46px; }
+    .row .stack{ flex-direction:row !important; align-items:center; justify-content:flex-end; gap:6px; flex-wrap:wrap; }
+    .row .grid-top, .row .grid-bottom{ display:contents !important; }
+    .logo{ max-height: 32px !important; }
   }
-  .row .stack{
-    flex-direction:row !important;
-    align-items:center;
-    justify-content:flex-end;
-    gap:6px;                          /* 8 → 6 */
-    flex-wrap:wrap;
-  }
-  .row .grid-top,
-  .row .grid-bottom{
-    display:contents !important;
-  }
-  .logo{ max-height: 32px !important; }
-}
-/* ← 컨테이너 쿼리 미지원 브라우저 폴백 */
   .table.cw-wide .row{ grid-template-columns:220px 1fr; min-height:46px; }
-  .table.cw-wide .row .stack{
-  flex-direction:row !important; align-items:center; justify-content:flex-end; gap:6px; flex-wrap:wrap;
-}
-  .table.cw-wide .row .grid-top,
-  .table.cw-wide .row .grid-bottom{ display:contents !important; }
+  .table.cw-wide .row .stack{ flex-direction:row !important; align-items:center; justify-content:flex-end; gap:6px; flex-wrap:wrap; }
+  .table.cw-wide .row .grid-top, .table.cw-wide .row .grid-bottom{ display:contents !important; }
   .table.cw-wide .logo{ max-height:32px !important; }
+
   .chip{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
 
   .section-title{font-size:28px;font-weight:900;letter-spacing:-.01em}
@@ -152,7 +119,6 @@
   #age .calc-card{border:1px solid #c7b7ff;border-radius:12px;background:#fff}
   #age .display-num{font-size:28px;font-weight:900}
   #age .card{border:1px solid #e2e8f0;border-radius:10px;padding:10px;background:#fff}
-  /* DOB 입력 + 버튼(아래, 중앙/높이 맞춤) */
   #age-form{display:block}
   #age-form .dob-wrap{display:flex;gap:8px;align-items:center;margin-top:6px;justify-content:center}
   #age-form input{height:38px;border-radius:10px;padding:0 12px;text-align:center;border:1px solid #cbd5e1;font-size:14px}
@@ -173,95 +139,49 @@
   .pill-indigo{background:#4f46e5}
   .pill-emerald{background:#059669}
 
-  /* === 실손 계산기: 상단 셀렉트 더 콤팩트 + 제목 가운데/가독성 업 === */
-  #medcalc .selector-row{
-    display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;justify-items:center;
-  }
-  #medcalc .selector-box{
-    display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;
-  }
+  #medcalc .selector-row{ display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;justify-items:center; }
+  #medcalc .selector-box{ display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px; }
   #medcalc .selector-badge{transform:translateY(1px);padding:4px 10px;font-size:11px}
   #medcalc .selector-heading{margin:0;font-size:16px;font-weight:800;letter-spacing:-.01em}
-
-  /* 셀렉트: 얇고 짧게 */
-  #medcalc .mc-select{
-    width:100%;max-width:220px;height:34px;padding:6px 10px;font-size:14px;border-radius:10px;border:1px solid #cbd5e1;
-  }
-
-  /* 작은 화면에서는 1열 + 폭 제한 해제 */
-  @media (max-width:639px){
-    #medcalc .selector-row{grid-template-columns:1fr;justify-items:stretch}
-    #medcalc .mc-select{max-width:none;width:100%}
-  }
-
-  /* 입력 영역 전체 축소 */
-  #medcalc input[type="text"],
-  #medcalc input[type="number"]{height:36px;padding:8px 10px;font-size:14px}
-
-  /* 필드 간격/여백 정돈 및 결과 박스 */
+  #medcalc .mc-select{ width:100%;max-width:220px;height:34px;padding:6px 10px;font-size:14px;border-radius:10px;border:1px solid #cbd5e1; }
+  @media (max-width:639px){ #medcalc .selector-row{grid-template-columns:1fr;} #medcalc .mc-select{max-width:none;width:100%} }
+  #medcalc input[type="text"], #medcalc input[type="number"]{height:36px;padding:8px 10px;font-size:14px}
   #medcalc .mc-card .grid{gap:10px}
   #dedSummary{margin-top:6px}
   #medcalc .mt-6{margin-top:10px !important}
   #medcalc #boxResult{padding:12px;border-radius:12px}
   #medcalc #txtPayout{font-size:1.75rem}
 
-  /* ===== 빠른 이동 버튼(히어로 아래) ===== */
+  /* ===== 빠른 이동 버튼 ===== */
   .quick-nav{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-  .qbtn{
-    display:inline-flex;align-items:center;gap:10px;
-    padding:10px 16px;border-radius:999px;
-    font-size:13.5px;font-weight:900;letter-spacing:.02em;color:#fff;text-decoration:none;line-height:1;
-    box-shadow:0 6px 18px rgba(2,6,23,.10), inset 0 0 0 1px rgba(255,255,255,.12);
-    transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
-  }
+  .qbtn{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:999px;font-size:13.5px;font-weight:900;letter-spacing:.02em;color:#fff;text-decoration:none;line-height:1;box-shadow:0 6px 18px rgba(2,6,23,.10), inset 0 0 0 1px rgba(255,255,255,.12);transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;}
   .qbtn:hover{transform:translateY(-1px);filter:brightness(.98);box-shadow:0 10px 22px rgba(2,6,23,.14), inset 0 0 0 1px rgba(255,255,255,.16)}
   .qbtn:focus-visible{outline:3px solid rgba(59,130,246,.55);outline-offset:2px}
-  .qbtn-loss{background:linear-gradient(135deg,#4f46e5 0%,#3b82f6 100%);}  /* 손해 */
-  .qbtn-life{background:linear-gradient(135deg,#10b981 0%,#059669 100%);}  /* 생명 */
-  .qbtn-age {background:linear-gradient(135deg,#a855f7 0%,#7c3aed 100%);}  /* 보험나이 */
-  .qbtn-med {background:linear-gradient(135deg,#06b6d4 0%,#0ea5e9 100%);}  /* 실손 */
+  .qbtn-loss{background:linear-gradient(135deg,#4f46e5 0%,#3b82f6 100%);}
+  .qbtn-life{background:linear-gradient(135deg,#10b981 0%,#059669 100%);}
+  .qbtn-age {background:linear-gradient(135deg,#a855f7 0%,#7c3aed 100%);}
+  .qbtn-med {background:linear-gradient(135deg,#06b6d4 0%,#0ea5e9 100%);}
   .qbtn .dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 0 0 2px rgba(255,255,255,.18) inset}
 
   /* === 레이아웃 컨테이너 중앙/폭 한도 === */
-header > .maxw,
-section > .maxw,
-main.maxw,
-footer > .maxw,
-.maxw{
-  max-width: 88rem;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 16px;
-  padding-right: 16px;
-  box-sizing: border-box;
-}
-@media (min-width: 1600px){
-  header > .maxw,
-  section > .maxw,
-  main.maxw,
-  footer > .maxw,
-  .maxw{ max-width: 92rem; }
-}
+  header > .maxw, section > .maxw, main.maxw, footer > .maxw, .maxw{ max-width: 88rem; width: 100%; margin-left: auto; margin-right: auto; padding-left: 16px; padding-right: 16px; box-sizing: border-box; }
+  @media (min-width: 1600px){ header > .maxw, section > .maxw, main.maxw, footer > .maxw, .maxw{ max-width: 92rem; } }
 
-  /* ===== 전화번호 버튼 정렬(숫자 폭 고정 + 줄바꿈 방지) ===== */
-.btn-call { white-space: nowrap; }               /* 버튼 자체 줄바꿈 금지 */
-.btn-call .num{
-  display: inline-block;
-  font-variant-numeric: tabular-nums;            /* 숫자 고정폭 (Pretendard 지원) */
-  font-feature-settings: 'tnum';                  /* 일부 브라우저 보강 */
-  min-width: 12ch;                                /* ← 숫자칸 고정폭 */
-  text-align: left;                               /* 하이픈 위치 유지 */
-}
-/* (추가) 고객센터/인콜 모니터링만 가운데 정렬 */
-.btn-call--center{
-  display:inline-flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;
-}
+  /* ===== 전화번호 버튼 ===== */
+  .btn-call { white-space: nowrap; display:inline-flex; align-items:center; } /* inline-flex로 통일 */
+  .btn-call .num{
+    display:inline-block;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+    min-width: 12ch;
+    text-align: left;
+  }
+  /* ✅ 추가: 고객센터/인콜만 번호 가운데 정렬 */
+  .btn-call--center{ justify-content:center; }
+  .btn-call--center .num{ text-align:center; }
 </style>
-
 </head>
 
-<!-- ✅ 컴팩트 모드 -->
 <body class="text-slate-900 mode-compact">
   <!-- 헤더 -->
   <header>
@@ -287,7 +207,6 @@ footer > .maxw,
       전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · <span class="font-semibold">치과치료확인서</span> · 고객센터 · 인콜 모니터링 · 보험금청구 FAX
     </p>
 
-    <!-- 검색(가운데) + 빠른 이동 버튼(카드 안으로 이동) -->
     <div class="hero-search">
       <div class="search-card">
         <div class="search-title">검색</div>
@@ -297,14 +216,14 @@ footer > .maxw,
           <a class="btn btn-ghost" href="#loss">손해부터 보기</a>
         </div>
         <div class="mt-2 text-xs text-slate-600">단축키: <span class="chip">/</span> 검색 포커스, <span class="chip">Esc</span> 지우기</div>
+      </div>
 
-        <!-- 👇 빠른 이동 CTA 4개: 카드 안으로 이동 -->
-        <div class="quick-nav">
-          <a href="#loss"    class="qbtn qbtn-loss"><span class="dot"></span>손해보험사</a>
-          <a href="#life"    class="qbtn qbtn-life"><span class="dot"></span>생명보험사</a>
-          <a href="#age"     class="qbtn qbtn-age"><span class="dot"></span>보험나이 계산기</a>
-          <a href="#medcalc" class="qbtn qbtn-med"><span class="dot"></span>실손의료비 계산기</a>
-        </div>
+      <!-- 빠른 이동 CTA 4개 -->
+      <div class="quick-nav">
+        <a href="#loss" class="qbtn qbtn-loss"><span class="dot"></span>손해보험사</a>
+        <a href="#life" class="qbtn qbtn-life"><span class="dot"></span>생명보험사</a>
+        <a href="#age" class="qbtn qbtn-age"><span class="dot"></span>보험나이 계산기</a>
+        <a href="#medcalc" class="qbtn qbtn-med"><span class="dot"></span>실손의료비 계산기</a>
       </div>
     </div>
   </section>
@@ -361,7 +280,6 @@ footer > .maxw,
                   <div class="text-xs text-slate-600" id="age-rule">생년월일을 입력하세요</div>
                 </div>
 
-                <!-- 입력 + 버튼(아래 중앙) -->
                 <form id="age-form">
                   <label class="text-sm font-semibold text-center block">생년월일</label>
                   <div class="dob-wrap">
@@ -387,8 +305,8 @@ footer > .maxw,
                     <div class="text-base font-semibold mt-0.5"><span id="halfleft">–</span></div>
                   </div>
                 </div>
-              </div><!-- /p-3 -->
-            </div><!-- /calc-card -->
+              </div>
+            </div>
           </div>
         </section>
 
@@ -401,7 +319,6 @@ footer > .maxw,
 
           <div class="panel-card">
             <section class="bg-white rounded-2xl shadow p-5 h-full mc-card">
-              <!-- 세대/의료기관: 같은 줄 2열 (배지→제목→셀렉트 순서) -->
               <div class="selector-row">
                 <div class="selector-box">
                   <span class="selector-badge pill pill-indigo">세대 선택</span>
@@ -540,50 +457,47 @@ footer > .maxw,
       const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
       const inner = `
         <div class="brand">
-          <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
-          <span class="name">${item.name}</span>
+          <img src="\${logoSrc}" alt="\${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
+          <span class="name">\${item.name}</span>
         </div>`;
-      return L.system ? `<a href="${L.system}" class="block no-underline">${inner}</a>` : `<div class="opacity-85">${inner}</div>`;
+      return L.system ? `<a href="\${L.system}" class="block no-underline">\${inner}</a>` : `<div class="opacity-85">\${inner}</div>`;
     }
 
     // 일반 버튼
     function btn(label, href, cls) {
-      if (!href) return `<button class="btn btn-muted" disabled>${label}</button>`;
+      if (!href) return `<button class="btn btn-muted" disabled>\${label}</button>`;
       const isExternal = /홈페이지|필요서류/.test(label);
-      const downloadAttr = /PDF/.test(label) ? ` download="${label}.pdf"` : "";
-      return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
+      const downloadAttr = /PDF/.test(label) ? ` download="\${label}.pdf"` : "";
+      return `<a class="btn \${cls}" href="\${href}" \${isExternal ? 'target="_blank" rel="noopener"' : ''}\${downloadAttr}>\${label}</a>`;
     }
 
-    // 전화 버튼(고객센터/인콜 모니터링만 가운데 정렬)
+    // 전화 버튼 — ✅ 고객센터/인콜만 가운데 정렬 클래스 부여
     function phoneBtn(label, number) {
-      if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
+      if (!number) return `<button class="btn btn-muted" disabled>\${label}</button>`;
       const tel = number.replace(/[^0-9]/g,'');
-      const centered = /고객센터|인콜/.test(label) ? ' btn-call--center' : '';
-      return `<a class="btn btn-call${centered}" href="tel:${tel}">
-                <span class="label">${label}</span>
-                <span class="num">${number}</span>
-              </a>`;
+      const centerCls = /고객센터|인콜/.test(label) ? ' btn-call--center' : '';
+      return `<a class="btn btn-call\${centerCls}" href="tel:\${tel}">\${label} <span class="num">\${number}</span></a>`;
     }
 
-    // 표 한 행(상단: 공통 링크 / 하단: 전화)
+    // 표 한 행
     function row(item) {
       const L = item.links || {};
       return `
-        <div class="row" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}">
-          <div>${brandCell(item)}</div>
+        <div class="row" data-name="\${item.name}" data-tags="\${(item.tags||[]).join(' ').toLowerCase()}">
+          <div>\${brandCell(item)}</div>
           <div class="stack">
             <div class="grid-top">
-              ${btn("전산 접속", L.system, "btn-primary")}
-              ${btn("필요서류 안내", L.guide, "btn-ghost")}
-              ${btn("치과치료확인서", L.dental, "btn-dental")}
-              ${btn("보험금 청구서 PDF 다운로드", L.pdf, "btn-pdf")}
-              ${btn("홈페이지", L.support, "btn-ghost")}
+              \${btn("전산 접속", L.system, "btn-primary")}
+              \${btn("필요서류 안내", L.guide, "btn-ghost")}
+              \${btn("치과치료확인서", L.dental, "btn-dental")}
+              \${btn("보험금 청구서 PDF 다운로드", L.pdf, "btn-pdf")}
+              \${btn("홈페이지", L.support, "btn-ghost")}
             </div>
             <div class="grid-bottom">
-              ${phoneBtn("고객센터", L.cs)}
-              ${phoneBtn("인콜 모니터링", L.monitor)}
-              ${phoneBtn("보험금청구 FAX", L.fax)}
-              ${btn("약관확인", L.terms, "btn-ghost")}
+              \${phoneBtn("고객센터", L.cs)}
+              \${phoneBtn("인콜 모니터링", L.monitor)}
+              \${phoneBtn("보험금청구 FAX", L.fax)}
+              \${btn("약관확인", L.terms, "btn-ghost")}
             </div>
           </div>
         </div>`;
@@ -603,7 +517,6 @@ footer > .maxw,
       if (lifeCount) lifeCount.textContent = `${life.length}개`;
 
       filter();
-      // 데이터가 표에 렌더된 뒤 폭 감지 시작(폴백)
       attachWideMode(document.getElementById('loss-list'));
       attachWideMode(document.getElementById('life-list'));
     }
@@ -675,7 +588,7 @@ footer > .maxw,
       yEl?.focus();
     }
 
-    $("#y").textContent = new Date().getFullYear();
+    document.getElementById("y").textContent = new Date().getFullYear();
 
     /* ===== 실손 계산기 로직 ===== */
     const KRW = new Intl.NumberFormat('ko-KR');
@@ -740,7 +653,7 @@ footer > .maxw,
       inputs.dedNon.value = fmtKRW(key==='2nd-legacy' ? 0 : (p.nonCoveredDeductible||0));
 
       const lbl = byId('currentLabel');
-      if(lbl) lbl.innerHTML = `현재 선택: <span class="text-indigo-700">${p.label}</span>`;
+      if(lbl) lbl.innerHTML = `현재 선택: <span class="text-indigo-700">\${p.label}</span>`;
       updateDedSummary();
     }
 
@@ -796,7 +709,7 @@ footer > .maxw,
         if(perCap>0)    payout = Math.min(payout, perCap);
         payout = Math.min(payout, annualRemain);
 
-        byId('txtPayout').textContent = fmtKRW(payout) + '원';
+        document.getElementById('txtPayout').textContent = fmtKRW(payout) + '원';
         explain.push(`전체금액: ${fmtKRW(totalAmt)}원`);
         explain.push(`공제(2세대): 최소 ${fmtKRW(minFixed)}원 vs 20% ${fmtKRW(twentyPct)}원 → 적용 ${fmtKRW(appliedDed)}원`);
         explain.push(`보상 기준금액: ${fmtKRW(base)}원(전액 보상)`);
@@ -809,13 +722,8 @@ footer > .maxw,
 
         let appliedNonDed = dedNon;
         let nonPct = null, nonFixed = null;
-        if (key === '3rd-standard') {
-          nonPct = 0.20; nonFixed = 20000;
-          appliedNonDed = Math.max(nonFixed, Math.floor(nonCovAmt * nonPct));
-        } else if (key === '4th-basic') {
-          nonPct = 0.30; nonFixed = 30000;
-          appliedNonDed = Math.max(nonFixed, Math.floor(nonCovAmt * nonPct));
-        }
+        if (key === '3rd-standard') { nonPct = 0.20; nonFixed = 20000; appliedNonDed = Math.max(nonFixed, Math.floor(nonCovAmt * nonPct)); }
+        else if (key === '4th-basic') { nonPct = 0.30; nonFixed = 30000; appliedNonDed = Math.max(nonFixed, Math.floor(nonCovAmt * nonPct)); }
 
         const nonBase = Math.max(0, nonCovAmt - appliedNonDed);
         let   nonPay  = nonBase;
@@ -825,9 +733,8 @@ footer > .maxw,
         if (perCap > 0) payout = Math.min(payout, perCap);
         payout = Math.min(payout, annualRemain);
 
-        byId('txtPayout').textContent = fmtKRW(payout) + '원';
+        document.getElementById('txtPayout').textContent = fmtKRW(payout) + '원';
         explain.push(`급여 보상: ${fmtKRW(covPay)}원 (기준 ${fmtKRW(covBase)}원 × ${Math.round(covRate*100)}%)`);
-
         if (nonPct !== null) {
           const pctKRW = Math.floor(nonCovAmt * nonPct);
           explain.push(`비급여 공제: 고정 ${fmtKRW(nonFixed)}원 vs ${Math.round(nonPct*100)}% ${fmtKRW(pctKRW)}원 → 적용 ${fmtKRW(appliedNonDed)}원`);
@@ -839,18 +746,18 @@ footer > .maxw,
         if (annualRemain>0 && annualRemain<999999999) explain.push(`연간 잔여 한도: ${fmtKRW(annualRemain)}원`);
       }
 
-      const ul = byId('listExplain'); ul.innerHTML = '';
+      const ul = document.getElementById('listExplain'); ul.innerHTML = '';
       explain.forEach(t=>{ const li=document.createElement('li'); li.textContent='• '+t; ul.appendChild(li); });
     }
 
-    byId('btnCalc')?.addEventListener('click', calc);
-    byId('btnReset')?.addEventListener('click', ()=>{
+    document.getElementById('btnCalc')?.addEventListener('click', calc);
+    document.getElementById('btnReset')?.addEventListener('click', ()=>{
       [inputs.coveredCo, inputs.nonCov].forEach(el=> el.value='');
       genSelect.value='4th-basic'; facilitySelect.value='clinic';
       applyGen('4th-basic'); applyFacility('clinic');
-      byId('txtPayout').textContent='0원'; byId('listExplain').innerHTML='';
+      document.getElementById('txtPayout').textContent='0원'; document.getElementById('listExplain').innerHTML='';
     });
-    // ── 폴백: 테이블 폭을 감지해 .cw-wide 클래스를 토글 ──
+
     function attachWideMode(tableEl, threshold=1100){
       if (!tableEl) return;
       const ro = new ResizeObserver(entries=>{
