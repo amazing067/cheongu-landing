@@ -193,22 +193,6 @@
       }
     },
     {
-      "name": "MG손해보험",
-      "type": "손해",
-      "tags": ["pdf", "고객센터"],
-      "links": {
-        "system": "",
-        "guide": "",
-        "pdf": "/assets/pdf/MG손해보험-보험금청구서.pdf",
-        "dental": "/assets/pdf/MG손해보험 치과치료확인서.pdf",
-        "support": "",
-        "cs": "",
-        "monitor": "",
-        "fax": "",
-        "terms": ""
-      }
-    },
-    {
       "name": "AIG손해보험",
       "type": "손해",
       "tags": ["글로벌", "pdf", "고객센터"],
