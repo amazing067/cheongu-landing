@@ -205,6 +205,96 @@ footer > .maxw,
 #medcalc .mt-6{margin-top:10px !important}
 #medcalc #boxResult{padding:12px;border-radius:12px}
 #medcalc #txtPayout{font-size:1.75rem}
+  /* ===============================
+   1) 공통: 전화 버튼 패딩만 타이트하게 + 중앙정렬
+   =============================== */
+.btn-call{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+  padding: 0 8px;         /* 좌우 여백만 줄임(필요시 0 6px까지 가능) */
+  height: 24px;
+  line-height: 24px;
+}
+.btn-call .label{ margin-right:4px; }
+.btn-call .num{
+  /* 불필요한 고정폭 제거 → 줄튀김 완화 */
+  min-width: auto;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+  font-weight: 600;       /* 숫자 가독성만 확보(더 두껍게 안 함) */
+}
+
+/* 두 줄 레이아웃(기본)에서: 위/아래 줄만 유지. 위줄은 줄바꿈 금지 → 3줄 방지 */
+.row .stack{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.row .grid-top{display:flex;gap:6px;flex-wrap:nowrap;overflow:hidden}
+.row .grid-bottom{display:flex;gap:4px;flex-wrap:wrap}
+
+/* 버튼 텍스트가 길어 전체가 빡빡해질 때 살짝만 더 콤팩트 */
+@media (max-width: 1200px){
+  .btn{font-size:10px;padding:2px 6px}
+  .btn-pdf,.btn-dental{padding:2px 8px}
+}
+
+/* ==========================================
+   2) 와이드(컨테이너가 충분히 넓을 때): 1줄 고정
+      - 버튼 그룹을 전부 한 줄로 합치고
+      - 전화 버튼 3종(고객센터/인콜/FAX)만 ‘고정폭’
+      - 중앙정렬 + 줄튀김 완전 차단
+   ========================================== */
+/* 컨테이너 쿼리: .table에 container-type이 선언되어 있어야 함 */
+@container carrierlist (min-width: 1100px){
+  .row{
+    grid-template-columns: 220px minmax(0,1fr);
+    min-height: 44px;
+  }
+  /* 위/아래 두 줄을 한 줄로 합침 */
+  .row .stack{
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-end;
+    flex-wrap:wrap;       /* 한 줄 안에서만 감기도록(전화 3종이 고정폭이라 안정적) */
+    gap:6px;
+  }
+  .row .grid-top,
+  .row .grid-bottom{ display:contents !important; }
+
+  /* ——— 전화 버튼 3종 ‘와이드에서만’ 고정폭 ——— */
+  :root{
+    --w-cs:  148px;   /* 고객센터 */
+    --w-mon: 168px;   /* 인콜 모니터링 */
+    --w-fax: 196px;   /* 보험금청구 FAX */
+  }
+  /* 레이블로 구분할 수 있게 attribute 시작문자열 매칭 사용 */
+  .btn-call[href^="tel"] .label{white-space:nowrap}
+  .btn-call:has(.label:contains("고객센터")){ width: var(--w-cs); }
+  .btn-call:has(.label:contains("인콜")){      width: var(--w-mon); }
+  .btn-call:has(.label:contains("FAX")){       width: var(--w-fax); }
+
+  /* :has()와 :contains() 지원이 약하면 클래스로 지정해서 쓰는 방법(추천):
+     .btn-call--cs, .btn-call--mon, .btn-call--fax 를 템플릿에서 넣어두면 더 안전함.
+     예: <a class="btn btn-call btn-call--cs">고객센터 …</a> */
+  /* 클래스 버전(선택): */
+  .btn-call--cs{  width: var(--w-cs); }
+  .btn-call--mon{ width: var(--w-mon); }
+  .btn-call--fax{ width: var(--w-fax); }
+
+  /* 와이드에서 버튼 간격 살짝만 */
+  .row .stack{ gap:6px }
+}
+
+/* ==========================================
+   3) 아주 넓은 화면에서 살짝만 여유 (선택)
+   ========================================== */
+@media (min-width: 1600px){
+  :root{
+    --w-cs:  156px;
+    --w-mon: 176px;
+    --w-fax: 204px;
+  }
+}
+
 </style>
 </head>
 
