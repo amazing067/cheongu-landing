@@ -4,27 +4,28 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>청구닷컴 | 보험금 청구 링크 허브</title>
-  <meta name="description" content="전산 접속 · 필요서류 · 보험금 청구서 PDF · 치과치료확인서 · 고객센터 · 인콜 모니터링 · 보험금청구 FAX " />
   <meta name="format-detection" content="telephone=no" />
 
   <!-- Pretendard -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
 
-  <!-- Tailwind(@apply) 빌드 CSS (사이트 기본) -->
+  <!-- (사이트 기본 CSS) -->
   <link rel="stylesheet" href="/assets/site.css?v=final-compact-12" />
 
 <style id="hotfix">
-/* ========== 기본 레이아웃/타이포 ========== */
+/* ===== 공통 ===== */
+:root{
+  --btn-h: 28px;            /* 버튼 행 높이(줄 맞춤 기준) */
+  --gap: 6px;               /* 버튼 사이 간격 */
+  --w-cs: 168px;            /* 고객센터 버튼 총폭 */
+  --w-mon:188px;            /* 인콜 모니터링 버튼 총폭 */
+}
 body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
 .maxw{max-width:88rem;margin:0 auto;padding:0 16px;box-sizing:border-box}
 @media (min-width:1600px){.maxw{max-width:92rem}}
-.section-title{font-size:28px;font-weight:900;letter-spacing:-.01em}
-.section-sub{font-size:12.5px;color:#475569}
-.section-head{display:flex;flex-direction:column;align-items:center;gap:6px;margin:28px 0 12px}
-.chip{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
 
-/* ========== 표(리스트) ========== */
+/* ===== 표 ===== */
 .table{
   background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;
   width:100%;max-width:1200px;margin:0 auto;
@@ -34,65 +35,70 @@ body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,
 
 .row{
   display:grid;
-  grid-template-columns:minmax(200px,1fr) minmax(0,2fr); /* 2번째 칼럼은 0까지 줄 수 있게 */
+  grid-template-columns:minmax(200px,1fr) minmax(0,2fr);
   align-items:center;gap:4px;padding:4px 6px;
   border-top:1px solid rgba(100,116,139,.22);min-height:46px;
-  overflow:hidden; /* 혹시 모를 미세 넘침 방지 */
+  overflow:hidden;
 }
 .row:first-child{border-top-width:0}
 
-/* 내부 컨테이너는 모두 줄어들 수 있어야 함 */
-.row>div,.row .stack,.row .grid-top,.row .grid-bottom{min-width:0}
-
-/* 브랜드(로고) */
+/* 로고(링크 제거, 이미지 그대로) */
 .brand{display:flex;align-items:center;gap:8px;min-height:30px}
 .logo{display:block;height:auto;max-height:30px;width:auto;object-fit:contain}
 @media (min-width:1280px){.logo{max-height:32px}}
 .name{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
 
-/* 버튼 공통 */
-.btn{min-height:24px;padding:3px 6px;font-size:10.5px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none;white-space:nowrap}
+/* 버튼 공통(정확한 행 높이 고정) */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  height:var(--btn-h); padding:0 6px; font-size:10.5px;
+  border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;
+  text-decoration:none;white-space:nowrap;
+}
 .btn:hover{background:#f1f5f9}
 .btn-muted{opacity:.55;cursor:not-allowed}
 .btn-ghost{border-color:#e2e8f0}
 .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
 .btn-primary:hover{background:#6d28d9}
-.btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:3px 8px}
-.btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:3px 8px}
+.btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:0 8px}
+.btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:0 8px}
 
 /* 전화 버튼 */
-.btn-call{border-color:#cbd5e1;background:#fff;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.btn-call{border-color:#cbd5e1;background:#fff}
 .btn-call .num{font-weight:600;font-variant-numeric:tabular-nums;font-feature-settings:'tnum'}
-
-/* 기본(보통 폭): 2줄 */
-.row .stack{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-.row .grid-top,.row .grid-bottom{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-
-/* 와이드(컨테이너 폭 ≥1100px): 1줄 + 넘침 금지 */
-@container carrierlist (min-width:1100px){
-  .row{grid-template-columns:220px minmax(0,1fr)}
-  .row .stack{flex-direction:row;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:nowrap;overflow:hidden}
-  .row .grid-top,.row .grid-bottom{display:contents} /* 상/하를 한 줄로 병합 */
-  .logo{max-height:32px}
-}
-
-/* 컨테이너 쿼리 미지원 폴백(ResizeObserver로 토글) */
-.table.cw-wide .row{grid-template-columns:220px minmax(0,1fr)}
-.table.cw-wide .row .stack{flex-direction:row;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:nowrap;overflow:hidden}
-.table.cw-wide .row .grid-top,.table.cw-wide .row .grid-bottom{display:contents}
-
-/* “고객센터/인콜 모니터링” 가운데 정렬 + 폭 고정으로 줄맞춤 */
-:root{
-  --w-cs: 168px;  /* 고객센터 */
-  --w-mon: 188px; /* 인콜 모니터링 */
-}
 .btn-call--center{justify-content:center}
 .btn-call--cs{width:var(--w-cs)}
 .btn-call--mon{width:var(--w-mon)}
-/* 숫자는 너무 굵지 않게 */
-.btn-call--center .num{font-weight:600}
 
-/* 히어로(검색) – 그대로 */
+/* 두 칼럼 내부 컨테이너는 모두 줄어들 수 있어야 함(넘침 방지) */
+.row>div,.row .stack,.row .grid-top,.row .grid-bottom{min-width:0}
+
+/* 기본(보통/좁은 폭): 최대 2줄(상단 1줄 + 하단 1줄) */
+.row .stack{display:flex;flex-direction:column;align-items:flex-end;gap:var(--gap)}
+.row .grid-top,
+.row .grid-bottom{
+  display:flex;gap:var(--gap);justify-content:flex-end;
+  flex-wrap:nowrap;             /* 각 줄은 1줄 고정 */
+  overflow:hidden;              /* 넘치는 버튼은 깔끔히 잘라 3줄 방지 */
+  max-height:var(--btn-h);
+}
+
+/* 와이드(컨테이너 폭 ≥1100px): 무조건 1줄 */
+@container carrierlist (min-width:1100px){
+  .row{grid-template-columns:220px minmax(0,1fr)}
+  .row .stack{
+    flex-direction:row;align-items:center;justify-content:flex-end;
+    gap:var(--gap);flex-wrap:nowrap;overflow:hidden;
+  }
+  .row .grid-top,.row .grid-bottom{display:contents} /* 상/하를 합쳐 1줄로 */
+}
+
+/* 컨테이너 쿼리 미지원 브라우저 폴백(ResizeObserver로 토글) */
+.table.cw-wide .row{grid-template-columns:220px minmax(0,1fr)}
+.table.cw-wide .row .stack{flex-direction:row;align-items:center;justify-content:flex-end;gap:var(--gap);flex-wrap:nowrap;overflow:hidden}
+.table.cw-wide .row .grid-top,.table.cw-wide .row .grid-bottom{display:contents}
+
+/* 히어로(검색) – 간단 유지 */
 .hero-search{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:16px}
 .search-card{width:100%;max-width:640px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px}
 .search-title{font-size:13px;font-weight:700;margin-bottom:6px}
@@ -104,12 +110,9 @@ body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,
   <header>
     <div class="maxw px-5 py-4 flex items-center gap-3">
       <a class="text-xl font-extrabold no-underline" href="/">청구닷컴</a>
-      <span class="chip">베타</span>
       <nav class="ml-auto flex items-center gap-2">
         <a class="btn btn-ghost" href="#loss">손해보험사</a>
         <a class="btn btn-ghost" href="#life">생명보험사</a>
-        <a class="btn btn-ghost" href="#calc-panels">보험나이 계산기</a>
-        <a class="btn btn-ghost" href="#medcalc">실손 계산기</a>
       </nav>
     </div>
   </header>
@@ -120,9 +123,6 @@ body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,
       보험금 청구 링크,
       <span style="background:linear-gradient(90deg,#d946ef,#7c3aed,#06b6d4);-webkit-background-clip:text;background-clip:text;color:transparent;">한 곳에서 바로</span>
     </h1>
-    <p class="mt-2 text-slate-700 text-center">
-      전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · <span class="font-semibold">치과치료확인서</span> · 고객센터 · 인콜 모니터링 · 보험금청구 FAX
-    </p>
 
     <div class="hero-search">
       <div class="search-card">
@@ -132,7 +132,6 @@ body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,
           <button id="clear" class="btn btn-ghost" type="button">지우기</button>
           <a class="btn btn-ghost" href="#loss">손해부터 보기</a>
         </div>
-        <div class="mt-2 text-xs text-slate-600">단축키: <span class="chip">/</span> 검색 포커스, <span class="chip">Esc</span> 지우기</div>
       </div>
     </div>
   </section>
@@ -163,10 +162,6 @@ body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,
     <div class="maxw px-5 py-6 text-sm text-slate-600">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>© <span id="y"></span> 청구닷컴</div>
-        <div class="flex items-center gap-3">
-          <a class="btn btn-ghost" href="#">문의</a>
-          <a class="btn btn-ghost" href="#">개인정보처리방침</a>
-        </div>
       </div>
     </div>
   </footer>
@@ -176,13 +171,13 @@ body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,
   const $  = (s,el=document)=> el.querySelector(s);
   const $$ = (s,el=document)=> Array.from(el.querySelectorAll(s));
 
-  // 검색(간단)
+  // 검색
   const q=$("#q"), clearBtn=$("#clear");
   document.addEventListener("keydown",(e)=>{ if(e.key==="/"){e.preventDefault();q?.focus()} if(e.key==="Escape"){q.value="";filter()} });
   clearBtn?.addEventListener("click",()=>{ q.value=""; filter(); q.focus(); });
   q?.addEventListener("input", filter);
 
-  // 타겟 엘리먼트
+  // 리스트
   const lossList=$("#loss-list"), lifeList=$("#life-list");
   const lossEmpty=$("#loss-empty"), lifeEmpty=$("#life-empty");
 
@@ -193,14 +188,12 @@ body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,
   }
 
   function brandCell(item){
-    const L=item.links||{};
     const logoSrc=item.logo || `/assets/logos/${item.name}.png`;
-    const inner = `
+    return `
       <div class="brand">
         <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
         <span class="name">${item.name}</span>
       </div>`;
-    return L.system ? `<a href="${L.system}" class="block no-underline">${inner}</a>` : `<div class="opacity-85">${inner}</div>`;
   }
 
   function btn(label, href, cls){
@@ -210,13 +203,12 @@ body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,
     return `<a class="btn ${cls}" href="${href}" ${isExternal?'target="_blank" rel="noopener"':''}${downloadAttr}>${label}</a>`;
   }
 
-  // 전화 버튼: 고객센터/인콜은 중앙정렬 + 고정폭 클래스 부여
   function phoneBtn(label, number){
     if(!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
     const tel = number.replace(/[^0-9]/g,'');
-    let extra = ' btn-call';
-    if(/고객센터/.test(label)) extra += ' btn-call--center btn-call--cs';
-    if(/인콜/.test(label))   extra += ' btn-call--center btn-call--mon';
+    let extra=' btn-call';
+    if(/고객센터/.test(label)) extra+=' btn-call--center btn-call--cs';
+    if(/인콜/.test(label))     extra+=' btn-call--center btn-call--mon';
     return `<a class="btn${extra}" href="tel:${tel}"><span class="label">${label}</span><span class="num">${number}</span></a>`;
   }
 
@@ -255,8 +247,6 @@ body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,
     lifeEmpty.classList.toggle("hidden", life.length>0);
 
     filter();
-
-    // 폴백: 컨테이너 쿼리 미지원 환경에서 넓으면 1줄 모드
     attachWideMode(lossList);
     attachWideMode(lifeList);
   }
@@ -275,10 +265,10 @@ body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,
     lossList.innerHTML=err; lifeList.innerHTML=err;
   });
 
-  // 푸터 연도
+  // 연도
   const yEl=document.getElementById('y'); if(yEl) yEl.textContent=new Date().getFullYear();
 
-  // 폴백용 ResizeObserver
+  // 폴백: 컨테이너 쿼리 미지원 환경
   function attachWideMode(tableEl, threshold=1100){
     if(!tableEl) return;
     const ro=new ResizeObserver(entries=>{
