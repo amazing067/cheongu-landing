@@ -48,11 +48,14 @@
     .chip{background:var(--brand-soft);color:#2a47b8;border:1px solid #d7e0ff;padding:8px 12px;border-radius:999px;font-weight:700;cursor:pointer}
 
     .results{margin-top:16px;display:grid;grid-template-columns:1fr;gap:16px}
-    .summary-card{display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,#ffffff,#fbfdff);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
-    .pill{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);padding:10px 14px;border-radius:999px;font-weight:800}
+    /* 요약 배지 레이아웃을 안정적으로 */
+    .summary-card{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 14px;background:linear-gradient(180deg,#ffffff,#fbfdff);border:1px solid var(--line);border-radius:var(--radius);padding:14px;align-items:stretch}
+    .pill{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:6px;background:#fff;border:1px solid var(--line);padding:10px 14px;border-radius:12px;font-weight:800;min-height:64px;word-break:keep-all;overflow-wrap:anywhere}
+    .pill b{font-size:12px;color:#60709a;letter-spacing:.2px}
 
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
     @media (max-width:860px){.grid{grid-template-columns:1fr}}
+    @media (max-width:480px){.summary-card{grid-template-columns:1fr}.pill{min-height:56px}}
 
     .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
     .card h3{margin:0;padding:14px 16px;font-size:16px;letter-spacing:.3px;border-bottom:1px solid var(--line)}
@@ -87,7 +90,6 @@
         <button id="searchBtn" class="search-btn">검색</button>
       </div>
 
-      <!-- 하단 보조 토글(요청으로 제거) 대신 빠른 칩만 유지 -->
       <div class="chips" aria-label="빠른검색">
         <button class="chip" data-k="대장용종">대장용종</button>
         <button class="chip" data-k="맹장수술">맹장수술</button>
@@ -181,7 +183,6 @@
 
       const right=`<div class="card"><h3>생명보험 <span class="sub">(회사별 · 예시)</span></h3><table><thead><tr><th>회사</th><th class="center">종</th><th>근거/비고</th></tr></thead><tbody>${life.length? life.map(r=>`<tr><td>${r.company}</td><td class="center"><b>${r.tier}종</b></td><td>${r.basis||''}</td></tr>`).join(''):`<tr><td class="center" colspan="3">자료 없음</td></tr>`}</tbody></table></div>`;
 
-      // 세부 시술 테이블(있는 경우)
       const detail = row.procs && row.procs.length ? `
         <div class="card">
           <h3>세부 시술( ${row.canonical} ) <span class="sub">— 예시</span></h3>
