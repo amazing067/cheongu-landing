@@ -98,21 +98,28 @@
   .btn-primary:hover{background:#6d28d9}
   .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:3px 8px}
   .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:3px 8px}
-  .btn-call{
+  /* ===== 전화번호 버튼: 가운데 정렬 + 숫자 고정폭(가독성 개선) ===== */
+.btn-call{
   border-color:#cbd5e1;
   background:#fff;
-  display:inline-flex;        /* 중앙 정렬 위해 flex */
-  align-items:center;         /* 수직 가운데 */
-  justify-content:center;     /* 수평 가운데 */
-  gap:6px;                    /* 라벨과 번호 간격 */
-  white-space:nowrap;         /* 줄바꿈 방지 */
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  white-space:nowrap;
 }
 .btn-call .num{
-  font-weight:800;
-  margin-left:0;              /* gap로 대체했으니 0 */
+  display:inline-block;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:'tnum';
+  width:12.5ch;             /* 필요시 12~14ch로 조절 */
+  text-align:center;
+  font-weight:600;          /* 800 → 600 : “찐함” 완화 */
+  letter-spacing:.01em;     /* 자잘한 뭉침 완화 */
+  /* 숫자 렌더링이 두껍게 보이는 브라우저 보정 */
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
-  .row .stack{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-  .row .grid-top,.row .grid-bottom{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
   /* === 컨테이너 폭 기준: 표가 넓어지면 한 줄로 전환 === */
 /* .table 에 container-type: inline-size; 가 선언돼 있어야 동작합니다! */
 @container carrierlist (min-width: 1100px){
@@ -273,7 +280,24 @@ footer > .maxw,
 @container carrierlist (max-width:720px){
   .btn-call .num{ width:auto; }
 }
-  
+  /* 고객센터/인콜만 폰트 크게 (FAX는 그대로) */
+.btn-call[data-role="cs"],
+.btn-call[data-role="monitor"]{
+  font-size:12px;        /* 기본 .btn 10.5px → 12px */
+  padding:4px 8px;       /* 살짝 여유 */
+  min-height:26px;       /* 높이 확보 */
+}
+.btn-call[data-role="cs"] .num,
+.btn-call[data-role="monitor"] .num{
+  font-size:12px;        /* 숫자도 같이 키움 */
+  width:12.5ch;          /* 폭은 동일하게 유지(줄튀김 방지) */
+}
+
+/* 아주 좁은 화면에서 버튼이 답답하면 숫자 폭 가변 */
+@container carrierlist (max-width: 720px){
+  .btn-call .num{ width:auto; }
+}
+
 </style>
 
 </head>
@@ -573,11 +597,15 @@ footer > .maxw,
     }
 
     // 전화 버튼(한 칸 띄운 번호)
-    function phoneBtn(label, number) {
-      if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
-      const tel = number.replace(/[^0-9]/g,'');
-      return `<a class="btn btn-call" href="tel:${tel}">${label} <span class="num">${number}</span></a>`;
-    }
+function phoneBtn(label, number) {
+  if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
+  const tel = number.replace(/[^0-9]/g,'');
+  const role =
+    /고객센터/.test(label) ? 'cs' :
+    /인콜/.test(label) ? 'monitor' :
+    /FAX/.test(label) ? 'fax' : 'phone';
+  return `<a class="btn btn-call" data-role="${role}" href="tel:${tel}"><span class="label">${label}</span> <span class="num">${number}</span></a>`;
+}
 
     // 표 한 행(상단: 공통 링크 / 하단: 전화)
     function row(item) {
