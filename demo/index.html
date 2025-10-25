@@ -242,13 +242,26 @@ footer > .maxw,
   .maxw{ max-width: 92rem; } /* 초광폭에서 살짝 더 풀어줌(≈1472px) */
 }
   /* ===== 전화번호 버튼 정렬(숫자 폭 고정 + 줄바꿈 방지) ===== */
-.btn-call { white-space: nowrap; }               /* 버튼 자체 줄바꿈 금지 */
+.btn-call{
+  /* 1단계에서 이미 설정했지만, 중복되어도 무방 */
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  white-space:nowrap;
+}
 .btn-call .num{
-  display: inline-block;
-  font-variant-numeric: tabular-nums;            /* 숫자 고정폭 (Pretendard 지원) */
-  font-feature-settings: 'tnum';                  /* 일부 브라우저 보강 */
-  min-width: 12ch;                                /* ← 숫자칸 고정폭. 필요시 13~14ch로 조절 */
-  text-align: left;                               /* 하이픈 위치 유지 */
+  display:inline-block;
+  font-variant-numeric:tabular-nums;    /* 숫자 고정폭 */
+  font-feature-settings:'tnum';
+  width:12.5ch;                          /* 번호 칸 ‘고정폭’(필요시 12~14ch로 조절) */
+  text-align:center;                      /* 칸 내부 가운데 정렬 */
+  font-family:Pretendard,ui-monospace,SFMono-Regular,Menlo,monospace; /* 폴백 */
+}
+
+/* 화면이 아주 좁아질 때(버튼이 답답하면) 번호 칸 가변 처리 */
+@container carrierlist (max-width:720px){
+  .btn-call .num{ width:auto; }
 }
 /* ====== 전화 버튼 3종 고정폭 + 간격/폰트 보정 ====== */
 
