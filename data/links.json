@@ -459,9 +459,9 @@
         "dental": null,                               // 치과치료확인서(없으면 null)
         "pdf": "https://example.com/claim-form.pdf",  // 청구서 PDF
         "support": "https://example.com",             // 홈페이지
-        "cs": "1588-1234",                            // 고객센터
-        "monitor": null,                              // 인콜 모니터링
-        "fax": "02-1234-5678"                         // 보험금청구 FAX
+        "cs": "1544-4117",                            // 고객센터
+        "monitor": "1544-4117",                              // 인콜 모니터링
+        "fax": "고객센터 전화"                         // 보험금청구 FAX
       }
     },
     {
