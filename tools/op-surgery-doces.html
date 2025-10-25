@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>종수술 분류표 | 청구닷컴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f8fafc; --card:#ffffff; --line:#e2e8f0; --txt:#0f172a; --mut:#64748b;
+    --ind:#6366f1; --emer:#10b981; --amber:#f59e0b; --rose:#f43f5e;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--txt)}
+  .wrap{max-width:960px;margin:24px auto;padding:0 16px}
+  .head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px}
+  .title{font-weight:900;font-size:22px;letter-spacing:-.01em}
+  .badge{font-size:11px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:2px 8px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center}
+  .search{height:40px;border:1px solid var(--line);border-radius:10px;padding:0 12px;width:100%}
+  .btn{height:40px;border-radius:10px;border:1px solid var(--line);background:#fff;padding:0 12px;font-weight:800}
+  .btn:hover{background:#f1f5f9}
+  .pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;color:#fff;font-weight:900;letter-spacing:.01em}
+  .pill-life{background:linear-gradient(135deg,var(--emer),#059669)}
+  .pill-loss{background:linear-gradient(135deg,var(--ind),#3b82f6)}
+  .pill-warn{background:linear-gradient(135deg,var(--amber),#fb923c)}
+  .mut{color:var(--mut);font-size:12px}
+  .table{width:100%;border-collapse:separate;border-spacing:0;margin-top:12px}
+  .table th,.table td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  .table th{background:#f9fafb;text-align:left;font-size:12px;color:#334155}
+  .k{font-weight:900}
+  mark{background:rgba(99,102,241,.18)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid var(--line);border-radius:999px;padding:6px 10px;background:#fff;font-size:12px}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .small{height:34px;border-radius:8px;font-size:12px}
+  .note{font-size:12px;color:#475569}
+  .code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+  .empty{padding:20px;text-align:center;color:#475569}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div class="title">종수술 분류표</div>
+      <span class="badge">검색 → 질병·수술명 / 키워드 / KCD 코드</span>
+      <span class="badge">손해/생명 분류 스케일 동시 표기</span>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <input id="q" class="search" type="search" placeholder="예: 대장용종, 충수절제, 담낭절제, K63.5, 폴립">
+        <div class="actions">
+          <button id="btnImport" class="btn small">가져오기(JSON)</button>
+          <button id="btnExport" class="btn small">내보내기(JSON)</button>
+          <button id="btnAdd" class="btn small">신규 추가</button>
+        </div>
+      </div>
+      <div class="mut" style="margin-top:6px">※ 본 표는 내부 참고용 도구입니다. 실제 청구/지급은 해당 <b>약관·심사</b> 기준을 따릅니다.</div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <table class="table" id="tbl">
+        <thead>
+          <tr>
+            <th style="width:26%">병명/시술명</th>
+            <th style="width:18%">코드/동의어</th>
+            <th style="width:20%">손해보험 분류</th>
+            <th style="width:20%">생명보험 분류</th>
+            <th>비고/근거</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="empty" id="empty" style="display:none">검색 결과가 없습니다.</div>
+    </div>
+
+    <p class="note" style="margin:10px 2px">
+      • <b>분류 스케일</b>: 손해(예: 1~5종/1~3종 등), 생명(예: 1~3종/1~5종 등) — 회사별로 다르면 <span class="code">overrides</span>에 개별 설정<br>
+      • <b>overrides</b> 예: <span class="code">loss.overrides["OO손해"] = {scale:"1-5", grade:3}</span><br>
+      • Import/Export로 파일을 주고받으며 내부 표준안을 유지하면 됩니다.
+    </p>
+  </div>
+
+<script>
+/** =========================
+ *  데이터 스키마 (예시)
+ *  =========================
+ *  {
+ *    id: "poly_colon",
+ *    name: "대장용종(내시경 용종절제술)",
+ *    aliases: ["대장폴립", "폴립절제", "용종절제", "내시경 용종절제", "K63.5"],
+ *    codes: { KCD: ["K63.5"], ETC: [] },
+ *    loss: { scale: "1-5", grade: null, overrides: { /* "OO손해":{scale:"1-3", grade:2} * / } },
+ *    life: { scale: "1-3", grade: null, overrides: { /* "OO생명":{scale:"1-3", grade:1} * / } },
+ *    note: "예시 항목 — 실제 약관 근거로 채워 넣으세요.",
+ *    refs: []
+ *  }
+ */
+
+// ===== 예시 데이터 (값은 샘플/미정입니다! 실제 운영 시 반드시 수정) =====
+const DATA = [
+  {
+    id:"poly_colon",
+    name:"대장용종(내시경 용종절제술)",
+    aliases:["대장폴립","폴립절제","용종절제","내시경 용종절제","K63.5"],
+    codes:{KCD:["K63.5"],ETC:[]},
+    loss:{scale:"1-5",grade:null,overrides:{}},
+    life:{scale:"1-3",grade:null,overrides:{}},
+    note:"예시. 회사/시기별 상이 → 약관 근거 입력 필요.",
+    refs:[]
+  },
+  {
+    id:"appy",
+    name:"충수절제술(맹장수술)",
+    aliases:["맹장염","충수염","appendectomy","K35"],
+    codes:{KCD:["K35"],ETC:[]},
+    loss:{scale:"1-5",grade:3,overrides:{}},
+    life:{scale:"1-3",grade:2,overrides:{}},
+    note:"예시값(임의). 실제 약관 확인 후 조정.",
+    refs:[]
+  },
+  {
+    id:"chole",
+    name:"담낭절제술(복강경)",
+    aliases:["담석","담낭염","담낭절제","cholecystectomy","K81","K80"],
+    codes:{KCD:["K80","K81"],ETC:[]},
+    loss:{scale:"1-5",grade:3,overrides:{}},
+    life:{scale:"1-3",grade:2,overrides:{}},
+    note:"예시값(임의).",
+    refs:[]
+  }
+];
+
+// ============== 유틸 ==============
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>Array.from(el.querySelectorAll(s));
+const escapeHTML = s => String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+function hi(text, q){
+  if(!q) return escapeHTML(text);
+  const re = new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
+  return escapeHTML(text).replace(re,'<mark>$1</mark>');
+}
+function matchScore(item, q){
+  if(!q) return 1;
+  const hay = [item.name,...(item.aliases||[]),(item.codes?.KCD||[]).join(' ')].join(' ').toLowerCase();
+  return hay.includes(q.toLowerCase()) ? 1 : 0;
+}
+
+// ============== 렌더 ==============
+const state = { q:"", items:[...DATA] };
+
+function render(){
+  const tbody = $("#tbody"); const empty = $("#empty");
+  const q = state.q.trim();
+  const filtered = state.items
+    .map(x=>({x,score:matchScore(x,q)}))
+    .filter(o=>o.score>0)
+    .map(o=>o.x);
+
+  tbody.innerHTML = filtered.map(rowHTML).join('');
+  empty.style.display = filtered.length ? 'none' : '';
+}
+
+function rowHTML(it){
+  const loss = it.loss||{}, life = it.life||{};
+  const lossTxt = gradeText(loss);
+  const lifeTxt = gradeText(life);
+
+  const aliases = [...(it.aliases||[])].slice(0,6).map(a=>`<span class="chip">${hi(a,state.q)}</span>`).join(' ');
+  const kcds = (it.codes?.KCD||[]).map(c=>`<span class="chip">${hi(c,state.q)}</span>`).join(' ');
+
+  return `
+  <tr>
+    <td>
+      <div class="k">${hi(it.name,state.q)}</div>
+      <div class="chips" style="margin-top:6px">${aliases}</div>
+    </td>
+    <td>
+      <div class="chips">${kcds || '<span class="chip">-</span>'}</div>
+    </td>
+    <td>
+      <div class="pill pill-loss">${lossTxt}</div>
+      ${overrideList(loss.overrides)}
+    </td>
+    <td>
+      <div class="pill pill-life">${lifeTxt}</div>
+      ${overrideList(life.overrides)}
+    </td>
+    <td>
+      <div class="note">${escapeHTML(it.note||'')}</div>
+    </td>
+  </tr>`;
+}
+
+function gradeText(side){
+  if(!side) return '미정';
+  const sc = side.scale || '스케일 미정';
+  const g = (side.grade ?? '–');
+  return `${sc} · ${g}종`;
+}
+function overrideList(ov){
+  if(!ov || !Object.keys(ov).length) return `<div class="mut" style="margin-top:6px">회사별 예외 없음</div>`;
+  return `
+    <div class="mut" style="margin-top:6px">회사별 예외:</div>
+    <ul class="note" style="margin:4px 0 0 14px">
+      ${Object.entries(ov).map(([k,v])=>`<li>${escapeHTML(k)} → ${escapeHTML(v.scale||'?')} · ${escapeHTML(v.grade ?? '–')}종</li>`).join('')}
+    </ul>`;
+}
+
+// ============== 이벤트 ==============
+$("#q").addEventListener('input', e=>{ state.q = e.target.value; render(); });
+document.addEventListener('keydown', e=>{ if(e.key==='/'){ e.preventDefault(); $("#q").focus(); } });
+
+// 신규 추가(간단 입력)
+$("#btnAdd").addEventListener('click', ()=>{
+  const name = prompt('병명/시술명 입력'); if(!name) return;
+  const scaleLoss = prompt('손해 스케일(예: 1-5)') || '1-5';
+  const gradeLoss = prompt('손해 “몇 종”(숫자, 비우면 미정)') || '';
+  const scaleLife = prompt('생명 스케일(예: 1-3)') || '1-3';
+  const gradeLife = prompt('생명 “몇 종”(숫자, 비우면 미정)') || '';
+  state.items.unshift({
+    id: 'u_' + Date.now(),
+    name,
+    aliases: [],
+    codes:{KCD:[],ETC:[]},
+    loss:{scale:scaleLoss,grade:gradeLoss?Number(gradeLoss):null,overrides:{}},
+    life:{scale:scaleLife,grade:gradeLife?Number(gradeLife):null,overrides:{}},
+    note:''
+  });
+  render();
+});
+
+// Export
+$("#btnExport").addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(state.items,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'surgery-grades.json';
+  a.click(); URL.revokeObjectURL(url);
+});
+// Import
+$("#btnImport").addEventListener('click', ()=>{
+  const inp = document.createElement('input'); inp.type='file'; inp.accept='application/json';
+  inp.onchange = async ()=>{
+    const f = inp.files?.[0]; if(!f) return;
+    try{
+      const txt = await f.text();
+      const arr = JSON.parse(txt);
+      if(!Array.isArray(arr)) throw new Error('형식 오류');
+      state.items = arr; render();
+      alert('불러오기 완료');
+    }catch(err){ alert('불러오기 실패: '+err.message); }
+  };
+  inp.click();
+});
+
+render();
+</script>
+</body>
+</html>
