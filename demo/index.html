@@ -577,12 +577,13 @@ footer > .maxw,
       return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
     }
 
-    // 전화 버튼(한 칸 띄운 번호)
-    function phoneBtn(label, number) {
-      if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
-      const tel = number.replace(/[^0-9]/g,'');
-      return `<a class="btn btn-call" href="tel:${tel}">${label} <span class="num">${number}</span></a>`;
-    }
+    // 전화 버튼(고객센터/인콜은 전용 스타일 부여, FAX는 기존 그대로)
+function phoneBtn(label, number) {
+  if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
+  const tel = number.replace(/[^0-9]/g,'');
+  const extra = /고객센터|인콜/.test(label) ? ' btn-call--center' : '';
+  return `<a class="btn btn-call${extra}" href="tel:${tel}"><span class="label">${label}</span> <span class="num">${number}</span></a>`;
+}
 
     // 표 한 행(상단: 공통 링크 / 하단: 전화)
     function row(item) {
