@@ -452,8 +452,7 @@
     {
       "name": "IBK연금보험",
       "type": "생명",
-      "tags": ["ibk", "연금", "고객센터", "청구"],
-      "logo": "/assets/logos/IBK연금보험.png",
+      "tags": ["ibk", "연금", "고객센터"],
       "links": {
         "system": "https://example.com/login",        // 전산 접속
         "guide": "https://example.com/claim-guide",   // 필요서류 안내
@@ -463,9 +462,8 @@
         "cs": "1588-1234",                            // 고객센터
         "monitor": null,                              // 인콜 모니터링
         "fax": "02-1234-5678"                         // 보험금청구 FAX
-  }
-}
-
+      }
+    },
     {
       "name": "처브라이프",
       "type": "생명",
