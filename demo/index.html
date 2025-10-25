@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <!-- 운영용 링크였던 것을 데모용으로 바꿈 -->
+<link rel="stylesheet" href="/assets/site.demo.css?v=demo1" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -249,6 +251,32 @@ footer > .maxw,
   font-feature-settings: 'tnum';                  /* 일부 브라우저 보강 */
   min-width: 12ch;                                /* ← 숫자칸 고정폭. 필요시 13~14ch로 조절 */
   text-align: left;                               /* 하이픈 위치 유지 */
+}
+/* ============ 전화 버튼 가독성 업(데모 전용) ============ */
+
+/* 기본 전화 버튼 숫자: 너무 진하지 않게 */
+.btn-call .num{
+  font-weight: 600;              /* 800 → 600 */
+  color: #0f172a;                /* 또렷하지만 과하지 않게 */
+}
+
+/* 고객센터/인콜 전용: 버튼 내부 꽉 차고 중앙 정렬 */
+.btn-call--center{
+  display: inline-flex;          /* 내부 정렬 위해 flex */
+  align-items: center;
+  justify-content: center;       /* 가운데 정렬 */
+  gap: 6px;
+  min-width: 152px;              /* 버튼 가로 최소폭(원하면 160~168으로 조절) */
+  padding: 4px 10px;             /* 약간 여유 */
+  text-align: center;
+}
+
+/* 전용 버튼의 숫자: 살짝 더 크고 선명 */
+.btn-call--center .num{
+  font-size: 12.5px;             /* 숫자 크기↑ */
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+  min-width: auto !important;    /* 행 정렬용 고정폭 제거(센터링을 위해) */
 }
 
 </style>
@@ -866,5 +894,11 @@ function attachWideMode(tableEl, threshold=1100){
 }
   })();
   </script>
+  <!-- DEMO 배지 -->
+<div style="position:fixed;right:12px;bottom:12px;z-index:9999;
+  padding:6px 10px;border-radius:999px;background:#0ea5e9;color:#fff;
+  font-weight:800;font-size:12px;box-shadow:0 6px 16px rgba(0,0,0,.15);">
+  DEMO
+</div>
 </body>
 </html>
