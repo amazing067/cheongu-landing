@@ -437,7 +437,7 @@
     {
       "name": "신한라이프",
       "type": "생명",
-      "tags": ["신한라이", "고객센터"],
+      "tags": ["신한라이프", "고객센터"],
       "links": {
         "system": "https://ga.shinhanlife.co.kr:11043/colomga010m.msv",
         "guide": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do",
