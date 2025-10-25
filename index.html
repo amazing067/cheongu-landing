@@ -98,28 +98,11 @@
   .btn-primary:hover{background:#6d28d9}
   .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:3px 8px}
   .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:3px 8px}
-  /* ===== 전화번호 버튼: 가운데 정렬 + 숫자 고정폭(가독성 개선) ===== */
-.btn-call{
-  border-color:#cbd5e1;
-  background:#fff;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  white-space:nowrap;
-}
-.btn-call .num{
-  display:inline-block;
-  font-variant-numeric:tabular-nums;
-  font-feature-settings:'tnum';
-  width:12.5ch;             /* 필요시 12~14ch로 조절 */
-  text-align:center;
-  font-weight:600;          /* 800 → 600 : “찐함” 완화 */
-  letter-spacing:.01em;     /* 자잘한 뭉침 완화 */
-  /* 숫자 렌더링이 두껍게 보이는 브라우저 보정 */
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
+  .btn-call{border-color:#cbd5e1;background:#fff}
+  .btn-call .num{font-weight:800;margin-left:6px}
+
+  .row .stack{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+  .row .grid-top,.row .grid-bottom{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
   /* === 컨테이너 폭 기준: 표가 넓어지면 한 줄로 전환 === */
 /* .table 에 container-type: inline-size; 가 선언돼 있어야 동작합니다! */
 @container carrierlist (min-width: 1100px){
@@ -258,44 +241,14 @@ footer > .maxw,
   footer > .maxw,
   .maxw{ max-width: 92rem; } /* 초광폭에서 살짝 더 풀어줌(≈1472px) */
 }
-/* ===== 전화번호 버튼 정렬(가운데 정렬 + 숫자 고정폭) ===== */
-.btn-call{
-  /* 1단계에서 이미 설정했지만, 중복되어도 무방 */
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  white-space:nowrap;
-}
+  /* ===== 전화번호 버튼 정렬(숫자 폭 고정 + 줄바꿈 방지) ===== */
+.btn-call { white-space: nowrap; }               /* 버튼 자체 줄바꿈 금지 */
 .btn-call .num{
-  display:inline-block;
-  font-variant-numeric:tabular-nums;    /* 숫자 고정폭 */
-  font-feature-settings:'tnum';
-  width:12.5ch;                          /* 번호 칸 ‘고정폭’(필요시 12~14ch로 조절) */
-  text-align:center;                      /* 칸 내부 가운데 정렬 */
-  font-family:Pretendard,ui-monospace,SFMono-Regular,Menlo,monospace; /* 폴백 */
-}
-
-/* 화면이 아주 좁아질 때(버튼이 답답하면) 번호 칸 가변 처리 */
-@container carrierlist (max-width:720px){
-  .btn-call .num{ width:auto; }
-}
-  /* 고객센터/인콜만 폰트 크게 (FAX는 그대로) */
-.btn-call[data-role="cs"],
-.btn-call[data-role="monitor"]{
-  font-size:12px;        /* 기본 .btn 10.5px → 12px */
-  padding:4px 8px;       /* 살짝 여유 */
-  min-height:26px;       /* 높이 확보 */
-}
-.btn-call[data-role="cs"] .num,
-.btn-call[data-role="monitor"] .num{
-  font-size:12px;        /* 숫자도 같이 키움 */
-  width:12.5ch;          /* 폭은 동일하게 유지(줄튀김 방지) */
-}
-
-/* 아주 좁은 화면에서 버튼이 답답하면 숫자 폭 가변 */
-@container carrierlist (max-width: 720px){
-  .btn-call .num{ width:auto; }
+  display: inline-block;
+  font-variant-numeric: tabular-nums;            /* 숫자 고정폭 (Pretendard 지원) */
+  font-feature-settings: 'tnum';                  /* 일부 브라우저 보강 */
+  min-width: 12ch;                                /* ← 숫자칸 고정폭. 필요시 13~14ch로 조절 */
+  text-align: left;                               /* 하이픈 위치 유지 */
 }
 
 </style>
@@ -597,15 +550,11 @@ footer > .maxw,
     }
 
     // 전화 버튼(한 칸 띄운 번호)
-function phoneBtn(label, number) {
-  if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
-  const tel = number.replace(/[^0-9]/g,'');
-  const role =
-    /고객센터/.test(label) ? 'cs' :
-    /인콜/.test(label) ? 'monitor' :
-    /FAX/.test(label) ? 'fax' : 'phone';
-  return `<a class="btn btn-call" data-role="${role}" href="tel:${tel}"><span class="label">${label}</span> <span class="num">${number}</span></a>`;
-}
+    function phoneBtn(label, number) {
+      if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
+      const tel = number.replace(/[^0-9]/g,'');
+      return `<a class="btn btn-call" href="tel:${tel}">${label} <span class="num">${number}</span></a>`;
+    }
 
     // 표 한 행(상단: 공통 링크 / 하단: 전화)
     function row(item) {
