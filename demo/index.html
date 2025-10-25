@@ -254,29 +254,30 @@ footer > .maxw,
 }
 /* ============ 전화 버튼 가독성 업(데모 전용) ============ */
 
-/* 기본 전화 버튼 숫자: 너무 진하지 않게 */
+/* 버튼 기본값은 원래대로(크기/패딩 건드리지 않음) */
+
+/* 전화 숫자: 너무 진한 느낌 완화 + 고정폭 제거 → ‘고객센터 1544-0000’이 한 칸만 벌어짐 */
 .btn-call .num{
-  font-weight: 600;              /* 800 → 600 */
-  color: #0f172a;                /* 또렷하지만 과하지 않게 */
-}
-
-/* 고객센터/인콜 전용: 버튼 내부 꽉 차고 중앙 정렬 */
-.btn-call--center{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;            /* 6px → 2px : 라벨-숫자 간격 축소 */
-  min-width: auto;     /* 152px 고정폭 제거 → 내용만큼만 */
-  padding: 2px 8px;    /* 4x10 → 2x8 : 세로/가로 여백 축소 */
-  text-align: center;
-}
-
-/* 전용 버튼의 숫자: 살짝 더 크고 선명 */
-.btn-call--center .num{
-  font-size: 12px;             /* 숫자 크기↑ */
+  font-weight: 600;               /* 800 → 600 */
+  min-width: auto;                /* 12ch 고정폭 제거 */
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum';
-  min-width: auto !important;    /* 행 정렬용 고정폭 제거(센터링을 위해) */
+}
+
+/* 고객센터/인콜은 버튼 안에서 내용 중앙 정렬 */
+.btn-call--center{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;                        /* 라벨-숫자 간 간격 */
+}
+
+/* (선택) 버튼들 사이 여백이 너무 넓으면 살짝만 줄이기 */
+@container carrierlist (min-width:1100px){
+  .row .stack{ gap:6px; }         /* 유지 */
+  .row .grid-top, .row .grid-bottom{ gap:6px; }  /* 6px 유지. 더 빡빡하게는 4px */
+}
+
 }
 /* ====== 전화 버튼 3종 고정폭 + 간격/폰트 보정 ====== */
 
