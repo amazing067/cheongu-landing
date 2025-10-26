@@ -160,6 +160,28 @@
   .btn-call.center .num{ text-align:center; }
 </style>
 
+<!-- Anti-copy START: 전역 선택/워터마크(입력/폼은 예외 허용) -->
+<style id="antiCopy">
+  /* 전역 텍스트 선택 차단(입력·편집 영역은 허용) */
+  body:not(.allow-select) {
+    -webkit-user-select: none; -moz-user-select: none; user-select: none;
+  }
+  input, textarea, select, [contenteditable="true"], .allow-select * {
+    -webkit-user-select: text !important; -moz-user-select: text !important; user-select: text !important;
+  }
+  /* 전 화면 워터마크(무단복제 억지) */
+  body.wm::after{
+    content:"청구닷컴  ·  무단복제 금지";
+    position:fixed; inset:0; pointer-events:none; opacity:.06;
+    font-weight:900; font-size:44px; letter-spacing:2px;
+    display:block; transform:rotate(-18deg);
+    background:
+      repeating-linear-gradient(45deg, rgba(24,36,64,.25) 0 2px, rgba(24,36,64,0) 2px 60px);
+    mix-blend-mode:multiply;
+  }
+</style>
+<!-- Anti-copy END -->
+
 </head>
 
 <body class="text-slate-900 mode-compact">
@@ -412,6 +434,15 @@
       </div>
     </div>
   </footer>
+
+  <!-- Anti-copy START: 상단 경고 토스트 -->
+  <div id="copyAlert" style="
+    position:fixed;left:50%;top:18px;transform:translateX(-50%);
+    background:#182340;color:#fff;padding:10px 14px;border-radius:10px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);font-size:14px;display:none;z-index:2147483647;">
+    무단 복제/배포 금지 · 저작권 보호 중
+  </div>
+  <!-- Anti-copy END -->
 
   <script>
   (function () {
@@ -763,5 +794,63 @@
     }
   })();
   </script>
+
+  <!-- Anti-copy START: 복제 억지 스크립트(기존 로직과 완전 분리) -->
+  <script>
+    (function(){
+      // 워터마크/안티카피 클래스
+      document.body.classList.add('wm');
+
+      // 이미지 드래그 방지
+      document.addEventListener('dragstart', e => e.preventDefault(), true);
+      document.querySelectorAll('img').forEach(img => { img.setAttribute('draggable','false'); });
+
+      // 우클릭/컨텍스트 메뉴 차단 + 토스트
+      const toast = document.getElementById('copyAlert');
+      let tId;
+      function showToast(msg){
+        if(!toast) return;
+        toast.textContent = msg || toast.textContent;
+        toast.style.display = 'block';
+        clearTimeout(tId);
+        tId = setTimeout(()=> toast.style.display='none', 1600);
+      }
+      document.addEventListener('contextmenu', e => { e.preventDefault(); showToast('무단 복제 금지 · 저작권 보호 중'); }, true);
+
+      // 단축키 일부 차단(F12, Ctrl+U/S/P, Ctrl+Shift+I/J/C)
+      document.addEventListener('keydown', function(e){
+        const k = (e.key || '').toLowerCase();
+        const ctrl = e.ctrlKey || e.metaKey;
+        const block =
+          k === 'f12' ||
+          (ctrl && ['u','s','p'].includes(k)) ||
+          (ctrl && e.shiftKey && ['i','j','c'].includes(k));
+        if(block){ e.preventDefault(); e.stopPropagation(); showToast('보호된 페이지 입니다'); }
+      }, true);
+
+      // 복사/잘라내기 시 경고 토스트
+      ['copy','cut'].forEach(evt => {
+        document.addEventListener(evt, function(ev){
+          // 입력필드 내 동작은 허용
+          const tag = (ev.target && ev.target.tagName || '').toLowerCase();
+          const editable = ev.target && (ev.target.isContentEditable || ['input','textarea'].includes(tag));
+          if(!editable){ ev.preventDefault(); showToast('콘텐츠 복사 금지'); }
+        }, true);
+      });
+
+      // 콘솔 경고(개발자에게만 보임)
+      try {
+        console.log('%c청구닷컴', 'font-weight:900;font-size:16px;color:#3b82f6');
+        console.log('%c이 페이지의 디자인/코드/데이터는 저작권 보호 대상입니다. 무단 복제/배포를 금합니다.', 'color:#ef4444');
+      } catch(e){}
+
+      // 카나리아 토큰(비가시성 식별자) — 필요 시 크롤링으로 역추적
+      const CANARY = 'claimhub-' + (new Date()).toISOString().slice(0,10).replace(/-/g,'') + '-K1';
+      const node = document.createComment('canary:'+CANARY);
+      document.body.appendChild(node);
+    })();
+  </script>
+  <!-- Anti-copy END -->
+
 </body>
 </html>
