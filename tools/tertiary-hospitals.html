@@ -6,16 +6,18 @@
   <title>상급종합병원 목록 · 검색/필터 · 팝업</title>
   <meta name="robots" content="noindex,nofollow" />
   <style>
-    :root{ --bg:#f7f9ff; --card:#ffffff; --ink:#182340; --muted:#5b6b8c; --line:#e6ecf7;
-      --brand:#3a64ff; --brand-soft:#e8eeff; --accent:#00c2a8; --radius:16px; --shadow:0 10px 30px rgba(15,25,55,.08); }
+    :root{
+      --bg:#f7f9ff; --card:#ffffff; --ink:#182340; --muted:#5b6b8c; --line:#e6ecf7;
+      --brand:#3a64ff; --brand-soft:#e8eeff; --accent:#00c2a8; --radius:16px; --shadow:0 10px 30px rgba(15,25,55,.08);
+    }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;background:radial-gradient(900px 500px at 10% -10%, #eef3ff 0, transparent 50%),linear-gradient(#f9fbff,#f3f7ff); color:var(--ink); font-family:system-ui,-apple-system,Segoe UI,Roboto,Apple SD Gothic Neo,Pretendard,Helvetica,Arial,sans-serif}
+    body{margin:0;background:radial-gradient(900px 500px at 10% -10%, #eef3ff 0, transparent 50%) ,linear-gradient(#f9fbff, #f3f7ff); color:var(--ink); font-family:system-ui,-apple-system,Segoe UI,Roboto,Apple SD Gothic Neo,Pretendard,Helvetica,Arial,sans-serif}
     .wrap{max-width:980px;margin:0 auto;padding:20px 16px 28px}
     header{position:sticky;top:0;background:linear-gradient(#fff,rgba(255,255,255,.92));backdrop-filter:saturate(140%) blur(6px);z-index:10;border-bottom:1px solid var(--line)}
     header .h-inner{max-width:980px;margin:0 auto;padding:14px 16px;display:flex;gap:10px;align-items:center;justify-content:space-between}
     h1{margin:0;font-size:18px;font-weight:800;letter-spacing:-.2px}
-    .badge{font-size:12px;color:#2a4;background:#e7fbf2;border:1px solid #b9f1da;border-radius:999px;padding:5px 10px;margin-left:8px}
+    .badge{font-size:12px;color:#2a4; background:#e7fbf2;border:1px solid #b9f1da;border-radius:999px;padding:5px 10px;margin-left:8px}
     .btn{appearance:none;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px;font-weight:600;cursor:pointer;box-shadow:0 1px 0 rgba(10,20,50,.04)}
     .btn:hover{border-color:#cfd8ee;background:#fafcff}
     .btn.brand{border-color:transparent;background:var(--brand);color:#fff}
@@ -27,8 +29,8 @@
     .help{font-size:12px;color:var(--muted);margin-top:8px}
     .table-wrap{overflow:auto;border-top:1px solid var(--line)}
     table{width:100%;border-collapse:separate;border-spacing:0}
-    thead th{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);text-align:left;font-size:12px;color:var(--muted);padding:12px}
-    tbody td{border-bottom:1px solid #eef2fb;padding:12px;vertical-align:top;font-size:14px}
+    thead th{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);text-align:left;font-size:12px;color:var(--muted);padding:12px 12px}
+    tbody td{border-bottom:1px solid #eef2fb;padding:12px 12px;vertical-align:top;font-size:14px}
     tbody tr:hover{background:#fbfdff}
     .name{font-weight:800}
     .addr{color:var(--muted);font-size:12px;margin-top:2px}
@@ -80,68 +82,67 @@
               <th style="width:20%">바로가기</th>
             </tr>
           </thead>
-          <tbody id="tbody"><!-- rows --></tbody>
+          <tbody id="tbody">
+            <!-- rows -->
+          </tbody>
         </table>
       </div>
     </section>
 
-    <footer>데이터 위치: <code>/data/tertiary-hospitals.json</code> (없으면 내장 47곳 템플릿 사용)</footer>
+    <footer>데이터 위치: <code>/data/tertiary-hospitals.json</code> (없으면 내장 예시 사용)</footer>
   </div>
 
   <script>
     // ====== 데이터 소스 ======
     const DATA_URL = '/data/tertiary-hospitals.json';
 
-    // ====== 5기 상급종합병원 47곳 (주소/전화/홈페이지 비워둠 · 나중에 채워넣기) ======
+    // 내장 예시(최소 구동용). 실제 운영은 /data/tertiary-hospitals.json 사용.
     const FALLBACK = [
-      { name:"강북삼성병원", tel:"1599-8114", city:"서울특별시", region:"종로", address:"서울특별시 종로구 새문안로 29 (03181) 강북삼성병원
-", homepage:"https://main.kbsmc.co.kr/main/main.do" },
-      { name:"건국대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"경희대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"고려대학교의과대학부속구로병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"삼성서울병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"서울대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"연세대학교의과대학강남세브란스병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"연세대학교의과대학세브란스병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"이화여자대학교의과대학부속목동병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"재단법인아산사회복지재단서울아산병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"중앙대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"학교법인고려중앙학원고려대학교의과대학부속병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"학교법인가톨릭학원가톨릭대학교서울성모병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"한양대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"가톨릭대학교인천성모병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"순천향대학교부속부천병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"의료법인길의료재단길병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"인하대학교의과대학부속병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"가톨릭대학교성빈센트병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"고려대학교의과대학부속안산병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"분당서울대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"아주대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"한림대학교성심병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"강릉아산병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"연세대학교원주세브란스기독병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"충북대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"단국대학교의과대학부속병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"충남대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"학교법인건양교육재단건양대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"원광대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"전북대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"전남대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"조선대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"화순전남대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"경북대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"계명대학교동산병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"대구가톨릭대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"영남대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"칠곡경북대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"고신대학교복음병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"동아대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"부산대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"양산부산대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"인제대학교부산백병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"학교법인동의학원동의의료원부속부산한방병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"경상국립대학교병원", tel:"", city:"", region:"", address:"", homepage:"" },
-      { name:"학교법인웅산교육재단삼성창원병원", tel:"", city:"", region:"", address:"", homepage:"" }
+      {
+        name: "서울아산병원",
+        tel: "1688-7575",
+        city: "서울",
+        region: "서울특별시",
+        address: "서울 송파구 올림픽로 43길 88",
+        homepage: "https://www.amc.seoul.kr",
+        lat: 37.526, lng: 127.107
+      },
+      {
+        name: "삼성서울병원",
+        tel: "1599-3114",
+        city: "서울",
+        region: "서울특별시",
+        address: "서울 강남구 일원로 81",
+        homepage: "https://www.samsunghospital.com",
+        lat: 37.488, lng: 127.087
+      },
+      {
+        name: "세브란스병원(신촌)",
+        tel: "1599-1004",
+        city: "서울",
+        region: "서울특별시",
+        address: "서울 서대문구 연세로 50",
+        homepage: "https://sev.iseverance.com",
+        lat: 37.563, lng: 126.936
+      },
+      {
+        name: "서울대학교병원",
+        tel: "1588-5700",
+        city: "서울",
+        region: "서울특별시",
+        address: "서울 종로구 대학로 101",
+        homepage: "https://www.snuh.org",
+        lat: 37.579, lng: 126.999
+      },
+      {
+        name: "부산대학교병원",
+        tel: "051-240-7000",
+        city: "부산",
+        region: "부산광역시",
+        address: "부산 서구 구덕로 179",
+        homepage: "https://www.pnuh.or.kr",
+        lat: 35.105, lng: 129.016
+      }
     ];
 
     let RAW = [];
@@ -161,22 +162,25 @@
     };
 
     // ====== 유틸 ======
-    const telHref = v => v ? `tel:${String(v).replaceAll(/[^0-9]/g,'')}` : '';
+    const telHref = v => v ? `tel:${v.replaceAll(/[^0-9]/g,'')}` : '';
     const nmap = (name, addr) => `https://map.naver.com/p/search/${encodeURIComponent(name + ' ' + (addr||''))}`;
     const kmap = (name, addr) => `https://map.kakao.com/?q=${encodeURIComponent(name + ' ' + (addr||''))}`;
-    const norm = s => (s||'').toLowerCase().replace(/\s+/g,'').normalize('NFKD');
+
+    function norm(s){ return (s||'').toLowerCase().replace(/\s+/g,'').normalize('NFKD'); }
 
     // ====== 렌더 ======
     function renderRows(list){
       els.tbody.innerHTML = '';
-      list.forEach((h)=>{
+      list.forEach((h, idx)=>{
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>
             <div class="name">${h.name||''}</div>
             <div class="addr">${h.city||''} · ${h.region||''} · ☎ ${h.tel||'-'}</div>
           </td>
-          <td><div>${h.address||''}</div></td>
+          <td>
+            <div>${h.address||''}</div>
+          </td>
           <td>
             <div class="row-actions">
               ${h.tel ? `<a class="pill" href="${telHref(h.tel)}" title="전화하기">전화</a>`:''}
@@ -188,16 +192,24 @@
           </td>
         `;
         tr.addEventListener('click', (e)=>{
+          // 버튼/링크 클릭은 행 클릭과 구분
           if(e.target.closest('a,button')) return;
           els.map.textContent = `${h.name} — ${h.address || ''}`;
         });
         els.tbody.appendChild(tr);
       });
       els.count.textContent = list.length;
+      // 주소복사 이벤트 위임
       els.tbody.addEventListener('click', async (e)=>{
         const btn = e.target.closest('button[data-copy]');
         if(!btn) return;
-        try{ await navigator.clipboard.writeText(btn.getAttribute('data-copy')); btn.textContent='복사됨'; setTimeout(()=>btn.textContent='주소복사',1200);}catch(err){ alert('클립보드 권한을 확인해주세요.'); }
+        try{
+          await navigator.clipboard.writeText(btn.getAttribute('data-copy'));
+          btn.textContent = '복사됨';
+          setTimeout(()=>btn.textContent='주소복사',1200);
+        }catch(err){
+          alert('클립보드 권한을 확인해주세요.');
+        }
       }, { once:true });
     }
 
@@ -226,8 +238,9 @@
         const json = await res.json();
         RAW = Array.isArray(json) ? json : (json.items || []);
       }catch(e){
-        RAW = FALLBACK; // ← 외부 JSON 없으면 이 47개 템플릿 사용
+        RAW = FALLBACK;
       }
+      // 필수 필드 정규화
       RAW = RAW.map(x=>({
         name: x.name || x.병원명 || '',
         tel: x.tel || x.전화 || x.phone || '',
