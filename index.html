@@ -160,24 +160,13 @@
   .btn-call.center .num{ text-align:center; }
 </style>
 
-<!-- Anti-copy START: 전역 선택/워터마크(입력/폼은 예외 허용) -->
+<!-- Anti-copy START: 전역 선택(입력/폼은 허용) — 워터마크 제거됨 -->
 <style id="antiCopy">
-  /* 전역 텍스트 선택 차단(입력·편집 영역은 허용) */
   body:not(.allow-select) {
     -webkit-user-select: none; -moz-user-select: none; user-select: none;
   }
   input, textarea, select, [contenteditable="true"], .allow-select * {
     -webkit-user-select: text !important; -moz-user-select: text !important; user-select: text !important;
-  }
-  /* 전 화면 워터마크(무단복제 억지) */
-  body.wm::after{
-    content:"청구닷컴  ·  무단복제 금지";
-    position:fixed; inset:0; pointer-events:none; opacity:.06;
-    font-weight:900; font-size:44px; letter-spacing:2px;
-    display:block; transform:rotate(-18deg);
-    background:
-      repeating-linear-gradient(45deg, rgba(24,36,64,.25) 0 2px, rgba(24,36,64,0) 2px 60px);
-    mix-blend-mode:multiply;
   }
 </style>
 <!-- Anti-copy END -->
@@ -435,19 +424,22 @@
     </div>
   </footer>
 
-  <!-- Anti-copy START: 상단 경고 토스트 -->
+  <!-- Anti-copy: 상단 경고 토스트 -->
   <div id="copyAlert" style="
     position:fixed;left:50%;top:18px;transform:translateX(-50%);
     background:#182340;color:#fff;padding:10px 14px;border-radius:10px;
     box-shadow:0 10px 30px rgba(0,0,0,.15);font-size:14px;display:none;z-index:2147483647;">
     무단 복제/배포 금지 · 저작권 보호 중
   </div>
-  <!-- Anti-copy END -->
 
   <script>
   (function () {
     const $ = (s, el=document) => el.querySelector(s);
     const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    // **맨 위로 고정 노출**
+    try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch(e){}
+    window.addEventListener('load', ()=> window.scrollTo(0,0));
 
     // 팝업 오픈(종수술/상급종합)
     window.openPopup = function(url, w=980, h=720){
@@ -604,10 +596,13 @@
         yEl.value=''; mEl.value=''; dEl.value='';
         ageNum.textContent='--'; intlAgeEl.textContent='–';
         ruleText.textContent='생년월일을 입력하세요'; halfLeft.textContent='–';
-        badge.textContent='–'; yEl.focus();
+        badge.textContent='–';
       });
-      (function(){ const p=new URL(location.href).searchParams.get('dob'); if(p && /^\d{4}-\d{2}-\d{2}$/.test(p)){ const [yy,mm,dd]=p.split('-'); yEl.value=yy; mEl.value=mm; dEl.value=dd; renderAge(); }})();
-      yEl?.focus();
+      (function(){
+        const p=new URL(location.href).searchParams.get('dob');
+        if(p && /^\d{4}-\d{2}-\d{2}$/.test(p)){ const [yy,mm,dd]=p.split('-'); yEl.value=yy; mEl.value=mm; dEl.value=dd; renderAge(); }
+      })();
+      // yEl?.focus();  // ⛔ 자동 포커스 제거(중간으로 스크롤되는 원인)
     }
 
     document.getElementById("y").textContent = new Date().getFullYear();
@@ -795,12 +790,9 @@
   })();
   </script>
 
-  <!-- Anti-copy START: 복제 억지 스크립트(기존 로직과 완전 분리) -->
+  <!-- Anti-copy: 복제 억지 스크립트(워터마크 제거 버전) -->
   <script>
     (function(){
-      // 워터마크/안티카피 클래스
-      document.body.classList.add('wm');
-
       // 이미지 드래그 방지
       document.addEventListener('dragstart', e => e.preventDefault(), true);
       document.querySelectorAll('img').forEach(img => { img.setAttribute('draggable','false'); });
@@ -828,29 +820,20 @@
         if(block){ e.preventDefault(); e.stopPropagation(); showToast('보호된 페이지 입니다'); }
       }, true);
 
-      // 복사/잘라내기 시 경고 토스트
+      // 복사/잘라내기 시 경고(입력 필드는 허용)
       ['copy','cut'].forEach(evt => {
         document.addEventListener(evt, function(ev){
-          // 입력필드 내 동작은 허용
           const tag = (ev.target && ev.target.tagName || '').toLowerCase();
           const editable = ev.target && (ev.target.isContentEditable || ['input','textarea'].includes(tag));
           if(!editable){ ev.preventDefault(); showToast('콘텐츠 복사 금지'); }
         }, true);
       });
 
-      // 콘솔 경고(개발자에게만 보임)
-      try {
-        console.log('%c청구닷컴', 'font-weight:900;font-size:16px;color:#3b82f6');
-        console.log('%c이 페이지의 디자인/코드/데이터는 저작권 보호 대상입니다. 무단 복제/배포를 금합니다.', 'color:#ef4444');
-      } catch(e){}
-
-      // 카나리아 토큰(비가시성 식별자) — 필요 시 크롤링으로 역추적
+      // 카나리아 토큰(보이지 않는 식별자)
       const CANARY = 'claimhub-' + (new Date()).toISOString().slice(0,10).replace(/-/g,'') + '-K1';
-      const node = document.createComment('canary:'+CANARY);
-      document.body.appendChild(node);
+      document.body.appendChild(document.createComment('canary:'+CANARY));
     })();
   </script>
-  <!-- Anti-copy END -->
 
 </body>
 </html>
