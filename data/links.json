@@ -70,7 +70,7 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "http://sales.meritzfire.com/salesportal/Layout/MeritzSales.jsp",
-        "guide": "https://www.meritzfire.com/compensation/longterm-insurance/request-document.do#!/",
+        "guide": "https://www.meritzfire.com/compensation/longterm-insurance/request-document.do#!",
         "pdf": "/assets/pdf/메리츠화재-보험금청구서.pdf",
         "dental": "/assets/pdf/메리츠화재 치과치료확인서.pdf",
         "support": "https://www.meritzfire.com/compensation.do#!/",
@@ -471,8 +471,8 @@
       "links": {
         "system": "https://sf.ibki.co.kr	",
         "guide": "https://www.ibki.co.kr/process/HP_CSCETR_POSN_DOC_INS_LIST?bltb_cod=SC000014&sctn=in&TAB=in",
-        "dental": null,
-        "pdf": null,
+        "dental": "/assets/pdf/IBK연금보험-보험금청구서.pdf",
+        "pdf": "/assets/pdf/IBK연금보험 치과치료확인서.pdf",
         "support": "https://www.ibki.co.kr/process/HP_MAIN_FRAME",
         "cs": "1544-4117",
         "monitor": "1544-4117", 
