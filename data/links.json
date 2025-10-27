@@ -70,7 +70,7 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "http://sales.meritzfire.com/salesportal/Layout/MeritzSales.jsp",
-        "guide": "https://www.meritzfire.com/compensation/longterm-insurance/request-document.do#!",
+        "guide": "https://www.meritzfire.com",
         "pdf": "/assets/pdf/메리츠화재-보험금청구서.pdf",
         "dental": "/assets/pdf/메리츠화재 치과치료확인서.pdf",
         "support": "https://www.meritzfire.com/compensation.do#!/",
