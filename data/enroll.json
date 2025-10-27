@@ -1,27 +1,358 @@
 {
   "items": [
     {
-      "name": "삼성화재",
-      "usage_period": "평일",
-      "usage_hours": "09:00–22:00",
-      "call_hours": "09:00–18:00",
+      "name": "DB손보",
+      "usage_period": "발송 당일\n서명완료 후 익일",
+      "usage_hours": "오후 11:30",
+      "call_hours": "09:00~18:00\n(예약 시 날짜지정 불가,\n시간대만 가능)",
       "gye_pi_sang_available": true,
-      "monitoring_criteria": "계피상 진행 시 인콜 모니터링 필수. 본인확인 멘트 2회, 계약 요약 고지.",
-      "mobile_enroll_age": { "min": 19, "max": 70 },
-      "mobile_url": "https://m.samsungfire.com/e-enroll",
-      "gen4_solo": true,
-      "note": "점검 시 사전 공지되며, 모바일 URL 기준 연령이 우선됩니다."
+      "mobile_enroll_age": {
+        "min": 19
+      },
+      "mobile_enroll_age_text": "만19세 이상",
+      "incall_monitoring_phone": "1566-0757"
     },
     {
-      "name": "한화손해",
-      "usage_period": "평일·토요일",
-      "usage_hours": "08:30–21:30",
-      "call_hours": "09:00–17:00",
+      "name": "KB손보",
+      "usage_period": "발송일 +7일",
+      "usage_hours": "-",
+      "call_hours": "09:00~20:00\n인콜: 09:00~18:00",
       "gye_pi_sang_available": false,
-      "monitoring_criteria": "계피상 불가. 대면 전환 또는 원격 본인확인 절차 안내.",
-      "mobile_enroll_age": { "min": 20, "max": 65 },
-      "mobile_url": "https://m.hanwhageneral.com/e-enroll",
-      "gen4_solo": false
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1544-0019"
+    },
+    {
+      "name": "롯데손보",
+      "usage_period": "발송일 +2일",
+      "usage_hours": "오후 11:30",
+      "call_hours": "09:00~20:50\n인콜: 09:00~17:30",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": {
+        "min": 19
+      },
+      "mobile_enroll_age_text": "만19세 이상",
+      "incall_monitoring_phone": "1600-5182"
+    },
+    {
+      "name": "메리츠",
+      "usage_period": "발송 당일만 사용",
+      "usage_hours": "자정전까지 가능",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1577-7711"
+    },
+    {
+      "name": "삼성화재",
+      "usage_period": "설계사 서명은 당일만 유효\n고객 서명은 3일(휴일주말 포함)",
+      "usage_hours": "오후 24시",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1566-0553"
+    },
+    {
+      "name": "한화손보",
+      "usage_period": "모집자 서명일+2일\n(총3일. 영업일수 아님)\n*모바일청약은 23시까지\n*즉시출금은 24시간\n(단, 월마감날 별도제어)\n*전산 수동수납은 전산마감시간",
+      "usage_hours": "23시까지\n(마감날 오후6시)",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": true,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1670-1882"
+    },
+    {
+      "name": "현대해상",
+      "usage_period": "발송 당일만 사용",
+      "usage_hours": "오후 12:00",
+      "call_hours": "10:00~20:00",
+      "gye_pi_sang_available": true,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1577-3223"
+    },
+    {
+      "name": "흥국화재",
+      "usage_period": "발송일 포함\n3영업일",
+      "usage_hours": "오후 10:00",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": true,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1688-6997"
+    },
+    {
+      "name": "하나손보",
+      "usage_period": "발송일 +2일",
+      "usage_hours": "오후 11:00",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": true,
+      "mobile_enroll_age": {
+        "min": 19
+      },
+      "mobile_enroll_age_text": "계약자19세 이상",
+      "incall_monitoring_phone": "1660-4590"
+    },
+    {
+      "name": "AIG손보",
+      "usage_period": "발송 당일만 사용",
+      "usage_hours": "오후 11:00",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": {
+        "min": 18,
+        "max": 65
+      },
+      "mobile_enroll_age_text": "만18세\n~ 만65세",
+      "incall_monitoring_phone": "1660-4590",
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다."
+    },
+    {
+      "name": "라이나손보",
+      "usage_period": "-",
+      "usage_hours": "-",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1600-4600"
+    },
+    {
+      "name": "농협손보",
+      "usage_period": "발송일 +1일",
+      "usage_hours": "-",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": true,
+      "mobile_enroll_age": {
+        "min": 15,
+        "max": 19
+      },
+      "mobile_enroll_age_text": "만15~19세 불가",
+      "incall_monitoring_phone": "1644-9600"
+    },
+    {
+      "name": "ABL생명",
+      "usage_period": "발송일 +1일",
+      "usage_hours": "오후 10:00",
+      "call_hours": "09:00~18:00\n09:00~20:00(아웃콜 예약)",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "02-1566-1002"
+    },
+    {
+      "name": "AIA생명",
+      "usage_period": "발송 당일 오후 6시",
+      "usage_hours": "오후 6:00",
+      "call_hours": "-",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "-",
+      "incall_monitoring_phone": "1588-2513"
+    },
+    {
+      "name": "DB생명",
+      "usage_period": "청약URL 유효기간 7일\n마감일, 상령일 이전 건만 가능",
+      "usage_hours": "00:01 ~ 23:00 까지",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": {
+        "min": 15,
+        "max": 64
+      },
+      "mobile_enroll_age_text": "만15세~64세",
+      "incall_monitoring_phone": "02-6470-7663"
+    },
+    {
+      "name": "iM라이프",
+      "usage_period": "발송일 +2일",
+      "usage_hours": "오후 11:00",
+      "call_hours": "09:00~18:00\n09:00~20:00 (수: 아웃콜)",
+      "gye_pi_sang_available": null,
+      "mobile_enroll_age": {
+        "min": 15
+      },
+      "mobile_enroll_age_text": "만15세 이상",
+      "incall_monitoring_phone": "1588-4770"
+    },
+    {
+      "name": "KB라이프",
+      "usage_period": "발송 당일만 사용",
+      "usage_hours": "오후 10:00",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": true,
+      "mobile_enroll_age": {
+        "min": 15,
+        "max": 65
+      },
+      "mobile_enroll_age_text": "15~65세이하",
+      "incall_monitoring_phone": "1588-9922",
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다."
+    },
+    {
+      "name": "KDB생명",
+      "usage_period": "발송 당일만 사용",
+      "usage_hours": "오후 11:00",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "미성년자 불가",
+      "incall_monitoring_phone": "1588-4040",
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다."
+    },
+    {
+      "name": "교보생명",
+      "usage_period": "월말(말일 휴일제외)",
+      "usage_hours": "오전 8시~오후 10시\n최종마감일은 오후 7시까지\n주말, 공휴일 불가",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1588-1636"
+    },
+    {
+      "name": "농협생명",
+      "usage_period": "고객 열람 당일\n23시까지",
+      "usage_hours": "오후 11:00",
+      "call_hours": "09:00~20:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "미성년자 외\n전 연령 가능",
+      "incall_monitoring_phone": "1544-4422",
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다."
+    },
+    {
+      "name": "동양생명",
+      "usage_period": "발행일 + 7일",
+      "usage_hours": "오후 6:00",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": true,
+      "mobile_enroll_age": {
+        "max": 65
+      },
+      "mobile_enroll_age_text": "65세 이하",
+      "incall_monitoring_phone": "080-899-1004",
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다."
+    },
+    {
+      "name": "라이나생명",
+      "usage_period": "발송 당일\n유효기간 전 재전송시 연장됨",
+      "usage_hours": "오후 11:00",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": {
+        "min": 75
+      },
+      "mobile_enroll_age_text": "75세까지 가능",
+      "incall_monitoring_phone": "1588-2442"
+    },
+    {
+      "name": "메트라이프",
+      "usage_period": "발송 당일 23:50",
+      "usage_hours": "07:00~23:50 (휴일 무관)\n*전자청약 수납 가능시간\n평일 및 토요일 7:00~22:00\n*당일 미수납 건은 익일 17시까지 가능",
+      "call_hours": "09:00~18:00 (월,수,금)\n09:00~20:00 (화,목)",
+      "gye_pi_sang_available": true,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1588-9609"
+    },
+    {
+      "name": "미래에셋",
+      "usage_period": "알림톡 발송시 표기",
+      "usage_hours": "알림톡 발송시 표기",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1588-0220"
+    },
+    {
+      "name": "삼성생명",
+      "usage_period": "발송일 +5일",
+      "usage_hours": "오후 11:00",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1588-1335"
+    },
+    {
+      "name": "신한라이프",
+      "usage_period": "발송 당일 + 5일",
+      "usage_hours": "오후 11:00",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": true,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1522-2285"
+    },
+    {
+      "name": "처브라이프",
+      "usage_period": "발송 당일 + 14일이내\n(휴일은 다음 영업일)",
+      "usage_hours": "08:00~20:00",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": true,
+      "mobile_enroll_age": {
+        "min": 65
+      },
+      "mobile_enroll_age_text": "65세까지",
+      "incall_monitoring_phone": "1599-4600",
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다."
+    },
+    {
+      "name": "하나생명",
+      "usage_period": "발송 당일만 사용\n당일 수납 필수\n(수납미완료시 익일 재설계후 재진행)",
+      "usage_hours": "오후 11:00",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1577-1112"
+    },
+    {
+      "name": "한화생명",
+      "usage_period": "한달",
+      "usage_hours": "오후 6:00",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1800-6633"
+    },
+    {
+      "name": "흥국생명",
+      "usage_period": "발행일+3영업일\n결제단계에서 오류, 잔고 부족시 \n유효기간 당일로 변경★",
+      "usage_hours": "오후 11:30",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": true,
+      "mobile_enroll_age": {
+        "min": 19
+      },
+      "mobile_enroll_age_text": "만19세 이상",
+      "incall_monitoring_phone": "1877-7006"
+    },
+    {
+      "name": "IBK연금보험",
+      "usage_period": "발행일 +14일",
+      "usage_hours": "-",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": true,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": "1577-4117"
+    },
+    {
+      "name": "푸본현대",
+      "usage_period": "해당월까지(상령일제외)",
+      "usage_hours": "-",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": false,
+      "mobile_enroll_age": null,
+      "mobile_enroll_age_text": "나이제한 없음",
+      "incall_monitoring_phone": ""
     }
   ]
 }
