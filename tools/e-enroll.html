@@ -9,81 +9,138 @@
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/site.css?v=final-compact-12" />
   <style>
-    body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:#0f172a}
-    .maxw{max-width:72rem;margin:0 auto;padding:16px}
-    .crumb{font-size:12px;color:#64748b}
-    .title{font-size:28px;font-weight:900;letter-spacing:-.01em;margin:8px 0 2px}
-    .subtitle{font-size:13px;color:#475569}
+    :root{
+      --ink:#0f172a; --muted:#475569; --line:#e2e8f0;
+      --brand:#7c3aed; --brand-2:#0ea5e9; --good:#10b981; --bad:#ef4444;
+      --bg:#f8fafc; --card:#ffffff;
+    }
+    body{background:var(--bg);font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink)}
+    .maxw{max-width:78rem;margin:0 auto;padding:16px}
+    .hstack{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+    .badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12px;background:#fff}
+    .ok{border-color:#86efac;background:#ecfdf5;color:#065f46}
+    .no{border-color:#fecaca;background:#fef2f2;color:#991b1b}
+    .chip{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff}
+    .title{font-size:32px;font-weight:900;letter-spacing:-.01em;margin:0}
+    .subtitle{font-size:13px;color:#64748b;margin-top:2px}
+    .logo{height:56px;object-fit:contain} /* ✅ 로고 크게 */
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+    .btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;border:1px solid var(--line);background:#fff;padding:10px 14px;font-weight:800;text-decoration:none}
+    .btn:hover{background:#f8fafc}
+    .btn-prim{background:var(--brand);border-color:var(--brand);color:#fff}
+    .btn-prim:hover{filter:brightness(.95)}
+    .btn-blue{background:var(--brand-2);border-color:var(--brand-2);color:#fff}
     .grid{display:grid;gap:16px}
-    @media (min-width:1024px){ .grid-2{grid-template-columns:1.4fr 1fr} }
-    .card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px}
-    .badge{display:inline-flex;align-items:center;gap:6px;border:1px solid #e2e8f0;border-radius:999px;padding:4px 10px;font-size:12px;background:#fff}
-    .badge.ok{border-color:#10b981;color:#065f46;background:#ecfdf5}
-    .badge.no{border-color:#ef4444;color:#991b1b;background:#fef2f2}
-    .row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px dashed #e2e8f0}
-    .row:first-child{border-top:0}
+    @media (min-width:1024px){ .grid-2{grid-template-columns:1.35fr 1fr} }
+
+    /* ✅ 히어로(중앙 컬러 박스) */
+    .hero{
+      border-radius:18px; padding:22px;
+      background:linear-gradient(135deg, rgba(124,58,237,.11), rgba(14,165,233,.10));
+      border:1px solid rgba(124,58,237,.25);
+    }
+    .hero .heading{font-size:22px;font-weight:900;letter-spacing:-.01em;margin:0 0 6px}
+    .hero .rows{display:grid; gap:10px}
+    @media (min-width:640px){ .hero .rows{grid-template-columns:1fr 1fr} }
+    .kv{background:#ffffffbd;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+    .kv .k{font-size:12px;color:#475569}
+    .kv .v{font-size:16px;font-weight:800;color:#111827;margin-top:1px}
+    .hero .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+
+    /* 표 카드 */
+    .rowspec{display:grid;gap:10px}
+    .spec{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px dashed var(--line)}
+    .spec:first-child{border-top:0}
     .key{font-weight:700;color:#334155}
     .val{color:#0f172a}
-    .btn{display:inline-flex;align-items:center;gap:8px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;padding:8px 12px;font-weight:800;text-decoration:none}
-    .btn:hover{background:#f8fafc}
-    .btn-prim{background:#7c3aed;border-color:#7c3aed;color:#fff}
-    .btn-prim:hover{background:#6d28d9}
-    .btn-blue{background:#0ea5e9;border-color:#0ea5e9;color:#fff}
-    .muted{color:#64748b;font-size:12px}
-    .logo{height:34px;object-fit:contain}
-    .kvs{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-    .pill{font-size:11px;border:1px solid #e2e8f0;border-radius:999px;padding:2px 8px;background:#fff}
+
+    /* 경고/안내 */
     .warn{font-size:12px;color:#b45309;background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:10px}
     .tip{font-size:12px;color:#0369a1;background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:10px}
-    .hstack{display:flex;flex-wrap:wrap;gap:8px}
-    .num{font-variant-numeric:tabular-nums;font-feature-settings:'tnum'}
+
+    /* ✅ 실손 블록 */
+    .silson{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+    .silson h3{margin:0 0 8px;font-weight:900}
+    .silson .bads{display:flex;gap:8px;flex-wrap:wrap}
   </style>
 </head>
 <body>
   <header class="maxw">
-    <div class="crumb"><a href="/" class="btn">← 목록으로</a></div>
-    <div id="head" class="hstack" style="align-items:center;gap:10px;margin-top:10px">
+    <div class="hstack">
+      <a href="/" class="btn">← 목록으로</a>
+      <span class="chip">전자청약</span>
+    </div>
+
+    <div class="hstack" style="gap:14px;margin-top:12px">
       <img id="logo" class="logo" alt="로고" />
       <div>
-        <div class="title" id="company">전자청약정보</div>
-        <div class="subtitle">회사별 전자청약 핵심 지표를 한눈에 확인하고, 바로 실행하세요.</div>
-        <div class="kvs" id="badges"></div>
+        <h1 class="title" id="company">전자청약정보</h1>
+        <p class="subtitle">회사별 전자청약 핵심 지표를 한눈에 확인하고, 바로 실행하세요.</p>
+        <div class="hstack" id="badges" style="gap:8px;margin-top:6px"></div>
       </div>
     </div>
   </header>
 
-  <main class="maxw grid grid-2" style="margin-top:10px">
-    <section class="card">
-      <h2 style="margin:0 0 10px;font-weight:900">핵심 정보</h2>
-      <div class="row"><div class="key">사용기한</div><div class="val" id="usage_period">–</div></div>
-      <div class="row"><div class="key">사용시간</div><div class="val" id="usage_hours">–</div></div>
-      <div class="row"><div class="key">통화가능시간</div><div class="val" id="call_hours">–</div></div>
-      <div class="row"><div class="key">모바일 청약 가능 나이</div><div class="val" id="mobile_age">–</div></div>
-      <div class="row"><div class="key">계피상 가능 여부</div><div class="val" id="gps">–</div></div>
-      <div class="row"><div class="key">계피상 시 모니터링 기준</div><div class="val" id="monitoring_criteria">–</div></div>
-      <div class="row"><div class="key">4세대 단독가입</div><div class="val" id="gen4_solo">–</div></div>
-      <p class="muted" style="margin-top:10px">※ 용어 안내: 현장 표준 용어를 사용하되, 회사 지침에 따라 표현이 다를 수 있습니다.</p>
-    </section>
-
-    <aside class="card">
-      <h2 style="margin:0 0 10px;font-weight:900">바로 실행</h2>
-      <div class="hstack" style="gap:8px;flex-wrap:wrap">
+  <main class="maxw grid grid-2" style="margin-top:14px">
+    <!-- ✅ 중앙 컬러 히어로: 모바일 전자청약 정보 -->
+    <section class="hero" style="grid-column:1/-1">
+      <div class="heading">모바일 전자청약 정보</div>
+      <div class="rows">
+        <div class="kv">
+          <div class="k">모바일 청약 가능 나이</div>
+          <div class="v" id="kv_mobile_age">–</div>
+        </div>
+        <div class="kv">
+          <div class="k">전자청약 사용시간</div>
+          <div class="v" id="kv_usage_hours">–</div>
+        </div>
+        <div class="kv">
+          <div class="k">통화가능시간</div>
+          <div class="v" id="kv_call_hours">–</div>
+        </div>
+        <div class="kv">
+          <div class="k">인콜 모니터링</div>
+          <div class="v" id="kv_incall">–</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a id="btn_mobile" class="btn btn-blue" target="_blank" rel="noopener">모바일 청약 바로가기</a>
         <a id="btn_system" class="btn btn-prim" target="_blank" rel="noopener">전산 접속</a>
-        <a id="btn_mobile" class="btn btn-blue" target="_blank" rel="noopener">모바일 청약</a>
         <a id="btn_guide" class="btn" target="_blank" rel="noopener">필요서류 안내</a>
         <a id="btn_terms" class="btn" target="_blank" rel="noopener">약관 확인</a>
-        <a id="btn_support" class="btn" target="_blank" rel="noopener">홈페이지</a>
-        <a id="btn_cs" class="btn" href="#">고객센터 <span id="num_cs" class="num"></span></a>
-        <a id="btn_monitor" class="btn" href="#">인콜 모니터링 <span id="num_monitor" class="num"></span></a>
-        <a id="btn_fax" class="btn" href="#">보험금청구 FAX <span id="num_fax" class="num"></span></a>
+        <a id="btn_support" class="btn" target="_blank" rel="noopener">회사 홈페이지</a>
       </div>
-      <div id="note" class="tip" style="margin-top:12px;display:none"></div>
-      <div id="warn" class="warn" style="margin-top:12px;display:none"></div>
+    </section>
+
+    <!-- 좌: 세부 스펙 / 우: 실무 버튼 -->
+    <section class="card">
+      <h2 style="margin:0 0 10px;font-weight:900">핵심 정보</h2>
+      <div class="rowspec">
+        <div class="spec"><div class="key">사용기한</div><div class="val" id="usage_period">–</div></div>
+        <div class="spec"><div class="key">사용시간</div><div class="val" id="usage_hours">–</div></div>
+        <div class="spec"><div class="key">통화가능시간</div><div class="val" id="call_hours">–</div></div>
+        <div class="spec"><div class="key">모바일 청약 가능 나이</div><div class="val" id="mobile_age">–</div></div>
+        <div class="spec"><div class="key">계피상 가능 여부</div><div class="val" id="gps">–</div></div>
+        <div class="spec"><div class="key">계피상 시 모니터링 기준</div><div class="val" id="monitoring_criteria">–</div></div>
+        <div class="spec"><div class="key">인콜 모니터링</div><div class="val" id="incall">–</div></div>
+      </div>
+      <p class="tip" id="note" style="margin-top:12px;display:none"></p>
+      <p class="warn" id="warn" style="margin-top:12px;display:none"></p>
+    </section>
+
+    <!-- ✅ 실손 블록: 4세대 단독여부 + 계산기 링크 -->
+    <aside class="silson">
+      <h3>실손 안내</h3>
+      <div class="bads" id="silson_badges"></div>
+      <div style="margin-top:10px" class="hstack">
+        <a href="/#medcalc" class="btn">실손 간편 계산기 열기</a>
+      </div>
+      <p class="subtitle" style="margin-top:8px">※ 실손 4세대 단독가입 가능 여부는 회사 정책에 따라 변동될 수 있습니다.</p>
     </aside>
 
     <section class="card" style="grid-column:1/-1">
       <h2 style="margin:0 0 10px;font-weight:900">설명 & 주의</h2>
-      <p class="muted">회사 정책 변경 시 실제 적용과 차이가 있을 수 있습니다. 언제나 최신 공지와 약관을 우선하세요.</p>
+      <p class="subtitle">회사 정책 변경 시 실제 적용과 차이가 있을 수 있습니다. 언제나 최신 공지와 약관을 우선하세요.</p>
     </section>
   </main>
 
@@ -92,89 +149,84 @@
     const $ = s => document.querySelector(s);
     const params = new URL(location.href).searchParams;
     const company = params.get('c') || '';
-    if(!company){ $('#company').textContent = '회사 선택 필요'; }
 
-    // 숫자 포맷
-    const tel = s => (s||'').replace(/[^0-9]/g,'');
+    const telfmt = s => (s||'').replace(/[^0-9]/g,'')
+      .replace(/^02(\d{3,4})(\d{4})$/,'02-$1-$2')
+      .replace(/^(\d{3})(\d{3,4})(\d{4})$/,'$1-$2-$3');
 
-    // 데이터 로딩: links + enroll
     Promise.all([
       fetch('/data/links.json?ts='+Date.now()).then(r=>r.json()),
       fetch('/data/enroll.json?ts='+Date.now()).then(r=>r.json())
     ]).then(([linksData, enrollData])=>{
       const carriers = linksData.carriers || [];
-      const base = carriers.find(x => x.name === company);
-      const enr  = (enrollData.items||[]).find(x => x.name === company);
+      const base = carriers.find(x => x.name === company) || {};
+      const enr  = (enrollData.items||[]).find(x => x.name === company) || {};
 
-      // 헤더
+      // 헤더/로고/회사명
       $('#company').textContent = company || '전자청약정보';
-      const logoSrc = base?.logo || (company ? `/assets/logos/${company}.png` : '');
-      if(logoSrc) { const img = $('#logo'); img.src = logoSrc; img.alt = company+' 로고'; }
+      const logoSrc = base.logo || (company ? `/assets/logos/${company}.png` : '');
+      if(logoSrc){ const img = $('#logo'); img.src = logoSrc; img.alt = company + ' 로고'; }
 
-      // 뱃지
+      // 상태 뱃지(상단)
       const badges = $('#badges'); badges.innerHTML = '';
-      const gen4 = enr?.gen4_solo ? '<span class="badge ok">4세대 단독 가능</span>' : '<span class="badge no">4세대 단독 불가</span>';
-      const gps  = enr?.gye_pi_sang_available ? '<span class="badge ok">계피상 가능</span>' : '<span class="badge no">계피상 불가</span>';
-      badges.insertAdjacentHTML('beforeend', gen4);
-      badges.insertAdjacentHTML('beforeend', gps);
-      if(enr?.mobile_enroll_age){
-        badges.insertAdjacentHTML('beforeend', `<span class="badge">모바일 ${enr.mobile_enroll_age.min ?? '?'}~${enr.mobile_enroll_age.max ?? '?'}세</span>`);
-      }
+      badges.insertAdjacentHTML('beforeend',
+        `<span class="badge ${enr.gen4_solo ? 'ok' : 'no'}">${enr.gen4_solo ? '4세대 단독 가능' : '4세대 단독 불가'}</span>`);
+      badges.insertAdjacentHTML('beforeend',
+        `<span class="badge ${enr.gye_pi_sang_available ? 'ok' : 'no'}">${enr.gye_pi_sang_available ? '계피상 가능' : '계피상 불가'}</span>`);
 
-      // 핵심값
-      const set = (id, text) => { const el = document.getElementById(id); if(el) el.textContent = text || '–'; };
-      set('usage_period', enr?.usage_period);
-      set('usage_hours', enr?.usage_hours);
-      set('call_hours',  enr?.call_hours);
-      set('monitoring_criteria', enr?.monitoring_criteria);
-      set('gps', enr?.gye_pi_sang_available ? '가능' : '불가');
-      if(enr?.mobile_enroll_age){
-        set('mobile_age', `${enr.mobile_enroll_age.min ?? '?'} ~ ${enr.mobile_enroll_age.max ?? '?'}세`);
-      }
-      set('gen4_solo', enr?.gen4_solo ? '가능' : '불가');
+      // 히어로 KV
+      const ageTxt = enr.mobile_enroll_age_text ||
+        (enr.mobile_enroll_age ? `${enr.mobile_enroll_age.min ?? '?'} ~ ${enr.mobile_enroll_age.max ?? '?'}세` : '–');
+      $('#kv_mobile_age').textContent = ageTxt || '–';
+      $('#kv_usage_hours').textContent = enr.usage_hours || '–';
+      $('#kv_call_hours').textContent  = enr.call_hours  || '–';
+      const incall = enr.incall_monitoring_phone || base?.links?.monitor || '';
+      $('#kv_incall').textContent = incall ? telfmt(incall) : '–';
 
-      // 버튼/링크
-      const L = base?.links || {};
-      const bindHref = (id, url) => { const a = document.getElementById(id); if(!a) return; if(url){ a.href = url; a.target = '_blank'; a.rel = 'noopener'; } else { a.classList.add('btn','muted'); a.textContent += ' (없음)'; a.removeAttribute('href'); } };
+      // 핵심 정보 표
+      const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v || '–'; };
+      set('usage_period', enr.usage_period);
+      set('usage_hours',  enr.usage_hours);
+      set('call_hours',   enr.call_hours);
+      set('mobile_age',   ageTxt);
+      set('gps',          enr.gye_pi_sang_available ? '가능' : '불가');
+      set('monitoring_criteria', enr.monitoring_criteria);
+      set('incall', incall ? telfmt(incall) : '–');
+
+      // 실행 버튼
+      const L = base.links || {};
+      const bindHref = (id, url) => {
+        const a = document.getElementById(id); if(!a) return;
+        if(url){ a.href = url; a.target = '_blank'; a.rel = 'noopener'; }
+        else{ a.classList.add('muted'); a.removeAttribute('href'); a.textContent += ' (없음)'; }
+      };
+      // 모바일 우선: enroll.json의 mobile_url → 없으면 links.json.links.mobile
+      bindHref('btn_mobile', enr.mobile_url || L.mobile || null);
       bindHref('btn_system', L.system);
       bindHref('btn_guide',  L.guide);
       bindHref('btn_terms',  L.terms);
       bindHref('btn_support',L.support);
 
-      const murl = enr?.mobile_url || L.mobile || null;
-      bindHref('btn_mobile', murl);
+      // 실손 뱃지
+      const sb = document.getElementById('silson_badges');
+      sb.innerHTML = `<span class="badge ${enr.gen4_solo ? 'ok':'no'}">${enr.gen4_solo ? '4세대 단독 가능':'4세대 단독 불가'}</span>`;
 
-      const bindTel = (id, numId, raw) => {
-        const a = document.getElementById(id); const n = document.getElementById(numId);
-        if(!a || !n) return;
-        if(raw){ n.textContent = ' ' + raw; a.href = 'tel:'+tel(raw); }
-        else { a.classList.add('muted'); a.removeAttribute('href'); }
-      };
-      bindTel('btn_cs','num_cs', L.cs);
-      bindTel('btn_monitor','num_monitor', L.monitor);
-      bindTel('btn_fax','num_fax', L.fax);
-
-      // 안내/경고
-      const now = new Date();
+      // 시간 외 경고
       const inHours = (str) => {
-        // 기대 포맷 예: "09:00–22:00", "24시간"
         if(!str) return true;
         if(/24\s*시간/.test(str)) return true;
         const m = str.match(/(\d{2}):(\d{2})\s*[–-]\s*(\d{2}):(\d{2})/);
         if(!m) return true;
-        const cur = now.getHours()*60 + now.getMinutes();
+        const now = new Date(), cur = now.getHours()*60 + now.getMinutes();
         const a = (+m[1])*60+(+m[2]), b=(+m[3])*60+(+m[4]);
         return cur>=a && cur<=b;
       };
-      if(enr?.usage_hours && !inHours(enr.usage_hours)){
-        const w = document.getElementById('warn');
-        w.style.display='block';
+      if(enr.usage_hours && !inHours(enr.usage_hours)){
+        const w = document.getElementById('warn'); w.style.display='block';
         w.textContent = `지금은 사용시간(${enr.usage_hours}) 외일 수 있습니다. 회사 정책상 제한될 수 있습니다.`;
       }
-      if(enr?.note){
-        const n = document.getElementById('note');
-        n.style.display='block';
-        n.textContent = enr.note;
+      if(enr.note){
+        const n = document.getElementById('note'); n.style.display='block'; n.textContent = enr.note;
       }
     }).catch(()=>{
       document.body.innerHTML = '<div class="maxw" style="padding:24px"><h1>데이터 로드 오류</h1><p>/data/links.json 또는 /data/enroll.json을 확인하세요.</p></div>';
