@@ -1,0 +1,27 @@
+{
+  "items": [
+    {
+      "name": "삼성화재",
+      "usage_period": "평일",
+      "usage_hours": "09:00–22:00",
+      "call_hours": "09:00–18:00",
+      "gye_pi_sang_available": true,
+      "monitoring_criteria": "계피상 진행 시 인콜 모니터링 필수. 본인확인 멘트 2회, 계약 요약 고지.",
+      "mobile_enroll_age": { "min": 19, "max": 70 },
+      "mobile_url": "https://m.samsungfire.com/e-enroll",
+      "gen4_solo": true,
+      "note": "점검 시 사전 공지되며, 모바일 URL 기준 연령이 우선됩니다."
+    },
+    {
+      "name": "한화손해",
+      "usage_period": "평일·토요일",
+      "usage_hours": "08:30–21:30",
+      "call_hours": "09:00–17:00",
+      "gye_pi_sang_available": false,
+      "monitoring_criteria": "계피상 불가. 대면 전환 또는 원격 본인확인 절차 안내.",
+      "mobile_enroll_age": { "min": 20, "max": 65 },
+      "mobile_url": "https://m.hanwhageneral.com/e-enroll",
+      "gen4_solo": false
+    }
+  ]
+}
