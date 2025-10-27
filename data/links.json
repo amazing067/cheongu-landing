@@ -469,7 +469,7 @@
       "type": "생명",
       "tags": ["ibk", "연금", "고객센터"],
       "links": {
-        "system": "https://sf.ibki.co.kr	",
+        "system": "https://sf.ibki.co.kr",
         "guide": "https://www.ibki.co.kr/process/HP_CSCETR_POSN_DOC_INS_LIST?bltb_cod=SC000014&sctn=in&TAB=in",
         "dental": "/assets/pdf/IBK연금보험-보험금청구서.pdf",
         "pdf": "/assets/pdf/IBK연금보험 치과치료확인서.pdf",
