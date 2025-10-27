@@ -1,7 +1,7 @@
 {
   "items": [
     {
-      "name": "DB손보",
+      "name": "DB손해보험",
       "usage_period": "발송 당일\n서명완료 후 익일",
       "usage_hours": "오후 11:30",
       "call_hours": "09:00~18:00\n(예약 시 날짜지정 불가,\n시간대만 가능)",
@@ -13,7 +13,7 @@
       "incall_monitoring_phone": "1566-0757"
     },
     {
-      "name": "KB손보",
+      "name": "KB손해보험",
       "usage_period": "발송일 +7일",
       "usage_hours": "-",
       "call_hours": "09:00~20:00\n인콜: 09:00~18:00",
@@ -23,7 +23,7 @@
       "incall_monitoring_phone": "1544-0019"
     },
     {
-      "name": "롯데손보",
+      "name": "롯데손해보험",
       "usage_period": "발송일 +2일",
       "usage_hours": "오후 11:30",
       "call_hours": "09:00~20:50\n인콜: 09:00~17:30",
@@ -35,7 +35,7 @@
       "incall_monitoring_phone": "1600-5182"
     },
     {
-      "name": "메리츠",
+      "name": "메리츠화재재",
       "usage_period": "발송 당일만 사용",
       "usage_hours": "자정전까지 가능",
       "call_hours": "09:00~18:00",
@@ -55,7 +55,7 @@
       "incall_monitoring_phone": "1566-0553"
     },
     {
-      "name": "한화손보",
+      "name": "한화손해보험",
       "usage_period": "모집자 서명일+2일\n(총3일. 영업일수 아님)\n*모바일청약은 23시까지\n*즉시출금은 24시간\n(단, 월마감날 별도제어)\n*전산 수동수납은 전산마감시간",
       "usage_hours": "23시까지\n(마감날 오후6시)",
       "call_hours": "09:00~18:00",
@@ -85,7 +85,7 @@
       "incall_monitoring_phone": "1688-6997"
     },
     {
-      "name": "하나손보",
+      "name": "하나손해보험",
       "usage_period": "발송일 +2일",
       "usage_hours": "오후 11:00",
       "call_hours": "09:00~18:00",
@@ -97,7 +97,7 @@
       "incall_monitoring_phone": "1660-4590"
     },
     {
-      "name": "AIG손보",
+      "name": "AIG손해보험",
       "usage_period": "발송 당일만 사용",
       "usage_hours": "오후 11:00",
       "call_hours": "09:00~18:00",
@@ -111,7 +111,7 @@
       "note": "65세 이상 및 미성년자는 유선만 가능합니다."
     },
     {
-      "name": "라이나손보",
+      "name": "라이나손해보험",
       "usage_period": "-",
       "usage_hours": "-",
       "call_hours": "09:00~18:00",
@@ -121,7 +121,7 @@
       "incall_monitoring_phone": "1600-4600"
     },
     {
-      "name": "농협손보",
+      "name": "NH농협손해보험",
       "usage_period": "발송일 +1일",
       "usage_hours": "-",
       "call_hours": "09:00~18:00",
