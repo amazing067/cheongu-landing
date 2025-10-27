@@ -23,7 +23,7 @@
     .chip{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff}
     .title{font-size:32px;font-weight:900;letter-spacing:-.01em;margin:0}
     .subtitle{font-size:13px;color:#64748b;margin-top:2px}
-    .logo{height:56px;object-fit:contain}
+    .logo{height:56px;object-fit:contain} /* 로고 크게 */
     .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
     .btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;border:1px solid var(--line);background:#fff;padding:10px 14px;font-weight:800;text-decoration:none}
     .btn:hover{background:#f8fafc}
@@ -128,21 +128,10 @@
       <p class="warn" id="warn" style="margin-top:12px;display:none"></p>
     </section>
 
-    <!-- 실손 블록: 탭 + 데이터 렌더 -->
+    <!-- 실손 블록: 4세대 단독여부 + 계산기 링크 -->
     <aside class="silson">
       <h3>실손 안내</h3>
       <div class="bads" id="silson_badges"></div>
-
-      <div class="hstack" style="gap:8px; margin-top:8px">
-        <button type="button" class="btn" id="tab_sum">요약</button>
-        <button type="button" class="btn" id="tab_hist">변천사</button>
-        <button type="button" class="btn" id="tab_excl">면책</button>
-      </div>
-
-      <div id="silson_sum"  class="card" style="margin-top:10px; padding:12px"></div>
-      <div id="silson_hist" class="card" style="margin-top:10px; padding:12px; display:none"></div>
-      <div id="silson_excl" class="card" style="margin-top:10px; padding:12px; display:none"></div>
-
       <div style="margin-top:10px" class="hstack">
         <a href="/#medcalc" class="btn">실손 간편 계산기 열기</a>
       </div>
@@ -161,61 +150,28 @@
     const params = new URL(location.href).searchParams;
     const company = params.get('c') || '';
 
-    // 전화번호 포맷터(02/10·11자리/8자리 대표번호)
+    // ✅ 전화번호 보기용 포맷터 (02, 10/11자리, 8자리 대표번호까지 지원)
     const telfmt = (s) => {
       const d = String(s || '').replace(/[^0-9]/g, '');
       if (!d) return '';
-      if (/^(15|16|18)\d{6}$/.test(d)) return d.slice(0,4) + '-' + d.slice(4); // 1566-0757
+      // 8자리 대표번호: 15xx/16xx/18xx-xxxx
+      if (/^(15|16|18)\d{6}$/.test(d)) return d.slice(0,4) + '-' + d.slice(4);
+      // 서울 지역번호
       if (d.startsWith('02') && (d.length === 9 || d.length === 10)) {
-        return d.length === 9 ? `02-${d.slice(2,5)}-${d.slice(5)}` : `02-${d.slice(2,6)}-${d.slice(6)}`;
+        return d.length === 9
+          ? `02-${d.slice(2,5)}-${d.slice(5)}`
+          : `02-${d.slice(2,6)}-${d.slice(6)}`;
       }
+      // 일반 10/11자리
       if (d.length === 10) return `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}`;
       if (d.length === 11) return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`;
       return s || '';
     };
 
-    /* ===== 실손 JSON 렌더링 유틸 ===== */
-    function makeTable(rows) {
-      if (!rows || !rows.length) return '<div class="subtitle">표시할 내용이 없습니다.</div>';
-      const cols = Object.keys(rows[0] || {});
-      if (cols.length >= 2) {
-        const k = cols[0], v = cols[1];
-        return rows.map(r => `
-          <div style="display:flex; gap:10px; padding:6px 0; border-top:1px dashed var(--line)">
-            <div style="min-width:9rem" class="key">${(r[k]||'').toString()}</div>
-            <div class="val">${(r[v]||'').toString()}</div>
-          </div>
-        `).join('');
-      }
-      return `<ul style="margin:0; padding-left:16px">${rows.map(r => `<li>${Object.values(r).filter(Boolean).join(' · ')}</li>`).join('')}</ul>`;
-    }
-
-    function renderSilsonTabs(bundle){
-      const S = bundle?.sheets || {};
-      const sumEl  = document.getElementById('silson_sum');
-      const histEl = document.getElementById('silson_hist');
-      const exclEl = document.getElementById('silson_excl');
-
-      sumEl.innerHTML  = makeTable(S['실비_총정리']?.rows || []);
-      histEl.innerHTML = makeTable(S['실비_변천사']?.rows || []);
-      exclEl.innerHTML = makeTable(S['1세대_면책사항']?.rows || []);
-
-      const tab = (a) => {
-        sumEl.style.display  = (a==='sum')  ? '' : 'none';
-        histEl.style.display = (a==='hist') ? '' : 'none';
-        exclEl.style.display = (a==='excl') ? '' : 'none';
-      };
-      document.getElementById('tab_sum') .onclick = ()=> tab('sum');
-      document.getElementById('tab_hist').onclick = ()=> tab('hist');
-      document.getElementById('tab_excl').onclick = ()=> tab('excl');
-      tab('sum');
-    }
-
     Promise.all([
       fetch('/data/links.json?ts='+Date.now()).then(r=>r.json()),
-      fetch('/data/enroll.json?ts='+Date.now()).then(r=>r.json()),
-      fetch('/data/silson.json?ts='+Date.now()).then(r=>r.json())   // ★ 실손 데이터 추가
-    ]).then(([linksData, enrollData, silsonBundle])=>{
+      fetch('/data/enroll.json?ts='+Date.now()).then(r=>r.json())
+    ]).then(([linksData, enrollData])=>{
       const carriers = linksData.carriers || [];
       const base = carriers.find(x => x.name === company) || {};
       const enr  = (enrollData.items||[]).find(x => x.name === company) || {};
@@ -247,7 +203,7 @@
       set('usage_hours',  enr.usage_hours);
       set('call_hours',   enr.call_hours);
       set('mobile_age',   ageTxt);
-      set('gps',          enr.gye_pi_sang_available ? '가능' : '불가');      // 데이터 키 유지
+      set('gps',          enr.gye_pi_sang_available ? '가능' : '불가');               // 데이터는 그대로(gps), 표시문구만 바뀜
       set('monitoring_criteria', enr.monitoring_criteria);
       set('incall', incall ? telfmt(incall) : '–');
 
@@ -258,18 +214,18 @@
         if(url){ a.href = url; a.target = '_blank'; a.rel = 'noopener'; }
         else{ a.classList.add('muted'); a.removeAttribute('href'); a.textContent += ' (없음)'; }
       };
+      // 모바일 우선: enroll.json의 mobile_url → 없으면 links.json.links.mobile
       bindHref('btn_mobile', enr.mobile_url || L.mobile || null);
       bindHref('btn_system', L.system);
       bindHref('btn_guide',  L.guide);
       bindHref('btn_terms',  L.terms);
       bindHref('btn_support',L.support);
 
-      // 실손 뱃지 + 탭 렌더
+      // 실손 뱃지
       const sb = document.getElementById('silson_badges');
       sb.innerHTML = `<span class="badge ${enr.gen4_solo ? 'ok':'no'}">${enr.gen4_solo ? '4세대 단독 가능':'4세대 단독 불가'}</span>`;
-      renderSilsonTabs(silsonBundle);
 
-      // 시간 외 경고/노트
+      // 시간 외 경고
       const inHours = (str) => {
         if(!str) return true;
         if(/24\s*시간/.test(str)) return true;
@@ -287,7 +243,7 @@
         const n = document.getElementById('note'); n.style.display='block'; n.textContent = enr.note;
       }
     }).catch(()=>{
-      document.body.innerHTML = '<div class="maxw" style="padding:24px"><h1>데이터 로드 오류</h1><p>/data/links.json, /data/enroll.json, /data/silson.json을 확인하세요.</p></div>';
+      document.body.innerHTML = '<div class="maxw" style="padding:24px"><h1>데이터 로드 오류</h1><p>/data/links.json 또는 /data/enroll.json을 확인하세요.</p></div>';
     });
   })();
   </script>
