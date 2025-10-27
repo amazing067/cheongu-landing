@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>전자청약정보 | 청구닷컴</title>
+  <meta name="robots" content="noindex,nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css?v=final-compact-12" />
+  <style>
+    body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:#0f172a}
+    .maxw{max-width:72rem;margin:0 auto;padding:16px}
+    .crumb{font-size:12px;color:#64748b}
+    .title{font-size:28px;font-weight:900;letter-spacing:-.01em;margin:8px 0 2px}
+    .subtitle{font-size:13px;color:#475569}
+    .grid{display:grid;gap:16px}
+    @media (min-width:1024px){ .grid-2{grid-template-columns:1.4fr 1fr} }
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px}
+    .badge{display:inline-flex;align-items:center;gap:6px;border:1px solid #e2e8f0;border-radius:999px;padding:4px 10px;font-size:12px;background:#fff}
+    .badge.ok{border-color:#10b981;color:#065f46;background:#ecfdf5}
+    .badge.no{border-color:#ef4444;color:#991b1b;background:#fef2f2}
+    .row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px dashed #e2e8f0}
+    .row:first-child{border-top:0}
+    .key{font-weight:700;color:#334155}
+    .val{color:#0f172a}
+    .btn{display:inline-flex;align-items:center;gap:8px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;padding:8px 12px;font-weight:800;text-decoration:none}
+    .btn:hover{background:#f8fafc}
+    .btn-prim{background:#7c3aed;border-color:#7c3aed;color:#fff}
+    .btn-prim:hover{background:#6d28d9}
+    .btn-blue{background:#0ea5e9;border-color:#0ea5e9;color:#fff}
+    .muted{color:#64748b;font-size:12px}
+    .logo{height:34px;object-fit:contain}
+    .kvs{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .pill{font-size:11px;border:1px solid #e2e8f0;border-radius:999px;padding:2px 8px;background:#fff}
+    .warn{font-size:12px;color:#b45309;background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:10px}
+    .tip{font-size:12px;color:#0369a1;background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:10px}
+    .hstack{display:flex;flex-wrap:wrap;gap:8px}
+    .num{font-variant-numeric:tabular-nums;font-feature-settings:'tnum'}
+  </style>
+</head>
+<body>
+  <header class="maxw">
+    <div class="crumb"><a href="/" class="btn">← 목록으로</a></div>
+    <div id="head" class="hstack" style="align-items:center;gap:10px;margin-top:10px">
+      <img id="logo" class="logo" alt="로고" />
+      <div>
+        <div class="title" id="company">전자청약정보</div>
+        <div class="subtitle">회사별 전자청약 핵심 지표를 한눈에 확인하고, 바로 실행하세요.</div>
+        <div class="kvs" id="badges"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="maxw grid grid-2" style="margin-top:10px">
+    <section class="card">
+      <h2 style="margin:0 0 10px;font-weight:900">핵심 정보</h2>
+      <div class="row"><div class="key">사용기한</div><div class="val" id="usage_period">–</div></div>
+      <div class="row"><div class="key">사용시간</div><div class="val" id="usage_hours">–</div></div>
+      <div class="row"><div class="key">통화가능시간</div><div class="val" id="call_hours">–</div></div>
+      <div class="row"><div class="key">모바일 청약 가능 나이</div><div class="val" id="mobile_age">–</div></div>
+      <div class="row"><div class="key">계피상 가능 여부</div><div class="val" id="gps">–</div></div>
+      <div class="row"><div class="key">계피상 시 모니터링 기준</div><div class="val" id="monitoring_criteria">–</div></div>
+      <div class="row"><div class="key">4세대 단독가입</div><div class="val" id="gen4_solo">–</div></div>
+      <p class="muted" style="margin-top:10px">※ 용어 안내: 현장 표준 용어를 사용하되, 회사 지침에 따라 표현이 다를 수 있습니다.</p>
+    </section>
+
+    <aside class="card">
+      <h2 style="margin:0 0 10px;font-weight:900">바로 실행</h2>
+      <div class="hstack" style="gap:8px;flex-wrap:wrap">
+        <a id="btn_system" class="btn btn-prim" target="_blank" rel="noopener">전산 접속</a>
+        <a id="btn_mobile" class="btn btn-blue" target="_blank" rel="noopener">모바일 청약</a>
+        <a id="btn_guide" class="btn" target="_blank" rel="noopener">필요서류 안내</a>
+        <a id="btn_terms" class="btn" target="_blank" rel="noopener">약관 확인</a>
+        <a id="btn_support" class="btn" target="_blank" rel="noopener">홈페이지</a>
+        <a id="btn_cs" class="btn" href="#">고객센터 <span id="num_cs" class="num"></span></a>
+        <a id="btn_monitor" class="btn" href="#">인콜 모니터링 <span id="num_monitor" class="num"></span></a>
+        <a id="btn_fax" class="btn" href="#">보험금청구 FAX <span id="num_fax" class="num"></span></a>
+      </div>
+      <div id="note" class="tip" style="margin-top:12px;display:none"></div>
+      <div id="warn" class="warn" style="margin-top:12px;display:none"></div>
+    </aside>
+
+    <section class="card" style="grid-column:1/-1">
+      <h2 style="margin:0 0 10px;font-weight:900">설명 & 주의</h2>
+      <p class="muted">회사 정책 변경 시 실제 적용과 차이가 있을 수 있습니다. 언제나 최신 공지와 약관을 우선하세요.</p>
+    </section>
+  </main>
+
+  <script>
+  (function(){
+    const $ = s => document.querySelector(s);
+    const params = new URL(location.href).searchParams;
+    const company = params.get('c') || '';
+    if(!company){ $('#company').textContent = '회사 선택 필요'; }
+
+    // 숫자 포맷
+    const tel = s => (s||'').replace(/[^0-9]/g,'');
+
+    // 데이터 로딩: links + enroll
+    Promise.all([
+      fetch('/data/links.json?ts='+Date.now()).then(r=>r.json()),
+      fetch('/data/enroll.json?ts='+Date.now()).then(r=>r.json())
+    ]).then(([linksData, enrollData])=>{
+      const carriers = linksData.carriers || [];
+      const base = carriers.find(x => x.name === company);
+      const enr  = (enrollData.items||[]).find(x => x.name === company);
+
+      // 헤더
+      $('#company').textContent = company || '전자청약정보';
+      const logoSrc = base?.logo || (company ? `/assets/logos/${company}.png` : '');
+      if(logoSrc) { const img = $('#logo'); img.src = logoSrc; img.alt = company+' 로고'; }
+
+      // 뱃지
+      const badges = $('#badges'); badges.innerHTML = '';
+      const gen4 = enr?.gen4_solo ? '<span class="badge ok">4세대 단독 가능</span>' : '<span class="badge no">4세대 단독 불가</span>';
+      const gps  = enr?.gye_pi_sang_available ? '<span class="badge ok">계피상 가능</span>' : '<span class="badge no">계피상 불가</span>';
+      badges.insertAdjacentHTML('beforeend', gen4);
+      badges.insertAdjacentHTML('beforeend', gps);
+      if(enr?.mobile_enroll_age){
+        badges.insertAdjacentHTML('beforeend', `<span class="badge">모바일 ${enr.mobile_enroll_age.min ?? '?'}~${enr.mobile_enroll_age.max ?? '?'}세</span>`);
+      }
+
+      // 핵심값
+      const set = (id, text) => { const el = document.getElementById(id); if(el) el.textContent = text || '–'; };
+      set('usage_period', enr?.usage_period);
+      set('usage_hours', enr?.usage_hours);
+      set('call_hours',  enr?.call_hours);
+      set('monitoring_criteria', enr?.monitoring_criteria);
+      set('gps', enr?.gye_pi_sang_available ? '가능' : '불가');
+      if(enr?.mobile_enroll_age){
+        set('mobile_age', `${enr.mobile_enroll_age.min ?? '?'} ~ ${enr.mobile_enroll_age.max ?? '?'}세`);
+      }
+      set('gen4_solo', enr?.gen4_solo ? '가능' : '불가');
+
+      // 버튼/링크
+      const L = base?.links || {};
+      const bindHref = (id, url) => { const a = document.getElementById(id); if(!a) return; if(url){ a.href = url; a.target = '_blank'; a.rel = 'noopener'; } else { a.classList.add('btn','muted'); a.textContent += ' (없음)'; a.removeAttribute('href'); } };
+      bindHref('btn_system', L.system);
+      bindHref('btn_guide',  L.guide);
+      bindHref('btn_terms',  L.terms);
+      bindHref('btn_support',L.support);
+
+      const murl = enr?.mobile_url || L.mobile || null;
+      bindHref('btn_mobile', murl);
+
+      const bindTel = (id, numId, raw) => {
+        const a = document.getElementById(id); const n = document.getElementById(numId);
+        if(!a || !n) return;
+        if(raw){ n.textContent = ' ' + raw; a.href = 'tel:'+tel(raw); }
+        else { a.classList.add('muted'); a.removeAttribute('href'); }
+      };
+      bindTel('btn_cs','num_cs', L.cs);
+      bindTel('btn_monitor','num_monitor', L.monitor);
+      bindTel('btn_fax','num_fax', L.fax);
+
+      // 안내/경고
+      const now = new Date();
+      const inHours = (str) => {
+        // 기대 포맷 예: "09:00–22:00", "24시간"
+        if(!str) return true;
+        if(/24\s*시간/.test(str)) return true;
+        const m = str.match(/(\d{2}):(\d{2})\s*[–-]\s*(\d{2}):(\d{2})/);
+        if(!m) return true;
+        const cur = now.getHours()*60 + now.getMinutes();
+        const a = (+m[1])*60+(+m[2]), b=(+m[3])*60+(+m[4]);
+        return cur>=a && cur<=b;
+      };
+      if(enr?.usage_hours && !inHours(enr.usage_hours)){
+        const w = document.getElementById('warn');
+        w.style.display='block';
+        w.textContent = `지금은 사용시간(${enr.usage_hours}) 외일 수 있습니다. 회사 정책상 제한될 수 있습니다.`;
+      }
+      if(enr?.note){
+        const n = document.getElementById('note');
+        n.style.display='block';
+        n.textContent = enr.note;
+      }
+    }).catch(()=>{
+      document.body.innerHTML = '<div class="maxw" style="padding:24px"><h1>데이터 로드 오류</h1><p>/data/links.json 또는 /data/enroll.json을 확인하세요.</p></div>';
+    });
+  })();
+  </script>
+</body>
+</html>
