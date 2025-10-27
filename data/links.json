@@ -22,14 +22,14 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "https://sp.hi.co.kr/websquare/websquare.html?w2xPath=/common/xml/Login.xml",
-        "guide": "https://www.meritzfire.com/compensation/longterm-insurance/request-document.do#!/",
+        "guide": "https://www.hi.co.kr/serviceAction.do",
         "pdf": "/assets/pdf/현대해상-보험금청구서.pdf",
         "dental": "/assets/pdf/현대해상 치과치료확인서.pdf",
         "support": "https://www.hi.co.kr/serviceAction.do",
         "cs": "1577-1001",
         "monitor": "1577-3223",
         "fax": "0507-774-6060",
-        "terms": ""
+        "terms": "https://www.hi.co.kr/serviceAction.do"
       }
     },
     {
@@ -41,11 +41,11 @@
         "guide": "https://www.idbins.com/pc/bizxpress/ct/dc/FWCUSV1301.shtm",
         "pdf": "/assets/pdf/DB손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/DB손해보험 치과치료확인서.pdf",
-        "support": "https://www.idbins.com/pc/bizxpress/ct/dc/FWCUSV1301.shtm",
+        "support": "https://www.idbins.com/FWMAIV0001.do",
         "cs": "1588-0100",
         "monitor": "1566-0757",
         "fax": "0505-181-4862",
-        "terms": ""
+        "terms": "https://www.idbins.com/FWMAIV1534.do"
       }
     },
     {
@@ -57,11 +57,11 @@
         "guide": "https://www.kbinsure.co.kr/CG205010001.ec",
         "pdf": "/assets/pdf/KB손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/KB손해보험 치과치료확인서.pdf",
-        "support": "https://www.kbinsure.co.kr/CG205010001.ec",
+        "support": "https://www.kbinsure.co.kr/main.ec?mdmn=0101",
         "cs": "1544-0114",
         "monitor": "1544-0019",
         "fax": "0505-136-6500",
-        "terms": ""
+        "terms": "https://www.kbinsure.co.kr/CG802030001.ec"
       }
     },
     {
@@ -70,14 +70,14 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "http://sales.meritzfire.com/salesportal/Layout/MeritzSales.jsp",
-        "guide": "https://m.meritzfire.com/compensation/longterm-insurance/request.do",
+        "guide": "https://www.meritzfire.com/compensation/longterm-insurance/request-document.do#!/",
         "pdf": "/assets/pdf/메리츠화재-보험금청구서.pdf",
         "dental": "/assets/pdf/메리츠화재 치과치료확인서.pdf",
-        "support": "https://m.meritzfire.com/compensation/longterm-insurance/request.do",
+        "support": "https://www.meritzfire.com/compensation.do#!/",
         "cs": "1566-7711",
         "monitor": "1577-7711",
         "fax": "0505-021-3400",
-        "terms": ""
+        "terms": "https://www.meritzfire.com/disclosure/product-announcement/product-list.do#!/"
       }
     },
     {
@@ -86,14 +86,14 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "https://lottero.lotteins.co.kr/ncrmwebroot/webfw/html/nawlogon.jsp",
-        "guide": "https://www.lotteins.co.kr/web/C/C/B/ccb202.jsp",
+        "guide": "https://www.lotteins.co.kr/web/C/D/C/cdc_claim_0502.jsp#tab-1",
         "pdf": "/assets/pdf/롯데손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/롯데손해보험 치과치료확인서.pdf",
-        "support": "https://www.lotteins.co.kr/web/C/C/B/ccb202.jsp",
+        "support": "https://www.lotteins.co.kr/index2.jsp",
         "cs": "1588-3344",
         "monitor": "1600-5182",
         "fax": "0507-333-9999",
-        "terms": ""
+        "terms": "https://www.lotteins.co.kr/web/C/D/H/cdh190.jsp#!"
       }
     },
     {
@@ -105,11 +105,11 @@
         "guide": "https://www.heungkukfire.co.kr/FRW/compensation/accidentDocInfo.do",
         "pdf": "/assets/pdf/흥국화재-보험금청구서.pdf",
         "dental": "/assets/pdf/흥국화재 치과치료확인서.pdf",
-        "support": "https://www.heungkukfire.co.kr/FRW/compensation/accidentDocInfo.do",
+        "support": "https://www.heungkukfire.co.kr/MAW/main1.do",
         "cs": "1688-1688",
         "monitor": "1688-6997",
         "fax": "0504-800-0700",
-        "terms": ""
+        "terms": "https://www.heungkukfire.co.kr/FRW/announce/insGoodsGongsiSale.do"
       }
     },
     {
@@ -121,11 +121,11 @@
         "guide": "https://www.hanainsure.co.kr/w/claim/healthReward/rewardDocCarGuide",
         "pdf": "/assets/pdf/하나손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/하나손해보험 치과치료확인서.pdf",
-        "support": "https://www.hanainsure.co.kr/w/claim/healthReward/rewardDocCarGuide",
+        "support": "https://www.hanainsure.co.kr/",
         "cs": "1566-1000",
         "monitor": "02-6299-6821",
         "fax": "0505-170-0765",
-        "terms": ""
+        "terms": "https://www.hanainsure.co.kr/w/disclosure/product/saleProduct"
       }
     },
     {
@@ -137,11 +137,11 @@
         "guide": "https://www.nhfire.co.kr/customer/guide/insuranceClaimGuide.nhfire",
         "pdf": "/assets/pdf/NH농협손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/NH농협손해보험 치과치료확인서.pdf",
-        "support": "https://www.nhfire.co.kr/customer/guide/insuranceClaimGuide.nhfire",
+        "support": "https://www.nhfire.co.kr/index.nhfire",
         "cs": "1544-0110",
         "monitor": "1644-9600",
         "fax": "0505-060-7000",
-        "terms": ""
+        "terms": "https://www.nhfire.co.kr/announce/productAnnounce/retrieveInsuranceProductsAnnounce.nhfire"
       }
     },
     {
@@ -169,11 +169,11 @@
         "guide": "https://www.shinhanez.co.kr/static/cus/CUS50000M01.html",
         "pdf": "/assets/pdf/신한EZ손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/신한EZ손해보험 치과치료확인서.pdf",
-        "support": "https://www.shinhanez.co.kr/static/cus/CUS50000M01.html",
+        "support": "https://www.shinhanez.co.kr/static/man/MAIN0000M01.html",
         "cs": "1544-2580",
         "monitor": "1544-2580",
         "fax": "0505-987-8282",
-        "terms": ""
+        "terms": "https://www.shinhanez.co.kr/static/pub/PUB2000T021.html"
       }
     },
     {
@@ -185,7 +185,7 @@
         "guide": "https://www.carrotins.com/desktop/reward/claim/guide/",
         "pdf": "/assets/pdf/캐롯손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/캐롯손해보험 치과치료확인서.pdf",
-        "support": "https://www.carrotins.com/desktop/reward/claim/guide/",
+        "support": "https://www.carrotins.com/",
         "cs": "1566-0300",
         "monitor": "1566-0300",
         "fax": "고객센터 전화",
@@ -201,9 +201,9 @@
         "guide": "https://www.aig.co.kr/wt/dpwtm025.html?menuId=MS216",
         "pdf": "/assets/pdf/AIG손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/AIG손해보험 치과치료확인서.pdf",
-        "support": "https://www.aig.co.kr/wt/dpwtm025.html?menuId=MS216",
-        "cs": "080-800-0580",
-        "monitor": "1544-2792",
+        "support": "https://www.aig.co.kr/wm/dpwmm001.html",
+        "cs": "1544-2792",
+        "monitor": "1600-4600",
         "fax": "02-2011-4607",
         "terms": ""
       }
@@ -217,8 +217,8 @@
         "guide": "https://www.chubb.com/kr-kr/claims/individual-insurance.html",
         "pdf": "/assets/pdf/라이나손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/라이나손해보험 치과치료확인서.pdf",
-        "support": "https://www.chubb.com/kr-kr/claims.html",
-        "cs": "1588-0022",
+        "support": "https://ec.aceinsurance.co.kr/jsp/acelimited/mainCert.jsp?utm_source=chubb&utm_medium=internal&utm_campaign=internal&utm_content=mob&utm_term=",
+        "cs": "1566-5800",
         "monitor": "1566-5800",
         "fax": "02-2127-2308",
         "terms": ""
@@ -230,14 +230,14 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "https://portal.hwgeneralins.com",
-        "guide": "https://m.hwgeneralins.com/",
+        "guide": "https://www.hwgeneralins.com/fplaza/compensation/receipt01.do/",
         "pdf": "/assets/pdf/한화손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/한화손해보험 치과치료확인서.pdf",
         "support": "https://m.hwgeneralins.com/",
         "cs": "1566-8000",
         "monitor": "1670-1882",
         "fax": "0502-779-1004",
-        "terms": ""
+        "terms": "https://www.hwgeneralins.com/notice/ir/product-ing01.do"
       }
     },
 
