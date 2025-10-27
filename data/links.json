@@ -247,10 +247,10 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "https://ga.samsunglife.com",
-        "guide": "https://direct.samsunglife.com/customerSupport/insuranceClaimInformation/CustomerSupportInsuranceClaimInformationView",
+        "guide": "https://www.samsunglife.com/individual/mysamsunglife/insurance/internet/MDP-MYINT020110M",
         "pdf": "/assets/pdf/삼성생명-보험금청구서.pdf",
         "dental": "/assets/pdf/삼성생명 치과치료확인서.pdf",
-        "support": "https://www.samsunglife.com/individual/mysamsunglife/insurance/internet/MDP-MYINT020110M",
+        "support": "https://www.samsunglife.com/main/PDP-MAMAI000000M",
         "cs": "1588-3114",
         "monitor": "1588-3115",
         "fax": "고객센터 전화",
@@ -263,10 +263,10 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "https://hmp.hanwhalife.com/online/solutions/websquare/websquare.html?w2xPath=/online/ui/uv/gmn/uvgmn010mvw.xml",
-        "guide": "https://www.hanwhalife.com/main/myPage/insurance/accident/MY_INAP000_P10000.do",
+        "guide": "https://www.hanwhalife.com/static/main/myPage/insurance/accident/document/MY_INAPADC_T10000.jsp",
         "pdf": "/assets/pdf/한화생명-보험금청구서.pdf",
         "dental": "/assets/pdf/한화생명 치과치료확인서.pdf",
-        "support": "https://www.hanwhalife.com/main/myPage/insurance/accident/MY_INAP000_P10000.do",
+        "support": "https://www.hanwhalife.com/main/MN_0000000_P10000.do",
         "cs": "1588-6363",
         "monitor": "1800-6633",
         "fax": "고객센터 전화",
@@ -311,7 +311,7 @@
       "tags": ["KB", "pdf"],
       "links": {
         "system": "https://sfa.kblife.co.kr/login/main",
-        "guide": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do",
+        "guide": "https://www.kblife.co.kr/customer-center/informRequiredDocument.do",
         "pdf": "/assets/pdf/KB라이프생명-보험금청구서.pdf",
         "dental": "/assets/pdf/KB라이프생명 치과치료확인서.pdf",
         "support": "https://www.kblife.co.kr/",
@@ -334,22 +334,6 @@
         "cs": "1588-0220",
         "monitor": "1588-0220",
         "fax": "고객센터 전화",
-        "terms": ""
-      }
-    },
-    {
-      "name": "KB라이프생명",
-      "type": "생명",
-      "tags": ["KB", "pdf"],
-      "links": {
-        "system": "https://sfa.kblife.co.kr/login/main",
-        "guide": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do",
-        "pdf": "/assets/pdf/KB라이프생명-보험금청구서.pdf",
-        "dental": "/assets/pdf/KB라이프생명 치과치료확인서.pdf",
-        "support": "https://www.kblife.co.kr/",
-        "cs": "1588-3374",
-        "monitor": "1566-2730",
-        "fax": "02-390-4629",
         "terms": ""
       }
     },
