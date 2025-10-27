@@ -338,22 +338,6 @@
       }
     },
     {
-      "name": "교보생명",
-      "type": "생명",
-      "tags": ["pdf", "고객센터"],
-      "links": {
-        "system": "https://sso.kyobo.com:5443/3rdParty/certLoginFormPage.jsp?NONCE=IEYi%2BWEDGPC8Lx4dVfrv9mRFtqk39DlGqrZkYUtprogEY0YcgGAnby%2BdWxAHmjZNrbqzq0zcT0Gt0A3axB%2BNsg%3D%3D&UURL=https%3A%2F%2Fsso.kyobo.com%3A5443%2Fnls3%2Ffcs",
-        "guide": "https://www.kyobo.com/dgt/web/customer/support/need-papers/list",
-        "pdf": "/assets/pdf/교보생명-보험금청구서.pdf",
-        "dental": "/assets/pdf/교보생명 치과치료확인서.pdf",
-        "support": "https://www.kyobo.com/dgt/web/dti/insurance/accInq/intro",
-        "cs": "1588-1001",
-        "monitor": "1588-1636",
-        "fax": "고객센터 전화",
-        "terms": ""
-      }
-    },
-    {
       "name": "KB라이프생명",
       "type": "생명",
       "tags": ["KB", "pdf"],
