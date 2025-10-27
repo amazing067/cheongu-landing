@@ -467,15 +467,21 @@
     }
 
     function brandCell(item) {
-      const L = item.links || {};
-      const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
-      const inner = `
-        <div class="brand">
-          <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
-          <span class="name">${item.name}</span>
-        </div>`;
-      return L.system ? `<a href="${L.system}" class="block no-underline">${inner}</a>` : `<div class="opacity-85">${inner}</div>`;
-    }
+  const L = item.links || {};
+  const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
+
+  // 상세페이지 URL(회사명 쿼리스트링)
+  const detailUrl = `/tools/e-enroll.html?c=${encodeURIComponent(item.name)}`;
+
+  const inner = `
+    <div class="brand">
+      <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
+      <span class="name">${item.name}</span>
+    </div>`;
+
+  // ✅ 로고 클릭 시: 전자청약 상세(새 탭). 전산접속은 우측 버튼으로 유지.
+  return `<a href="${detailUrl}" target="_blank" rel="noopener" class="block no-underline">${inner}</a>`;
+}
 
     // 일반 버튼
     function btn(label, href, cls) {
