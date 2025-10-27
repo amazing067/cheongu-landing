@@ -298,7 +298,7 @@
         "guide": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MNT-CC-012",
         "pdf": "/assets/pdf/미래에셋생명-보험금청구서.pdf",
         "dental": "/assets/pdf/미래에셋생명 치과치료확인서.pdf",
-        "support": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MO-CB-300000-100000",
+        "support": "https://life.miraeasset.com/home/index.do#MO-HO-000000-000000",
         "cs": "1588-0220",
         "monitor": "1588-0220",
         "fax": "고객센터 전화",
@@ -318,22 +318,6 @@
         "cs": "1588-3374",
         "monitor": "1566-2730",
         "fax": "02-390-4629",
-        "terms": ""
-      }
-    },
-    {
-      "name": "미래에셋생명",
-      "type": "생명",
-      "tags": ["pdf", "고객센터"],
-      "links": {
-        "system": "https://www.loveageplan.com",
-        "guide": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MNT-CC-012",
-        "pdf": "/assets/pdf/미래에셋생명-보험금청구서.pdf",
-        "dental": "/assets/pdf/미래에셋생명 치과치료확인서.pdf",
-        "support": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MO-CB-300000-100000",
-        "cs": "1588-0220",
-        "monitor": "1588-0220",
-        "fax": "고객센터 전화",
         "terms": ""
       }
     },
