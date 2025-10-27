@@ -22,7 +22,7 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "https://sp.hi.co.kr/websquare/websquare.html?w2xPath=/common/xml/Login.xml",
-        "guide": "https://www.hi.co.kr/serviceAction.do",
+        "guide": "https://www.hi.co.kr/serviceAction.do?menuId=100631",
         "pdf": "/assets/pdf/현대해상-보험금청구서.pdf",
         "dental": "/assets/pdf/현대해상 치과치료확인서.pdf",
         "support": "https://www.hi.co.kr/serviceAction.do",
