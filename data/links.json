@@ -338,38 +338,6 @@
       }
     },
     {
-      "name": "KB라이프생명",
-      "type": "생명",
-      "tags": ["KB", "pdf"],
-      "links": {
-        "system": "https://sfa.kblife.co.kr/login/main",
-        "guide": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do",
-        "pdf": "/assets/pdf/KB라이프생명-보험금청구서.pdf",
-        "dental": "/assets/pdf/KB라이프생명 치과치료확인서.pdf",
-        "support": "https://www.kblife.co.kr/",
-        "cs": "1588-3374",
-        "monitor": "1566-2730",
-        "fax": "02-390-4629",
-        "terms": ""
-      }
-    },
-    {
-      "name": "신한라이프",
-      "type": "생명",
-      "tags": ["신한라이프", "고객센터"],
-      "links": {
-        "system": "https://ga.shinhanlife.co.kr:11043/colomga010m.msv",
-        "guide": "https://m.kblife.co.kr/mobile-view/guideToClaimDocument.do",
-        "pdf": "/assets/pdf/신한라이프-보험금청구서.pdf",
-        "dental": "/assets/pdf/신한라이프 치과치료확인서.pdf",
-        "support": "https://www.shinhanlife.co.kr/hp/cdha0010.do",
-        "cs": "1588-5580",
-        "monitor": "1522-2285",
-        "fax": "고객센터 전화",
-        "terms": ""
-      }
-    },
-    {
       "name": "농협생명",
       "type": "생명",
       "tags": ["NH", "pdf"],
