@@ -23,7 +23,7 @@
     .chip{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff}
     .title{font-size:32px;font-weight:900;letter-spacing:-.01em;margin:0}
     .subtitle{font-size:13px;color:#64748b;margin-top:2px}
-    .logo{height:56px;object-fit:contain} /* ✅ 로고 크게 */
+    .logo{height:56px;object-fit:contain} /* 로고 크게 */
     .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
     .btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;border:1px solid var(--line);background:#fff;padding:10px 14px;font-weight:800;text-decoration:none}
     .btn:hover{background:#f8fafc}
@@ -33,7 +33,7 @@
     .grid{display:grid;gap:16px}
     @media (min-width:1024px){ .grid-2{grid-template-columns:1.35fr 1fr} }
 
-    /* ✅ 히어로(중앙 컬러 박스) */
+    /* 중앙 컬러 히어로 */
     .hero{
       border-radius:18px; padding:22px;
       background:linear-gradient(135deg, rgba(124,58,237,.11), rgba(14,165,233,.10));
@@ -58,7 +58,7 @@
     .warn{font-size:12px;color:#b45309;background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:10px}
     .tip{font-size:12px;color:#0369a1;background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:10px}
 
-    /* ✅ 실손 블록 */
+    /* 실손 블록 */
     .silson{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
     .silson h3{margin:0 0 8px;font-weight:900}
     .silson .bads{display:flex;gap:8px;flex-wrap:wrap}
@@ -82,7 +82,7 @@
   </header>
 
   <main class="maxw grid grid-2" style="margin-top:14px">
-    <!-- ✅ 중앙 컬러 히어로: 모바일 전자청약 정보 -->
+    <!-- 중앙 컬러 히어로: 모바일 전자청약 정보 -->
     <section class="hero" style="grid-column:1/-1">
       <div class="heading">모바일 전자청약 정보</div>
       <div class="rows">
@@ -120,15 +120,15 @@
         <div class="spec"><div class="key">사용시간</div><div class="val" id="usage_hours">–</div></div>
         <div class="spec"><div class="key">통화가능시간</div><div class="val" id="call_hours">–</div></div>
         <div class="spec"><div class="key">모바일 청약 가능 나이</div><div class="val" id="mobile_age">–</div></div>
-        <div class="spec"><div class="key">계피상 가능 여부</div><div class="val" id="gps">–</div></div>
-        <div class="spec"><div class="key">계피상 시 모니터링 기준</div><div class="val" id="monitoring_criteria">–</div></div>
+        <div class="spec"><div class="key">계약자·피보험자 불일치 가능 여부</div><div class="val" id="gps">–</div></div>
+        <div class="spec"><div class="key">불일치 시 모니터링 기준</div><div class="val" id="monitoring_criteria">–</div></div>
         <div class="spec"><div class="key">인콜 모니터링</div><div class="val" id="incall">–</div></div>
       </div>
       <p class="tip" id="note" style="margin-top:12px;display:none"></p>
       <p class="warn" id="warn" style="margin-top:12px;display:none"></p>
     </section>
 
-    <!-- ✅ 실손 블록: 4세대 단독여부 + 계산기 링크 -->
+    <!-- 실손 블록: 4세대 단독여부 + 계산기 링크 -->
     <aside class="silson">
       <h3>실손 안내</h3>
       <div class="bads" id="silson_badges"></div>
@@ -150,9 +150,23 @@
     const params = new URL(location.href).searchParams;
     const company = params.get('c') || '';
 
-    const telfmt = s => (s||'').replace(/[^0-9]/g,'')
-      .replace(/^02(\d{3,4})(\d{4})$/,'02-$1-$2')
-      .replace(/^(\d{3})(\d{3,4})(\d{4})$/,'$1-$2-$3');
+    // ✅ 전화번호 보기용 포맷터 (02, 10/11자리, 8자리 대표번호까지 지원)
+    const telfmt = (s) => {
+      const d = String(s || '').replace(/[^0-9]/g, '');
+      if (!d) return '';
+      // 8자리 대표번호: 15xx/16xx/18xx-xxxx
+      if (/^(15|16|18)\d{6}$/.test(d)) return d.slice(0,4) + '-' + d.slice(4);
+      // 서울 지역번호
+      if (d.startsWith('02') && (d.length === 9 || d.length === 10)) {
+        return d.length === 9
+          ? `02-${d.slice(2,5)}-${d.slice(5)}`
+          : `02-${d.slice(2,6)}-${d.slice(6)}`;
+      }
+      // 일반 10/11자리
+      if (d.length === 10) return `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}`;
+      if (d.length === 11) return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`;
+      return s || '';
+    };
 
     Promise.all([
       fetch('/data/links.json?ts='+Date.now()).then(r=>r.json()),
@@ -167,12 +181,12 @@
       const logoSrc = base.logo || (company ? `/assets/logos/${company}.png` : '');
       if(logoSrc){ const img = $('#logo'); img.src = logoSrc; img.alt = company + ' 로고'; }
 
-      // 상태 뱃지(상단)
+      // 상태 뱃지(상단): 4세대 단독 / 불일치 가능
       const badges = $('#badges'); badges.innerHTML = '';
       badges.insertAdjacentHTML('beforeend',
         `<span class="badge ${enr.gen4_solo ? 'ok' : 'no'}">${enr.gen4_solo ? '4세대 단독 가능' : '4세대 단독 불가'}</span>`);
       badges.insertAdjacentHTML('beforeend',
-        `<span class="badge ${enr.gye_pi_sang_available ? 'ok' : 'no'}">${enr.gye_pi_sang_available ? '계피상 가능' : '계피상 불가'}</span>`);
+        `<span class="badge ${enr.gye_pi_sang_available ? 'ok' : 'no'}">${enr.gye_pi_sang_available ? '불일치 가능' : '불일치 불가'}</span>`);
 
       // 히어로 KV
       const ageTxt = enr.mobile_enroll_age_text ||
@@ -189,7 +203,7 @@
       set('usage_hours',  enr.usage_hours);
       set('call_hours',   enr.call_hours);
       set('mobile_age',   ageTxt);
-      set('gps',          enr.gye_pi_sang_available ? '가능' : '불가');
+      set('gps',          enr.gye_pi_sang_available ? '가능' : '불가');               // 데이터는 그대로(gps), 표시문구만 바뀜
       set('monitoring_criteria', enr.monitoring_criteria);
       set('incall', incall ? telfmt(incall) : '–');
 
