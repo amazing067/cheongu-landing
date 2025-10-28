@@ -3,443 +3,250 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>보험금 청구서 자동채움 · 인쇄</title>
+<title>보험금 청구서 자동기입 PDF 생성</title>
 <meta name="format-detection" content="telephone=no" />
 <style>
-  :root{
-    --bg:#f6f8fb; --card:#fff; --ink:#111827; --muted:#6b7280; --brand:#3a64ff; --line:#e5e7eb;
-    --radius:16px; --shadow:0 10px 30px rgba(17,24,39,.08);
-  }
+  :root{--bg:#f6f8fb;--card:#fff;--ink:#111827;--muted:#6b7280;--brand:#3a64ff;--line:#e5e7eb;--radius:16px;--shadow:0 10px 30px rgba(17,24,39,.08)}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,Apple SD Gothic Neo,Segoe UI,Roboto,Helvetica,Arial}
-  .wrap{max-width:1000px;margin:24px auto;padding:16px}
-  .grid{display:grid;gap:16px}
-  .two{grid-template-columns:1fr 1fr}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-  .hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)}
-  .hd h2{margin:0;font-size:18px}
-  .bd{padding:16px 20px}
-  label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
-  input,select{width:100%;padding:12px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:14px}
+  .wrap{max-width:900px;margin:24px auto;padding:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 20px}
   .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer}
+  label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+  input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:14px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer}
   .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
-  .btn.ghost{background:#fff}
-  .btnbar{display:flex;gap:8px;flex-wrap:wrap}
   .muted{color:var(--muted);font-size:12px}
-  .preview{line-height:1.6}
-  .formgrid{display:grid;grid-template-columns:220px 1fr;gap:10px;align-items:center}
-  .field{border:1px solid var(--line);padding:10px;border-radius:10px;background:#fff;min-height:42px}
-  .label{font-weight:600}
-  .hr{height:1px;background:var(--line);margin:12px 0}
-  @media (max-width:860px){ .two{grid-template-columns:1fr} .formgrid{grid-template-columns:1fr} }
-  @media print{
-    body{background:#fff}
-    .no-print{display:none !important}
-    .wrap{max-width:100%;margin:0;padding:0}
-    .card{border:none;box-shadow:none}
-    .bd{padding:0}
-    .print-page{page-break-after:always;padding:12mm}
-    .formgrid{grid-template-columns:200px 1fr}
-  }
 </style>
 </head>
 <body>
-<div class="wrap grid two">
-  <!-- 내 정보 -->
-  <section class="card">
-    <div class="hd">
-      <h2>내 기본정보</h2>
-      <div class="btnbar no-print">
-        <button class="btn ghost" id="btnSample">샘플 불러오기</button>
-        <button class="btn ghost" id="btnExport">내 정보 내보내기</button>
-        <label class="btn ghost" for="importFile">불러오기</label>
-        <input id="importFile" type="file" accept=".json" hidden />
+<div class="wrap">
+  <h2 style="margin:0 0 12px 0">보험금 청구서 자동기입 PDF 생성</h2>
+  <p class="muted" style="margin:0 0 16px 0">내 정보가 들어간 1쪽 커버를 만들고, 선택한 보험사의 원본 청구서 PDF와 병합해 내려받습니다.</p>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3 style="margin:0 0 12px 0">내 기본정보</h3>
+    <div class="row">
+      <div><label>이름</label><input id="name"></div>
+      <div><label>전화번호(숫자만)</label><input id="phone" inputmode="numeric"></div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div><label>주민등록번호(숫자만)</label><input id="rrn" inputmode="numeric"></div>
+      <div><label>계좌번호(은행명 포함)</label><input id="account"></div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div><label>직장명</label><input id="employer"></div>
+      <div><label>하는 일(직무)</label><input id="job"></div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" id="btnSample">샘플 채우기</button>
+      <button class="btn" id="btnSave">내 정보 저장</button>
+      <button class="btn" id="btnLoad">불러오기</button>
+      <span class="muted">브라우저 로컬 저장소에만 저장됩니다.</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px 0">보험사 선택 및 PDF 생성</h3>
+    <div class="row">
+      <div>
+        <label>보험사</label>
+        <select id="carrier"></select>
+      </div>
+      <div>
+        <label>청구서 PDF</label>
+        <select id="pdfFile"></select>
       </div>
     </div>
-    <div class="bd grid" style="gap:14px">
-      <div class="row">
-        <div>
-          <label>이름</label>
-          <input id="name" autocomplete="name" />
-        </div>
-        <div>
-          <label>전화번호(숫자만)</label>
-          <input id="phone" inputmode="numeric" autocomplete="tel" />
-        </div>
-      </div>
-      <div class="row">
-        <div>
-          <label>주민등록번호(13자리·숫자만)</label>
-          <input id="rrn" inputmode="numeric" />
-        </div>
-        <div>
-          <label>계좌번호(은행명 포함)</label>
-          <input id="account" />
-        </div>
-      </div>
-      <div class="row">
-        <div>
-          <label>직장명</label>
-          <input id="employer" />
-        </div>
-        <div>
-          <label>하는 일(직무)</label>
-          <input id="job" />
-        </div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="row no-print">
-        <div>
-          <label>로컬 저장 암호(선택·설정 시 암호화 저장)</label>
-          <input id="passphrase" type="password" placeholder="암호 설정 또는 해제" />
-        </div>
-        <div class="btnbar" style="align-items:end">
-          <button class="btn" id="btnSave">저장/업데이트</button>
-          <button class="btn" id="btnClear">정보 삭제</button>
-        </div>
-      </div>
-      <p class="muted no-print">개인정보는 브라우저 <b>로컬 저장소</b>에만 보관됩니다. 암호를 입력한 상태로 저장하면 <b>AES-GCM</b>으로 암호화됩니다.</p>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn primary" id="btnMake">PDF 만들기</button>
+      <a class="btn" id="btnViewRaw" target="_blank" rel="noopener">원본 PDF 보기</a>
     </div>
-  </section>
-
-  <!-- 회사/양식 선택 + 미리보기/인쇄 -->
-  <section class="card">
-    <div class="hd">
-      <h2>회사별 청구서 자동채움</h2>
-      <div class="btnbar no-print">
-        <button class="btn primary" id="btnPrint">인쇄(PDF)</button>
-      </div>
-    </div>
-    <div class="bd grid" style="gap:14px">
-      <div class="row no-print">
-        <div>
-          <label>보험사</label>
-          <select id="carrier"></select>
-        </div>
-        <div>
-          <label>양식(라벨세트)</label>
-          <select id="formset"></select>
-        </div>
-      </div>
-
-      <!-- 인쇄 영역 -->
-      <div class="print-page">
-        <div class="preview">
-          <h3 style="margin:0 0 8px 0">보험금 청구서(자동채움 미리보기)</h3>
-          <div class="muted" id="metaLine"></div>
-          <div class="hr"></div>
-          <div id="formGrid" class="formgrid"></div>
-          <div class="hr"></div>
-          <div class="grid" style="gap:8px">
-            <div class="label">서명(자필)</div>
-            <div class="field" style="height:64px"></div>
-            <div class="label">날짜</div>
-            <div class="field" id="todayBox"></div>
-          </div>
-          <p class="muted" style="margin-top:10px">※ 실제 보험사 제출 시, 회사 고유 양식(다운로드 PDF/페이지)에 동일 내용으로 기입하여 제출하세요.</p>
-        </div>
-      </div>
-
-      <div class="no-print">
-        <div class="hr"></div>
-        <details>
-          <summary><b>라벨 커스터마이즈/회사 추가 방법</b></summary>
-          <p class="muted">아래 <code>FORMS</code> 객체에 회사 키(예: <code>"삼성화재"</code>)를 추가하고, 라벨/필드 순서를 원하는 대로 정의하세요.</p>
-        </details>
-      </div>
-    </div>
-  </section>
+    <p class="muted" style="margin-top:8px">※ 다음 단계에서 각 보험사 PDF 내부 칸에 직접 적어넣는 “스탬프/폼채움”을 추가합니다.</p>
+  </div>
 </div>
 
+<!-- pdf-lib (CDN) -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script>
-/** ===== 회사별 라벨/순서 정의 ===== */
-const FORMS = {
-  "삼성화재": {
-    "기본 청구서": [
-      ["피보험자 성명", "name"],
-      ["주민(외국인)등록번호", "rrn"],
-      ["연락처", "phone"],
-      ["보험금 수령계좌", "account"],
-      ["직장명(사업장)", "employer"],
-      ["직무(하는 일)", "job"],
-    ],
-    "입원/통원 공통": [
-      ["피보험자 성명", "name"],
-      ["연락처", "phone"],
-      ["주민등록번호", "rrn"],
-      ["계좌(은행명/번호)", "account"],
-      ["회사명", "employer"],
-      ["업무내용", "job"],
-    ]
-  },
-  "현대해상": {
-    "일반 청구서": [
-      ["계약자/피보험자 성명", "name"],
-      ["주민번호", "rrn"],
-      ["휴대전화", "phone"],
-      ["지급계좌", "account"],
-      ["근무처", "employer"],
-      ["직무", "job"],
-    ]
-  },
-  "DB손해": {
-    "간편 청구": [
-      ["성명", "name"],
-      ["주민등록번호", "rrn"],
-      ["연락처", "phone"],
-      ["수령계좌", "account"],
-      ["직장명", "employer"],
-      ["직무", "job"],
-    ]
-  },
-  "기타": {
-    "공통(커스텀)": [
-      ["이름", "name"],
-      ["주민등록번호", "rrn"],
-      ["전화번호", "phone"],
-      ["계좌번호", "account"],
-      ["직장명", "employer"],
-      ["하시는 일", "job"],
-    ]
-  }
+/** 1) 리포지토리의 assets/pdf 파일 매핑
+ *   좌측은 사용자에게 보일 이름, 우측은 실제 경로입니다.
+ *   파일명이 다르면 우측 경로만 맞게 고치세요.
+ */
+const PDF_MAP = {
+  "삼성화재": [
+    ["보험금청구서", "/assets/pdf/삼성화재-보험금청구서.pdf"]
+  ],
+  "현대해상": [
+    ["보험금청구서", "/assets/pdf/현대해상-보험금청구서.pdf"]
+  ],
+  "DB손해": [
+    ["보험금청구서", "/assets/pdf/DB손해보험-보험금청구서.pdf"],
+    ["치과치료확인서", "/assets/pdf/DB손해보험 치과치료확인서.pdf"]
+  ],
+  "KB손해": [
+    ["보험금청구서", "/assets/pdf/KB손해보험-보험금청구서.pdf"]
+  ],
+  "KB라이프생명": [
+    ["보험금청구서", "/assets/pdf/KB라이프생명 보험금청구서.pdf"]
+  ],
+  "AIA생명": [
+    ["보험금청구서", "/assets/pdf/AIA생명-보험금청구서.pdf"],
+    ["치과치료확인서", "/assets/pdf/AIA생명 치과치료확인서.pdf"]
+  ],
+  "ABL생명": [
+    ["보험금청구서", "/assets/pdf/ABL생명-보험금청구서.pdf"],
+    ["치과치료확인서", "/assets/pdf/ABL생명 치과치료확인서.pdf"]
+  ],
+  "AXA손해보험": [
+    ["보험금청구서", "/assets/pdf/AXA손해보험.pdf"],
+    ["치과치료확인서", "/assets/pdf/AXA손해보험 치과치료확인서.pdf"]
+  ],
+  "AIG손해보험": [
+    ["치과치료확인서", "/assets/pdf/AIG손해보험 치과치료확인서.pdf"]
+  ],
+  "기타": [
+    ["공란 커버만 생성", ""]
+  ]
 };
 
-const PROFILE_KEYS = ["name","rrn","phone","account","employer","job"];
+/** 2) 로컬 저장 */
+const LS_KEY = "claim-autofill.profile.v2";
 
-/** ===== 샘플 데이터 ===== */
-const SAMPLE = {
-  name:"홍길동",
-  rrn:"9001011234567",
-  phone:"01012345678",
-  account:"국민은행 123-456-789012",
-  employer:"청구닷컴 주식회사",
-  job:"보험상담사"
-};
-
-/** ===== 암호화 유틸(AES-GCM, Web Crypto) ===== */
-async function deriveKey(passphrase){
-  const enc = new TextEncoder();
-  const salt = enc.encode("claim-autofill-salt-v1");
-  const baseKey = await crypto.subtle.importKey("raw", enc.encode(passphrase), "PBKDF2", false, ["deriveKey"]);
-  return crypto.subtle.deriveKey(
-    { name:"PBKDF2", salt, iterations: 120000, hash: "SHA-256" },
-    baseKey,
-    { name:"AES-GCM", length:256 },
-    false,
-    ["encrypt","decrypt"]
-  );
-}
-async function encryptJson(obj, passphrase){
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const key = await deriveKey(passphrase);
-  const data = new TextEncoder().encode(JSON.stringify(obj));
-  const cipher = await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, data);
-  return { iv: Array.from(iv), cipher: Array.from(new Uint8Array(cipher)) };
-}
-async function decryptJson(payload, passphrase){
-  const key = await deriveKey(passphrase);
-  const iv = new Uint8Array(payload.iv);
-  const cipher = new Uint8Array(payload.cipher);
-  const plain = await crypto.subtle.decrypt({name:"AES-GCM", iv}, key, cipher);
-  return JSON.parse(new TextDecoder().decode(plain));
-}
-
-/** ===== 로컬 스토리지 키 ===== */
-const LS_KEY = "claim-autofill.profile";
-const LS_KEY_SECURE = "claim-autofill.profile.secure";
-
-/** ===== DOM ===== */
+/** 3) DOM */
 const el = (id)=>document.getElementById(id);
-const $name=el("name"), $rrn=el("rrn"), $phone=el("phone"), $account=el("account"), $employer=el("employer"), $job=el("job");
-const $pass=el("passphrase");
-const $carrier=el("carrier"), $formset=el("formset");
-const $formGrid=el("formGrid"), $metaLine=el("metaLine"), $todayBox=el("todayBox");
+const $name=el("name"),$rrn=el("rrn"),$phone=el("phone"),$account=el("account"),$employer=el("employer"),$job=el("job");
+const $carrier=el("carrier"),$pdfFile=el("pdfFile");
+const $btnViewRaw=el("btnViewRaw");
 
-/** ===== 상태 ===== */
-let currentProfile = { name:"", rrn:"", phone:"", account:"", employer:"", job:"" };
-
-/** ===== 초기화 ===== */
+/** 4) 초기화 */
 function initSelectors(){
-  $carrier.innerHTML = "";
-  Object.keys(FORMS).forEach(c=>{
-    const opt = document.createElement("option");
-    opt.value = c; opt.textContent = c;
-    $carrier.appendChild(opt);
+  $carrier.innerHTML="";
+  Object.keys(PDF_MAP).forEach(k=>{
+    const o=document.createElement("option");o.value=k;o.textContent=k;$carrier.appendChild(o);
   });
-  // 기본 선택값
-  $carrier.value = "삼성화재";
-  updateFormsetOptions();
-  $formset.value = "기본 청구서";
+  updatePdfOptions();
 }
-function updateFormsetOptions(){
-  const carrier = $carrier.value;
-  const sets = Object.keys(FORMS[carrier]||{});
-  $formset.innerHTML = "";
-  sets.forEach(s=>{
-    const opt = document.createElement("option");
-    opt.value=s; opt.textContent=s;
-    $formset.appendChild(opt);
+function updatePdfOptions(){
+  const list = PDF_MAP[$carrier.value] || [];
+  $pdfFile.innerHTML="";
+  list.forEach(([label, path])=>{
+    const o=document.createElement("option");o.value=path;o.textContent=label;$pdfFile.appendChild(o);
   });
+  const first = list[0]?.[1] || "";
+  $btnViewRaw.href = first || "#";
 }
 
-/** ===== 프로필 로드/세이브 ===== */
-async function loadProfile(){
-  const sec = localStorage.getItem(LS_KEY_SECURE);
-  if(sec){
-    try{
-      if($pass.value){
-        const obj = await decryptJson(JSON.parse(sec), $pass.value);
-        currentProfile = { ...currentProfile, ...obj };
-      }
-    }catch(e){
-      console.warn("암호화 데이터 해독 실패", e);
-    }
-  }
-  const plain = localStorage.getItem(LS_KEY);
-  if(plain){
-    try{
-      const obj = JSON.parse(plain);
-      currentProfile = { ...currentProfile, ...obj };
-    }catch(e){}
-  }
-  syncInputsFromProfile();
-  renderPreview();
+/** 5) 프로필 load/save */
+function loadProfile(){
+  try{
+    const obj=JSON.parse(localStorage.getItem(LS_KEY)||"{}");
+    ["name","rrn","phone","account","employer","job"].forEach(k=>{
+      el(k).value=obj[k]||"";
+    });
+  }catch(e){}
 }
-async function saveProfile(){
-  const obj = collectProfileFromInputs();
+function saveProfile(){
+  const obj={
+    name:$name.value.trim(),
+    rrn:$rrn.value.replace(/\D/g,""),
+    phone:$phone.value.replace(/\D/g,""),
+    account:$account.value.trim(),
+    employer:$employer.value.trim(),
+    job:$job.value.trim()
+  };
   localStorage.setItem(LS_KEY, JSON.stringify(obj));
-  if($pass.value){
-    const enc = await encryptJson(obj, $pass.value);
-    localStorage.setItem(LS_KEY_SECURE, JSON.stringify(enc));
-  }
-  currentProfile = obj;
-  alert("저장되었습니다.");
-  renderPreview();
+  alert("저장 완료");
 }
-function clearProfile(){
-  if(!confirm("저장된 내 정보를 삭제할까요?")) return;
-  localStorage.removeItem(LS_KEY);
-  localStorage.removeItem(LS_KEY_SECURE);
-  currentProfile = { name:"", rrn:"", phone:"", account:"", employer:"", job:"" };
-  syncInputsFromProfile();
-  alert("삭제되었습니다.");
-  renderPreview();
-}
-function collectProfileFromInputs(){
-  return {
-    name: ($name.value||"").trim(),
-    rrn: ($rrn.value||"").replace(/\D/g,""),
-    phone: ($phone.value||"").replace(/\D/g,""),
-    account: ($account.value||"").trim(),
-    employer: ($employer.value||"").trim(),
-    job: ($job.value||"").trim(),
-  };
-}
-function syncInputsFromProfile(){
-  $name.value = currentProfile.name||"";
-  $rrn.value = currentProfile.rrn||"";
-  $phone.value = currentProfile.phone||"";
-  $account.value = currentProfile.account||"";
-  $employer.value = currentProfile.employer||"";
-  $job.value = currentProfile.job||"";
+function fillSample(){
+  $name.value="홍길동"; $rrn.value="9001011234567"; $phone.value="01012345678";
+  $account.value="국민은행 123-456-789012"; $employer.value="청구닷컴 주식회사"; $job.value="보험상담사";
 }
 
-/** ===== 미리보기 렌더 ===== */
-function renderPreview(){
-  const carrier = $carrier.value;
-  const setName = $formset.value;
-  const spec = (FORMS[carrier] && FORMS[carrier][setName]) ? FORMS[carrier][setName] : [];
-  $metaLine.textContent = `회사: ${carrier} · 양식: ${setName}`;
-  const now = new Date();
-  const y = now.getFullYear(), m = String(now.getMonth()+1).padStart(2,"0"), d = String(now.getDate()).padStart(2,"0");
-  $todayBox.textContent = `${y}-${m}-${d}`;
-  $formGrid.innerHTML = "";
-  spec.forEach(([label,key])=>{
-    const L = document.createElement("div");
-    L.className="label";
-    L.textContent=label;
-    const V = document.createElement("div");
-    V.className="field";
-    V.textContent = (currentProfile[key]||"");
-    $formGrid.appendChild(L);
-    $formGrid.appendChild(V);
+/** 6) PDF 생성 로직
+ *  - 커버 1쪽을 만들고, 선택한 보험사 PDF를 뒤에 병합
+ *  - 다음 단계에서 보험사별 좌표/폼 채움(스탬프)을 추가 예정
+ */
+async function makePdf(){
+  // 내 정보
+  const P={
+    name:$name.value.trim(),
+    rrn:$rrn.value.replace(/\D/g,""),
+    phone:$phone.value.replace(/\D/g,""),
+    account:$account.value.trim(),
+    employer:$employer.value.trim(),
+    job:$job.value.trim()
+  };
+  if(!P.name){ alert("이름을 입력하세요."); return; }
+
+  // 1) 빈 문서 + 커버 페이지
+  const { PDFDocument, StandardFonts, rgb } = PDFLib;
+  const out = await PDFDocument.create();
+  const page = out.addPage([595.28, 841.89]); // A4 pt
+  const font = await out.embedFont(StandardFonts.Helvetica);
+  const titleSize=18, labelSize=11, valueSize=13;
+
+  // 타이틀
+  page.drawText("보험금 청구서 자동기입 커버", { x: 50, y: 790, size: titleSize, font, color: rgb(0.1,0.1,0.2) });
+  const today = new Date(); const y=today.getFullYear(), m=String(today.getMonth()+1).padStart(2,"0"), d=String(today.getDate()).padStart(2,"0");
+  page.drawText(`생성일: ${y}-${m}-${d}`, { x: 50, y: 770, size: labelSize, font, color: rgb(0.4,0.4,0.5) });
+
+  // 박스
+  const boxY = 720, boxH = 220;
+  page.drawRectangle({ x:40, y: boxY-boxH, width: 515, height: boxH, borderColor: rgb(0.85,0.87,0.92), borderWidth: 1, color: rgb(1,1,1) });
+
+  const rows = [
+    ["피보험자 성명", P.name],
+    ["주민등록번호", P.rrn],
+    ["연락처", P.phone],
+    ["보험금 수령계좌", P.account],
+    ["직장명", P.employer],
+    ["직무", P.job],
+  ];
+  let yPos = boxY - 24;
+  rows.forEach(([label, value])=>{
+    page.drawText(label, { x: 55, y: yPos, size: labelSize, font, color: rgb(0.35,0.35,0.45) });
+    page.drawText(String(value||""), { x: 200, y: yPos, size: valueSize, font, color: rgb(0,0,0) });
+    yPos -= 32;
   });
-}
 
-/** ===== 내보내기/불러오기/샘플 ===== */
-function exportProfile(){
-  const data = {
-    version:"v1",
-    exportedAt:new Date().toISOString(),
-    profile: collectProfileFromInputs()
-  };
-  const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "claim-profile.json";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-}
-function importProfile(file){
-  const reader = new FileReader();
-  reader.onload = ()=>{
+  // 안내
+  page.drawText("※ 이 커버는 제출 편의를 위한 요약입니다. 다음 장부터는 선택한 보험사의 원본 청구서가 그대로 이어집니다.", { x: 50, y: 480, size: 10, font, color: rgb(0.4,0.4,0.5) });
+
+  // 2) 원본 청구서 병합 (선택)
+  const srcPath = $pdfFile.value;
+  if(srcPath){
     try{
-      const obj = JSON.parse(reader.result);
-      if(obj && obj.profile){
-        currentProfile = {...currentProfile, ...obj.profile};
-        localStorage.setItem(LS_KEY, JSON.stringify(currentProfile));
-        syncInputsFromProfile();
-        renderPreview();
-        alert("불러오기 완료");
-      }else{
-        alert("알 수 없는 파일 형식입니다.");
-      }
+      const bytes = await fetch(srcPath, {cache:"no-store"}).then(r=>r.arrayBuffer());
+      const src = await PDFDocument.load(bytes);
+      const pages = await out.copyPages(src, src.getPageIndices());
+      pages.forEach(p=>out.addPage(p));
     }catch(e){
-      alert("불러오기 실패: "+e.message);
+      alert("원본 PDF 병합 실패: " + e.message + "\\n경로 또는 파일명을 확인하세요.");
     }
-  };
-  reader.readAsText(file);
-}
-function loadSampleProfile(){
-  currentProfile = {...currentProfile, ...SAMPLE};
-  syncInputsFromProfile();
-  renderPreview();
-}
-
-/** ===== 이벤트 ===== */
-document.addEventListener("DOMContentLoaded", async ()=>{
-  initSelectors();
-
-  // URL ?demo 모드 처리
-  const params = new URLSearchParams(location.search);
-  if(params.has("demo")){
-    $carrier.value = "삼성화재";
-    updateFormsetOptions();
-    $formset.value = "기본 청구서";
-    loadSampleProfile();
-  }else{
-    await loadProfile();
   }
 
-  $carrier.addEventListener("change", ()=>{ updateFormsetOptions(); renderPreview(); });
-  $formset.addEventListener("change", renderPreview);
-  [$name,$rrn,$phone,$account,$employer,$job].forEach(i=>i.addEventListener("input",()=>{
-    currentProfile = collectProfileFromInputs();
-    renderPreview();
-  }));
+  // 3) 저장
+  const pdfBytes = await out.save();
+  const blob = new Blob([pdfBytes], {type:"application/pdf"});
+  const a = document.createElement("a");
+  const carrier = $carrier.value || "보험사";
+  a.href = URL.createObjectURL(blob);
+  a.download = `${carrier}_청구서_자동기입.pdf`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+/** 이벤트 바인딩 */
+document.addEventListener("DOMContentLoaded", ()=>{
+  initSelectors(); loadProfile();
+  $carrier.addEventListener("change", updatePdfOptions);
+  $pdfFile.addEventListener("change", ()=>{ $btnViewRaw.href = $pdfFile.value || "#"; });
+  el("btnMake").addEventListener("click", makePdf);
   el("btnSave").addEventListener("click", saveProfile);
-  el("btnClear").addEventListener("click", clearProfile);
-  el("btnPrint").addEventListener("click", ()=>window.print());
-  el("btnExport").addEventListener("click", exportProfile);
-  el("btnSample").addEventListener("click", loadSampleProfile);
-  el("importFile").addEventListener("change", (e)=>{
-    const file = e.target.files?.[0]; if(file) importProfile(file);
-    e.target.value = "";
-  });
+  el("btnLoad").addEventListener("click", loadProfile);
+  el("btnSample").addEventListener("click", fillSample);
+  $btnViewRaw.addEventListener("click", (e)=>{ if(!$pdfFile.value) e.preventDefault(); });
 });
 </script>
 </body>
