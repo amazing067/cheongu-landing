@@ -51,6 +51,7 @@
     <div class="hd">
       <h2>내 기본정보</h2>
       <div class="btnbar no-print">
+        <button class="btn ghost" id="btnSample">샘플 불러오기</button>
         <button class="btn ghost" id="btnExport">내 정보 내보내기</button>
         <label class="btn ghost" for="importFile">불러오기</label>
         <input id="importFile" type="file" accept=".json" hidden />
@@ -154,11 +155,7 @@
 </div>
 
 <script>
-/** ===== 회사별 라벨/순서 정의 =====
- * 각 항목은 [라벨, 데이터키] 형태.
- * 데이터키는 아래 PROFILE_KEYS 중 하나: name, rrn, phone, account, employer, job
- * 필요시 라벨을 회사 관용어로 맞추면 됩니다.
- */
+/** ===== 회사별 라벨/순서 정의 ===== */
 const FORMS = {
   "삼성화재": {
     "기본 청구서": [
@@ -212,6 +209,16 @@ const FORMS = {
 
 const PROFILE_KEYS = ["name","rrn","phone","account","employer","job"];
 
+/** ===== 샘플 데이터 ===== */
+const SAMPLE = {
+  name:"홍길동",
+  rrn:"9001011234567",
+  phone:"01012345678",
+  account:"국민은행 123-456-789012",
+  employer:"청구닷컴 주식회사",
+  job:"보험상담사"
+};
+
 /** ===== 암호화 유틸(AES-GCM, Web Crypto) ===== */
 async function deriveKey(passphrase){
   const enc = new TextEncoder();
@@ -241,8 +248,8 @@ async function decryptJson(payload, passphrase){
 }
 
 /** ===== 로컬 스토리지 키 ===== */
-const LS_KEY = "claim-autofill.profile";      // 평문 저장
-const LS_KEY_SECURE = "claim-autofill.profile.secure"; // 암호화 저장
+const LS_KEY = "claim-autofill.profile";
+const LS_KEY_SECURE = "claim-autofill.profile.secure";
 
 /** ===== DOM ===== */
 const el = (id)=>document.getElementById(id);
@@ -262,7 +269,10 @@ function initSelectors(){
     opt.value = c; opt.textContent = c;
     $carrier.appendChild(opt);
   });
+  // 기본 선택값
+  $carrier.value = "삼성화재";
   updateFormsetOptions();
+  $formset.value = "기본 청구서";
 }
 function updateFormsetOptions(){
   const carrier = $carrier.value;
@@ -277,13 +287,10 @@ function updateFormsetOptions(){
 
 /** ===== 프로필 로드/세이브 ===== */
 async function loadProfile(){
-  // 1) 암호화본 시도
   const sec = localStorage.getItem(LS_KEY_SECURE);
   if(sec){
     try{
-      if(!$pass.value){
-        // 암호 없으면 해독 불가 → 건너뛰고 평문 확인
-      }else{
+      if($pass.value){
         const obj = await decryptJson(JSON.parse(sec), $pass.value);
         currentProfile = { ...currentProfile, ...obj };
       }
@@ -291,7 +298,6 @@ async function loadProfile(){
       console.warn("암호화 데이터 해독 실패", e);
     }
   }
-  // 2) 평문본 병합
   const plain = localStorage.getItem(LS_KEY);
   if(plain){
     try{
@@ -299,20 +305,12 @@ async function loadProfile(){
       currentProfile = { ...currentProfile, ...obj };
     }catch(e){}
   }
-  // UI 반영
-  $name.value = currentProfile.name||"";
-  $rrn.value = currentProfile.rrn||"";
-  $phone.value = currentProfile.phone||"";
-  $account.value = currentProfile.account||"";
-  $employer.value = currentProfile.employer||"";
-  $job.value = currentProfile.job||"";
+  syncInputsFromProfile();
   renderPreview();
 }
 async function saveProfile(){
   const obj = collectProfileFromInputs();
-  // 평문 저장(로컬 전용 편의)
   localStorage.setItem(LS_KEY, JSON.stringify(obj));
-  // 암호 설정 시 암호화 병행 저장
   if($pass.value){
     const enc = await encryptJson(obj, $pass.value);
     localStorage.setItem(LS_KEY_SECURE, JSON.stringify(enc));
@@ -326,7 +324,7 @@ function clearProfile(){
   localStorage.removeItem(LS_KEY);
   localStorage.removeItem(LS_KEY_SECURE);
   currentProfile = { name:"", rrn:"", phone:"", account:"", employer:"", job:"" };
-  $name.value=$rrn.value=$phone.value=$account.value=$employer.value=$job.value="";
+  syncInputsFromProfile();
   alert("삭제되었습니다.");
   renderPreview();
 }
@@ -340,19 +338,24 @@ function collectProfileFromInputs(){
     job: ($job.value||"").trim(),
   };
 }
+function syncInputsFromProfile(){
+  $name.value = currentProfile.name||"";
+  $rrn.value = currentProfile.rrn||"";
+  $phone.value = currentProfile.phone||"";
+  $account.value = currentProfile.account||"";
+  $employer.value = currentProfile.employer||"";
+  $job.value = currentProfile.job||"";
+}
 
 /** ===== 미리보기 렌더 ===== */
 function renderPreview(){
   const carrier = $carrier.value;
   const setName = $formset.value;
   const spec = (FORMS[carrier] && FORMS[carrier][setName]) ? FORMS[carrier][setName] : [];
-  // 메타라인
   $metaLine.textContent = `회사: ${carrier} · 양식: ${setName}`;
-  // 오늘 날짜
   const now = new Date();
   const y = now.getFullYear(), m = String(now.getMonth()+1).padStart(2,"0"), d = String(now.getDate()).padStart(2,"0");
   $todayBox.textContent = `${y}-${m}-${d}`;
-  // 그리드
   $formGrid.innerHTML = "";
   spec.forEach(([label,key])=>{
     const L = document.createElement("div");
@@ -366,7 +369,7 @@ function renderPreview(){
   });
 }
 
-/** ===== 내보내기/불러오기 ===== */
+/** ===== 내보내기/불러오기/샘플 ===== */
 function exportProfile(){
   const data = {
     version:"v1",
@@ -388,15 +391,8 @@ function importProfile(file){
       const obj = JSON.parse(reader.result);
       if(obj && obj.profile){
         currentProfile = {...currentProfile, ...obj.profile};
-        // 평문 저장
         localStorage.setItem(LS_KEY, JSON.stringify(currentProfile));
-        // UI 반영
-        $name.value=currentProfile.name||"";
-        $rrn.value=currentProfile.rrn||"";
-        $phone.value=currentProfile.phone||"";
-        $account.value=currentProfile.account||"";
-        $employer.value=currentProfile.employer||"";
-        $job.value=currentProfile.job||"";
+        syncInputsFromProfile();
         renderPreview();
         alert("불러오기 완료");
       }else{
@@ -408,11 +404,27 @@ function importProfile(file){
   };
   reader.readAsText(file);
 }
+function loadSampleProfile(){
+  currentProfile = {...currentProfile, ...SAMPLE};
+  syncInputsFromProfile();
+  renderPreview();
+}
 
 /** ===== 이벤트 ===== */
 document.addEventListener("DOMContentLoaded", async ()=>{
   initSelectors();
-  await loadProfile();
+
+  // URL ?demo 모드 처리
+  const params = new URLSearchParams(location.search);
+  if(params.has("demo")){
+    $carrier.value = "삼성화재";
+    updateFormsetOptions();
+    $formset.value = "기본 청구서";
+    loadSampleProfile();
+  }else{
+    await loadProfile();
+  }
+
   $carrier.addEventListener("change", ()=>{ updateFormsetOptions(); renderPreview(); });
   $formset.addEventListener("change", renderPreview);
   [$name,$rrn,$phone,$account,$employer,$job].forEach(i=>i.addEventListener("input",()=>{
@@ -423,6 +435,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   el("btnClear").addEventListener("click", clearProfile);
   el("btnPrint").addEventListener("click", ()=>window.print());
   el("btnExport").addEventListener("click", exportProfile);
+  el("btnSample").addEventListener("click", loadSampleProfile);
   el("importFile").addEventListener("change", (e)=>{
     const file = e.target.files?.[0]; if(file) importProfile(file);
     e.target.value = "";
