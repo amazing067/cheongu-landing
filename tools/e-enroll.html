@@ -92,6 +92,13 @@
   .row-kv .v{color:#0f172a; line-height:1.55; word-break:keep-all; white-space:normal}
   .cols2{display:grid; gap:10px}
   @media (min-width:860px){ .cols2{grid-template-columns:1fr 1fr} }
+
+  /* === (추가) 급여 공제 정렬용 === */
+  .kv-deduct{display:grid;gap:6px}
+  .kv-deduct .title{font-weight:800;letter-spacing:-.01em}
+  .kv-deduct .grid{display:grid;grid-template-columns:auto auto;gap:6px 14px;align-items:center}
+  .kv-deduct .k-chip{padding:2px 8px;border:1px solid rgba(100,116,139,.28);border-radius:999px;font-size:12px;color:#334155;background:#fff;white-space:nowrap}
+  .kv-deduct .v-num{font-weight:800;white-space:nowrap}
   </style>
 
   <!-- ===== 페이지 전용 오버라이드 ===== -->
@@ -385,6 +392,28 @@
 
         // 실손 카드
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
+
+        // === (추가) 주계약(급여) 보기 좋게 교체 ===
+        function prettifyMainBenefit(){
+          const rows = document.querySelectorAll('#silson_common .row-kv');
+          let target = null;
+          rows.forEach(r => {
+            const k = r.querySelector('.k')?.textContent?.trim();
+            if (k === '주계약(급여)') target = r;
+          });
+          if (!target) return;
+          target.querySelector('.v').innerHTML = `
+            <div class="kv-deduct">
+              <div class="title">80% 보상 / 공제금액</div>
+              <div class="grid">
+                <span class="k-chip">의원</span> <span class="v-num">1만원</span>
+                <span class="k-chip">병원</span> <span class="v-num">15,000원</span>
+                <span class="k-chip">종합병원·상급종합</span> <span class="v-num">20,000원</span>
+              </div>
+            </div>`;
+        }
+        prettifyMainBenefit();
+        // === 끝 ===
 
         // 시간 외 경고/노트
         const inHours = (str) => {
