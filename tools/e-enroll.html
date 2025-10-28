@@ -45,7 +45,7 @@
   .grid{display:grid;gap:16px}
   @media (min-width:1024px){ .grid-2{grid-template-columns:1.35fr 1fr} }
 
-  /* ===== Hero 기본 ===== */
+  /* ===== Hero ===== */
   .hero{ border-radius:20px; padding:22px; border:1px solid rgba(124,58,237,.25); }
   .hero .heading{font-size:22px;font-weight:900;margin:0 0 6px}
   .hero .rows{display:grid; gap:10px}
@@ -79,11 +79,10 @@
   .row-kv .v{color:#0f172a; line-height:1.55; word-break:keep-all; white-space:normal}
   .cols2{display:grid; gap:10px}
   @media (min-width:860px){ .cols2{grid-template-columns:1fr 1fr} }
-  </style>
 
-  <!-- ===== 페이지 전용 오버라이드(공통 CSS보다 우선) — 반드시 </head> 직전에 둠 ===== -->
+  /* ===== 페이지 전용 오버라이드 ===== */
+  </style>
   <style id="enroll-override">
-/* ===== ENROLL PRO SKIN (강조 버전) ===== */
 .page-enroll.theme-pro{
   background:
     radial-gradient(28px 28px at 14px 14px, rgba(124,58,237,.08) 1px, transparent 1px),
@@ -116,7 +115,8 @@
 }
 .page-enroll.theme-pro .badge{
   border-color: rgba(99,102,241,.34) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.75) !important; background:#fff !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.75) !important;
+  background:#fff !important;
 }
 .page-enroll.theme-pro .badge.ok{ background:#ecfdf5 !important; border-color:#86efac !important; color:#065f46 !important; }
 .page-enroll.theme-pro .badge.no{ background:#fef2f2 !important; border-color:#fecaca !important; color:#991b1b !important; }
@@ -128,19 +128,18 @@
 .page-enroll.theme-pro .btn:hover{ transform:translateY(-2px) !important; box-shadow:0 12px 26px rgba(2,6,23,.16) !important; }
 .page-enroll.theme-pro #btn_cs_tel,
 .page-enroll.theme-pro #btn_fax_tel,
-.page-enroll.theme-pro #btn_help_tel,
-.page-enroll.theme-pro #btn_incall_tel{ border-color:#a5b4fc !important; }  /* ← 인콜 버튼 포함 */
+.page-enroll.theme-pro #btn_help_tel{ border-color:#a5b4fc !important; }
 .page-enroll.theme-pro .row-kv{
   display:grid !important; grid-template-columns:minmax(10.5rem,13.5rem) 1fr !important;
-  align-items:center !important; gap:12px !important; border-top:1px dashed rgba(100,116,139,.28) !important; padding:12px 0 !important;
+  align-items:center !important; gap:12px !important;
+  border-top:1px dashed rgba(100,116,139,.28) !important; padding:12px 0 !important;
 }
-.page-enroll.theme-pro .row-kv .v{ line-height:1.65 !important; word-break:keep-all !important; white-space:normal !important; }
+.page-enroll.theme-pro .row-kv .v{ line-height:1.65 !important; }
 .page-enroll.theme-pro .cols2{ display:grid !important; gap:14px !important; }
 @media (min-width:900px){ .page-enroll.theme-pro .cols2{ grid-template-columns:1fr 1fr !important; } }
-</style>
+  </style>
 </head>
 
-<!-- ★ 테마 적용을 위해 theme-pro 클래스 추가 -->
 <body class="page-enroll theme-pro">
   <header class="maxw">
     <div class="hstack">
@@ -163,41 +162,16 @@
     <section class="hero" style="grid-column:1/-1">
       <div class="heading">모바일 전자청약 정보</div>
       <div class="rows">
-        <div class="kv">
-          <div class="k">모바일 청약 가능 나이</div>
-          <div class="v" id="kv_mobile_age">–</div>
-        </div>
-        <div class="kv">
-          <div class="k">전자청약 사용시간</div>
-          <div class="v" id="kv_usage_hours">–</div>
-        </div>
-        <div class="kv">
-          <div class="k">통화가능시간</div>
-          <div class="v" id="kv_call_hours">–</div>
-        </div>
-        <div class="kv">
-          <div class="k">인콜 모니터링</div>
-          <div class="v" id="kv_incall">–</div>
-        </div>
+        <div class="kv"><div class="k">모바일 청약 가능 나이</div><div class="v" id="kv_mobile_age">–</div></div>
+        <div class="kv"><div class="k">전자청약 사용시간</div><div class="v" id="kv_usage_hours">–</div></div>
+        <div class="kv"><div class="k">통화가능시간</div><div class="v" id="kv_call_hours">–</div></div>
+        <div class="kv"><div class="k">인콜 모니터링</div><div class="v" id="kv_incall">–</div></div>
       </div>
       <div class="actions">
-        <!-- 전화 버튼 4종 (고객센터/팩스/헬프/인콜) -->
-        <a id="btn_cs_tel" class="btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.15 9.81 19.8 19.8 0 0 1 .08 1.18 2 2 0 0 1 2.06 0h3a2 2 0 0 1 2 1.72c.12.89.31 1.76.57 2.6a2 2 0 0 1-.45 2.11L6.09 7.91a16 16 0 0 0 10 10l1.48-1.09a2 2 0 0 1 2.11-.45c.84.26 1.71.45 2.6.57A2 2 0 0 1 22 16.92z"/></svg>
-          고객센터: <span id="txt_cs_tel">–</span>
-        </a>
-        <a id="btn_fax_tel" class="btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M7 7V3h10v4"/><path d="M8 13h8M8 17h6"/></svg>
-          보험금청구 FAX: <span id="txt_fax_tel">–</span>
-        </a>
-        <a id="btn_help_tel" class="btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 1 1 5.82 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg>
-          헬프데스크(전산): <span id="txt_help_tel">–</span>
-        </a>
-        <a id="btn_incall_tel" class="btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 2v6h-6"/><path d="M20 13a8 8 0 1 1-2-5.3"/></svg>
-          인콜 모니터링: <span id="txt_incall_tel">–</span>
-        </a>
+        <!-- 전화 버튼 3종 (인콜 버튼 제거) -->
+        <a id="btn_cs_tel" class="btn">고객센터: <span id="txt_cs_tel">–</span></a>
+        <a id="btn_fax_tel" class="btn">보험금청구 FAX: <span id="txt_fax_tel">–</span></a>
+        <a id="btn_help_tel" class="btn">헬프데스크(전산): <span id="txt_help_tel">–</span></a>
       </div>
     </section>
 
@@ -218,21 +192,26 @@
       <p class="subtitle" id="warn" style="margin-top:8px;color:#b45309;display:none"></p>
     </section>
 
-    <!-- 우: 실손 안내(회사별 구조) -->
+    <!-- 우: 실손 안내 -->
     <aside class="silson">
       <h3>실손 안내</h3>
       <div class="hstack" id="silson_badges" style="gap:8px;margin-bottom:6px"></div>
 
       <div class="card" style="margin-top:8px"><div class="list" id="silson_summary"></div></div>
+
       <div class="card" style="margin-top:10px">
         <h4 style="margin:0 0 8px;font-weight:900">공통사항</h4>
         <div class="list cols2" id="silson_common"></div>
       </div>
+
       <div class="card" style="margin-top:10px">
         <h4 style="margin:0 0 8px;font-weight:900">전환/인수</h4>
         <div class="list" id="silson_convert"></div>
       </div>
-      <div class="card" style="margin-top:10px"><div class="list" id="silson_specials"></div></div>
+
+      <div class="card" style="margin-top:10px">
+        <div class="list" id="silson_specials"></div>
+      </div>
 
       <div style="margin-top:10px" class="hstack">
         <a href="/#medcalc" class="btn">실손 간편 계산기 열기</a>
@@ -284,15 +263,7 @@
       const updated = bundle?.last_updated || '';
       const record = bundle?.companies?.[name] || {};
 
-      // 상단 배지: 단독실손 / 카드납
-      const bf = $('#badges');
-      bf.innerHTML = '';
-      const solo = asBool(record['단독가입여부']);
-      const card = asBool(record['카드납 가능']);
-      bf.insertAdjacentHTML('beforeend', `<span class="badge ${solo===false?'no':(solo===true?'ok':'')}">${solo===false?'단독실손 가입 불가':(solo===true?'단독실손 가입가능':'단독실손 정보 없음')}</span>`);
-      bf.insertAdjacentHTML('beforeend', `<span class="badge ${card===false?'no':(card===true?'ok':'')}">${card===false?'카드납 불가':(card===true?'카드납 가능':'카드납 정보 없음')}</span>`);
-
-      // 실손 카드들
+      // 실손 카드 – 요약/공통/전환/특별
       $('#silson_summary').innerHTML =
         kvRow('단독가입여부', record['단독가입여부']) +
         kvRow('중복가입',     record['중복가입']) +
@@ -334,7 +305,7 @@
         const enr  = (Array.isArray(enrollData?.items) ? enrollData.items : []).find(x => x.name === company) || {};
         const L = base.links || {};
 
-        // 헤더
+        // 헤더/로고
         $('#company').textContent = company || '전자청약정보';
         const logoSrc = base.logo || (company ? `/assets/logos/${company}.png` : '');
         if (logoSrc){ const img = $('#logo'); img.src = logoSrc; img.alt = company + ' 로고'; }
@@ -347,7 +318,7 @@
         const incall = enr.incall_monitoring_phone || L.monitor || '';
         $('#kv_incall').textContent = incall ? telfmt(incall) : '–';
 
-        // 전화 버튼(고객센터/FAX/헬프/인콜)
+        // 전화 버튼(고객센터/FAX/헬프데스크)
         const csTel   = L.cs || '';
         const faxTel  = L.fax || '';
         const helpTel = enr.helpdesk_phone || L.helpdesk || '';
@@ -367,22 +338,29 @@
         bindTelBtn('btn_cs_tel','txt_cs_tel',csTel);
         bindTelBtn('btn_fax_tel','txt_fax_tel',faxTel);
         bindTelBtn('btn_help_tel','txt_help_tel',helpTel);
-        bindTelBtn('btn_incall_tel','txt_incall_tel',incall);   // ★ 인콜 모니터링 버튼 바인딩
 
-        // 상세 정보
+        // 상세 정보 표
+        const toText = (b) => b===false?'불가':(b===true?'가능':'정보 없음');
         const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = (v ?? '') || '–'; };
         const gps  = asBool(enr.gye_pi_sang_available);
         const card = asBool(enr.card_payment_available);
+
         set('usage_period', enr.usage_period);
         set('usage_hours',  enr.usage_hours);
         set('call_hours',   enr.call_hours);
         set('mobile_age',   ageTxt);
-        set('gps',          gps===false?'불가':(gps===true?'가능':'정보 없음'));
+        set('gps',          toText(gps));
         set('monitoring_criteria', enr.monitoring_criteria);
-        set('cardpay',      card===false?'불가':(card===true?'가능':'정보 없음'));
+        set('cardpay',      toText(card));
         set('incall',       incall ? telfmt(incall) : '–');
 
-        // 실손 카드
+        // 상단 뱃지: 단독실손(실손 파일), 카드납(enroll)
+        const badges = $('#badges'); badges.innerHTML = '';
+        const solo = asBool((silsonCompany?.companies?.[company]||{})['단독가입여부']);
+        badges.insertAdjacentHTML('beforeend', `<span class="badge ${solo===false?'no':(solo===true?'ok':'')}">${solo===false?'단독실손 가입 불가':(solo===true?'단독실손 가입가능':'단독실손 정보 없음')}</span>`);
+        badges.insertAdjacentHTML('beforeend', `<span class="badge ${card===false?'no':(card===true?'ok':'')}">${toText(card).replace('정보 없음','카드납 정보 없음')}</span>`);
+
+        // 실손 카드 채우기
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
 
         // 시간 외 경고/노트
