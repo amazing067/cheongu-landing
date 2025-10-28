@@ -45,10 +45,9 @@
   .grid{display:grid;gap:16px}
   @media (min-width:1024px){ .grid-2{grid-template-columns:1.35fr 1fr} }
 
-  /* ===== Hero 기본 ===== */
+  /* ===== Hero 기본(색 유지) ===== */
   .hero{ border-radius:20px; padding:22px; border:1px solid rgba(124,58,237,.25); }
   .hero .heading{font-size:22px;font-weight:900;margin:0 0 12px}
-
   .hero .rows{display:grid; gap:10px}
   @media (min-width:640px){ .hero .rows{grid-template-columns:1fr 1fr} }
   .kv{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
@@ -84,7 +83,7 @@
 
   <!-- ===== 페이지 전용 오버라이드 ===== -->
   <style id="enroll-override">
-/* ===== ENROLL PRO SKIN ===== */
+/* 배경 유지 */
 .page-enroll.theme-pro{
   background:
     radial-gradient(28px 28px at 14px 14px, rgba(124,58,237,.08) 1px, transparent 1px),
@@ -92,7 +91,7 @@
   background-size:28px 28px, auto !important;
 }
 
-/* 공통 “섹션 타이틀 배너” – 기본은 밝은 톤 + 어두운 글자 */
+/* 공통 “섹션 타이틀 배너” – 파스텔 */
 .page-enroll .section-title{
   text-align:center;
   font-weight:900;
@@ -102,14 +101,13 @@
   color:#0f172a;
   letter-spacing:-.01em;
   box-shadow:0 6px 16px rgba(2,6,23,.10);
-  background:linear-gradient(135deg,#eef2ff,#e0f2fe); /* 기본 은은한 파스텔 */
+  background:linear-gradient(135deg,#eef2ff,#e0f2fe);
 }
-/* 색상 변형 */
 .page-enroll .section-title.st-violet{ background:linear-gradient(135deg,#ede9fe,#e0e7ff); }
 .page-enroll .section-title.st-blue  { background:linear-gradient(135deg,#dbeafe,#e0f2fe); }
 .page-enroll .section-title.st-teal  { background:linear-gradient(135deg,#ccfbf1,#d1fae5); }
 
-/* 카드 & 실손 카드 강화 */
+/* 카드 강화 */
 .page-enroll.theme-pro .card,
 .page-enroll.theme-pro .silson{
   background:#fff !important;
@@ -162,9 +160,9 @@
   </header>
 
   <main class="maxw grid grid-2" style="margin-top:14px">
-    <!-- 모바일 전자청약 정보(히어로) -->
+    <!-- 모바일 전자청약 정보(히어로) — 제목은 원래 스타일 유지 -->
     <section class="hero" style="grid-column:1/-1">
-      <div class="heading section-title st-violet">모바일 전자청약 정보</div>
+      <div class="heading">모바일 전자청약 정보</div>
       <div class="rows">
         <div class="kv">
           <div class="k">모바일 청약 가능 나이</div>
@@ -184,19 +182,9 @@
         </div>
       </div>
       <div class="actions">
-        <!-- 전화 버튼 3종 (유지) -->
-        <a id="btn_cs_tel" class="btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.15 9.81 19.8 19.8 0 0 1 .08 1.18 2 2 0 0 1 2.06 0h3a2 2 0 0 1 2 1.72c.12.89.31 1.76.57 2.6a2 2 0 0 1-.45 2.11L6.09 7.91a16 16 0 0 0 10 10l1.48-1.09a2 2 0 0 1 2.11-.45c.84.26 1.71.45 2.6.57A2 2 0 0 1 22 16.92z"/></svg>
-          고객센터: <span id="txt_cs_tel">–</span>
-        </a>
-        <a id="btn_fax_tel" class="btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M7 7V3h10v4"/><path d="M8 13h8M8 17h6"/></svg>
-          보험금청구 FAX: <span id="txt_fax_tel">–</span>
-        </a>
-        <a id="btn_help_tel" class="btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 1 1 5.82 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg>
-          헬프데스크(전산): <span id="txt_help_tel">–</span>
-        </a>
+        <a id="btn_cs_tel" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.15 9.81 19.8 19.8 0 0 1 .08 1.18 2 2 0 0 1 2.06 0h3a2 2 0 0 1 2 1.72c.12.89.31 1.76.57 2.6a2 2 0 0 1-.45 2.11L6.09 7.91a16 16 0 0 0 10 10l1.48-1.09a2 2 0 0 1 2.11-.45c.84.26 1.71.45 2.6.57A2 2 0 0 1 22 16.92z"/></svg>고객센터: <span id="txt_cs_tel">–</span></a>
+        <a id="btn_fax_tel" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M7 7V3h10v4"/><path d="M8 13h8M8 17h6"/></svg>보험금청구 FAX: <span id="txt_fax_tel">–</span></a>
+        <a id="btn_help_tel" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 1 1 5.82 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg>헬프데스크(전산): <span id="txt_help_tel">–</span></a>
       </div>
     </section>
 
@@ -222,29 +210,25 @@
       <h3 class="section-title st-violet">실손 안내</h3>
       <div class="hstack" id="silson_badges" style="gap:8px;margin-bottom:6px"></div>
 
-      <!-- 요약 -->
       <div class="card" style="margin-top:8px">
         <div class="list" id="silson_summary"></div>
       </div>
 
-      <!-- 4세대 공통사항 -->
       <div class="card" style="margin-top:10px">
         <h4 class="section-title st-blue" style="margin-bottom:12px">4세대 공통사항</h4>
         <div class="list cols2" id="silson_common"></div>
       </div>
 
-      <!-- 전환/인수 -->
       <div class="card" style="margin-top:10px">
         <h4 class="section-title st-teal" style="margin-bottom:12px">전환/인수</h4>
         <div class="list" id="silson_convert"></div>
       </div>
 
-      <!-- 유병자/노후 -->
       <div class="card" style="margin-top:10px">
         <div class="list" id="silson_specials"></div>
       </div>
 
-      <!-- 버튼 제거 요청: 실손 간편 계산기 링크 삭제 -->
+      <!-- 간편 계산기 버튼은 제거 -->
       <p class="subtitle" style="margin-top:8px" id="silson_updated"></p>
     </aside>
 
@@ -259,7 +243,6 @@
     const $ = s => document.querySelector(s);
     const company = new URL(location.href).searchParams.get('c') || '';
 
-    // 전화번호 포맷터
     const telfmt = (s) => {
       const d = String(s || '').replace(/[^0-9]/g, '');
       if (!d) return '';
@@ -292,7 +275,6 @@
       const updated = bundle?.last_updated || '';
       const record = bundle?.companies?.[name] || {};
 
-      // 상단 배지: 단독실손 / 카드납
       const bf = $('#badges');
       bf.innerHTML = '';
       const solo = asBool(record['단독가입여부']);
@@ -300,7 +282,6 @@
       bf.insertAdjacentHTML('beforeend', `<span class="badge ${solo===false?'no':(solo===true?'ok':'')}">${solo===false?'단독실손 가입 불가':(solo===true?'단독실손 가입가능':'단독실손 정보 없음')}</span>`);
       bf.insertAdjacentHTML('beforeend', `<span class="badge ${card===false?'no':(card===true?'ok':'')}">${card===false?'카드납 불가':(card===true?'카드납 가능':'카드납 정보 없음')}</span>`);
 
-      // 실손 카드들
       $('#silson_summary').innerHTML =
         kvRow('단독가입여부', record['단독가입여부']) +
         kvRow('중복가입',     record['중복가입']) +
@@ -355,7 +336,7 @@
         const incall = enr.incall_monitoring_phone || L.monitor || '';
         $('#kv_incall').textContent = incall ? telfmt(incall) : '–';
 
-        // 전화 버튼(고객센터/FAX/헬프데스크)
+        // 전화 버튼
         const csTel   = L.cs || '';
         const faxTel  = L.fax || '';
         const helpTel = enr.helpdesk_phone || L.helpdesk || '';
