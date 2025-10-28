@@ -6,11 +6,11 @@
       "usage_hours": "오후 11:30",
       "call_hours": "09:00~18:00\n(예약 시 날짜지정 불가,\n시간대만 가능)",
       "gye_pi_sang_available": true,
-      "mobile_enroll_age": {
-        "min": 19
-      },
+      "mobile_enroll_age": { "min": 19 },
       "mobile_enroll_age_text": "만19세 이상",
-      "incall_monitoring_phone": "1566-0757"
+      "incall_monitoring_phone": "1566-0757",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "KB손해보험",
@@ -20,7 +20,9 @@
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1544-0019"
+      "incall_monitoring_phone": "1544-0019",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "롯데손해보험",
@@ -28,11 +30,11 @@
       "usage_hours": "오후 11:30",
       "call_hours": "09:00~20:50\n인콜: 09:00~17:30",
       "gye_pi_sang_available": false,
-      "mobile_enroll_age": {
-        "min": 19
-      },
+      "mobile_enroll_age": { "min": 19 },
       "mobile_enroll_age_text": "만19세 이상",
-      "incall_monitoring_phone": "1600-5182"
+      "incall_monitoring_phone": "1600-5182",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "메리츠화재",
@@ -42,7 +44,9 @@
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1577-7711"
+      "incall_monitoring_phone": "1577-7711",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "삼성화재",
@@ -52,7 +56,9 @@
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1566-0553"
+      "incall_monitoring_phone": "1566-0553",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "한화손해보험",
@@ -62,7 +68,9 @@
       "gye_pi_sang_available": true,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1670-1882"
+      "incall_monitoring_phone": "1670-1882",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "현대해상",
@@ -72,7 +80,9 @@
       "gye_pi_sang_available": true,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1577-3223"
+      "incall_monitoring_phone": "1577-3223",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "흥국화재",
@@ -82,7 +92,9 @@
       "gye_pi_sang_available": true,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1688-6997"
+      "incall_monitoring_phone": "1688-6997",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "하나손해보험",
@@ -90,11 +102,11 @@
       "usage_hours": "오후 11:00",
       "call_hours": "09:00~18:00",
       "gye_pi_sang_available": true,
-      "mobile_enroll_age": {
-        "min": 19
-      },
+      "mobile_enroll_age": { "min": 19 },
       "mobile_enroll_age_text": "계약자19세 이상",
-      "incall_monitoring_phone": "1660-4590"
+      "incall_monitoring_phone": "1660-4590",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "AIG손해보험",
@@ -102,13 +114,12 @@
       "usage_hours": "오후 11:00",
       "call_hours": "09:00~18:00",
       "gye_pi_sang_available": false,
-      "mobile_enroll_age": {
-        "min": 18,
-        "max": 65
-      },
+      "mobile_enroll_age": { "min": 18, "max": 65 },
       "mobile_enroll_age_text": "만18세\n~ 만65세",
       "incall_monitoring_phone": "1660-4590",
-      "note": "65세 이상 및 미성년자는 유선만 가능합니다."
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "라이나손해보험",
@@ -118,7 +129,9 @@
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1600-4600"
+      "incall_monitoring_phone": "1600-4600",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "NH농협손해보험",
@@ -126,12 +139,11 @@
       "usage_hours": "-",
       "call_hours": "09:00~18:00",
       "gye_pi_sang_available": true,
-      "mobile_enroll_age": {
-        "min": 15,
-        "max": 19
-      },
+      "mobile_enroll_age": { "min": 15, "max": 19 },
       "mobile_enroll_age_text": "만15~19세 불가",
-      "incall_monitoring_phone": "1644-9600"
+      "incall_monitoring_phone": "1644-9600",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "ABL생명",
@@ -141,7 +153,9 @@
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "02-1566-1002"
+      "incall_monitoring_phone": "02-1566-1002",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "AIA생명",
@@ -151,7 +165,9 @@
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "-",
-      "incall_monitoring_phone": "1588-2513"
+      "incall_monitoring_phone": "1588-2513",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "DB생명",
@@ -159,12 +175,11 @@
       "usage_hours": "00:01 ~ 23:00 까지",
       "call_hours": "09:00~18:00",
       "gye_pi_sang_available": false,
-      "mobile_enroll_age": {
-        "min": 15,
-        "max": 64
-      },
+      "mobile_enroll_age": { "min": 15, "max": 64 },
       "mobile_enroll_age_text": "만15세~64세",
-      "incall_monitoring_phone": "02-6470-7663"
+      "incall_monitoring_phone": "02-6470-7663",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "iM라이프",
@@ -172,11 +187,11 @@
       "usage_hours": "오후 11:00",
       "call_hours": "09:00~18:00\n09:00~20:00 (수: 아웃콜)",
       "gye_pi_sang_available": null,
-      "mobile_enroll_age": {
-        "min": 15
-      },
+      "mobile_enroll_age": { "min": 15 },
       "mobile_enroll_age_text": "만15세 이상",
-      "incall_monitoring_phone": "1588-4770"
+      "incall_monitoring_phone": "1588-4770",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "KB라이프",
@@ -184,13 +199,12 @@
       "usage_hours": "오후 10:00",
       "call_hours": "09:00~18:00",
       "gye_pi_sang_available": true,
-      "mobile_enroll_age": {
-        "min": 15,
-        "max": 65
-      },
+      "mobile_enroll_age": { "min": 15, "max": 65 },
       "mobile_enroll_age_text": "15~65세이하",
       "incall_monitoring_phone": "1588-9922",
-      "note": "65세 이상 및 미성년자는 유선만 가능합니다."
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "KDB생명",
@@ -201,7 +215,9 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "미성년자 불가",
       "incall_monitoring_phone": "1588-4040",
-      "note": "65세 이상 및 미성년자는 유선만 가능합니다."
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "교보생명",
@@ -211,7 +227,9 @@
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1588-1636"
+      "incall_monitoring_phone": "1588-1636",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "농협생명",
@@ -222,7 +240,9 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "미성년자 외\n전 연령 가능",
       "incall_monitoring_phone": "1544-4422",
-      "note": "65세 이상 및 미성년자는 유선만 가능합니다."
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "동양생명",
@@ -230,12 +250,12 @@
       "usage_hours": "오후 6:00",
       "call_hours": "09:00~18:00",
       "gye_pi_sang_available": true,
-      "mobile_enroll_age": {
-        "max": 65
-      },
+      "mobile_enroll_age": { "max": 65 },
       "mobile_enroll_age_text": "65세 이하",
       "incall_monitoring_phone": "080-899-1004",
-      "note": "65세 이상 및 미성년자는 유선만 가능합니다."
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "라이나생명",
@@ -243,11 +263,11 @@
       "usage_hours": "오후 11:00",
       "call_hours": "09:00~18:00",
       "gye_pi_sang_available": false,
-      "mobile_enroll_age": {
-        "min": 75
-      },
+      "mobile_enroll_age": { "min": 75 },
       "mobile_enroll_age_text": "75세까지 가능",
-      "incall_monitoring_phone": "1588-2442"
+      "incall_monitoring_phone": "1588-2442",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "메트라이프",
@@ -257,7 +277,9 @@
       "gye_pi_sang_available": true,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1588-9609"
+      "incall_monitoring_phone": "1588-9609",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "미래에셋",
@@ -267,7 +289,9 @@
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1588-0220"
+      "incall_monitoring_phone": "1588-0220",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "삼성생명",
@@ -277,7 +301,9 @@
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1588-1335"
+      "incall_monitoring_phone": "1588-1335",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "신한라이프",
@@ -287,7 +313,9 @@
       "gye_pi_sang_available": true,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1522-2285"
+      "incall_monitoring_phone": "1522-2285",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "처브라이프",
@@ -295,12 +323,12 @@
       "usage_hours": "08:00~20:00",
       "call_hours": "09:00~18:00",
       "gye_pi_sang_available": true,
-      "mobile_enroll_age": {
-        "min": 65
-      },
+      "mobile_enroll_age": { "min": 65 },
       "mobile_enroll_age_text": "65세까지",
       "incall_monitoring_phone": "1599-4600",
-      "note": "65세 이상 및 미성년자는 유선만 가능합니다."
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "하나생명",
@@ -310,7 +338,9 @@
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1577-1112"
+      "incall_monitoring_phone": "1577-1112",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "한화생명",
@@ -320,7 +350,9 @@
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1800-6633"
+      "incall_monitoring_phone": "1800-6633",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "흥국생명",
@@ -328,11 +360,11 @@
       "usage_hours": "오후 11:30",
       "call_hours": "09:00~18:00",
       "gye_pi_sang_available": true,
-      "mobile_enroll_age": {
-        "min": 19
-      },
+      "mobile_enroll_age": { "min": 19 },
       "mobile_enroll_age_text": "만19세 이상",
-      "incall_monitoring_phone": "1877-7006"
+      "incall_monitoring_phone": "1877-7006",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "IBK연금보험",
@@ -342,7 +374,9 @@
       "gye_pi_sang_available": true,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": "1577-4117"
+      "incall_monitoring_phone": "1577-4117",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
     {
       "name": "푸본현대",
@@ -352,7 +386,9 @@
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
-      "incall_monitoring_phone": ""
+      "incall_monitoring_phone": "",
+      "card_payment_available": true,
+      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     }
   ]
 }
