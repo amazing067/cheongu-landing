@@ -9,6 +9,7 @@
       "mobile_enroll_age": { "min": 19 },
       "mobile_enroll_age_text": "만19세 이상",
       "incall_monitoring_phone": "1566-0757",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -21,6 +22,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1544-0019",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -33,6 +35,7 @@
       "mobile_enroll_age": { "min": 19 },
       "mobile_enroll_age_text": "만19세 이상",
       "incall_monitoring_phone": "1600-5182",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -45,6 +48,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1577-7711",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -57,6 +61,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1566-0553",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -69,6 +74,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1670-1882",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -81,6 +87,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1577-3223",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -93,6 +100,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1688-6997",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -105,6 +113,7 @@
       "mobile_enroll_age": { "min": 19 },
       "mobile_enroll_age_text": "계약자19세 이상",
       "incall_monitoring_phone": "1660-4590",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -118,6 +127,7 @@
       "mobile_enroll_age_text": "만18세\n~ 만65세",
       "incall_monitoring_phone": "1660-4590",
       "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -130,6 +140,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1600-4600",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -142,6 +153,7 @@
       "mobile_enroll_age": { "min": 15, "max": 19 },
       "mobile_enroll_age_text": "만15~19세 불가",
       "incall_monitoring_phone": "1644-9600",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -154,6 +166,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "02-1566-1002",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -166,6 +179,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "-",
       "incall_monitoring_phone": "1588-2513",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -178,6 +192,7 @@
       "mobile_enroll_age": { "min": 15, "max": 64 },
       "mobile_enroll_age_text": "만15세~64세",
       "incall_monitoring_phone": "02-6470-7663",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -190,6 +205,7 @@
       "mobile_enroll_age": { "min": 15 },
       "mobile_enroll_age_text": "만15세 이상",
       "incall_monitoring_phone": "1588-4770",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -203,6 +219,7 @@
       "mobile_enroll_age_text": "15~65세이하",
       "incall_monitoring_phone": "1588-9922",
       "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -216,6 +233,7 @@
       "mobile_enroll_age_text": "미성년자 불가",
       "incall_monitoring_phone": "1588-4040",
       "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -228,6 +246,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1588-1636",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -241,6 +260,7 @@
       "mobile_enroll_age_text": "미성년자 외\n전 연령 가능",
       "incall_monitoring_phone": "1544-4422",
       "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -254,6 +274,7 @@
       "mobile_enroll_age_text": "65세 이하",
       "incall_monitoring_phone": "080-899-1004",
       "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -266,6 +287,7 @@
       "mobile_enroll_age": { "min": 75 },
       "mobile_enroll_age_text": "75세까지 가능",
       "incall_monitoring_phone": "1588-2442",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -278,6 +300,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1588-9609",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -290,6 +313,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1588-0220",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -302,6 +326,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1588-1335",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -314,6 +339,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1522-2285",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -327,6 +353,7 @@
       "mobile_enroll_age_text": "65세까지",
       "incall_monitoring_phone": "1599-4600",
       "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -339,6 +366,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1577-1112",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -351,6 +379,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1800-6633",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -363,6 +392,7 @@
       "mobile_enroll_age": { "min": 19 },
       "mobile_enroll_age_text": "만19세 이상",
       "incall_monitoring_phone": "1877-7006",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -375,6 +405,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "1577-4117",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     },
@@ -387,6 +418,7 @@
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "나이제한 없음",
       "incall_monitoring_phone": "",
+      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
       "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
     }
