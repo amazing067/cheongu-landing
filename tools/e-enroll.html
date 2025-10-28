@@ -45,9 +45,10 @@
   .grid{display:grid;gap:16px}
   @media (min-width:1024px){ .grid-2{grid-template-columns:1.35fr 1fr} }
 
-  /* ===== Hero ===== */
+  /* ===== Hero 기본 ===== */
   .hero{ border-radius:20px; padding:22px; border:1px solid rgba(124,58,237,.25); }
-  .hero .heading{font-size:22px;font-weight:900;margin:0 0 6px}
+  .hero .heading{font-size:22px;font-weight:900;margin:0 0 12px}
+
   .hero .rows{display:grid; gap:10px}
   @media (min-width:640px){ .hero .rows{grid-template-columns:1fr 1fr} }
   .kv{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
@@ -81,33 +82,40 @@
   @media (min-width:860px){ .cols2{grid-template-columns:1fr 1fr} }
   </style>
 
-  <!-- ===== 페이지 전용 오버라이드 — </head> 직전 유지 ===== -->
+  <!-- ===== 페이지 전용 오버라이드 ===== -->
   <style id="enroll-override">
+/* ===== ENROLL PRO SKIN ===== */
 .page-enroll.theme-pro{
   background:
     radial-gradient(28px 28px at 14px 14px, rgba(124,58,237,.08) 1px, transparent 1px),
     linear-gradient(180deg, #eef3ff 0%, #eaf0ff 32%, #f7f9ff 100%) !important;
   background-size:28px 28px, auto !important;
 }
-.page-enroll.theme-pro .hero{
-  background: linear-gradient(135deg, rgba(124,58,237,.18), rgba(14,165,233,.18)) !important;
-  border: 1px solid rgba(124,58,237,.45) !important;
-  border-radius: 22px !important;
-  box-shadow: 0 16px 38px rgba(79,70,229,.15), 0 1px 0 rgba(255,255,255,.55) inset !important;
-  position: relative; overflow: hidden;
+
+/* 공통 “섹션 타이틀 배너” */
+.page-enroll .section-title{
+  text-align:center;
+  font-weight:900;
+  margin:0 0 12px;
+  padding:10px 16px;
+  border-radius:999px;
+  background:linear-gradient(135deg, var(--brand), var(--brand-2));
+  color:#fff;
+  letter-spacing:-.01em;
+  box-shadow:0 6px 16px rgba(60,64,231,.18);
 }
-.page-enroll.theme-pro .hero::after{
-  content:""; position:absolute; inset:-20%;
-  background: radial-gradient(600px 260px at 20% -10%, rgba(255,255,255,.28), transparent 60%),
-              radial-gradient(600px 260px at 80% 110%, rgba(255,255,255,.22), transparent 60%);
-  pointer-events:none;
+
+/* 히어로 타이틀도 배너 스타일로 */
+.page-enroll .hero .heading{
+  text-align:center !important;
+  padding:10px 16px !important;
+  border-radius:999px !important;
+  background:linear-gradient(135deg, var(--brand), var(--brand-2)) !important;
+  color:#fff !important;
+  box-shadow:0 6px 16px rgba(60,64,231,.18) !important;
 }
-.page-enroll.theme-pro .kv{
-  background: rgba(255,255,255,.94) !important;
-  border: 1px solid rgba(100,116,139,.30) !important;
-  border-radius: 14px !important;
-  box-shadow: 0 4px 10px rgba(2,6,23,.08) !important;
-}
+
+/* 카드 & 실손 카드 강화 */
 .page-enroll.theme-pro .card,
 .page-enroll.theme-pro .silson{
   background:#fff !important;
@@ -115,29 +123,28 @@
   border-radius:18px !important;
   box-shadow:0 10px 24px rgba(2,6,23,.08) !important;
 }
-.page-enroll.theme-pro .badge{
-  border-color: rgba(99,102,241,.34) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.75) !important;
-  background:#fff !important;
-}
-.page-enroll.theme-pro .badge.ok{ background:#ecfdf5 !important; border-color:#86efac !important; color:#065f46 !important; }
-.page-enroll.theme-pro .badge.no{ background:#fef2f2 !important; border-color:#fecaca !important; color:#991b1b !important; }
+
+/* 버튼 */
 .page-enroll.theme-pro .btn{
-  border-color:#cad3ff !important; background:#fff !important;
-  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease !important;
+  border-color:#cad3ff !important;
+  background:#fff !important;
+  transition: transform .16s ease, box-shadow .16s ease !important;
   box-shadow:0 5px 14px rgba(2,6,23,.10) !important;
 }
-.page-enroll.theme-pro .btn:hover{ transform:translateY(-2px) !important; box-shadow:0 12px 26px rgba(2,6,23,.16) !important; }
-.page-enroll.theme-pro #btn_cs_tel,
-.page-enroll.theme-pro #btn_fax_tel,
-.page-enroll.theme-pro #btn_help_tel{ border-color:#a5b4fc !important; }
+.page-enroll.theme-pro .btn:hover{
+  transform:translateY(-2px) !important;
+  box-shadow:0 12px 26px rgba(2,6,23,.16) !important;
+}
+
+/* 공통사항 2열 + 와이드 보정 */
 .page-enroll.theme-pro .row-kv{
   display:grid !important;
   grid-template-columns:minmax(10.5rem,13.5rem) 1fr !important;
-  align-items:center !important; gap:12px !important;
-  border-top:1px dashed rgba(100,116,139,.28) !important; padding:12px 0 !important;
+  align-items:center !important;
+  gap:12px !important;
+  border-top:1px dashed rgba(100,116,139,.28) !important;
+  padding:12px 0 !important;
 }
-.page-enroll.theme-pro .row-kv .v{ line-height:1.65 !important; }
 .page-enroll.theme-pro .cols2{ display:grid !important; gap:14px !important; }
 @media (min-width:900px){ .page-enroll.theme-pro .cols2{ grid-template-columns:1fr 1fr !important; } }
   </style>
@@ -201,14 +208,14 @@
 
     <!-- 좌: 세부 스펙 -->
     <section class="card">
-      <h2 style="margin:0 0 10px;font-weight:900">모바일 전자청약 정보</h2>
+      <h2 class="section-title">모바일 전자청약 정보</h2>
       <div class="rowspec">
         <div class="spec"><div class="key">사용기한</div><div class="val" id="usage_period">–</div></div>
         <div class="spec"><div class="key">사용시간</div><div class="val" id="usage_hours">–</div></div>
         <div class="spec"><div class="key">통화가능시간</div><div class="val" id="call_hours">–</div></div>
         <div class="spec"><div class="key">모바일 청약 가능 나이</div><div class="val" id="mobile_age">–</div></div>
-        <div class="spec"><div class="key">계약자·피보험자 불일치시 가능 여부</div><div class="val" id="gps">–</div></div>
-        <div class="spec"><div class="key">계약자·피보험자 불일치시 모니터링 기준</div><div class="val" id="monitoring_criteria">–</div></div>
+        <div class="spec"><div class="key">계약자·피보험자 불일치 가능</div><div class="val" id="gps">–</div></div>
+        <div class="spec"><div class="key">불일치 시 모니터링 기준</div><div class="val" id="monitoring_criteria">–</div></div>
         <div class="spec"><div class="key">카드납 가능 여부</div><div class="val" id="cardpay">–</div></div>
         <div class="spec"><div class="key">인콜 모니터링</div><div class="val" id="incall">–</div></div>
       </div>
@@ -218,7 +225,7 @@
 
     <!-- 우: 실손 안내(회사별 구조) -->
     <aside class="silson">
-      <h3>실손 안내</h3>
+      <h3 class="section-title">실손 안내</h3>
       <div class="hstack" id="silson_badges" style="gap:8px;margin-bottom:6px"></div>
 
       <!-- 요약 -->
@@ -226,22 +233,16 @@
         <div class="list" id="silson_summary"></div>
       </div>
 
-      <!-- 공통사항 -->
+      <!-- 4세대 공통사항 -->
       <div class="card" style="margin-top:10px">
-        <h4 style="margin:0 0 8px;font-weight:900">공통사항</h4>
+        <h4 class="section-title" style="margin-bottom:12px">4세대 공통사항</h4>
         <div class="list cols2" id="silson_common"></div>
       </div>
 
       <!-- 전환/인수 -->
       <div class="card" style="margin-top:10px">
-        <h4 style="margin:0 0 8px;font-weight:900">전환/인수</h4>
+        <h4 class="section-title" style="margin-bottom:12px">전환/인수</h4>
         <div class="list" id="silson_convert"></div>
-      </div>
-
-      <!-- 카드납 안내 (신설) -->
-      <div class="card" id="cardpay_card" style="margin-top:10px; display:none">
-        <h4 style="margin:0 0 8px;font-weight:900">카드납 안내</h4>
-        <div class="list" id="cardpay_detail"></div>
       </div>
 
       <!-- 유병자/노후 -->
@@ -256,7 +257,7 @@
     </aside>
 
     <section class="card" style="grid-column:1/-1">
-      <h2 style="margin:0 0 10px;font-weight:900">설명 & 주의</h2>
+      <h2 class="section-title" style="margin-bottom:12px">설명 & 주의</h2>
       <p class="subtitle">회사 정책 변경 시 실제 적용과 차이가 있을 수 있습니다. 언제나 최신 공지와 약관을 우선하세요.</p>
     </section>
   </main>
@@ -349,7 +350,7 @@
         const enr  = (Array.isArray(enrollData?.items) ? enrollData.items : []).find(x => x.name === company) || {};
         const L = base.links || {};
 
-        // 헤더/로고
+        // 헤더
         $('#company').textContent = company || '전자청약정보';
         const logoSrc = base.logo || (company ? `/assets/logos/${company}.png` : '');
         if (logoSrc){ const img = $('#logo'); img.src = logoSrc; img.alt = company + ' 로고'; }
@@ -383,8 +384,7 @@
         bindTelBtn('btn_fax_tel','txt_fax_tel',faxTel);
         bindTelBtn('btn_help_tel','txt_help_tel',helpTel);
 
-        // 상세 정보 표
-        const toText = (b) => b===false?'불가':(b===true?'가능':'정보 없음');
+        // 상세 정보
         const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = (v ?? '') || '–'; };
         const gps  = asBool(enr.gye_pi_sang_available);
         const card = asBool(enr.card_payment_available);
@@ -392,34 +392,13 @@
         set('usage_hours',  enr.usage_hours);
         set('call_hours',   enr.call_hours);
         set('mobile_age',   ageTxt);
-        set('gps',          toText(gps));
-        set('monitoring_criteria', enr.monitoring_criteria);
-        set('cardpay',      toText(card));
+        set('gps',          gps===false?'불가':(gps===true?'가능':'정보 없음'));
+        set('monitoring_criteria', enr.monitoring_criteria || '');
+        set('cardpay',      card===false?'불가':(card===true?'가능':'정보 없음'));
         set('incall',       incall ? telfmt(incall) : '–');
 
-        // 회사별 실손 카드 채우기
+        // 실손 카드
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
-
-        // 카드납 상세 안내 렌더링 (enroll.json 우선, 없으면 silson-company.json)
-        (function renderCardPayDetail(){
-          const host = document.getElementById('cardpay_card');
-          const list = document.getElementById('cardpay_detail');
-          if(!host || !list) return;
-
-          const fromEnroll  = enr.card_payment_notes;
-          const fromCompany = (silsonCompany?.companies?.[company] || {})['카드납 상세'];
-          const raw = fromEnroll ?? fromCompany;
-
-          if(!raw){
-            host.style.display = 'none';
-            list.innerHTML = '';
-            return;
-          }
-          const lines = Array.isArray(raw) ? raw : String(raw).split(/\s*[\r\n]+\s*/);
-          const rows  = lines.filter(Boolean).map(t => `<div class="row-kv"><div class="k">안내</div><div class="v">${t}</div></div>`).join('');
-          list.innerHTML = rows || '';
-          host.style.display = rows ? 'block' : 'none';
-        })();
 
         // 시간 외 경고/노트
         const inHours = (str) => {
