@@ -22,7 +22,7 @@
 <body>
 <div class="wrap">
   <h2 style="margin:0 0 12px 0">보험금 청구서 자동기입 PDF 생성</h2>
-  <p class="muted" style="margin:0 0 16px 0">내 정보가 들어간 1쪽 커버를 만들고, 선택한 보험사의 원본 청구서 PDF와 병합해 내려받습니다.</p>
+  <p class="muted" style="margin:0 0 16px 0">새로고침 시 입력값은 초기화됩니다. 내 정보는 <b>암호 저장/불러오기</b>로만 사용하세요.</p>
 
   <div class="card" style="margin-bottom:16px">
     <h3 style="margin:0 0 12px 0">내 기본정보</h3>
@@ -38,11 +38,18 @@
       <div><label>직장명</label><input id="employer"></div>
       <div><label>하는 일(직무)</label><input id="job"></div>
     </div>
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn" id="btnSample">샘플 채우기</button>
-      <button class="btn" id="btnSave">내 정보 저장</button>
-      <button class="btn" id="btnLoad">불러오기</button>
-      <span class="muted">브라우저 로컬 저장소에만 저장됩니다.</span>
+
+    <div class="row" style="margin-top:12px">
+      <div>
+        <label>암호(내 정보 저장/불러오기용)</label>
+        <input id="passphrase" type="password" placeholder="AES-GCM 암호" />
+      </div>
+      <div style="display:flex;align-items:end;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="btnSample" type="button">샘플 채우기</button>
+        <button class="btn" id="btnSaveEnc" type="button">암호 저장</button>
+        <button class="btn" id="btnLoadEnc" type="button">암호 불러오기</button>
+        <span class="muted">※ 자동 로드는 하지 않습니다.</span>
+      </div>
     </div>
   </div>
 
@@ -61,18 +68,16 @@
     <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn primary" id="btnMake" type="button" onclick="makePdf()">PDF 만들기</button>
       <a class="btn" id="btnViewRaw" target="_blank" rel="noopener">원본 PDF 보기</a>
+      <span id="status" class="muted"></span>
     </div>
-    <p class="muted" style="margin-top:8px">※ 다음 단계에서 각 보험사 PDF 내부 칸에 직접 적어넣는 “스탬프/폼채움”을 추가합니다.</p>
+    <p class="muted" style="margin-top:8px">다음 단계에서 각 보험사 PDF 내부 칸에 직접 텍스트를 찍는 “스탬프/폼 채움”을 추가합니다.</p>
   </div>
 </div>
 
 <!-- pdf-lib (CDN) -->
 <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script>
-/** 1) 리포지토리의 assets/pdf 파일 매핑
- *   좌측은 사용자에게 보일 이름, 우측은 실제 경로입니다.
- *   파일명이 다르면 우측 경로만 맞게 고치세요.
- */
+/* ====== 1) PDF 경로 매핑 ====== */
 const PDF_MAP = {
   "삼성화재": [
     ["보험금청구서", "/assets/pdf/삼성화재-보험금청구서.pdf"]
@@ -110,16 +115,42 @@ const PDF_MAP = {
   ]
 };
 
-/** 2) 로컬 저장 */
-const LS_KEY = "claim-autofill.profile.v2";
+/* ====== 2) 암호화 유틸 (AES-GCM) ====== */
+async function deriveKey(passphrase){
+  const enc = new TextEncoder();
+  const salt = enc.encode("claim-autofill-salt-v2");
+  const baseKey = await crypto.subtle.importKey("raw", enc.encode(passphrase), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey(
+    { name:"PBKDF2", salt, iterations:120000, hash:"SHA-256" },
+    baseKey,
+    { name:"AES-GCM", length:256 },
+    false,
+    ["encrypt","decrypt"]
+  );
+}
+async function encryptJSON(obj, passphrase){
+  const key = await deriveKey(passphrase);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const data = new TextEncoder().encode(JSON.stringify(obj));
+  const cipher = await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, data);
+  return { iv: Array.from(iv), cipher: Array.from(new Uint8Array(cipher)) };
+}
+async function decryptJSON(payload, passphrase){
+  const key = await deriveKey(passphrase);
+  const iv = new Uint8Array(payload.iv);
+  const cipher = new Uint8Array(payload.cipher);
+  const plain = await crypto.subtle.decrypt({name:"AES-GCM", iv}, key, cipher);
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+const LS_KEY_SECURE = "claim-autofill.profile.enc";
 
-/** 3) DOM */
+/* ====== 3) DOM ====== */
 const el = (id)=>document.getElementById(id);
 const $name=el("name"),$rrn=el("rrn"),$phone=el("phone"),$account=el("account"),$employer=el("employer"),$job=el("job");
-const $carrier=el("carrier"),$pdfFile=el("pdfFile");
-const $btnViewRaw=el("btnViewRaw");
+const $pass=el("passphrase");
+const $carrier=el("carrier"),$pdfFile=el("pdfFile"),$btnViewRaw=el("btnViewRaw"),$status=el("status");
 
-/** 4) 초기화 */
+/* ====== 4) 셀렉터 ====== */
 function initSelectors(){
   $carrier.innerHTML="";
   Object.keys(PDF_MAP).forEach(k=>{
@@ -133,120 +164,126 @@ function updatePdfOptions(){
   list.forEach(([label, path])=>{
     const o=document.createElement("option");o.value=path;o.textContent=label;$pdfFile.appendChild(o);
   });
-  const first = list[0]?.[1] || "";
-  $btnViewRaw.href = first || "#";
+  $btnViewRaw.href = (list[0]?.[1]||"#");
 }
 
-/** 5) 프로필 load/save */
-function loadProfile(){
-  try{
-    const obj=JSON.parse(localStorage.getItem(LS_KEY)||"{}");
-    ["name","rrn","phone","account","employer","job"].forEach(k=>{
-      el(k).value=obj[k]||"";
-    });
-  }catch(e){}
+/* ====== 5) 저장/불러오기(암호 전용) — 자동 로드 없음 ====== */
+async function saveEncrypted(){
+  if(!$pass.value){ alert("암호를 입력하세요."); return; }
+  const profile = collectProfile();
+  const enc = await encryptJSON(profile, $pass.value);
+  localStorage.setItem(LS_KEY_SECURE, JSON.stringify(enc));
+  alert("암호 저장 완료");
 }
-function saveProfile(){
-  const obj={
-    name:$name.value.trim(),
-    rrn:$rrn.value.replace(/\D/g,""),
-    phone:$phone.value.replace(/\D/g,""),
-    account:$account.value.trim(),
-    employer:$employer.value.trim(),
-    job:$job.value.trim()
+async function loadEncrypted(){
+  if(!$pass.value){ alert("암호를 입력하세요."); return; }
+  const raw = localStorage.getItem(LS_KEY_SECURE);
+  if(!raw){ alert("저장된 내 정보가 없습니다."); return; }
+  try{
+    const obj = await decryptJSON(JSON.parse(raw), $pass.value);
+    applyProfile(obj);
+    alert("불러오기 완료");
+  }catch(e){ alert("불러오기 실패: 암호를 확인하세요."); }
+}
+function collectProfile(){
+  return {
+    name: ($name.value||"").trim(),
+    rrn: ($rrn.value||"").replace(/\D/g,""),
+    phone: ($phone.value||"").replace(/\D/g,""),
+    account: ($account.value||"").trim(),
+    employer: ($employer.value||"").trim(),
+    job: ($job.value||"").trim()
   };
-  localStorage.setItem(LS_KEY, JSON.stringify(obj));
-  alert("저장 완료");
+}
+function applyProfile(p){
+  $name.value=p.name||""; $rrn.value=p.rrn||""; $phone.value=p.phone||"";
+  $account.value=p.account||""; $employer.value=p.employer||""; $job.value=p.job||"";
 }
 function fillSample(){
-  $name.value="홍길동"; $rrn.value="9001011234567"; $phone.value="01012345678";
-  $account.value="국민은행 123-456-789012"; $employer.value="청구닷컴 주식회사"; $job.value="보험상담사";
+  applyProfile({name:"홍길동", rrn:"9001011234567", phone:"01012345678", account:"국민은행 123-456-789012", employer:"청구닷컴 주식회사", job:"보험상담사"});
 }
 
-/** 6) PDF 생성 로직
- *  - 커버 1쪽을 만들고, 선택한 보험사 PDF를 뒤에 병합
- *  - 다음 단계에서 보험사별 좌표/폼 채움(스탬프)을 추가 예정
- */
+/* ====== 6) PDF 생성 ====== */
 async function makePdf(){
-  // 내 정보
-  const P={
-    name:$name.value.trim(),
-    rrn:$rrn.value.replace(/\D/g,""),
-    phone:$phone.value.replace(/\D/g,""),
-    account:$account.value.trim(),
-    employer:$employer.value.trim(),
-    job:$job.value.trim()
-  };
-  if(!P.name){ alert("이름을 입력하세요."); return; }
+  // 즉시 UI 반응(무응답 진단)
+  const btn = document.getElementById("btnMake");
+  $status.textContent = "PDF 생성 중…";
+  btn.disabled = true;
 
-  // 1) 빈 문서 + 커버 페이지
-  const { PDFDocument, StandardFonts, rgb } = PDFLib;
-  const out = await PDFDocument.create();
-  const page = out.addPage([595.28, 841.89]); // A4 pt
-  const font = await out.embedFont(StandardFonts.Helvetica);
-  const titleSize=18, labelSize=11, valueSize=13;
+  try{
+    const P = collectProfile();
+    if(!P.name){ alert("이름을 입력하세요."); return; }
 
-  // 타이틀
-  page.drawText("보험금 청구서 자동기입 커버", { x: 50, y: 790, size: titleSize, font, color: rgb(0.1,0.1,0.2) });
-  const today = new Date(); const y=today.getFullYear(), m=String(today.getMonth()+1).padStart(2,"0"), d=String(today.getDate()).padStart(2,"0");
-  page.drawText(`생성일: ${y}-${m}-${d}`, { x: 50, y: 770, size: labelSize, font, color: rgb(0.4,0.4,0.5) });
+    const { PDFDocument, StandardFonts, rgb } = PDFLib;
+    // 커버 페이지
+    const out = await PDFDocument.create();
+    const page = out.addPage([595.28, 841.89]); // A4
+    const font = await out.embedFont(StandardFonts.Helvetica);
+    const titleSize=18, labelSize=11, valueSize=13;
 
-  // 박스
-  const boxY = 720, boxH = 220;
-  page.drawRectangle({ x:40, y: boxY-boxH, width: 515, height: boxH, borderColor: rgb(0.85,0.87,0.92), borderWidth: 1, color: rgb(1,1,1) });
+    page.drawText("보험금 청구서 자동기입 커버", { x: 50, y: 790, size: titleSize, font, color: rgb(0.1,0.1,0.2) });
+    const t=new Date(), y=t.getFullYear(), m=String(t.getMonth()+1).padStart(2,"0"), d=String(t.getDate()).padStart(2,"0");
+    page.drawText(`생성일: ${y}-${m}-${d}`, { x: 50, y: 770, size: labelSize, font, color: rgb(0.4,0.4,0.5) });
 
-  const rows = [
-    ["피보험자 성명", P.name],
-    ["주민등록번호", P.rrn],
-    ["연락처", P.phone],
-    ["보험금 수령계좌", P.account],
-    ["직장명", P.employer],
-    ["직무", P.job],
-  ];
-  let yPos = boxY - 24;
-  rows.forEach(([label, value])=>{
-    page.drawText(label, { x: 55, y: yPos, size: labelSize, font, color: rgb(0.35,0.35,0.45) });
-    page.drawText(String(value||""), { x: 200, y: yPos, size: valueSize, font, color: rgb(0,0,0) });
-    yPos -= 32;
-  });
+    page.drawRectangle({ x:40, y: 500, width: 515, height: 220, borderColor: rgb(0.85,0.87,0.92), borderWidth: 1, color: rgb(1,1,1) });
 
-  // 안내
-  page.drawText("※ 이 커버는 제출 편의를 위한 요약입니다. 다음 장부터는 선택한 보험사의 원본 청구서가 그대로 이어집니다.", { x: 50, y: 480, size: 10, font, color: rgb(0.4,0.4,0.5) });
+    const rows = [
+      ["피보험자 성명", P.name],
+      ["주민등록번호", P.rrn],
+      ["연락처", P.phone],
+      ["보험금 수령계좌", P.account],
+      ["직장명", P.employer],
+      ["직무", P.job],
+    ];
+    let yPos = 700;
+    rows.forEach(([label,val])=>{
+      page.drawText(label, { x: 55, y: yPos, size: labelSize, font, color: rgb(0.35,0.35,0.45) });
+      page.drawText(String(val||""), { x: 200, y: yPos, size: valueSize, font, color: rgb(0,0,0) });
+      yPos -= 32;
+    });
+    page.drawText("※ 다음 장부터는 선택한 보험사의 원본 청구서가 이어집니다.", { x: 50, y: 480, size: 10, font, color: rgb(0.4,0.4,0.5) });
 
-  // 2) 원본 청구서 병합 (선택)
-  const srcPath = $pdfFile.value;
-  if(srcPath){
-    try{
-      const bytes = await fetch(srcPath, {cache:"no-store"}).then(r=>r.arrayBuffer());
+    // 원본 병합
+    const srcPath = $pdfFile.value;
+    if(srcPath){
+      const bytes = await fetch(srcPath, {cache:"no-store"}).then(r=>{
+        if(!r.ok) throw new Error("원본 PDF 경로 오류");
+        return r.arrayBuffer();
+      });
       const src = await PDFDocument.load(bytes);
       const pages = await out.copyPages(src, src.getPageIndices());
       pages.forEach(p=>out.addPage(p));
-    }catch(e){
-      alert("원본 PDF 병합 실패: " + e.message + "\\n경로 또는 파일명을 확인하세요.");
     }
+
+    // 저장
+    const pdfBytes = await out.save();
+    const blob = new Blob([pdfBytes], {type:"application/pdf"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${($carrier.value||"보험사")}_청구서_자동기입.pdf`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+
+    $status.textContent = "완료";
+  }catch(err){
+    console.error(err);
+    alert("PDF 생성 실패: " + (err?.message||err));
+    $status.textContent = "실패";
+  }finally{
+    document.getElementById("btnMake").disabled = false;
   }
-
-  // 3) 저장
-  const pdfBytes = await out.save();
-  const blob = new Blob([pdfBytes], {type:"application/pdf"});
-  const a = document.createElement("a");
-  const carrier = $carrier.value || "보험사";
-  a.href = URL.createObjectURL(blob);
-  a.download = `${carrier}_청구서_자동기입.pdf`;
-  a.click();
-  URL.revokeObjectURL(a.href);
 }
+window.makePdf = makePdf; // 전역 노출 (onclick 안전)
 
-/** 이벤트 바인딩 */
+/* ====== 7) 이벤트 ====== */
 document.addEventListener("DOMContentLoaded", ()=>{
-  initSelectors(); loadProfile();
+  initSelectors();
   $carrier.addEventListener("change", updatePdfOptions);
   $pdfFile.addEventListener("change", ()=>{ $btnViewRaw.href = $pdfFile.value || "#"; });
-  el("btnMake").addEventListener("click", makePdf);
-  el("btnSave").addEventListener("click", saveProfile);
-  el("btnLoad").addEventListener("click", loadProfile);
-  el("btnSample").addEventListener("click", fillSample);
-  $btnViewRaw.addEventListener("click", (e)=>{ if(!$pdfFile.value) e.preventDefault(); });
+
+  document.getElementById("btnSample").addEventListener("click", fillSample);
+  document.getElementById("btnSaveEnc").addEventListener("click", ()=>{ saveEncrypted().catch(e=>alert(e.message)); });
+  document.getElementById("btnLoadEnc").addEventListener("click", ()=>{ loadEncrypted().catch(e=>alert(e.message)); });
 });
 </script>
 </body>
