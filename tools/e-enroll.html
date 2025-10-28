@@ -92,28 +92,22 @@
   background-size:28px 28px, auto !important;
 }
 
-/* 공통 “섹션 타이틀 배너” */
+/* 공통 “섹션 타이틀 배너” – 기본은 밝은 톤 + 어두운 글자 */
 .page-enroll .section-title{
   text-align:center;
   font-weight:900;
   margin:0 0 12px;
   padding:10px 16px;
   border-radius:999px;
-  background:linear-gradient(135deg, var(--brand), var(--brand-2));
-  color:#fff;
+  color:#0f172a;
   letter-spacing:-.01em;
-  box-shadow:0 6px 16px rgba(60,64,231,.18);
+  box-shadow:0 6px 16px rgba(2,6,23,.10);
+  background:linear-gradient(135deg,#eef2ff,#e0f2fe); /* 기본 은은한 파스텔 */
 }
-
-/* 히어로 타이틀도 배너 스타일로 */
-.page-enroll .hero .heading{
-  text-align:center !important;
-  padding:10px 16px !important;
-  border-radius:999px !important;
-  background:linear-gradient(135deg, var(--brand), var(--brand-2)) !important;
-  color:#fff !important;
-  box-shadow:0 6px 16px rgba(60,64,231,.18) !important;
-}
+/* 색상 변형 */
+.page-enroll .section-title.st-violet{ background:linear-gradient(135deg,#ede9fe,#e0e7ff); }
+.page-enroll .section-title.st-blue  { background:linear-gradient(135deg,#dbeafe,#e0f2fe); }
+.page-enroll .section-title.st-teal  { background:linear-gradient(135deg,#ccfbf1,#d1fae5); }
 
 /* 카드 & 실손 카드 강화 */
 .page-enroll.theme-pro .card,
@@ -170,7 +164,7 @@
   <main class="maxw grid grid-2" style="margin-top:14px">
     <!-- 모바일 전자청약 정보(히어로) -->
     <section class="hero" style="grid-column:1/-1">
-      <div class="heading">모바일 전자청약 정보</div>
+      <div class="heading section-title st-violet">모바일 전자청약 정보</div>
       <div class="rows">
         <div class="kv">
           <div class="k">모바일 청약 가능 나이</div>
@@ -190,7 +184,7 @@
         </div>
       </div>
       <div class="actions">
-        <!-- 전화 버튼 3종 -->
+        <!-- 전화 버튼 3종 (유지) -->
         <a id="btn_cs_tel" class="btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.15 9.81 19.8 19.8 0 0 1 .08 1.18 2 2 0 0 1 2.06 0h3a2 2 0 0 1 2 1.72c.12.89.31 1.76.57 2.6a2 2 0 0 1-.45 2.11L6.09 7.91a16 16 0 0 0 10 10l1.48-1.09a2 2 0 0 1 2.11-.45c.84.26 1.71.45 2.6.57A2 2 0 0 1 22 16.92z"/></svg>
           고객센터: <span id="txt_cs_tel">–</span>
@@ -208,7 +202,7 @@
 
     <!-- 좌: 세부 스펙 -->
     <section class="card">
-      <h2 class="section-title">모바일 전자청약 정보</h2>
+      <h2 class="section-title st-blue">모바일 전자청약 정보</h2>
       <div class="rowspec">
         <div class="spec"><div class="key">사용기한</div><div class="val" id="usage_period">–</div></div>
         <div class="spec"><div class="key">사용시간</div><div class="val" id="usage_hours">–</div></div>
@@ -225,7 +219,7 @@
 
     <!-- 우: 실손 안내(회사별 구조) -->
     <aside class="silson">
-      <h3 class="section-title">실손 안내</h3>
+      <h3 class="section-title st-violet">실손 안내</h3>
       <div class="hstack" id="silson_badges" style="gap:8px;margin-bottom:6px"></div>
 
       <!-- 요약 -->
@@ -235,13 +229,13 @@
 
       <!-- 4세대 공통사항 -->
       <div class="card" style="margin-top:10px">
-        <h4 class="section-title" style="margin-bottom:12px">4세대 공통사항</h4>
+        <h4 class="section-title st-blue" style="margin-bottom:12px">4세대 공통사항</h4>
         <div class="list cols2" id="silson_common"></div>
       </div>
 
       <!-- 전환/인수 -->
       <div class="card" style="margin-top:10px">
-        <h4 class="section-title" style="margin-bottom:12px">전환/인수</h4>
+        <h4 class="section-title st-teal" style="margin-bottom:12px">전환/인수</h4>
         <div class="list" id="silson_convert"></div>
       </div>
 
@@ -250,14 +244,12 @@
         <div class="list" id="silson_specials"></div>
       </div>
 
-      <div style="margin-top:10px" class="hstack">
-        <a href="/#medcalc" class="btn">실손 간편 계산기 열기</a>
-      </div>
+      <!-- 버튼 제거 요청: 실손 간편 계산기 링크 삭제 -->
       <p class="subtitle" style="margin-top:8px" id="silson_updated"></p>
     </aside>
 
     <section class="card" style="grid-column:1/-1">
-      <h2 class="section-title" style="margin-bottom:12px">설명 & 주의</h2>
+      <h2 class="section-title st-violet" style="margin-bottom:12px">설명 & 주의</h2>
       <p class="subtitle">회사 정책 변경 시 실제 적용과 차이가 있을 수 있습니다. 언제나 최신 공지와 약관을 우선하세요.</p>
     </section>
   </main>
@@ -271,7 +263,7 @@
     const telfmt = (s) => {
       const d = String(s || '').replace(/[^0-9]/g, '');
       if (!d) return '';
-      if (/^(15|16|18)\d{6}$/.test(d)) return d.slice(0,4) + '-' + d.slice(4); // 15660757 → 1566-0757
+      if (/^(15|16|18)\d{6}$/.test(d)) return d.slice(0,4) + '-' + d.slice(4);
       if (d.startsWith('02') && (d.length === 9 || d.length === 10)) {
         return d.length === 9 ? `02-${d.slice(2,5)}-${d.slice(5)}` : `02-${d.slice(2,6)}-${d.slice(6)}`;
       }
