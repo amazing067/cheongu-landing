@@ -83,79 +83,105 @@
 
   <!-- ===== 페이지 전용 오버라이드(공통 CSS보다 우선) — 반드시 </head> 직전에 둠 ===== -->
   <style id="enroll-override">
-  /* ===== 페이지 전용 스킨(강제 적용) — 더 강한 토닝 ===== */
-.page-enroll{
+/* ===== ENROLL PRO SKIN (강조 버전) ===== */
+.page-enroll.theme-pro{
+  /* 점 배경 + 그라데이션 더 선명 */
   background:
-    radial-gradient(28px 28px at 14px 14px, rgba(124,58,237,.06) 1px, transparent 1px),
-    linear-gradient(180deg, #f7f9ff 0%, #f2f6ff 38%, #f8fafc 100%) !important;
+    radial-gradient(28px 28px at 14px 14px, rgba(124,58,237,.08) 1px, transparent 1px),
+    linear-gradient(180deg, #eef3ff 0%, #eaf0ff 32%, #f7f9ff 100%) !important;
   background-size:28px 28px, auto !important;
 }
 
-/* 히어로: 유리카드 느낌 + 진한 보더/섀도우 */
-.page-enroll .hero{
-  background: linear-gradient(135deg, rgba(124,58,237,.15), rgba(14,165,233,.15)) !important;
-  border: 1px solid rgba(124,58,237,.35) !important;
-  border-radius: 20px !important;
-  box-shadow: 0 14px 34px rgba(79,70,229,.12), 0 2px 0 rgba(255,255,255,.45) inset !important;
+/* 히어로: 글래스 + 라이트 글로우 */
+.page-enroll.theme-pro .hero{
+  background: linear-gradient(135deg, rgba(124,58,237,.18), rgba(14,165,233,.18)) !important;
+  border: 1px solid rgba(124,58,237,.45) !important;
+  border-radius: 22px !important;
+  box-shadow:
+    0 16px 38px rgba(79,70,229,.15),
+    0 1px 0 rgba(255,255,255,.55) inset !important;
+  position: relative;
+  overflow: hidden;
+}
+.page-enroll.theme-pro .hero::after{
+  content:"";
+  position:absolute; inset:-20%;
+  background: radial-gradient(600px 260px at 20% -10%, rgba(255,255,255,.28), transparent 60%),
+              radial-gradient(600px 260px at 80% 110%, rgba(255,255,255,.22), transparent 60%);
+  pointer-events:none;
 }
 
-/* 히어로 내부 KV 박스: 살짝 반투명 + 라운드 강화 */
-.page-enroll .kv{
-  background: rgba(255,255,255,.9) !important;
-  border: 1px solid rgba(100,116,139,.28) !important;
+/* 히어로 내부 KV 박스 */
+.page-enroll.theme-pro .kv{
+  background: rgba(255,255,255,.94) !important;
+  border: 1px solid rgba(100,116,139,.30) !important;
   border-radius: 14px !important;
-  box-shadow: 0 3px 8px rgba(2,6,23,.06) !important;
+  box-shadow: 0 4px 10px rgba(2,6,23,.08) !important;
 }
-.page-enroll .kv .k{ font-size:12px !important; color:#475569 !important; opacity:.95 !important; }
-.page-enroll .kv .v{ font-size:16px !important; font-weight:800 !important; color:#0f172a !important; }
+.page-enroll.theme-pro .kv .k{ font-size:12px !important; color:#475569 !important; }
+.page-enroll.theme-pro .kv .v{ font-size:16px !important; font-weight:800 !important; color:#0f172a !important; }
 
-/* 카드/실손 카드: 라운드 + 그림자 업 */
-.page-enroll .card,
-.page-enroll .silson{
+/* 카드 & 실손 카드 */
+.page-enroll.theme-pro .card,
+.page-enroll.theme-pro .silson{
+  background:#fff !important;
   border:1px solid rgba(100,116,139,.26) !important;
-  border-radius:16px !important;
-  box-shadow:0 6px 18px rgba(2,6,23,.06) !important;
-  background:#fff !important;
+  border-radius:18px !important;
+  box-shadow:0 10px 24px rgba(2,6,23,.08) !important;
 }
 
-/* 배지: 색감 조금 더 선명하게 */
-.page-enroll .badge{
-  border-color: rgba(99,102,241,.28) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.7) !important;
+/* 뱃지 */
+.page-enroll.theme-pro .badge{
+  border-color: rgba(99,102,241,.34) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.75) !important;
   background:#fff !important;
 }
-.page-enroll .badge.ok{ background:#ecfdf5 !important; border-color:#86efac !important; color:#065f46 !important; }
-.page-enroll .badge.no{ background:#fef2f2 !important; border-color:#fecaca !important; color:#991b1b !important; }
+.page-enroll.theme-pro .badge.ok{ background:#ecfdf5 !important; border-color:#86efac !important; color:#065f46 !important; }
+.page-enroll.theme-pro .badge.no{ background:#fef2f2 !important; border-color:#fecaca !important; color:#991b1b !important; }
 
-/* 버튼: 살짝 리프트 + 아웃라인 톤 */
-.page-enroll .btn{
-  box-shadow:0 4px 12px rgba(2,6,23,.08) !important;
-  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease, background-color .15s ease !important;
-  border-color:#d6daf0 !important;
-}
-.page-enroll .btn:hover{ transform:translateY(-2px) !important; box-shadow:0 10px 22px rgba(2,6,23,.12) !important; }
-.page-enroll #btn_cs_tel,
-.page-enroll #btn_fax_tel,
-.page-enroll #btn_help_tel{
+/* 버튼: 그라데이션 + 살짝 리프트 */
+.page-enroll.theme-pro .btn{
+  border-color:#cad3ff !important;
   background:#fff !important;
-  border-color:#c7d2fe !important;
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease !important;
+  box-shadow:0 5px 14px rgba(2,6,23,.10) !important;
+}
+.page-enroll.theme-pro .btn:hover{
+  transform:translateY(-2px) !important;
+  box-shadow:0 12px 26px rgba(2,6,23,.16) !important;
+}
+/* 전화 3종(아웃라인) */
+.page-enroll.theme-pro #btn_cs_tel,
+.page-enroll.theme-pro #btn_fax_tel,
+.page-enroll.theme-pro #btn_help_tel{
+  border-color:#a5b4fc !important;
+}
+/* 강조형(필요 시) */
+.page-enroll.theme-pro .btn-prim{
+  background: linear-gradient(135deg,#6d28d9,#7c3aed) !important;
+  border-color:#6d28d9 !important;
+  color:#fff !important;
+}
+.page-enroll.theme-pro .btn-blue{
+  background: linear-gradient(135deg,#0ea5e9,#2563eb) !important;
+  border-color:#0ea5e9 !important;
+  color:#fff !important;
 }
 
-/* 공통사항 2열: 와이드에서도 줄깨짐 방지 */
-.page-enroll .row-kv{
+/* 공통사항 2열 + 와이드 보정 */
+.page-enroll.theme-pro .row-kv{
   display:grid !important;
-  grid-template-columns:minmax(10rem,13rem) 1fr !important;
+  grid-template-columns:minmax(10.5rem,13.5rem) 1fr !important;
   align-items:center !important;
-  gap:10px !important;
-  border-top:1px dashed rgba(100,116,139,.26) !important;
-  padding:10px 0 !important;
+  gap:12px !important;
+  border-top:1px dashed rgba(100,116,139,.28) !important;
+  padding:12px 0 !important;
 }
-.page-enroll .row-kv .k{ font-weight:800 !important; color:#334155 !important; }
-.page-enroll .row-kv .v{ line-height:1.6 !important; word-break:keep-all !important; white-space:normal !important; }
-.page-enroll .cols2{ display:grid !important; gap:12px !important; }
-@media (min-width:860px){ .page-enroll .cols2{ grid-template-columns:1fr 1fr !important; } }
-
-  </style>
+.page-enroll.theme-pro .row-kv .k{ font-weight:800 !important; color:#334155 !important; }
+.page-enroll.theme-pro .row-kv .v{ line-height:1.65 !important; word-break:keep-all !important; white-space:normal !important; }
+.page-enroll.theme-pro .cols2{ display:grid !important; gap:14px !important; }
+@media (min-width:900px){ .page-enroll.theme-pro .cols2{ grid-template-columns:1fr 1fr !important; } }
+</style>
 </head>
 
 <body class="page-enroll">
