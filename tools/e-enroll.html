@@ -13,6 +13,7 @@
     --ink:#0f172a; --muted:#475569; --line:#e2e8f0;
     --brand:#7c3aed; --brand-2:#0ea5e9; --good:#10b981; --bad:#ef4444;
     --bg:#f8fafc; --card:#ffffff;
+    --chipbg:#f4f3ff; --chipbd:#e9e5ff; --chipfg:#4c1d95; /* 연보라 포인트 */
   }
 
   /* ===== Base ===== */
@@ -45,22 +46,15 @@
   .grid{display:grid;gap:16px}
   @media (min-width:1024px){ .grid-2{grid-template-columns:1.35fr 1fr} }
 
-  /* ===== Hero 기본(색 유지) ===== */
+  /* ===== Hero (타이틀 진파랑 유지) ===== */
   .hero{ border-radius:20px; padding:22px; border:1px solid rgba(124,58,237,.25); }
   .hero .heading{
-  font-size:22px;
-  font-weight:900;
-  margin:0 0 12px;
-  text-align:center;
-  padding:12px 18px;
-  border-radius:999px;
-  color:#fff;
-  letter-spacing:-.01em;
-  /* 진한 파란 포인트 배너 */
-  background: linear-gradient(135deg,#2563eb,#1d4ed8);
-  box-shadow: 0 10px 24px rgba(37,99,235,.25), inset 0 1px 0 rgba(255,255,255,.25);
-  border: 1px solid rgba(29,78,216,.6);
-}
+    font-size:22px; font-weight:900; margin:0 0 12px; text-align:center;
+    padding:12px 18px; border-radius:999px; color:#fff; letter-spacing:-.01em;
+    background: linear-gradient(135deg,#2563eb,#1d4ed8);
+    box-shadow: 0 10px 24px rgba(37,99,235,.25), inset 0 1px 0 rgba(255,255,255,.25);
+    border: 1px solid rgba(29,78,216,.6);
+  }
   .hero .rows{display:grid; gap:10px}
   @media (min-width:640px){ .hero .rows{grid-template-columns:1fr 1fr} }
   .kv{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
@@ -93,69 +87,50 @@
   .cols2{display:grid; gap:10px}
   @media (min-width:860px){ .cols2{grid-template-columns:1fr 1fr} }
 
-  /* === (추가) 급여 공제 정렬용 === */
-  .kv-deduct{display:grid;gap:6px}
-  .kv-deduct .title{font-weight:800;letter-spacing:-.01em}
-  .kv-deduct .grid{display:grid;grid-template-columns:auto auto;gap:6px 14px;align-items:center}
-  .kv-deduct .k-chip{padding:2px 8px;border:1px solid rgba(100,116,139,.28);border-radius:999px;font-size:12px;color:#334155;background:#fff;white-space:nowrap}
-  .kv-deduct .v-num{font-weight:800;white-space:nowrap}
+  /* === (개선) 급여 공제: 컴팩트 & 포인트 칩 === */
+  .kv-deduct{display:grid;gap:8px}
+  .kv-deduct .subtitle-line{font-size:12px;color:#475569}
+  .kv-deduct .grid{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center}
+  .kv-deduct .k-chip{
+    padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;font-size:12px;
+    color:var(--chipfg);background:var(--chipbg);white-space:nowrap
+  }
+  .kv-deduct .v-num{font-weight:800;white-space:nowrap;letter-spacing:.01em}
   </style>
 
   <!-- ===== 페이지 전용 오버라이드 ===== -->
   <style id="enroll-override">
-/* 배경 유지 */
 .page-enroll.theme-pro{
   background:
     radial-gradient(28px 28px at 14px 14px, rgba(124,58,237,.08) 1px, transparent 1px),
     linear-gradient(180deg, #eef3ff 0%, #eaf0ff 32%, #f7f9ff 100%) !important;
   background-size:28px 28px, auto !important;
 }
-
-/* 공통 “섹션 타이틀 배너” – 파스텔 */
 .page-enroll .section-title{
-  text-align:center;
-  font-weight:900;
-  margin:0 0 12px;
-  padding:10px 16px;
-  border-radius:999px;
-  color:#0f172a;
-  letter-spacing:-.01em;
-  box-shadow:0 6px 16px rgba(2,6,23,.10);
+  text-align:center; font-weight:900; margin:0 0 12px; padding:10px 16px; border-radius:999px;
+  color:#0f172a; letter-spacing:-.01em; box-shadow:0 6px 16px rgba(2,6,23,.10);
   background:linear-gradient(135deg,#eef2ff,#e0f2fe);
 }
 .page-enroll .section-title.st-violet{ background:linear-gradient(135deg,#ede9fe,#e0e7ff); }
 .page-enroll .section-title.st-blue  { background:linear-gradient(135deg,#dbeafe,#e0f2fe); }
 .page-enroll .section-title.st-teal  { background:linear-gradient(135deg,#ccfbf1,#d1fae5); }
 
-/* 카드 강화 */
 .page-enroll.theme-pro .card,
 .page-enroll.theme-pro .silson{
-  background:#fff !important;
-  border:1px solid rgba(100,116,139,.26) !important;
-  border-radius:18px !important;
-  box-shadow:0 10px 24px rgba(2,6,23,.08) !important;
+  background:#fff !important; border:1px solid rgba(100,116,139,.26) !important;
+  border-radius:18px !important; box-shadow:0 10px 24px rgba(2,6,23,.08) !important;
 }
-
-/* 버튼 */
 .page-enroll.theme-pro .btn{
-  border-color:#cad3ff !important;
-  background:#fff !important;
+  border-color:#cad3ff !important; background:#fff !important;
   transition: transform .16s ease, box-shadow .16s ease !important;
   box-shadow:0 5px 14px rgba(2,6,23,.10) !important;
 }
-.page-enroll.theme-pro .btn:hover{
-  transform:translateY(-2px) !important;
-  box-shadow:0 12px 26px rgba(2,6,23,.16) !important;
-}
+.page-enroll.theme-pro .btn:hover{ transform:translateY(-2px) !important; box-shadow:0 12px 26px rgba(2,6,23,.16) !important; }
 
-/* 공통사항 2열 + 와이드 보정 */
 .page-enroll.theme-pro .row-kv{
-  display:grid !important;
-  grid-template-columns:minmax(10.5rem,13.5rem) 1fr !important;
-  align-items:center !important;
-  gap:12px !important;
-  border-top:1px dashed rgba(100,116,139,.28) !important;
-  padding:12px 0 !important;
+  display:grid !important; grid-template-columns:minmax(10.5rem,13.5rem) 1fr !important;
+  align-items:center !important; gap:12px !important;
+  border-top:1px dashed rgba(100,116,139,.28) !important; padding:12px 0 !important;
 }
 .page-enroll.theme-pro .cols2{ display:grid !important; gap:14px !important; }
 @media (min-width:900px){ .page-enroll.theme-pro .cols2{ grid-template-columns:1fr 1fr !important; } }
@@ -180,26 +155,14 @@
   </header>
 
   <main class="maxw grid grid-2" style="margin-top:14px">
-    <!-- 모바일 전자청약 정보(히어로) — 제목은 원래 스타일 유지 -->
+    <!-- 모바일 전자청약 정보 -->
     <section class="hero" style="grid-column:1/-1">
       <div class="heading">모바일 전자청약 정보</div>
       <div class="rows">
-        <div class="kv">
-          <div class="k">모바일 청약 가능 나이</div>
-          <div class="v" id="kv_mobile_age">–</div>
-        </div>
-        <div class="kv">
-          <div class="k">전자청약 사용시간</div>
-          <div class="v" id="kv_usage_hours">–</div>
-        </div>
-        <div class="kv">
-          <div class="k">통화가능시간</div>
-          <div class="v" id="kv_call_hours">–</div>
-        </div>
-        <div class="kv">
-          <div class="k">인콜 모니터링</div>
-          <div class="v" id="kv_incall">–</div>
-        </div>
+        <div class="kv"><div class="k">모바일 청약 가능 나이</div><div class="v" id="kv_mobile_age">–</div></div>
+        <div class="kv"><div class="k">전자청약 사용시간</div><div class="v" id="kv_usage_hours">–</div></div>
+        <div class="kv"><div class="k">통화가능시간</div><div class="v" id="kv_call_hours">–</div></div>
+        <div class="kv"><div class="k">인콜 모니터링</div><div class="v" id="kv_incall">–</div></div>
       </div>
       <div class="actions">
         <a id="btn_cs_tel" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.15 9.81 19.8 19.8 0 0 1 .08 1.18 2 2 0 0 1 2.06 0h3a2 2 0 0 1 2 1.72c.12.89.31 1.76.57 2.6a2 2 0 0 1-.45 2.11L6.09 7.91a16 16 0 0 0 10 10l1.48-1.09a2 2 0 0 1 2.11-.45c.84.26 1.71.45 2.6.57A2 2 0 0 1 22 16.92z"/></svg>고객센터: <span id="txt_cs_tel">–</span></a>
@@ -248,7 +211,6 @@
         <div class="list" id="silson_specials"></div>
       </div>
 
-      <!-- 간편 계산기 버튼은 제거 -->
       <p class="subtitle" style="margin-top:8px" id="silson_updated"></p>
     </aside>
 
@@ -393,27 +355,23 @@
         // 실손 카드
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
 
-        // === (추가) 주계약(급여) 보기 좋게 교체 ===
+        /* === 주계약(급여) 표현을 컴팩트 템플릿으로 교체 === */
         function prettifyMainBenefit(){
           const rows = document.querySelectorAll('#silson_common .row-kv');
           let target = null;
-          rows.forEach(r => {
-            const k = r.querySelector('.k')?.textContent?.trim();
-            if (k === '주계약(급여)') target = r;
-          });
+          rows.forEach(r => { if (r.querySelector('.k')?.textContent?.trim() === '주계약(급여)') target = r; });
           if (!target) return;
           target.querySelector('.v').innerHTML = `
             <div class="kv-deduct">
-              <div class="title">80% 보상 / 공제금액</div>
+              <div class="subtitle-line">80% 보상 · 공제금액</div>
               <div class="grid">
                 <span class="k-chip">의원</span> <span class="v-num">1만원</span>
-                <span class="k-chip">병원</span> <span class="v-num">15,000원</span>
-                <span class="k-chip">종합병원·상급종합</span> <span class="v-num">20,000원</span>
+                <span class="k-chip">상급·종합종합</span> <span class="v-num">2만원</span>
               </div>
             </div>`;
         }
         prettifyMainBenefit();
-        // === 끝 ===
+        /* === 끝 === */
 
         // 시간 외 경고/노트
         const inHours = (str) => {
