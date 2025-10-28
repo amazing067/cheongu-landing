@@ -47,7 +47,20 @@
 
   /* ===== Hero 기본(색 유지) ===== */
   .hero{ border-radius:20px; padding:22px; border:1px solid rgba(124,58,237,.25); }
-  .hero .heading{font-size:22px;font-weight:900;margin:0 0 12px}
+  .hero .heading{
+  font-size:22px;
+  font-weight:900;
+  margin:0 0 12px;
+  text-align:center;
+  padding:12px 18px;
+  border-radius:999px;
+  color:#fff;
+  letter-spacing:-.01em;
+  /* 진한 파란 포인트 배너 */
+  background: linear-gradient(135deg,#2563eb,#1d4ed8);
+  box-shadow: 0 10px 24px rgba(37,99,235,.25), inset 0 1px 0 rgba(255,255,255,.25);
+  border: 1px solid rgba(29,78,216,.6);
+}
   .hero .rows{display:grid; gap:10px}
   @media (min-width:640px){ .hero .rows{grid-template-columns:1fr 1fr} }
   .kv{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
