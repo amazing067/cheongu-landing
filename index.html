@@ -141,6 +141,7 @@
   #medcalc input[type="text"], #medcalc input[type="number"]{height:36px;padding:8px 10px;font-size:14px}
   #medcalc .mc-card .grid{gap:10px}
   #dedSummary{margin-top:6px}
+  #ruleDetails{margin-top:6px}
   #medcalc .mt-6{margin-top:10px !important}
   #medcalc #boxResult{padding:12px;border-radius:12px}
   #medcalc #txtPayout{font-size:1.75rem}
@@ -329,13 +330,13 @@
                   <select id="facilitySelect" class="mc-select">
                     <option value="clinic" selected>의원</option>
                     <option value="hospital">병원</option>
-                    <option value="general">종합병원</option>
-                    <option value="tertiary">상급종합병원</option>
+                    <option value="sh">상급/종합병원</option>
                   </select>
                 </div>
               </div>
 
               <div id="dedSummary" class="mt-2 text-[12px] text-slate-600"></div>
+              <div id="ruleDetails" class="mt-2 text-[12px] text-slate-600"></div>
 
               <div class="mt-4 grid grid-cols-1 gap-4">
                 <div>
@@ -368,12 +369,12 @@
                   <div>
                     <label class="block text-sm font-bold mb-1 text-slate-800">급여 공제(원)</label>
                     <input id="advDedCovered" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" value="0" />
-                    <p class="text-xs text-slate-500 mt-1">의료기관 유형에 따라 자동 설정</p>
+                    <p class="text-xs text-slate-500 mt-1">의료기관 유형/세대 규칙에 따라 자동 설정</p>
                   </div>
                   <div>
                     <label class="block text-sm font-bold mb-1 text-slate-800">비급여 공제(원)</label>
                     <input id="advDedNonCovered" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" value="0" />
-                    <p class="text-xs text-slate-500 mt-1">2세대는 ‘최소공제 vs 20%’ 규칙 적용(자동 무시)</p>
+                    <p class="text-xs text-slate-500 mt-1">2세대는 ‘최소공제 vs 20%’ 규칙(전체금액 기준)</p>
                   </div>
                   <div>
                     <label class="block text-sm font-bold mb-1 text-slate-800">도수·주사·체외(1회 한도)</label>
@@ -467,21 +468,16 @@
     }
 
     function brandCell(item) {
-  const L = item.links || {};
-  const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
-
-  // 상세페이지 URL(회사명 쿼리스트링)
-  const detailUrl = `/tools/e-enroll.html?c=${encodeURIComponent(item.name)}`;
-
-  const inner = `
-    <div class="brand">
-      <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
-      <span class="name">${item.name}</span>
-    </div>`;
-
-  // ✅ 로고 클릭 시: 전자청약 상세(새 탭). 전산접속은 우측 버튼으로 유지.
-  return `<a href="${detailUrl}" target="_blank" rel="noopener" class="block no-underline">${inner}</a>`;
-}
+      const L = item.links || {};
+      const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
+      const detailUrl = `/tools/e-enroll.html?c=${encodeURIComponent(item.name)}`;
+      const inner = `
+        <div class="brand">
+          <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
+          <span class="name">${item.name}</span>
+        </div>`;
+      return `<a href="${detailUrl}" target="_blank" rel="noopener" class="block no-underline">${inner}</a>`;
+    }
 
     // 일반 버튼
     function btn(label, href, cls) {
@@ -608,7 +604,6 @@
         const p=new URL(location.href).searchParams.get('dob');
         if(p && /^\d{4}-\d{2}-\d{2}$/.test(p)){ const [yy,mm,dd]=p.split('-'); yEl.value=yy; mEl.value=mm; dEl.value=dd; renderAge(); }
       })();
-      // yEl?.focus();  // ⛔ 자동 포커스 제거(중간으로 스크롤되는 원인)
     }
 
     document.getElementById("y").textContent = new Date().getFullYear();
@@ -628,14 +623,34 @@
       annualRemain: byId('advAnnualRemain')
     };
 
+    // 기본 비급여 보상률/공제(유지)
     const presets = {
-      '4th-basic':    { label: '4세대(현행)', coveredRate: 0.8, nonCoveredRate: 0.7, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 30000, physioPerVisitCap: 0, annualRemain: 999999999 },
-      '3rd-standard': { label: '3세대(표준)',  coveredRate: 0.9, nonCoveredRate: 0.8, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 20000, physioPerVisitCap: 0, annualRemain: 999999999 },
-      '2nd-legacy':   { label: '2세대',       coveredRate: 0.9, nonCoveredRate: 1.0, perVisitCap: 0, coveredDeductible: 10000, nonCoveredDeductible: 0,     physioPerVisitCap: 0, annualRemain: 999999999 }
+      '4th-basic':    { label: '4세대(현행)', coveredRate: 1.0, nonCoveredRate: 0.7, perVisitCap: 0, nonCoveredDeductible: 30000, physioPerVisitCap: 0, annualRemain: 999999999 },
+      '3rd-standard': { label: '3세대(표준)',  coveredRate: 1.0, nonCoveredRate: 0.8, perVisitCap: 0, nonCoveredDeductible: 20000, physioPerVisitCap: 0, annualRemain: 999999999 },
+      '2nd-legacy':   { label: '2세대',       coveredRate: 1.0, nonCoveredRate: 1.0, perVisitCap: 0, nonCoveredDeductible: 0,     physioPerVisitCap: 0, annualRemain: 999999999 }
     };
 
-    const facilityCoveredDed = { clinic:10000, hospital:15000, general:20000, tertiary:20000 };
-    const facilityMinDed_2nd = { clinic:10000, hospital:15000, general:20000, tertiary:20000 };
+    // 2세대 최소공제(전체금액 기준)
+    const facilityMinDed_2nd = { clinic:10000, hospital:15000, sh:20000 };
+
+    // UI: 4세대에서만 '병원' 숨김
+    function refreshFacilityOptions(){
+      const sel = byId('facilitySelect');
+      const keep = new Set(['clinic','hospital','sh']);
+      Array.from(sel.options).forEach(o => { if(!keep.has(o.value)) sel.removeChild(o); });
+      const gen = byId('genSelect').value;
+      const hasHospital = Array.from(sel.options).some(o=>o.value==='hospital');
+      if (gen === '4th-basic' && hasHospital){
+        // 만약 병원이 선택돼있으면 의원으로 바꿔줌
+        if (sel.value === 'hospital') sel.value = 'clinic';
+        sel.querySelector('option[value="hospital"]').remove();
+      } else if (gen !== '4th-basic' && !hasHospital){
+        const opt = document.createElement('option');
+        opt.value = 'hospital';
+        opt.textContent = '병원';
+        sel.insertBefore(opt, sel.querySelector('option[value="sh"]'));
+      }
+    }
 
     function onlyDigits2(s){ return String(s||'').replace(/[^0-9]/g, ''); }
     function toNumber(text){ return Number(onlyDigits2(text)||0); }
@@ -651,48 +666,74 @@
     const genSelect = byId('genSelect');
     const facilitySelect = byId('facilitySelect');
     const dedSummary = byId('dedSummary');
+    const ruleDetails = byId('ruleDetails');
 
     function updateDedSummary(){
       const key = genSelect.value;
       if(key === '2nd-legacy'){
-        dedSummary.textContent = '공제(1회): 전체금액 기준 → 최소공제(의원 10,000원 / 병원 15,000원 / 종합·상급 20,000원)와 전체금액의 20% 중 큰 금액 1회 공제';
+        dedSummary.textContent = '2세대 공제(1회): 전체(급여+비급여) 금액 기준 → 최소공제(의원 10,000원 / 병원 15,000원 / 상급·종합 20,000원)와 전체의 20% 중 큰 금액을 1회 공제 후 전액 보상.';
       } else if (key === '3rd-standard'){
-        const cov = toNumber(inputs.dedCov.value);
-        dedSummary.textContent = `공제(1회): 급여 ${fmtKRW(cov)}원 / 비급여 (20,000원 vs 비급여의 20%) 중 큰 금액`;
+        dedSummary.textContent = '3세대 공제(1회): 급여는 (의원 1만원·병원 1.5만원·상급/종합 2만원) vs 급여의 10% 중 큰 금액 공제. 비급여는 (2만원 vs 비급여 20%) 중 큰 금액 공제 후 보장.';
       } else if (key === '4th-basic'){
-        const cov = toNumber(inputs.dedCov.value);
-        dedSummary.textContent = `공제(1회): 급여 ${fmtKRW(cov)}원 / 비급여 (30,000원 vs 비급여의 30%) 중 큰 금액`;
+        dedSummary.textContent = '4세대 공제(1회): 급여는 (의원 1만원·상급/종합 2만원) vs 급여의 20% 중 큰 금액 공제(병원 미적용). 비급여는 (3만원 vs 비급여 30%) 중 큰 금액 공제 후 보장.';
       }
     }
+
+    function updateRuleDetails(){
+      const gen = genSelect.value;
+      const fac = facilitySelect.value;
+      const mapKo = {clinic:'의원', hospital:'병원', sh:'상급/종합병원'};
+      let lines = [];
+
+      if (gen === '2nd-legacy') {
+        lines.push('• 전체금액(급여+비급여) 기준으로 1회 공제 후 전액 보상');
+        lines.push('• 최소공제: 의원 10,000원 / 병원 15,000원 / 상급·종합 20,000원');
+        lines.push('• “최소공제”와 “전체의 20%” 중 큰 금액을 적용');
+      } else if (gen === '3rd-standard') {
+        lines.push(`• 급여(${mapKo[fac]}): (최소공제 vs 급여의 10%) 중 큰 금액 공제 후 100% 보상`);
+        if (fac==='clinic') lines.push('  - 최소공제: 10,000원');
+        else if (fac==='hospital') lines.push('  - 최소공제: 15,000원');
+        else lines.push('  - 최소공제: 20,000원');
+        lines.push('• 비급여: (20,000원 vs 비급여 20%) 중 큰 금액 공제 후 보장(보상률 80%)');
+      } else { // 4th-basic
+        lines.push(`• 급여(${mapKo[fac]}): (최소공제 vs 급여의 20%) 중 큰 금액 공제 후 100% 보상`);
+        if (fac==='clinic') lines.push('  - 최소공제: 10,000원');
+        else if (fac==='hospital') lines.push('  - 4세대에서 병원은 선택 불가');
+        else lines.push('  - 최소공제: 20,000원');
+        lines.push('• 비급여: (30,000원 vs 비급여 30%) 중 큰 금액 공제 후 보장(보상률 70%)');
+      }
+      ruleDetails.innerHTML = lines.map(s=>`<div>${s}</div>`).join('');
+    }
+
     function applyGen(key){
       const p = presets[key]; if(!p) return;
+
+      // 보상률 입력(급여는 100%로 고정 사용, 비급여는 세대별)
       inputs.covRate.value = Math.round((p.coveredRate||0)*100);
       inputs.nonRate.value = Math.round((p.nonCoveredRate||0)*100);
       inputs.perCap.value = fmtKRW(p.perVisitCap||0);
       inputs.physioCap.value = fmtKRW(p.physioPerVisitCap||0);
       inputs.annualRemain.value = fmtKRW(p.annualRemain||999999999);
 
-      inputs.dedCov.value = fmtKRW(facilityCoveredDed[facilitySelect.value] ?? 10000);
+      // 비급여 고정 최소공제(세대별)
       inputs.dedNon.value = fmtKRW(key==='2nd-legacy' ? 0 : (p.nonCoveredDeductible||0));
+
+      // 4세대에서 병원 숨김/그 외 복원
+      refreshFacilityOptions();
 
       const lbl = byId('currentLabel');
       if(lbl) lbl.innerHTML = `현재 선택: <span class="text-indigo-700">${p.label}</span>`;
-      updateDedSummary();
+      updateDedSummary(); updateRuleDetails();
     }
 
-    function applyFacility(fac){
-      inputs.dedCov.value = fmtKRW(facilityCoveredDed[fac] ?? 10000);
-      if(genSelect.value !== '2nd-legacy'){
-        const key = genSelect.value;
-        inputs.dedNon.value = fmtKRW(presets[key]?.nonCoveredDeductible ?? 0);
-      }
-      updateDedSummary();
+    function applyFacility(){
+      updateRuleDetails();
     }
 
     // init
     applyGen('4th-basic');
     genSelect?.addEventListener('change', ()=> applyGen(genSelect.value));
-    facilitySelect?.addEventListener('change', ()=> applyFacility(facilitySelect.value));
+    facilitySelect?.addEventListener('change', ()=> applyFacility());
 
     // 예시
     document.getElementById('btnExample')?.addEventListener('click', ()=>{
@@ -706,22 +747,26 @@
       const coveredCo = toNumber(inputs.coveredCo.value);
       const nonCovAmt = toNumber(inputs.nonCov.value);
       const key = genSelect.value;
+      const fac = facilitySelect.value;
 
       const totalAmt = coveredCo + nonCovAmt;
-      if((key==='2nd-legacy' && totalAmt===0) || (key!=='2nd-legacy' && coveredCo===0 && nonCovAmt===0)){ alert('금액을 입력하세요'); return; }
+      if((key==='2nd-legacy' && totalAmt===0) || (key!=='2nd-legacy' && coveredCo===0 && nonCovAmt===0)){
+        alert('금액을 입력하세요'); return;
+      }
 
-      const covRate = Number(inputs.covRate.value||0)/100;
+      // 보상률
+      const covRate = 1.0; // 급여는 100% 적용(요청사항)
       const nonRate = Number(inputs.nonRate.value||0)/100;
+
       const perCap  = toNumber(inputs.perCap.value);
-      const dedCov  = toNumber(inputs.dedCov.value);
-      const dedNon  = toNumber(inputs.dedNon.value);
       const physioCap = toNumber(inputs.physioCap.value);
       const annualRemain = toNumber(inputs.annualRemain.value) || 999999999;
 
       let payout = 0, explain = [];
 
       if(key === '2nd-legacy'){
-        const minFixed = (facilityMinDed_2nd[facilitySelect.value] ?? 20000);
+        // 전체 기준 공제
+        const minFixed = (facilityMinDed_2nd[fac] ?? 20000);
         const twentyPct = Math.floor(totalAmt * 0.20);
         const appliedDed = Math.max(minFixed, twentyPct);
 
@@ -732,7 +777,7 @@
         if(perCap>0)    payout = Math.min(payout, perCap);
         payout = Math.min(payout, annualRemain);
 
-        document.getElementById('txtPayout').textContent = fmtKRW(payout) + '원';
+        byId('txtPayout').textContent = fmtKRW(payout) + '원';
         explain.push(`전체금액: ${fmtKRW(totalAmt)}원`);
         explain.push(`공제(2세대): 최소 ${fmtKRW(minFixed)}원 vs 20% ${fmtKRW(twentyPct)}원 → 적용 ${fmtKRW(appliedDed)}원`);
         explain.push(`보상 기준금액: ${fmtKRW(base)}원(전액 보상)`);
@@ -740,36 +785,64 @@
         if(perCap>0)    explain.push(`1회 한도: 최대 ${fmtKRW(perCap)}원`);
         if(annualRemain>0 && annualRemain<999999999) explain.push(`연간 잔여 한도: ${fmtKRW(annualRemain)}원`);
       } else {
-        const covBase = Math.max(0, coveredCo - dedCov);
-        const covPay  = covBase * covRate;
+        // ===== 급여 공제: 세대/의료기관 별 최소 vs % 중 큰 금액
+        let covPct = 0.10; // 3세대 기본
+        let covMin = 10000; // 의원 기본
+        if (key === '4th-basic') covPct = 0.20;
 
-        let appliedNonDed = dedNon;
-        let nonPct = null, nonFixed = null;
-        if (key === '3rd-standard') { nonPct = 0.20; nonFixed = 20000; appliedNonDed = Math.max(nonFixed, Math.floor(nonCovAmt * nonPct)); }
-        else if (key === '4th-basic') { nonPct = 0.30; nonFixed = 30000; appliedNonDed = Math.max(nonFixed, Math.floor(nonCovAmt * nonPct)); }
+        if (fac === 'clinic') covMin = 10000;
+        else if (fac === 'hospital') covMin = (key==='3rd-standard') ? 15000 : 0; // 4세대는 병원 사용 불가(옵션 숨김)
+        else covMin = 20000; // 상급/종합
 
-        const nonBase = Math.max(0, nonCovAmt - appliedNonDed);
-        let   nonPay  = nonBase;
-        if (physioCap > 0) nonPay = Math.min(nonPay, physioCap);
+        // 병원은 4세대에서 선택 불가이므로 방어
+        if (key==='4th-basic' && fac==='hospital') {
+          explain.push('4세대에서 “병원”은 적용되지 않습니다. 의원 또는 상급/종합병원을 선택해주세요.');
+          byId('txtPayout').textContent = '0원';
+          const ul = byId('listExplain'); ul.innerHTML = '';
+          explain.forEach(t=>{ const li=document.createElement('li'); li.textContent='• '+t; ul.appendChild(li); });
+          return;
+        }
+
+        const covPctKRW = Math.floor(coveredCo * covPct);
+        const appliedCovDed = Math.max(covMin, covPctKRW);
+        const covBase = Math.max(0, coveredCo - appliedCovDed);
+        const covPay  = covBase * covRate; // 100%
+
+        // ===== 비급여 공제: 세대 규칙 유지
+        let nonFixed = 0, nonPct = 0;
+        if (key === '3rd-standard') { nonFixed = 20000; nonPct = 0.20; }
+        else if (key === '4th-basic') { nonFixed = 30000; nonPct = 0.30; }
+
+        let appliedNonDed = nonFixed;
+        let nonPay = 0, nonBase = 0;
+        if (key === '3rd-standard' || key === '4th-basic') {
+          const nonPctKRW = Math.floor(nonCovAmt * nonPct);
+          appliedNonDed = Math.max(nonFixed, nonPctKRW);
+          nonBase = Math.max(0, nonCovAmt - appliedNonDed);
+          nonPay  = nonBase * nonRate;
+        }
 
         payout = covPay + nonPay;
-        if (perCap > 0) payout = Math.min(payout, perCap);
+        if (physioCap > 0) payout = Math.min(payout, physioCap);
+        if (perCap > 0)    payout = Math.min(payout, perCap);
         payout = Math.min(payout, annualRemain);
 
-        document.getElementById('txtPayout').textContent = fmtKRW(payout) + '원';
-        explain.push(`급여 보상: ${fmtKRW(covPay)}원 (기준 ${fmtKRW(covBase)}원 × ${Math.round(covRate*100)}%)`);
-        if (nonPct !== null) {
-          const pctKRW = Math.floor(nonCovAmt * nonPct);
-          explain.push(`비급여 공제: 고정 ${fmtKRW(nonFixed)}원 vs ${Math.round(nonPct*100)}% ${fmtKRW(pctKRW)}원 → 적용 ${fmtKRW(appliedNonDed)}원`);
+        byId('txtPayout').textContent = fmtKRW(payout) + '원';
+        // 설명
+        const mapKo = {clinic:'의원', hospital:'병원', sh:'상급/종합병원'};
+        explain.push(`급여 공제(${mapKo[fac]}): ${fmtKRW(covMin)}원 vs ${Math.round(covPct*100)}% ${fmtKRW(covPctKRW)}원 → 적용 ${fmtKRW(appliedCovDed)}원`);
+        explain.push(`급여 보상: ${fmtKRW(covPay)}원 (기준 ${fmtKRW(covBase)}원 × 100%)`);
+        if (key==='3rd-standard' || key==='4th-basic') {
+          const nonPctKRW = Math.floor(nonCovAmt * nonPct);
+          explain.push(`비급여 공제: ${fmtKRW(nonFixed)}원 vs ${Math.round(nonPct*100)}% ${fmtKRW(nonPctKRW)}원 → 적용 ${fmtKRW(appliedNonDed)}원`);
+          explain.push(`비급여 보상: ${fmtKRW(nonPay)}원 (기준 ${fmtKRW(nonBase)}원 × ${Math.round(nonRate*100)}%)`);
         }
-        explain.push(`비급여 보상: ${fmtKRW(nonPay)}원 (기준 ${fmtKRW(nonBase)}원)`);
-        explain.push(`적용 공제: 급여 ${fmtKRW(dedCov)}원 / 비급여 ${fmtKRW(appliedNonDed)}원`);
         if (physioCap>0) explain.push(`도수·주사·체외 1회 한도: 최대 ${fmtKRW(physioCap)}원`);
         if (perCap>0)    explain.push(`1회 한도: 최대 ${fmtKRW(perCap)}원`);
         if (annualRemain>0 && annualRemain<999999999) explain.push(`연간 잔여 한도: ${fmtKRW(annualRemain)}원`);
       }
 
-      const ul = document.getElementById('listExplain'); ul.innerHTML = '';
+      const ul = byId('listExplain'); ul.innerHTML = '';
       explain.forEach(t=>{ const li=document.createElement('li'); li.textContent='• '+t; ul.appendChild(li); });
     }
 
@@ -777,7 +850,7 @@
     document.getElementById('btnReset')?.addEventListener('click', ()=>{
       [inputs.coveredCo, inputs.nonCov].forEach(el=> el.value='');
       genSelect.value='4th-basic'; facilitySelect.value='clinic';
-      applyGen('4th-basic'); applyFacility('clinic');
+      applyGen('4th-basic'); updateRuleDetails();
       document.getElementById('txtPayout').textContent='0원'; document.getElementById('listExplain').innerHTML='';
     });
 
@@ -840,6 +913,6 @@
       document.body.appendChild(document.createComment('canary:'+CANARY));
     })();
   </script>
-<a href="tools/claim-autofill.html?demo">청구서 자동채움 데모 열기</a>
+
 </body>
 </html>
