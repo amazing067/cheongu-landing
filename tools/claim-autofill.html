@@ -327,20 +327,45 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 /* ============== 폰트 로더(한글) ============== */
 async function loadKoreanFontBytes(){
+  // 프로젝트 페이지(예: /cheongu-landing/...)에서도 동작하도록 다중 경로 시도
+  const repo = (() => {
+    // /username.github.io 는 repo가 없고, /cheongu-landing/... 는 repo가 있음
+    const seg = location.pathname.split('/').filter(Boolean);
+    // ex) ["cheongu-landing","tools","claim-autofill-pdf.html"]
+    return seg.length > 0 ? `/${seg[0]}` : '';
+  })();
+
   const candidates = [
-    "/assets/fonts/NotoSansKR-Regular.otf",
-    "/assets/fonts/NanumGothic-Regular.ttf",
-    "https://cdn.jsdelivr.net/gh/googlefonts/noto-cjk@main/Sans/OTF/Korean/NotoSansKR-Regular.otf"
+    // 1) 현재 페이지 기준 상대경로(권장)
+    new URL('./assets/fonts/NotoSansKR-Regular.otf', location.href).toString(),
+    new URL('../assets/fonts/NotoSansKR-Regular.otf', location.href).toString(),
+    // 2) 저장소 루트 기준
+    `${repo}/assets/fonts/NotoSansKR-Regular.otf`,
+    `${repo}/assets/fonts/NanumGothic-Regular.ttf`,
+    // 3) 절대 루트(사용자 페이지일 때만 유효)
+    `/assets/fonts/NotoSansKR-Regular.otf`,
+    `/assets/fonts/NanumGothic-Regular.ttf`,
+    // 4) 최후의 수단(CDN)
+    'https://cdn.jsdelivr.net/gh/googlefonts/noto-cjk@main/Sans/OTF/Korean/NotoSansKR-Regular.otf'
   ];
+
   for (const url of candidates){
     try{
-      const resp = await fetch(url, { cache:"no-store", mode:"cors" });
-      if (resp.ok){
+      const resp = await fetch(url, { cache:'no-store' });
+      if (resp.ok) {
         const buf = await resp.arrayBuffer();
-        if (buf.byteLength > 0) return buf;
+        if (buf.byteLength > 1024) {
+          console.log('[font] loaded:', url);
+          return buf;
+        }
+      } else {
+        console.log('[font] skip (status):', url, resp.status);
       }
-    }catch(_){}
+    }catch(e){
+      console.log('[font] error:', url, e?.message||e);
+    }
   }
+  console.warn('[font] no font found, fallback to ASCII mode');
   return null;
 }
 
