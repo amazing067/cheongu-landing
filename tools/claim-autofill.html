@@ -356,90 +356,104 @@ async function loadKoreanFontBytes(){
 /* ============== PDF 생성: 원본 1페이지 스탬프 + 폰트 임베드 ============== */
 async function makePdf(){
   const btn = document.getElementById("btnMake");
-  $status.textContent = "PDF 생성 중…"; btn.disabled = true;
+  const $status = document.getElementById("status") || { textContent: ()=>{} };
+  $status.textContent = "PDF 생성 중…";
+  btn.disabled = true;
 
   try{
+    // 0) 입력 수집
     const P = collectProfile();
-    if(!P.policyholder.name){ alert("계약자 이름을 입력하세요."); return; }
+    if(!P || !P.policyholder || !P.policyholder.name){
+      alert("계약자 이름을 입력하세요."); return;
+    }
 
-    const carrier = $carrier.value;
-    const pos = POS_MAP[carrier] || {};
-    const cfg = PDF_MAP[carrier] || { files:[], hasAddress:false };
-    const srcPath = $pdfFile.value;
+    const carrier = (document.getElementById("carrier")?.value) || "";
+    const cfg = (typeof PDF_MAP!=="undefined" && PDF_MAP[carrier]) || { files:[], hasAddress:false };
+    const pos = (typeof POS_MAP!=="undefined" && POS_MAP[carrier]) || {}; // 좌표 없으면 자연스레 스킵
+    const srcPath = document.getElementById("pdfFile")?.value || "";
     if(!srcPath){ alert("청구서 PDF를 선택하세요."); return; }
 
+    // 1) pdf-lib 준비 + fontkit 등록
     const { PDFDocument, StandardFonts, rgb } = PDFLib;
     const out = await PDFDocument.create();
-    out.registerFontkit(fontkit);
+    if (typeof fontkit !== "undefined") out.registerFontkit(fontkit);
 
-    // 1) 폰트 임베드(한글)
+    // 2) 한글 폰트 임베드 시도 (없으면 ASCII 폴백)
     let kFont = null;
     try{
-      const bytes = await loadKoreanFontBytes();
-      if (bytes) kFont = await out.embedFont(bytes, { subset:true });
-    }catch(_){}
+      if (typeof loadKoreanFontBytes === "function"){
+        const bytes = await loadKoreanFontBytes();
+        if (bytes) kFont = await out.embedFont(bytes, { subset:true });
+      }
+    }catch(e){ /* 폴백으로 진행 */ }
     const helv = await out.embedFont(StandardFonts.Helvetica);
-    const chooseFont = (text)=> (/[^\x00-\x7F]/.test(String(text||"")) && kFont) ? kFont : helv;
-    const safeText  = (text)=> kFont ? String(text||"") : String(text||"").replace(/[^\x00-\x7F]/g,"?");
+    const hasHangul = (t)=> /[^\x00-\x7F]/.test(String(t||""));
+    const pickFont = (t)=> (hasHangul(t) && kFont) ? kFont : helv;
+    const safeText = (t)=> kFont ? String(t||"") : String(t||"").replace(/[^\x00-\x7F]/g,"?");
 
-    // 2) 원본 복사
+    // 3) 원본 PDF 병합
     const url = new URL(encodeURI(srcPath), location.origin).toString();
     const resp = await fetch(url, { cache:"no-store" });
     if(!resp.ok) throw new Error(`원본 PDF 응답오류(${resp.status})`);
-    const src = await PDFDocument.load(await resp.arrayBuffer(), { ignoreEncryption:true });
-    const pages = await out.copyPages(src, src.getPageIndices());
+    const base = await PDFDocument.load(await resp.arrayBuffer(), { ignoreEncryption:true });
+    const pages = await out.copyPages(base, base.getPageIndices());
     pages.forEach(p=>out.addPage(p));
 
-    // 3) 스탬프(첫 페이지)
+    // 4) 1페이지 스탬프
     const page = out.getPage(0);
-    const draw = (xy, text, size=11)=>{ if(!xy) return;
-      page.drawText(safeText(text), { x:xy[0], y:xy[1], size, font: chooseFont(text), color: rgb(0,0,0) });
+    const draw = (xy, text, size=11)=>{
+      if(!xy || text==null) return;
+      page.drawText(safeText(text), { x:xy[0], y:xy[1], size, font: pickFont(text), color: rgb(0,0,0) });
     };
 
+    // 계약자
     if(pos.policyholder){
       const [sr1="",sr2=""]=(P.policyholder.rrn||"").split("-");
       draw(pos.policyholder.name, P.policyholder.name, 12);
       draw(pos.policyholder.rrn1, sr1, 12);
       draw(pos.policyholder.rrn2, sr2, 12);
     }
+    // 피보험자
     if(pos.insured){
       const [ir1="",ir2=""]=(P.insured.rrn||"").split("-");
       const [ip1="",ip2="",ip3=""]=(P.insured.phone||"").split("-");
-      draw(pos.insured.name, P.insured.name, 12);
+      draw(pos.insured.name,  P.insured.name, 12);
       draw(pos.insured.rrn1, ir1, 12);
       draw(pos.insured.rrn2, ir2, 12);
-      draw(pos.insured.job,  P.employerJob, 11);
+      draw(pos.insured.job,   P.employerJob, 11);
       draw(pos.insured.phone1, ip1, 12);
       draw(pos.insured.phone2, ip2, 12);
       draw(pos.insured.phone3, ip3, 12);
     }
-    if(cfg.hasAddress && pos.address){
-      draw(pos.address.zip,   P.zip, 11);
-      draw(pos.address.road,  P.addr, 11);
-      draw(pos.address.detail,P.addrDetail, 11);
+    // 주소(양식에 있을 때만)
+    if((cfg.hasAddress!==false) && pos.address){
+      draw(pos.address.zip,    P.zip, 11);
+      draw(pos.address.road,   P.addr, 11);
+      draw(pos.address.detail, P.addrDetail, 11);
     }
+    // 수령 계좌
     if(pos.bank){
       draw(pos.bank.bankName,  P.bankName, 11);
       draw(pos.bank.account,   P.accountNumber, 11);
-      draw(pos.bank.depositor, P.insured.name||P.policyholder.name, 11);
+      draw(pos.bank.depositor, P.insured.name || P.policyholder.name, 11);
     }
 
-    // 4) 저장
+    // 5) 저장
     const pdfBytes = await out.save();
-    const blob = new Blob([pdfBytes], {type:"application/pdf"});
+    const blob = new Blob([pdfBytes], { type:"application/pdf" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `${carrier}_claim_autofill.pdf`;
+    a.download = `${carrier||'insurer'}_claim_autofill.pdf`;
     a.click();
     URL.revokeObjectURL(a.href);
 
-    $status.textContent = kFont ? "완료(한글 폰트 적용)" : "완료(ASCII 폴백)";
+    document.getElementById("status").textContent = kFont ? "완료(한글 폰트 적용)" : "완료(ASCII 폴백)";
   }catch(err){
     console.error(err);
     alert("PDF 생성 실패: " + (err?.message||err));
-    $status.textContent = "실패";
+    document.getElementById("status").textContent = "실패";
   }finally{
-    document.getElementById("btnMake").disabled = false;
+    btn.disabled = false;
   }
 }
 window.makePdf = makePdf;
