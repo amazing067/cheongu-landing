@@ -340,9 +340,11 @@ async function loadKoreanFontBytes(){
   return null; // 없으면 null
 }
 
-/* ====== PDF 생성 ====== */
+<script>
+/* ====== PDF 생성 (강제 ASCII 안전모드) ====== */
 async function makePdf(){
   const btn = document.getElementById("btnMake");
+  const $status = document.getElementById("status");
   $status.textContent = "PDF 생성 중…";
   btn.disabled = true;
 
@@ -351,49 +353,47 @@ async function makePdf(){
     if(!P.name){ alert("이름을 입력하세요."); return; }
 
     const { PDFDocument, StandardFonts, rgb } = PDFLib;
-    const out = await PDFDocument.create();
 
-    // ⓐ fontkit 등록 + 한글 폰트 시도
-    out.registerFontkit(fontkit);
-    let kFont = null;
-    try{
-      const fontBytes = await loadKoreanFontBytes();
-      if (fontBytes) kFont = await out.embedFont(fontBytes, { subset: true });
-    }catch(_){}
+    // 1) 새 문서
+    const out = await PDFDocument.create();
     const helv = await out.embedFont(StandardFonts.Helvetica);
 
-    // 한글 출력 헬퍼: kFont 없으면 ASCII만 출력해 에러 회피
-    const safeText = (s)=> (kFont ? String(s||"") : String(s||"").replace(/[^\x00-\x7F]/g, "?"));
-    const useFont = (s)=> (/[^\x00-\x7F]/.test(String(s||"")) && kFont) ? kFont : helv;
+    // ⚠ 안전모드: 비-ASCII 문자 제거/대체 (폰트 미로딩 시 오류 방지)
+    const toASCII = (s) => String(s ?? "")
+      // 줄바꿈, 탭은 허용
+      .replace(/[^\x09\x0A\x0D\x20-\x7E]/g, "?");
 
-    // 1) 커버 페이지
+    // 2) 커버 페이지 (표시는 영어/ASCII 임시표기)
     const page = out.addPage([595.28, 841.89]); // A4
-    const titleSize=18, labelSize=11, valueSize=13;
+    const title = "Claim Cover (Auto-Fill)";
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = String(today.getMonth()+1).padStart(2,"0");
+    const d = String(today.getDate()).padStart(2,"0");
 
-    page.drawText(safeText("보험금 청구서 자동기입 커버"), { x: 50, y: 790, size: titleSize, font: (kFont||helv), color: rgb(0.1,0.1,0.2) });
-    const t=new Date(), y=t.getFullYear(), m=String(t.getMonth()+1).padStart(2,"0"), d=String(t.getDate()).padStart(2,"0");
-    page.drawText(`생성일: ${y}-${m}-${d}`, { x: 50, y: 770, size: labelSize, font: helv, color: rgb(0.4,0.4,0.5) });
+    page.drawText(title, { x: 50, y: 790, size: 18, font: helv, color: rgb(0.1,0.1,0.2) });
+    page.drawText(`Generated: ${y}-${m}-${d}`, { x: 50, y: 770, size: 11, font: helv, color: rgb(0.4,0.4,0.5) });
 
     page.drawRectangle({ x:40, y: 460, width: 515, height: 300, borderColor: rgb(0.85,0.87,0.92), borderWidth: 1, color: rgb(1,1,1) });
 
     const rows = [
-      ["피보험자 성명", P.name],
-      ["주민등록번호", P.rrn],
-      ["연락처", P.phone],
-      ["주소", P.address],
-      ["은행명", P.bankName],
-      ["계좌번호", P.accountNumber],
-      ["직장/직무", P.employerJob]
+      ["Name", P.name],
+      ["RRN", P.rrn],
+      ["Phone", P.phone],
+      ["Address", P.address],
+      ["Bank", P.bankName],
+      ["Account No.", P.accountNumber],
+      ["Employer/Job", P.employerJob]
     ];
     let yPos = 720;
-    rows.forEach(([label,val])=>{
-      page.drawText(safeText(label), { x: 55, y: yPos, size: labelSize, font: (kFont||helv), color: rgb(0.35,0.35,0.45) });
-      page.drawText(safeText(String(val||"")), { x: 200, y: yPos, size: valueSize, font: useFont(val), color: rgb(0,0,0) });
+    for(const [label, val] of rows){
+      page.drawText(label, { x: 55, y: yPos, size: 11, font: helv, color: rgb(0.35,0.35,0.45) });
+      page.drawText(toASCII(val), { x: 200, y: yPos, size: 13, font: helv, color: rgb(0,0,0) });
       yPos -= 32;
-    });
-    page.drawText(safeText("※ 다음 장부터는 선택한 보험사의 원본 청구서가 이어집니다."), { x: 50, y: 440, size: 10, font: (kFont||helv), color: rgb(0.4,0.4,0.5) });
+    }
+    page.drawText("Note: Original insurer claim form is appended.", { x: 50, y: 440, size: 10, font: helv, color: rgb(0.4,0.4,0.5) });
 
-    // 2) 원본 PDF 병합
+    // 3) 원본 PDF 병합
     const srcPath = document.getElementById("pdfFile").value;
     if (srcPath) {
       try {
@@ -410,27 +410,27 @@ async function makePdf(){
       }
     }
 
-    // 3) 저장
+    // 4) 저장
     const pdfBytes = await out.save();
     const blob = new Blob([pdfBytes], {type:"application/pdf"});
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `${(document.getElementById("carrier").value||"보험사")}_청구서_자동기입.pdf`;
+    a.download = `${(document.getElementById("carrier").value||"insurer")}_claim_autofill.pdf`;
     a.click();
     URL.revokeObjectURL(a.href);
-    document.getElementById("status").textContent = "완료";
-    if (!kFont){
-      alert("참고: 리포에 한글 폰트를 추가하면 커버 페이지가 한글로 인쇄됩니다.\n경로: /assets/fonts/NanumGothic-Regular.ttf");
-    }
+
+    $status.textContent = "완료";
   }catch(err){
     console.error(err);
     alert("PDF 생성 실패: " + (err?.message||err));
-    document.getElementById("status").textContent = "실패";
+    $status.textContent = "실패";
   }finally{
     document.getElementById("btnMake").disabled = false;
   }
 }
 window.makePdf = makePdf;
+</script>
+
 
 /* ====== 이벤트 ====== */
 document.addEventListener("DOMContentLoaded", ()=>{
