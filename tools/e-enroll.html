@@ -62,30 +62,49 @@
   .kv .v{font-size:16px;font-weight:800;color:#111827;margin-top:1px}
   .hero .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 
-  /* 표 카드 */
+  /* ===== 상세표 영역(좌라벨/우값 모두 중앙 정렬 + 라벨 오토폭) ===== */
   .rowspec{display:grid;gap:2px}
   .spec{
-    display:grid; grid-template-columns:minmax(11rem,14rem) 1fr;
-    align-items:center; gap:12px; padding:10px 0;
+    display:grid;
+    grid-template-columns:auto 1fr;           /* 라벨을 내용 길이에 맞게 */
+    align-items:center;
+    gap:12px;
+    padding:12px 0;
     border-top:1px dashed rgba(100,116,139,.28);
   }
   .spec:first-child{border-top:0}
   .key{
-    display:inline-flex; align-items:center; justify-content:flex-start;
-    height:36px; padding:0 14px;
-    font-weight:800; font-size:13px; color:#0f172a; line-height:1;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;                   /* 라벨 내부 텍스트 중앙 */
+    height:auto;
+    padding:8px 14px;                         /* 텍스트 길이에 맞춘 pill */
+    font-weight:800;
+    font-size:13px;
+    color:#0f172a;
+    line-height:1;
     background:linear-gradient(135deg,#dbeafe,#e0f2fe);
-    border:1px solid #cbd5e1; border-radius:999px; white-space:nowrap;
+    border:1px solid #cbd5e1;
+    border-radius:999px;
+    white-space:nowrap;                       /* 한 줄 유지 */
+    justify-self:center;                      /* 라벨 자체를 좌열이 아닌 중앙 배치 */
   }
-  @media (max-width:480px){ .key{ height:32px; padding:0 12px; font-size:12px; } }
-  .val{color:#0f172a; white-space:pre-line; line-height:1.6}
+  @media (max-width:480px){
+    .key{ padding:7px 12px; font-size:12px; }
+  }
+  .val{
+    color:#0f172a;
+    white-space:pre-line;
+    line-height:1.6;
+    text-align:center;                        /* 값도 중앙 정렬 */
+  }
 
-  /* 실손 블록 */
+  /* ===== 실손 카드 ===== */
   .silson{background:#fff;border:1px solid rgba(100,116,139,.22);border-radius:16px;padding:16px;box-shadow:0 3px 10px rgba(2,6,23,.04)}
   .silson h3{margin:0 0 8px;font-weight:900}
   .list{display:grid;gap:8px}
 
-  /* K–V */
+  /* K–V (우측 카드 고정) */
   .row-kv{
     display:grid;
     grid-template-columns:minmax(9rem,12rem) 1fr;
@@ -93,15 +112,15 @@
     border-top:1px dashed rgba(100,116,139,.26); padding:8px 0;
   }
   .row-kv:first-child{border-top:0}
-  .row-kv .k{font-weight:800;color:#334155}
-  .row-kv .v{color:#0f172a; line-height:1.55; word-break:keep-all; white-space:normal}
+  .row-kv .k{font-weight:800;color:#334155;text-align:center}
+  .row-kv .v{color:#0f172a; line-height:1.55; word-break:keep-all; white-space:normal; text-align:center}
   .cols2{display:grid; gap:10px}
   @media (min-width:860px){ .cols2{grid-template-columns:1fr 1fr} }
 
   /* 급여 공제 미니 */
   .kv-deduct{display:grid;gap:8px}
-  .kv-deduct .subtitle-line{font-size:12px;color:#475569}
-  .kv-deduct .grid{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center}
+  .kv-deduct .subtitle-line{font-size:12px;color:#475569;text-align:center}
+  .kv-deduct .grid{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;justify-content:center}
   .kv-deduct .k-chip{
     padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;font-size:12px;
     color:#4c1d95;background:#f4f3ff;white-space:nowrap
@@ -191,7 +210,6 @@
         <div class="spec"><div class="key">통화가능시간</div><div class="val" id="call_hours">–</div></div>
         <div class="spec"><div class="key">모바일 청약 가능 나이</div><div class="val" id="mobile_age">–</div></div>
         <div class="spec"><div class="key">계약자·피보험자 불일치시 가능여부</div><div class="val" id="gps">–</div></div>
-        <!-- '가능시 모니터링 기준' 행은 제거 -->
         <div class="spec"><div class="key">카드납 가능 여부</div><div class="val" id="cardpay">–</div></div>
         <div class="spec"><div class="key">인콜 모니터링</div><div class="val" id="incall">–</div></div>
       </div>
@@ -347,7 +365,7 @@
         // 실손 카드
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
 
-        // === 신규 배지: 계피상 가능/불가 ===
+        // === 계피상 배지 ===
         (function addGpsBadge(){
           const bf = $('#badges');
           const b = (function(v){
@@ -358,13 +376,10 @@
             return null;
           })(enr.gye_pi_sang_available);
           if (b === null) return;
-          bf.insertAdjacentHTML(
-            'beforeend',
-            `<span class="badge ${b?'ok':'no'}">${b?'계피상 가능':'계피상 불가'}</span>`
-          );
+          bf.insertAdjacentHTML('beforeend', `<span class="badge ${b?'ok':'no'}">${b?'계피상 가능':'계피상 불가'}</span>`);
         })();
 
-        // 상세 정보 채우기
+        // 상세 정보
         const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = (v ?? '') || '–'; };
         set('usage_period', enr.usage_period);
         set('usage_hours',  enr.usage_hours);
