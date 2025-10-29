@@ -174,7 +174,7 @@ const PDF_MAP = {
   "기타":     { files:[["공란 커버만 생성",""]], hasAddress:false }
 };
 
-/* ============== (임시) 삼성화재 1페이지 좌표 ============== */
+/* ============== (임시) 삼성화재 1페이지 좌표(왼쪽-위 기준 px) ============== */
 const POS_MAP = {
   "삼성화재": {
     insured: { name:[110,681], rrn1:[260,681], rrn2:[330,681], job:[470,681], phone1:[455,651], phone2:[515,651], phone3:[575,651] },
@@ -327,32 +327,27 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 /* ============== 폰트 로더(한글) ============== */
 async function loadKoreanFontBytes(){
-  // GitHub Pages 프로젝트 경로에 'cheongu-landing'가 있으므로 절대경로로 고정
-  const hard = `${location.origin}/cheongu-landing/assets/fonts/NotoSansKR-Regular.otf`;
-  const alt  = `${location.origin}/cheongu-landing/assets/fonts/NanumGothic-Regular.ttf`;
   const cdn  = 'https://cdn.jsdelivr.net/gh/googlefonts/noto-cjk@main/Sans/OTF/Korean/NotoSansKR-Regular.otf';
-
-  const candidates = [hard, alt, cdn];
-
+  const candidates = [
+    `${location.origin}/assets/fonts/NotoSansKR-Regular.otf`,
+    `${location.origin}/assets/fonts/NanumGothic-Regular.ttf`,
+    '/assets/fonts/NotoSansKR-Regular.otf',
+    '/assets/fonts/NanumGothic-Regular.ttf',
+    cdn
+  ];
   for (const url of candidates){
     try{
       const resp = await fetch(url, { cache:'no-store' });
       if (resp.ok){
         const buf = await resp.arrayBuffer();
-        if (buf.byteLength > 1024){
-          console.log('[font] loaded:', url);
-          return buf;
-        }
-      } else {
-        console.log('[font] miss(status):', url, resp.status);
-      }
-    }catch(e){
-      console.log('[font] miss(err):', url, e?.message||e);
-    }
+        if (buf.byteLength > 1024){ console.log('[font] loaded:', url); return buf; }
+      } else { console.log('[font] miss(status):', url, resp.status); }
+    }catch(e){ console.log('[font] miss(err):', url, e?.message||e); }
   }
   console.warn('[font] no font found -> ASCII fallback');
   return null;
 }
+
 /* ============== PDF 생성: 원본 1페이지 스탬프 + 폰트 임베드 ============== */
 async function makePdf(){
   const btn = document.getElementById("btnMake");
@@ -361,37 +356,28 @@ async function makePdf(){
   btn.disabled = true;
 
   try{
-    // 0) 입력 수집
     const P = collectProfile();
-    if(!P || !P.policyholder || !P.policyholder.name){
-      alert("계약자 이름을 입력하세요."); return;
-    }
+    if(!P?.policyholder?.name){ alert("계약자 이름을 입력하세요."); return; }
 
     const carrier = (document.getElementById("carrier")?.value) || "";
-    const cfg = (typeof PDF_MAP!=="undefined" && PDF_MAP[carrier]) || { files:[], hasAddress:false };
-    const pos = (typeof POS_MAP!=="undefined" && POS_MAP[carrier]) || {}; // 좌표 없으면 자연스레 스킵
+    const cfg = PDF_MAP[carrier] || { files:[], hasAddress:false };
+    const pos = POS_MAP[carrier] || {};
     const srcPath = document.getElementById("pdfFile")?.value || "";
     if(!srcPath){ alert("청구서 PDF를 선택하세요."); return; }
 
-    // 1) pdf-lib 준비 + fontkit 등록
     const { PDFDocument, StandardFonts, rgb } = PDFLib;
     const out = await PDFDocument.create();
     if (typeof fontkit !== "undefined") out.registerFontkit(fontkit);
 
-    // 2) 한글 폰트 임베드 시도 (없으면 ASCII 폴백)
+    // 폰트 임베드 (한글 우선)
     let kFont = null;
     try{
-      if (typeof loadKoreanFontBytes === "function"){
-        const bytes = await loadKoreanFontBytes();
-        if (bytes) kFont = await out.embedFont(bytes, { subset:true });
-      }
-    }catch(e){ /* 폴백으로 진행 */ }
+      const bytes = await loadKoreanFontBytes();
+      if (bytes) kFont = await out.embedFont(bytes, { subset:true });
+    }catch(_) {}
     const helv = await out.embedFont(StandardFonts.Helvetica);
-    const hasHangul = (t)=> /[^\x00-\x7F]/.test(String(t||""));
-    const pickFont = (t)=> (hasHangul(t) && kFont) ? kFont : helv;
-    const safeText = (t)=> kFont ? String(t||"") : String(t||"").replace(/[^\x00-\x7F]/g,"?");
 
-    // 3) 원본 PDF 병합
+    // 원본 복사
     const url = new URL(encodeURI(srcPath), location.origin).toString();
     const resp = await fetch(url, { cache:"no-store" });
     if(!resp.ok) throw new Error(`원본 PDF 응답오류(${resp.status})`);
@@ -399,12 +385,22 @@ async function makePdf(){
     const pages = await out.copyPages(base, base.getPageIndices());
     pages.forEach(p=>out.addPage(p));
 
-    // 4) 1페이지 스탬프
+    // 1페이지 스탬프
     const page = out.getPage(0);
-    const draw = (xy, text, size=11)=>{
-      if(!xy || text==null) return;
-      page.drawText(safeText(text), { x:xy[0], y:xy[1], size, font: pickFont(text), color: rgb(0,0,0) });
-    };
+    const pageH = page.getHeight();
+
+    // 폰트 테스트(왼쪽 상단 근처 찍힘)
+    page.drawText("한글폰트_테스트_OK", { x: 40, y: pageH - 30, size: 14, font: (kFont ?? helv) });
+
+    // 좌표 변환(draw: 왼쪽-위 기준 → PDF 왼쪽-아래)
+    function draw(xy, text, size=11){
+      if(!xy) return;
+      const val = (text ?? '').toString();
+      if(!val) return;
+      const x = xy[0];
+      const y = pageH - xy[1];
+      page.drawText(val, { x, y, size, font: (kFont ?? helv), color: rgb(0,0,0) });
+    }
 
     // 계약자
     if(pos.policyholder){
@@ -438,7 +434,7 @@ async function makePdf(){
       draw(pos.bank.depositor, P.insured.name || P.policyholder.name, 11);
     }
 
-    // 5) 저장
+    // 저장
     const pdfBytes = await out.save();
     const blob = new Blob([pdfBytes], { type:"application/pdf" });
     const a = document.createElement("a");
@@ -447,79 +443,16 @@ async function makePdf(){
     a.click();
     URL.revokeObjectURL(a.href);
 
-    document.getElementById("status").textContent = kFont ? "완료(한글 폰트 적용)" : "완료(ASCII 폴백)";
+    $status.textContent = (kFont ? "완료(한글 폰트 적용)" : "완료(ASCII 폴백)");
   }catch(err){
     console.error(err);
     alert("PDF 생성 실패: " + (err?.message||err));
-    document.getElementById("status").textContent = "실패";
+    $status.textContent = "실패";
   }finally{
     btn.disabled = false;
   }
 }
 window.makePdf = makePdf;
 </script>
-  <script>
-/* === PDF 한글폰트 진단 패널 + 로더(override) === */
-(function(){
-  const css = `
-    #fontDiag{position:fixed;right:12px;bottom:12px;z-index:99999;background:#111827;color:#fff;
-      font:12px/1.4 ui-sans-serif,system-ui; border-radius:12px; padding:10px 12px; max-width:360px;
-      box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    #fontDiag b{color:#a5b4fc} #fontDiag .ok{color:#86efac} #fontDiag .bad{color:#fca5a5}
-    #fontDiag code{background:#0b1220;color:#e5e7eb;padding:2px 4px;border-radius:6px}
-  `;
-  const s = document.createElement('style'); s.textContent = css; document.head.appendChild(s);
-  const box = document.createElement('div'); box.id='fontDiag'; box.innerHTML='폰트 진단 중…'; document.body.appendChild(box);
-
-  function log(line){ box.innerHTML += `<div>${line}</div>`; }
-  function header(){ box.innerHTML = `<div><b>PDF 한글폰트 진단</b></div>`; }
-
-  // 저장소/경로 추정
-  const seg = location.pathname.split('/').filter(Boolean);
-  const repo = seg.length>0 ? `/${seg[0]}` : '';
-  const candidates = [
-    new URL('./assets/fonts/NotoSansKR-Regular.otf', location.href).toString(),
-    new URL('../assets/fonts/NotoSansKR-Regular.otf', location.href).toString(),
-    `${repo}/assets/fonts/NotoSansKR-Regular.otf`,
-    `${repo}/assets/fonts/NanumGothic-Regular.ttf`,
-    `/assets/fonts/NotoSansKR-Regular.otf`,
-    `/assets/fonts/NanumGothic-Regular.ttf`,
-    'https://cdn.jsdelivr.net/gh/googlefonts/noto-cjk@main/Sans/OTF/Korean/NotoSansKR-Regular.otf'
-  ];
-
-  header();
-  log(`<code>origin</code> ${location.origin}`);
-  log(`<code>path</code> ${location.pathname}`);
-  log(`<code>repo</code> ${repo||'(none)'}`);
-
-  // 기존 함수가 있더라도 덮어씀
-  window.loadKoreanFontBytes = async function(){
-    let picked = null, bytes = null, lastErr = '';
-    for (const url of candidates){
-      try{
-        log(`시도: <code>${url}</code> …`);
-        const resp = await fetch(url, { cache:'no-store' });
-        if (!resp.ok){ log(`<span class="bad">응답 ${resp.status}</span>`); continue; }
-        const buf = await resp.arrayBuffer();
-        log(`바이트: ${buf.byteLength}`);
-        if (buf.byteLength > 1024){ picked = url; bytes = buf; break; }
-      }catch(e){
-        lastErr = e?.message||String(e);
-        log(`<span class="bad">에러: ${lastErr}</span>`);
-      }
-    }
-    if (picked){
-      log(`<span class="ok">성공</span>: <code>${picked}</code>`);
-      return bytes;
-    }else{
-      log(`<span class="bad">실패</span>: 폰트를 찾지 못했습니다. (ASCII 폴백)`);
-      return null;
-    }
-  };
-
-  log('<span class="ok">준비 완료</span>: 이제 "PDF 만들기"를 눌러보세요.');
-})();
-</script>
-
 </body>
 </html>
