@@ -64,7 +64,7 @@
     <div class="row4" style="margin-top:12px">
       <div><label>은행명</label><input id="bankName" placeholder="예: 국민은행" /></div>
       <div><label>계좌번호</label><input id="accountNumber" placeholder="숫자/하이픈 가능" /></div>
-      <div><label>직장/직무</label><input id="employerJob" placeholder="예: 회사원/학" /></div>
+      <div><label>직장/직무</label><input id="employerJob" placeholder="예: 청구닷컴 / 보험상담사" /></div>
       <div>
         <label>암호(내 정보 저장/불러오기)</label>
         <input id="passphrase" type="password" placeholder="AES-GCM 암호" />
@@ -306,17 +306,27 @@ async function makePdf(){
     });
     page.drawText("※ 다음 장부터는 선택한 보험사의 원본 청구서가 이어집니다.", { x: 50, y: 460, size: 10, font, color: rgb(0.4,0.4,0.5) });
 
-    // 원본 병합
+    /* --- 원본 병합 (교체본 시작) --- */
     const srcPath = $pdfFile.value;
-    if(srcPath){
-      const bytes = await fetch(srcPath, {cache:"no-store"}).then(r=>{
-        if(!r.ok) throw new Error("원본 PDF 경로 오류");
-        return r.arrayBuffer();
-      });
-      const src = await PDFDocument.load(bytes);
-      const pages = await out.copyPages(src, src.getPageIndices());
-      pages.forEach(p=>out.addPage(p));
+    if (srcPath) {
+      try {
+        // 공백/한글 경로 안전 인코딩
+        const url = new URL(encodeURI(srcPath), location.origin).toString();
+        const resp = await fetch(url, { cache: "no-store" });
+        if (!resp.ok) throw new Error(`원본 PDF 응답오류(${resp.status})`);
+
+        const bytes = await resp.arrayBuffer();
+        // 일부 PDF의 보안 속성으로 인한 로드 에러 무시
+        const src = await PDFDocument.load(bytes, { ignoreEncryption: true });
+
+        const pages = await out.copyPages(src, src.getPageIndices());
+        pages.forEach(p => out.addPage(p));
+      } catch (e) {
+        console.error("병합 실패:", e);
+        alert("원본 PDF 병합을 건너뛰고 커버만 저장합니다.\n사유: " + (e?.message || e));
+      }
     }
+    /* --- 원본 병합 (교체본 끝) --- */
 
     // 저장
     const pdfBytes = await out.save();
