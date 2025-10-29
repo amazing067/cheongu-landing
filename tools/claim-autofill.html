@@ -25,7 +25,15 @@
   @media(max-width:820px){
     .row4{grid-template-columns:1fr 1fr;gap:12px}
   }
+  /* 다음 우편번호 레이어 */
+  #postcode-layer{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;width:360px;height:480px;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.12);background:#fff;overflow:hidden}
+  #postcode-layer .layer-hd{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line);background:#fff}
+  #postcode-layer .layer-hd strong{font-size:14px}
+  #postcode-layer .layer-close{border:0;background:#fff;cursor:pointer;font-size:16px;line-height:1}
+  #postcode-layer #postcode-container{width:100%;height:calc(100% - 44px)}
 </style>
+<!-- 카카오(다음) 우편번호 서비스 -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -58,7 +66,15 @@
           <input id="rrn2" inputmode="numeric" maxlength="7" placeholder="뒤 7자리" />
         </div>
       </div>
-      <div><label>주소</label><input id="address" placeholder="도로명주소 + 상세주소" /></div>
+
+      <div>
+        <label>주소</label>
+        <div class="row3" style="gap:8px">
+          <input id="zip" placeholder="우편번호" readonly />
+          <input id="addr" placeholder="도로명주소" readonly />
+          <input id="addrDetail" placeholder="상세주소" />
+        </div>
+      </div>
     </div>
 
     <div class="row4" style="margin-top:12px">
@@ -98,6 +114,15 @@
     </div>
     <p class="muted" style="margin-top:8px">다음 단계에서 각 보험사 PDF 내부 칸에 직접 텍스트를 찍는 “스탬프/폼 채움”을 추가합니다.</p>
   </div>
+</div>
+
+<!-- 주소검색 레이어 -->
+<div id="postcode-layer" role="dialog" aria-modal="true" aria-label="주소 검색">
+  <div class="layer-hd">
+    <strong>주소 검색</strong>
+    <button class="layer-close" type="button" onclick="closePostcode()" aria-label="닫기">✕</button>
+  </div>
+  <div id="postcode-container"></div>
 </div>
 
 <!-- pdf-lib (CDN) -->
@@ -174,7 +199,7 @@ const el = (id)=>document.getElementById(id);
 const $name=el("name");
 const $phone1=el("phone1"), $phone2=el("phone2"), $phone3=el("phone3");
 const $rrn1=el("rrn1"), $rrn2=el("rrn2");
-const $address=el("address");
+const $zip=el("zip"), $addr=el("addr"), $addrDetail=el("addrDetail");
 const $bankName=el("bankName"), $accountNumber=el("accountNumber");
 const $employerJob=el("employerJob");
 const $pass=el("passphrase");
@@ -201,10 +226,14 @@ function updatePdfOptions(){
 function collectProfile(){
   const phone = [$phone1.value,$phone2.value,$phone3.value].map(v=>(v||"").replace(/\D/g,"")).join("-");
   const rrn = [$rrn1.value,$rrn2.value].map(v=>(v||"").replace(/\D/g,"")).join("-");
+  const addressFull = [($zip.value||"").trim(), ($addr.value||"").trim(), ($addrDetail.value||"").trim()].filter(Boolean).join(" ");
   return {
     name: ($name.value||"").trim(),
     phone, rrn,
-    address: ($address.value||"").trim(),
+    zip: ($zip.value||"").trim(),
+    addr: ($addr.value||"").trim(),
+    addrDetail: ($addrDetail.value||"").trim(),
+    address: addressFull,
     bankName: ($bankName.value||"").trim(),
     accountNumber: ($accountNumber.value||"").trim(),
     employerJob: ($employerJob.value||"").trim()
@@ -216,9 +245,8 @@ function applyProfile(p){
   $phone1.value=p1; $phone2.value=p2; $phone3.value=p3;
   const [r1="",r2=""] = (p.rrn||"").split("-");
   $rrn1.value=r1; $rrn2.value=r2;
-  $address.value=p.address||"";
-  $bankName.value=p.bankName||"";
-  $accountNumber.value=p.accountNumber||"";
+  $zip.value=p.zip||""; $addr.value=p.addr||""; $addrDetail.value=p.addrDetail||"";
+  $bankName.value=p.bankName||""; $accountNumber.value=p.accountNumber||"";
   $employerJob.value=p.employerJob||"";
 }
 async function saveEncrypted(){
@@ -242,10 +270,12 @@ function fillSample(){
     name:"홍길동",
     phone:"010-1234-5678",
     rrn:"900101-1234567",
-    address:"서울특별시 광진구 천호대로 561,영창빌딩8층",
-    bankName:"우리은행",
+    zip:"04524",
+    addr:"서울특별시 중구 세종대로 110",
+    addrDetail:"10층",
+    bankName:"국민은행",
     accountNumber:"123-456-789012",
-    employerJob:"회사원"
+    employerJob:"청구닷컴 / 보험상담사"
   });
 }
 
@@ -265,7 +295,30 @@ function autoBackspace(e, prevId){
   }
 }
 
-/* ====== 7) PDF 생성 ====== */
+/* ====== 7) 카카오(다음) 주소검색 ====== */
+const $layer = document.getElementById('postcode-layer');
+const $container = document.getElementById('postcode-container');
+
+function openPostcode(){
+  $layer.style.display = 'block';
+  new daum.Postcode({
+    oncomplete: function(data){
+      const road = data.roadAddress || data.address || "";
+      $zip.value = data.zonecode || "";
+      $addr.value = road;
+      $addrDetail.focus();
+      closePostcode();
+    },
+    width: '100%',
+    height: '100%'
+  }).embed($container);
+}
+function closePostcode(){
+  $layer.style.display = 'none';
+  $container.innerHTML = '';
+}
+
+/* ====== 8) PDF 생성 ====== */
 async function makePdf(){
   const btn = document.getElementById("btnMake");
   $status.textContent = "PDF 생성 중…";
@@ -287,7 +340,7 @@ async function makePdf(){
     page.drawText(`생성일: ${y}-${m}-${d}`, { x: 50, y: 770, size: labelSize, font, color: rgb(0.4,0.4,0.5) });
 
     // 정보 박스
-    page.drawRectangle({ x:40, y: 480, width: 515, height: 260, borderColor: rgb(0.85,0.87,0.92), borderWidth: 1, color: rgb(1,1,1) });
+    page.drawRectangle({ x:40, y: 460, width: 515, height: 300, borderColor: rgb(0.85,0.87,0.92), borderWidth: 1, color: rgb(1,1,1) });
 
     const rows = [
       ["피보험자 성명", P.name],
@@ -304,21 +357,17 @@ async function makePdf(){
       page.drawText(String(val||""), { x: 200, y: yPos, size: valueSize, font, color: rgb(0,0,0) });
       yPos -= 32;
     });
-    page.drawText("※ 다음 장부터는 선택한 보험사의 원본 청구서가 이어집니다.", { x: 50, y: 460, size: 10, font, color: rgb(0.4,0.4,0.5) });
+    page.drawText("※ 다음 장부터는 선택한 보험사의 원본 청구서가 이어집니다.", { x: 50, y: 440, size: 10, font, color: rgb(0.4,0.4,0.5) });
 
-    /* --- 원본 병합 (교체본 시작) --- */
+    /* --- 원본 병합 --- */
     const srcPath = $pdfFile.value;
     if (srcPath) {
       try {
-        // 공백/한글 경로 안전 인코딩
         const url = new URL(encodeURI(srcPath), location.origin).toString();
         const resp = await fetch(url, { cache: "no-store" });
         if (!resp.ok) throw new Error(`원본 PDF 응답오류(${resp.status})`);
-
         const bytes = await resp.arrayBuffer();
-        // 일부 PDF의 보안 속성으로 인한 로드 에러 무시
         const src = await PDFDocument.load(bytes, { ignoreEncryption: true });
-
         const pages = await out.copyPages(src, src.getPageIndices());
         pages.forEach(p => out.addPage(p));
       } catch (e) {
@@ -326,7 +375,6 @@ async function makePdf(){
         alert("원본 PDF 병합을 건너뛰고 커버만 저장합니다.\n사유: " + (e?.message || e));
       }
     }
-    /* --- 원본 병합 (교체본 끝) --- */
 
     // 저장
     const pdfBytes = await out.save();
@@ -348,7 +396,7 @@ async function makePdf(){
 }
 window.makePdf = makePdf; // 전역 노출
 
-/* ====== 8) 이벤트 ====== */
+/* ====== 9) 이벤트 ====== */
 document.addEventListener("DOMContentLoaded", ()=>{
   // 셀렉터 초기화
   initSelectors();
@@ -371,6 +419,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
   $rrn1.addEventListener("input", ()=>autoAdvance($rrn1,"rrn2",6));
   $rrn2.addEventListener("input", ()=>onlyDigits($rrn2));
   $rrn2.addEventListener("keydown", (e)=>autoBackspace(e,"rrn1"));
+
+  // 주소칸 클릭 시 검색 레이어 열기
+  $zip.addEventListener("click", openPostcode);
+  $addr.addEventListener("click", openPostcode);
+  $addrDetail.addEventListener("focus", ()=>{ if(!$addr.value) openPostcode(); });
 });
 </script>
 </body>
