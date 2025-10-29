@@ -13,7 +13,8 @@
     --ink:#0f172a; --muted:#475569; --line:#e2e8f0;
     --brand:#7c3aed; --brand-2:#0ea5e9; --good:#10b981; --bad:#ef4444;
     --bg:#f8fafc; --card:#ffffff;
-    --chipbg:#f4f3ff; --chipbd:#e9e5ff; --chipfg:#4c1d95; /* 연보라 포인트 */
+    --chipbg:#f4f3ff; --chipbd:#e9e5ff; --chipfg:#4c1d95;
+    --keybg1:#dbeafe; --keybg2:#e0f2fe;
   }
 
   /* ===== Base ===== */
@@ -46,7 +47,7 @@
   .grid{display:grid;gap:16px}
   @media (min-width:1024px){ .grid-2{grid-template-columns:1.35fr 1fr} }
 
-  /* ===== Hero (타이틀 진파랑 유지) ===== */
+  /* ===== Hero ===== */
   .hero{ border-radius:20px; padding:22px; border:1px solid rgba(124,58,237,.25); }
   .hero .heading{
     font-size:22px; font-weight:900; margin:0 0 12px; text-align:center;
@@ -62,19 +63,35 @@
   .kv .v{font-size:16px;font-weight:800;color:#111827;margin-top:1px}
   .hero .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 
-  /* 표 카드 */
-  .rowspec{display:grid;gap:10px}
-  .spec{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px dashed rgba(100,116,139,.28)}
+  /* ===== 상세 표 ===== */
+  .rowspec{display:grid;gap:2px}
+  .spec{
+    display:grid; grid-template-columns:minmax(11rem,14rem) 1fr;
+    align-items:center; gap:12px; padding:10px 0;
+    border-top:1px dashed rgba(100,116,139,.28);
+  }
   .spec:first-child{border-top:0}
-  .key{font-weight:700;color:#334155}
-  .val{color:#0f172a; white-space:pre-line}
+
+  /* ▶ 키 라벨(칩) 크기/정렬 통일 */
+  .key{
+    display:inline-flex; align-items:center; justify-content:flex-start;
+    height:36px; padding:0 14px; /* 고정 높이 + 좌우 패딩 */
+    font-weight:800; font-size:13px; color:#0f172a; line-height:1;
+    background:linear-gradient(135deg,var(--keybg1),var(--keybg2));
+    border:1px solid #cbd5e1; border-radius:999px; white-space:nowrap;
+  }
+  @media (max-width:480px){
+    .key{ height:32px; padding:0 12px; font-size:12px; }
+  }
+
+  .val{color:#0f172a; white-space:pre-line; line-height:1.6}
 
   /* 실손 블록 */
   .silson{background:#fff;border:1px solid rgba(100,116,139,.22);border-radius:16px;padding:16px;box-shadow:0 3px 10px rgba(2,6,23,.04)}
   .silson h3{margin:0 0 8px;font-weight:900}
   .list{display:grid;gap:8px}
 
-  /* K–V 줄고정 & 와이드 보정 */
+  /* K–V (우측 카드들) */
   .row-kv{
     display:grid;
     grid-template-columns:minmax(9rem,12rem) 1fr;
@@ -87,7 +104,7 @@
   .cols2{display:grid; gap:10px}
   @media (min-width:860px){ .cols2{grid-template-columns:1fr 1fr} }
 
-  /* === (개선) 급여 공제: 컴팩트 & 포인트 칩 === */
+  /* 급여 공제 컴팩트 */
   .kv-deduct{display:grid;gap:8px}
   .kv-deduct .subtitle-line{font-size:12px;color:#475569}
   .kv-deduct .grid{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center}
@@ -180,7 +197,6 @@
         <div class="spec"><div class="key">통화가능시간</div><div class="val" id="call_hours">–</div></div>
         <div class="spec"><div class="key">모바일 청약 가능 나이</div><div class="val" id="mobile_age">–</div></div>
         <div class="spec"><div class="key">계약자·피보험자 불일치시 가능여부</div><div class="val" id="gps">–</div></div>
-        <div class="spec"><div class="key">가능시 모니터링 기준</div><div class="val" id="monitoring_criteria">–</div></div>
         <div class="spec"><div class="key">카드납 가능 여부</div><div class="val" id="cardpay">–</div></div>
         <div class="spec"><div class="key">인콜 모니터링</div><div class="val" id="incall">–</div></div>
       </div>
@@ -245,7 +261,6 @@
       return null;
     };
 
-    // === 추가: 표시문구 유니온 처리(불리언/문자열 모두 허용) ===
     function asDisplayText(value, trueText='가능', falseText='불가', fallback='정보 없음'){
       if (typeof value === 'string' && value.trim()) return value.trim();
       const b = asBool(value);
@@ -351,7 +366,7 @@
         bindTelBtn('btn_fax_tel','txt_fax_tel',faxTel);
         bindTelBtn('btn_help_tel','txt_help_tel',helpTel);
 
-        // 상세 정보 (표시문구 유니온 적용)
+        // 상세 정보
         const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = (v ?? '') || '–'; };
         const gpsDisplay  = enr.gye_pi_sang_display ?? enr.gye_pi_sang_available;
         const cardDisplay = enr.card_payment_display ?? enr.card_payment_available;
@@ -361,17 +376,14 @@
         set('call_hours',   enr.call_hours);
         set('mobile_age',   ageTxt);
 
-        // 가능/불가 + 커스텀 문구 허용
         set('gps',     asDisplayText(gpsDisplay));
         set('cardpay', asDisplayText(cardDisplay));
-
-        set('monitoring_criteria', enr.monitoring_criteria || '');
-        set('incall',       incall ? telfmt(incall) : '–');
+        set('incall',  (enr.incall_monitoring_phone || L.monitor) ? telfmt(enr.incall_monitoring_phone || L.monitor) : '–');
 
         // 실손 카드
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
 
-        /* === 주계약(급여) 표현을 컴팩트 템플릿으로 교체 === */
+        // 급여 공제 미니 템플릿
         function prettifyMainBenefit(){
           const rows = document.querySelectorAll('#silson_common .row-kv');
           let target = null;
@@ -387,9 +399,8 @@
             </div>`;
         }
         prettifyMainBenefit();
-        /* === 끝 === */
 
-        // 시간 외 경고/노트
+        // 시간 외 경고
         const inHours = (str) => {
           if(!str) return true;
           if(/24\s*시간/.test(str)) return true;
