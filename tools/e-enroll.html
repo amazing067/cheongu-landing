@@ -14,8 +14,7 @@
     --brand:#7c3aed; --brand-2:#0ea5e9; --good:#10b981; --bad:#ef4444;
     --bg:#f8fafc; --card:#ffffff;
     --chipbg:#f4f3ff; --chipbd:#e9e5ff; --chipfg:#4c1d95;
-    /* 좌측 라벨(버튼) 공통 폭: JS로 자동 계산되며, 기본값(안전폭) 지정 */
-    --labelW: 18rem;
+    --labelW: 18rem; /* 좌측 라벨 폭: JS로 자동 보정 */
   }
 
   body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;}
@@ -59,11 +58,11 @@
   .kv .v{font-size:16px;font-weight:800;color:#111827;margin-top:1px}
   .hero .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 
-  /* ===== 상세표: 좌라벨 고정폭 + 우내용 정렬 ===== */
+  /* 상세표(좌라벨 고정, 우내용 중앙) */
   .rowspec{display:grid;gap:2px}
   .spec{
     display:grid;
-    grid-template-columns: var(--labelW) 1fr; /* 좌측 라벨 고정 폭 */
+    grid-template-columns: var(--labelW) 1fr;
     align-items:center;
     gap:12px;
     padding:12px 0;
@@ -71,28 +70,13 @@
   }
   .spec:first-child{border-top:0}
   .key{
-    display:flex;
-    align-items:center;
-    justify-content:center;       /* 라벨 텍스트 중앙 */
-    width:100%;                   /* 고정폭 칸을 가득 채움 */
-    padding:10px 14px;
-    font-weight:800;
-    font-size:13px;
-    color:#0f172a;
-    line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    width:100%;padding:10px 14px;font-weight:800;font-size:13px;color:#0f172a;line-height:1;
     background:linear-gradient(135deg,#dbeafe,#e0f2fe);
-    border:1px solid #cbd5e1;
-    border-radius:999px;
-    white-space:nowrap;           /* 한 줄 유지 */
+    border:1px solid #cbd5e1;border-radius:999px;white-space:nowrap;
   }
-  .val{
-    color:#0f172a;
-    white-space:pre-line;
-    line-height:1.7;
-    text-align:center;            /* 값도 중앙 정렬 */
-  }
+  .val{color:#0f172a;white-space:pre-line;line-height:1.7;text-align:center}
 
-  /* 모바일에서는 자동폭(줄바꿈 허용)로 전환 */
   @media (max-width:720px){
     .spec{ grid-template-columns: 1fr; }
     .key{ width:auto; justify-self:center; }
@@ -102,26 +86,17 @@
   .silson{background:#fff;border:1px solid rgba(100,116,139,.22);border-radius:16px;padding:16px;box-shadow:0 3px 10px rgba(2,6,23,.04)}
   .silson h3{margin:0 0 8px;font-weight:900}
   .list{display:grid;gap:8px}
-
-  .row-kv{
-    display:grid;
-    grid-template-columns:minmax(9rem,12rem) 1fr;
-    align-items:center; gap:10px;
-    border-top:1px dashed rgba(100,116,139,.26); padding:8px 0;
-  }
+  .row-kv{display:grid;grid-template-columns:minmax(9rem,12rem) 1fr;align-items:center;gap:10px;border-top:1px dashed rgba(100,116,139,.26);padding:8px 0}
   .row-kv:first-child{border-top:0}
   .row-kv .k{font-weight:800;color:#334155;text-align:center}
-  .row-kv .v{color:#0f172a; line-height:1.55; word-break:keep-all; white-space:normal; text-align:center}
-  .cols2{display:grid; gap:10px}
+  .row-kv .v{color:#0f172a;line-height:1.55;word-break:keep-all;white-space:normal;text-align:center}
+  .cols2{display:grid;gap:10px}
   @media (min-width:860px){ .cols2{grid-template-columns:1fr 1fr} }
 
   .kv-deduct{display:grid;gap:8px}
   .kv-deduct .subtitle-line{font-size:12px;color:#475569;text-align:center}
   .kv-deduct .grid{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;justify-content:center}
-  .kv-deduct .k-chip{
-    padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;font-size:12px;
-    color:#4c1d95;background:#f4f3ff;white-space:nowrap
-  }
+  .kv-deduct .k-chip{padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;font-size:12px;color:#4c1d95;background:#f4f3ff;white-space:nowrap}
   .kv-deduct .v-num{font-weight:800;white-space:nowrap;letter-spacing:.01em}
   </style>
 
@@ -133,33 +108,28 @@
   background-size:28px 28px, auto !important;
 }
 .page-enroll .section-title{
-  text-align:center; font-weight:900; margin:0 0 12px; padding:10px 16px; border-radius:999px;
-  color:#0f172a; letter-spacing:-.01em; box-shadow:0 6px 16px rgba(2,6,23,.10);
+  text-align:center;font-weight:900;margin:0 0 12px;padding:10px 16px;border-radius:999px;
+  color:#0f172a;letter-spacing:-.01em;box-shadow:0 6px 16px rgba(2,6,23,.10);
   background:linear-gradient(135deg,#eef2ff,#e0f2fe);
 }
-.page-enroll .section-title.st-violet{ background:linear-gradient(135deg,#ede9fe,#e0e7ff); }
-.page-enroll .section-title.st-blue  { background:linear-gradient(135deg,#dbeafe,#e0f2fe); }
-.page-enroll .section-title.st-teal  { background:linear-gradient(135deg,#ccfbf1,#d1fae5); }
+.page-enroll .section-title.st-violet{background:linear-gradient(135deg,#ede9fe,#e0e7ff)}
+.page-enroll .section-title.st-blue{background:linear-gradient(135deg,#dbeafe,#e0f2fe)}
+.page-enroll .section-title.st-teal{background:linear-gradient(135deg,#ccfbf1,#d1fae5)}
 
 .page-enroll.theme-pro .card,
 .page-enroll.theme-pro .silson{
-  background:#fff !important; border:1px solid rgba(100,116,139,.26) !important;
-  border-radius:18px !important; box-shadow:0 10px 24px rgba(2,6,23,.08) !important;
+  background:#fff !important;border:1px solid rgba(100,116,139,.26) !important;
+  border-radius:18px !important;box-shadow:0 10px 24px rgba(2,6,23,.08) !important;
 }
-.page-enroll.theme-pro .btn{
-  border-color:#cad3ff !important; background:#fff !important;
-  transition: transform .16s ease, box-shadow .16s ease !important;
-  box-shadow:0 5px 14px rgba(2,6,23,.10) !important;
-}
-.page-enroll.theme-pro .btn:hover{ transform:translateY(-2px) !important; box-shadow:0 12px 26px rgba(2,6,23,.16) !important; }
+.page-enroll.theme-pro .btn{border-color:#cad3ff !important;background:#fff !important;transition:transform .16s ease, box-shadow .16s ease !important;box-shadow:0 5px 14px rgba(2,6,23,.10) !important}
+.page-enroll.theme-pro .btn:hover{transform:translateY(-2px) !important;box-shadow:0 12px 26px rgba(2,6,23,.16) !important}
 
 .page-enroll.theme-pro .row-kv{
-  display:grid !important; grid-template-columns:minmax(10.5rem,13.5rem) 1fr !important;
-  align-items:center !important; gap:12px !important;
-  border-top:1px dashed rgba(100,116,139,.28) !important; padding:12px 0 !important;
+  display:grid !important;grid-template-columns:minmax(10.5rem,13.5rem) 1fr !important;
+  align-items:center !important;gap:12px !important;border-top:1px dashed rgba(100,116,139,.28) !important;padding:12px 0 !important;
 }
-.page-enroll.theme-pro .cols2{ display:grid !important; gap:14px !important; }
-@media (min-width:900px){ .page-enroll.theme-pro .cols2{ grid-template-columns:1fr 1fr !important; } }
+.page-enroll.theme-pro .cols2{display:grid !important;gap:14px !important}
+@media (min-width:900px){ .page-enroll.theme-pro .cols2{grid-template-columns:1fr 1fr !important} }
   </style>
 </head>
 
@@ -312,11 +282,9 @@
       const keys = document.querySelectorAll('.rowspec .key');
       let max = 0;
       keys.forEach(k => {
-        // pill 내부 여백 보정(+28px), 테두리 보정(+2px)
-        const w = k.scrollWidth + 30;
+        const w = k.scrollWidth + 30; // pill 여백 보정
         if (w > max) max = w;
       });
-      // 최소·최대 범위 클램프 (가독성 보장)
       const clamped = Math.max(220, Math.min(max, 420));
       document.documentElement.style.setProperty('--labelW', clamped + 'px');
     }
@@ -334,10 +302,12 @@
         const enr  = (Array.isArray(enrollData?.items) ? enrollData.items : []).find(x => x.name === company) || {};
         const L = base.links || {};
 
+        // 헤더
         $('#company').textContent = company || '전자청약정보';
         const logoSrc = base.logo || (company ? `/assets/logos/${company}.png` : '');
         if (logoSrc){ const img = $('#logo'); img.src = logoSrc; img.alt = company + ' 로고'; }
 
+        // 히어로 KV
         const ageTxt = enr.mobile_enroll_age_text || (enr.mobile_enroll_age ? `${enr.mobile_enroll_age.min ?? '?'} ~ ${enr.mobile_enroll_age.max ?? '?'}세` : '–');
         $('#kv_mobile_age').textContent = ageTxt || '–';
         $('#kv_usage_hours').textContent = enr.usage_hours || '–';
@@ -345,6 +315,7 @@
         const incall = enr.incall_monitoring_phone || L.monitor || '';
         $('#kv_incall').textContent = incall ? telfmt(incall) : '–';
 
+        // 전화 버튼
         const bindTelBtn = (btnId, txtId, tel) => {
           const btn = document.getElementById(btnId);
           const span= document.getElementById(txtId);
@@ -359,9 +330,7 @@
         bindTelBtn('btn_fax_tel','txt_fax_tel', (L.fax||''));
         bindTelBtn('btn_help_tel','txt_help_tel', (enr.helpdesk_phone||L.helpdesk||''));
 
-        renderSilsonCompany(silsonCompany || {companies:{}}, company);
-
-        // 계피상 배지
+        // === 계피상이 배지 ===
         (function addGpsBadge(){
           const bf = $('#badges');
           const b = (function(v){
@@ -372,7 +341,7 @@
             return null;
           })(enr.gye_pi_sang_available);
           if (b === null) return;
-          bf.insertAdjacentHTML('beforeend', `<span class="badge ${b?'ok':'no'}">${b?'계피상 가능':'계피상 불가'}</span>`);
+          bf.insertAdjacentHTML('beforeend', `<span class="badge ${b?'ok':'no'}">${b?'계피상이 가능':'계피상이 불가'}</span>`);
         })();
 
         // 상세 정보 바인딩
@@ -382,7 +351,7 @@
         set('call_hours',   enr.call_hours);
         set('mobile_age',   ageTxt);
 
-        // 계피상 가능여부 + 상세기준
+        // 계피상이 가능여부 + 상세기준
         (function(){
           const main = (function(){
             const b = asBool(enr.gye_pi_sang_available);
@@ -425,7 +394,7 @@
             </div>`;
         })();
 
-        // 사용시간 경고/노트
+        // 시간 외 경고/노트
         const inHours = (str) => {
           if(!str) return true;
           if(/24\s*시간/.test(str)) return true;
@@ -443,7 +412,7 @@
           const n = document.getElementById('note'); n.style.display='block'; n.textContent = enr.note;
         }
 
-        // 좌측 라벨 폭 자동 맞춤(모든 데이터 바인딩 후 실행)
+        // 좌측 라벨 폭 자동 맞춤
         autosizeLabelWidth();
 
       }catch(err){
