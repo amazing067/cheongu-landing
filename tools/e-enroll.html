@@ -17,7 +17,6 @@
     --keybg1:#dbeafe; --keybg2:#e0f2fe;
   }
 
-  /* ===== Base ===== */
   body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;}
   .maxw{max-width:78rem;margin:0 auto;padding:16px}
   .hstack{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
@@ -25,14 +24,12 @@
   .subtitle{font-size:13px;color:#64748b;margin-top:2px}
   .logo{height:56px;object-fit:contain}
 
-  /* ===== Card / Chip / Badge ===== */
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 3px 10px rgba(2,6,23,.04)}
   .chip{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff}
   .badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12px;background:#fff}
   .badge.ok{border-color:#86efac;background:#ecfdf5;color:#065f46}
   .badge.no{border-color:#fecaca;background:#fef2f2;color:#991b1b}
 
-  /* ===== Buttons ===== */
   .btn{
     display:inline-flex;align-items:center;gap:8px;border-radius:12px;border:1px solid var(--line);background:#fff;
     padding:10px 14px;font-weight:800;text-decoration:none;color:#0f172a;
@@ -43,11 +40,9 @@
   .btn[disabled], .btn.muted{opacity:.55;cursor:not-allowed}
   .btn svg{width:16px;height:16px}
 
-  /* ===== Grid ===== */
   .grid{display:grid;gap:16px}
   @media (min-width:1024px){ .grid-2{grid-template-columns:1.35fr 1fr} }
 
-  /* ===== Hero ===== */
   .hero{ border-radius:20px; padding:22px; border:1px solid rgba(124,58,237,.25); }
   .hero .heading{
     font-size:22px; font-weight:900; margin:0 0 12px; text-align:center;
@@ -63,7 +58,6 @@
   .kv .v{font-size:16px;font-weight:800;color:#111827;margin-top:1px}
   .hero .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 
-  /* ===== 상세 표 ===== */
   .rowspec{display:grid;gap:2px}
   .spec{
     display:grid; grid-template-columns:minmax(11rem,14rem) 1fr;
@@ -71,27 +65,20 @@
     border-top:1px dashed rgba(100,116,139,.28);
   }
   .spec:first-child{border-top:0}
-
-  /* ▶ 키 라벨(칩) 크기/정렬 통일 */
   .key{
     display:inline-flex; align-items:center; justify-content:flex-start;
-    height:36px; padding:0 14px; /* 고정 높이 + 좌우 패딩 */
+    height:36px; padding:0 14px;
     font-weight:800; font-size:13px; color:#0f172a; line-height:1;
-    background:linear-gradient(135deg,var(--keybg1),var(--keybg2));
+    background:linear-gradient(135deg,#dbeafe,#e0f2fe);
     border:1px solid #cbd5e1; border-radius:999px; white-space:nowrap;
   }
-  @media (max-width:480px){
-    .key{ height:32px; padding:0 12px; font-size:12px; }
-  }
-
+  @media (max-width:480px){ .key{ height:32px; padding:0 12px; font-size:12px; } }
   .val{color:#0f172a; white-space:pre-line; line-height:1.6}
 
-  /* 실손 블록 */
   .silson{background:#fff;border:1px solid rgba(100,116,139,.22);border-radius:16px;padding:16px;box-shadow:0 3px 10px rgba(2,6,23,.04)}
   .silson h3{margin:0 0 8px;font-weight:900}
   .list{display:grid;gap:8px}
 
-  /* K–V (우측 카드들) */
   .row-kv{
     display:grid;
     grid-template-columns:minmax(9rem,12rem) 1fr;
@@ -104,18 +91,16 @@
   .cols2{display:grid; gap:10px}
   @media (min-width:860px){ .cols2{grid-template-columns:1fr 1fr} }
 
-  /* 급여 공제 컴팩트 */
   .kv-deduct{display:grid;gap:8px}
   .kv-deduct .subtitle-line{font-size:12px;color:#475569}
   .kv-deduct .grid{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center}
   .kv-deduct .k-chip{
     padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;font-size:12px;
-    color:var(--chipfg);background:var(--chipbg);white-space:nowrap
+    color:#4c1d95;background:#f4f3ff;white-space:nowrap
   }
   .kv-deduct .v-num{font-weight:800;white-space:nowrap;letter-spacing:.01em}
   </style>
 
-  <!-- ===== 페이지 전용 오버라이드 ===== -->
   <style id="enroll-override">
 .page-enroll.theme-pro{
   background:
@@ -172,7 +157,6 @@
   </header>
 
   <main class="maxw grid grid-2" style="margin-top:14px">
-    <!-- 모바일 전자청약 정보 -->
     <section class="hero" style="grid-column:1/-1">
       <div class="heading">모바일 전자청약 정보</div>
       <div class="rows">
@@ -188,7 +172,6 @@
       </div>
     </section>
 
-    <!-- 좌: 세부 스펙 -->
     <section class="card">
       <h2 class="section-title st-blue">모바일 전자청약 정보 상세내용</h2>
       <div class="rowspec">
@@ -197,6 +180,7 @@
         <div class="spec"><div class="key">통화가능시간</div><div class="val" id="call_hours">–</div></div>
         <div class="spec"><div class="key">모바일 청약 가능 나이</div><div class="val" id="mobile_age">–</div></div>
         <div class="spec"><div class="key">계약자·피보험자 불일치시 가능여부</div><div class="val" id="gps">–</div></div>
+        <!-- '가능시 모니터링 기준' 행 삭제 유지 -->
         <div class="spec"><div class="key">카드납 가능 여부</div><div class="val" id="cardpay">–</div></div>
         <div class="spec"><div class="key">인콜 모니터링</div><div class="val" id="incall">–</div></div>
       </div>
@@ -204,7 +188,6 @@
       <p class="subtitle" id="warn" style="margin-top:8px;color:#b45309;display:none"></p>
     </section>
 
-    <!-- 우: 실손 안내(회사별 구조) -->
     <aside class="silson">
       <h3 class="section-title st-violet">실손 안내</h3>
       <div class="hstack" id="silson_badges" style="gap:8px;margin-bottom:6px"></div>
@@ -267,9 +250,6 @@
       if (b === true) return trueText;
       if (b === false) return falseText;
       return fallback;
-    }
-    function getFlagBoolean(value){
-      return asBool(value) === true;
     }
 
     const kvRow = (k,v) => `<div class="row-kv"><div class="k">${k}</div><div class="v">${v || '–'}</div></div>`;
@@ -337,7 +317,7 @@
         const logoSrc = base.logo || (company ? `/assets/logos/${company}.png` : '');
         if (logoSrc){ const img = $('#logo'); img.src = logoSrc; img.alt = company + ' 로고'; }
 
-        // 히어로 KV
+        // 히어로
         const ageTxt = enr.mobile_enroll_age_text || (enr.mobile_enroll_age ? `${enr.mobile_enroll_age.min ?? '?'} ~ ${enr.mobile_enroll_age.max ?? '?'}세` : '–');
         $('#kv_mobile_age').textContent = ageTxt || '–';
         $('#kv_usage_hours').textContent = enr.usage_hours || '–';
@@ -345,10 +325,7 @@
         const incall = enr.incall_monitoring_phone || L.monitor || '';
         $('#kv_incall').textContent = incall ? telfmt(incall) : '–';
 
-        // 전화 버튼
-        const csTel   = L.cs || '';
-        const faxTel  = L.fax || '';
-        const helpTel = enr.helpdesk_phone || L.helpdesk || '';
+        // 전화버튼
         const bindTelBtn = (btnId, txtId, tel) => {
           const btn = document.getElementById(btnId);
           const span= document.getElementById(txtId);
@@ -362,29 +339,50 @@
             btn.classList.add('muted');
           }
         };
-        bindTelBtn('btn_cs_tel','txt_cs_tel',csTel);
-        bindTelBtn('btn_fax_tel','txt_fax_tel',faxTel);
-        bindTelBtn('btn_help_tel','txt_help_tel',helpTel);
+        bindTelBtn('btn_cs_tel','txt_cs_tel', (L.cs||''));
+        bindTelBtn('btn_fax_tel','txt_fax_tel', (L.fax||''));
+        bindTelBtn('btn_help_tel','txt_help_tel', (enr.helpdesk_phone||L.helpdesk||''));
 
-        // 상세 정보
-        const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = (v ?? '') || '–'; };
-        const gpsDisplay  = enr.gye_pi_sang_display ?? enr.gye_pi_sang_available;
-        const cardDisplay = enr.card_payment_display ?? enr.card_payment_available;
+        // 상세정보
+        const El = id => document.getElementById(id);
+        const setText = (id, v) => { const el = El(id); if(el) el.textContent = (v ?? '') || '–'; };
 
-        set('usage_period', enr.usage_period);
-        set('usage_hours',  enr.usage_hours);
-        set('call_hours',   enr.call_hours);
-        set('mobile_age',   ageTxt);
+        setText('usage_period', enr.usage_period);
+        setText('usage_hours',  enr.usage_hours);
+        setText('call_hours',   enr.call_hours);
+        setText('mobile_age',   ageTxt);
 
-        set('gps',     asDisplayText(gpsDisplay));
-        set('cardpay', asDisplayText(cardDisplay));
-        set('incall',  (enr.incall_monitoring_phone || L.monitor) ? telfmt(enr.incall_monitoring_phone || L.monitor) : '–');
+        // 불일치 가능여부(텍스트만)
+        setText('gps', (function(){
+          const b = asBool(enr.gye_pi_sang_available);
+          if (b === true)  return '가능';
+          if (b === false) return '불가';
+          return '정보 없음';
+        })());
+
+        // ▶ 카드납: 가능/불가 + detail 줄바꿈 병기
+        (function(){
+          const el = El('cardpay');
+          if(!el) return;
+          const main = (function(){
+            const v = enr.card_payment_display ?? enr.card_payment_available;
+            const b = asBool(v);
+            if (typeof v === 'string' && v.trim()) return v.trim();
+            if (b === true)  return '가능';
+            if (b === false) return '불가';
+            return '정보 없음';
+          })();
+          const detail = (enr.card_payment_detail || '').trim();
+          el.textContent = detail ? `${main}\n${detail}` : main;
+        })();
+
+        setText('incall', incall ? telfmt(incall) : '–');
 
         // 실손 카드
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
 
         // 급여 공제 미니 템플릿
-        function prettifyMainBenefit(){
+        (function prettifyMainBenefit(){
           const rows = document.querySelectorAll('#silson_common .row-kv');
           let target = null;
           rows.forEach(r => { if (r.querySelector('.k')?.textContent?.trim() === '주계약(급여)') target = r; });
@@ -397,8 +395,7 @@
                 <span class="k-chip">상급·종합종합</span> <span class="v-num">2만원</span>
               </div>
             </div>`;
-        }
-        prettifyMainBenefit();
+        })();
 
         // 시간 외 경고
         const inHours = (str) => {
