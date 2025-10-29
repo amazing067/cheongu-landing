@@ -15,7 +15,7 @@
     },
     {
       "name": "KB손해보험",
-      "usage_period": "발송일 +7일",
+      "usage_period": "발송일 +3일,설계사 서명시 당일만 유효",
       "usage_hours": "-",
       "call_hours": "09:00~20:00\n인콜: 09:00~18:00",
       "gye_pi_sang_available": false,
