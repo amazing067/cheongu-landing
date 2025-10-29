@@ -17,27 +17,24 @@
   .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
   .muted{color:var(--muted);font-size:12px}
 
-  /* 한 줄 세그먼트 */
   .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-  /* 전화/주민번호 분할 */
   .seg{display:grid;gap:0;align-items:center}
   .seg-rrn{grid-template-columns:100px 14px 120px}
   .seg-phone{grid-template-columns:72px 14px 84px 14px 84px}
   .seg input{text-align:center;letter-spacing:1px}
   .dash{color:var(--muted);text-align:center}
 
-  /* 주소 한 줄: 우편번호(작게) | 도로명(크게) | 상세(크게) */
   .addr-line{display:grid;grid-template-columns:100px 1fr 1fr;gap:8px}
   .addr-line input{min-width:0}
 
   .pass-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
   .pass-actions input{width:240px}
 
-  /* 주소검색 레이어 */
   #postcode-layer{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;width:360px;height:480px;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.12);background:#fff;overflow:hidden}
   #postcode-layer .layer-hd{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
+  #postcode-layer .layer-hd strong{font-size:14px}
   #postcode-layer .layer-close{border:0;background:#fff;cursor:pointer;font-size:16px;line-height:1}
   #postcode-layer #postcode-container{width:100%;height:calc(100% - 44px)}
 
@@ -52,8 +49,9 @@
 </style>
 <!-- 주소검색 -->
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<!-- pdf-lib -->
+<!-- pdf-lib & fontkit -->
 <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -157,7 +155,6 @@
   </div>
 </div>
 
-<!-- 주소검색 레이어 -->
 <div id="postcode-layer" role="dialog" aria-modal="true" aria-label="주소 검색">
   <div class="layer-hd">
     <strong>주소 검색</strong>
@@ -167,7 +164,7 @@
 </div>
 
 <script>
-/* ====== PDF 경로 & 기능 플래그 ====== */
+/* ============== 캐리어 PDF & 플래그 ============== */
 const PDF_MAP = {
   "삼성화재": { files:[["보험금청구서","/assets/pdf/삼성화재-보험금청구서.pdf"]], hasAddress:true },
   "현대해상": { files:[["보험금청구서","/assets/pdf/현대해상-보험금청구서.pdf"]], hasAddress:true },
@@ -177,58 +174,19 @@ const PDF_MAP = {
   "기타":     { files:[["공란 커버만 생성",""]], hasAddress:false }
 };
 
-/* ====== 삼성화재 1페이지 좌표(임시) ======
-   좌표가 없으면 그 필드는 자동 생략됩니다. */
+/* ============== (임시) 삼성화재 1페이지 좌표 ============== */
 const POS_MAP = {
   "삼성화재": {
-    insured: { // 피보험자
-      name: [110, 681],
-      rrn1: [260, 681],
-      rrn2: [330, 681],
-      job:  [470, 681],
-      phone1: [455, 651], phone2:[515,651], phone3:[575,651]
-    },
-    policyholder: { // 계약자
-      name: [110, 711],
-      rrn1: [260, 711],
-      rrn2: [330, 711]
-    },
-    address: { zip:[110, 621], road:[170,621], detail:[410,621] },
-    bank: { bankName:[110, 586], account:[250,586], depositor:[480,586] }
+    insured: { name:[110,681], rrn1:[260,681], rrn2:[330,681], job:[470,681], phone1:[455,651], phone2:[515,651], phone3:[575,651] },
+    policyholder: { name:[110,711], rrn1:[260,711], rrn2:[330,711] },
+    address: { zip:[110,621], road:[170,621], detail:[410,621] },
+    bank: { bankName:[110,586], account:[250,586], depositor:[480,586] }
   }
 };
 
-/* ====== 암호화 스토리지 ====== */
-async function deriveKey(pass){
-  const enc = new TextEncoder();
-  const salt = enc.encode("claim-autofill-salt-v3");
-  const baseKey = await crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]);
-  return crypto.subtle.deriveKey(
-    { name:"PBKDF2", salt, iterations:120000, hash:"SHA-256" },
-    baseKey, { name:"AES-GCM", length:256 }, false, ["encrypt","decrypt"]
-  );
-}
-async function encryptJSON(obj, pass){
-  const key = await deriveKey(pass);
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const data = new TextEncoder().encode(JSON.stringify(obj));
-  const cipher = await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, data);
-  return { iv: Array.from(iv), cipher: Array.from(new Uint8Array(cipher)) };
-}
-async function decryptJSON(payload, pass){
-  const key = await deriveKey(pass);
-  const iv = new Uint8Array(payload.iv);
-  const cipher = new Uint8Array(payload.cipher);
-  const plain = await crypto.subtle.decrypt({name:"AES-GCM", iv}, key, cipher);
-  return JSON.parse(new TextDecoder().decode(plain));
-}
-const LS_KEY_SECURE = "claim-autofill.profile.enc.v3";
-
-/* ====== 도우미 ====== */
-const el = (id)=>document.getElementById(id);
-const $carrier=el("carrier"), $pdfFile=el("pdfFile"), $btnViewRaw=el("btnViewRaw"), $status=el("status");
-const $addrBlock=el("addrBlock");
-const $same=el("samePerson");
+/* ============== 공통 유틸 ============== */
+const el = id=>document.getElementById(id);
+const $carrier=el("carrier"), $pdfFile=el("pdfFile"), $btnViewRaw=el("btnViewRaw"), $status=el("status"), $addrBlock=el("addrBlock"), $same=el("samePerson");
 
 function onlyDigits(e){ e.value = (e.value||"").replace(/\D/g,""); }
 function autoAdvance(cur, nextId, max){ onlyDigits(cur); if(cur.value.length>=max){const n=el(nextId); n&&n.focus(); n?.select?.();} }
@@ -237,8 +195,7 @@ function autoBackspace(e, prevId){ if(e.key==="Backspace" && !e.target.value){ c
 function initSelectors(){
   $carrier.innerHTML="";
   for(const k of Object.keys(PDF_MAP)){
-    const o=document.createElement("option");
-    o.value=k; o.textContent=k; $carrier.appendChild(o);
+    const o=document.createElement("option"); o.value=k; o.textContent=k; $carrier.appendChild(o);
   }
   updatePdfOptions();
 }
@@ -249,11 +206,10 @@ function updatePdfOptions(){
     const o=document.createElement("option"); o.value=path; o.textContent=label; $pdfFile.appendChild(o);
   });
   $btnViewRaw.href = (cfg.files[0]?.[1]||"#");
-  // 주소 블록 표시/숨김
   $addrBlock.style.display = cfg.hasAddress ? "" : "none";
 }
 
-/* ====== 데이터 수집 ====== */
+/* ============== 데이터 수집/적용 ============== */
 function getSeg(id1,id2,id3){ return [el(id1).value,el(id2).value,el(id3).value].map(v=>(v||"").replace(/\D/g,"")); }
 function getRRN(a,b){ return [el(a).value,el(b).value].map(v=>(v||"").replace(/\D/g,"")); }
 
@@ -262,25 +218,13 @@ function collectProfile(){
   const insPhone = getSeg("ins_phone1","ins_phone2","ins_phone3").join("-");
   const subRRN = getRRN("sub_rrn1","sub_rrn2").join("-");
   const insRRN = getRRN("ins_rrn1","ins_rrn2").join("-");
-  const profile = {
-    policyholder: {
-      name:(el("sub_name").value||"").trim(),
-      rrn:subRRN,
-      phone:subPhone
-    },
-    insured: {
-      name:(el("ins_name").value||"").trim(),
-      rrn:insRRN,
-      phone:insPhone
-    },
-    zip:(el("zip").value||"").trim(),
-    addr:(el("addr").value||"").trim(),
-    addrDetail:(el("addrDetail").value||"").trim(),
-    bankName:(el("bankName").value||"").trim(),
-    accountNumber:(el("accountNumber").value||"").trim(),
+  return {
+    policyholder:{ name:(el("sub_name").value||"").trim(), rrn:subRRN, phone:subPhone },
+    insured:{ name:(el("ins_name").value||"").trim(), rrn:insRRN, phone:insPhone },
+    zip:(el("zip").value||"").trim(), addr:(el("addr").value||"").trim(), addrDetail:(el("addrDetail").value||"").trim(),
+    bankName:(el("bankName").value||"").trim(), accountNumber:(el("accountNumber").value||"").trim(),
     employerJob:(el("employerJob").value||"").trim()
   };
-  return profile;
 }
 function applyProfile(p){
   el("sub_name").value = p.policyholder?.name||"";
@@ -299,8 +243,6 @@ function applyProfile(p){
   el("bankName").value=p.bankName||""; el("accountNumber").value=p.accountNumber||"";
   el("employerJob").value=p.employerJob||"";
 }
-
-/* ====== 샘플 채우기 ====== */
 function fillSample(){
   applyProfile({
     policyholder:{ name:"홍길동", rrn:"900101-1234567", phone:"010-1234-5678" },
@@ -310,67 +252,58 @@ function fillSample(){
   });
 }
 
-/* ====== 암호 저장/불러오기 ====== */
-async function saveEncrypted(){
-  const pass = el("passphrase").value;
-  if(!pass){ alert("암호를 입력하세요."); return; }
-  const enc = await encryptJSON(collectProfile(), pass);
-  localStorage.setItem(LS_KEY_SECURE, JSON.stringify(enc));
-  alert("암호 저장 완료");
+/* ============== 암호 저장/불러오기 ============== */
+async function deriveKey(pass){
+  const enc = new TextEncoder();
+  const salt = enc.encode("claim-autofill-salt-v3");
+  const baseKey = await crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({ name:"PBKDF2", salt, iterations:120000, hash:"SHA-256" },
+    baseKey, { name:"AES-GCM", length:256 }, false, ["encrypt","decrypt"]);
 }
-async function loadEncrypted(){
-  const pass = el("passphrase").value;
-  if(!pass){ alert("암호를 입력하세요."); return; }
-  const raw = localStorage.getItem(LS_KEY_SECURE);
-  if(!raw){ alert("저장된 내 정보가 없습니다."); return; }
-  try{
-    const obj = await decryptJSON(JSON.parse(raw), pass);
-    applyProfile(obj);
-    alert("불러오기 완료");
-  }catch(e){ alert("불러오기 실패: 암호를 확인하세요."); }
+async function encryptJSON(obj, pass){
+  const key = await deriveKey(pass);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const data = new TextEncoder().encode(JSON.stringify(obj));
+  const cipher = await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, data);
+  return { iv: Array.from(iv), cipher: Array.from(new Uint8Array(cipher)) };
 }
+async function decryptJSON(payload, pass){
+  const key = await deriveKey(pass);
+  const iv = new Uint8Array(payload.iv);
+  const cipher = new Uint8Array(payload.cipher);
+  const plain = await crypto.subtle.decrypt({name:"AES-GCM", iv}, key, cipher);
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+const LS_KEY_SECURE = "claim-autofill.profile.enc.v3";
+async function saveEncrypted(){ const pass=el("passphrase").value; if(!pass){alert("암호를 입력하세요.");return;}
+  const enc=await encryptJSON(collectProfile(),pass); localStorage.setItem(LS_KEY_SECURE,JSON.stringify(enc)); alert("암호 저장 완료"); }
+async function loadEncrypted(){ const pass=el("passphrase").value; if(!pass){alert("암호를 입력하세요.");return;}
+  const raw=localStorage.getItem(LS_KEY_SECURE); if(!raw){alert("저장된 내 정보가 없습니다.");return;}
+  try{ const obj=await decryptJSON(JSON.parse(raw),pass); applyProfile(obj); alert("불러오기 완료"); }
+  catch(e){ alert("불러오기 실패: 암호를 확인하세요."); } }
 
-/* ====== 주소검색 ====== */
-const $layer = document.getElementById('postcode-layer');
-const $container = document.getElementById('postcode-container');
-function openPostcode(){
-  $layer.style.display='block';
-  new daum.Postcode({
-    oncomplete: function(data){
-      el("zip").value = data.zonecode || "";
-      el("addr").value = data.roadAddress || data.address || "";
-      el("addrDetail").focus();
-      closePostcode();
-    }, width:'100%', height:'100%'
-  }).embed($container);
-}
+/* ============== 주소검색 ============== */
+const $layer = document.getElementById('postcode-layer'); const $container = document.getElementById('postcode-container');
+function openPostcode(){ $layer.style.display='block';
+  new daum.Postcode({ oncomplete:(data)=>{ el("zip").value=data.zonecode||""; el("addr").value=data.roadAddress||data.address||""; el("addrDetail").focus(); closePostcode(); }, width:'100%', height:'100%' }).embed($container); }
 function closePostcode(){ $layer.style.display='none'; $container.innerHTML=''; }
 
-/* ====== 이벤트 바인딩 ====== */
+/* ============== 이벤트 초기화 ============== */
 document.addEventListener("DOMContentLoaded", ()=>{
   initSelectors();
 
-  // 계약자→피보험자 동일 체크 동기화
-  const syncInsured = ()=>{
-    if(!$same.checked) return;
-    el("ins_name").value   = el("sub_name").value;
-    el("ins_rrn1").value   = el("sub_rrn1").value;
-    el("ins_rrn2").value   = el("sub_rrn2").value;
-    el("ins_phone1").value = el("sub_phone1").value;
-    el("ins_phone2").value = el("sub_phone2").value;
-    el("ins_phone3").value = el("sub_phone3").value;
+  const syncInsured = ()=>{ if(!$same.checked) return;
+    el("ins_name").value=el("sub_name").value;
+    el("ins_rrn1").value=el("sub_rrn1").value; el("ins_rrn2").value=el("sub_rrn2").value;
+    el("ins_phone1").value=el("sub_phone1").value; el("ins_phone2").value=el("sub_phone2").value; el("ins_phone3").value=el("sub_phone3").value;
   };
   $same.addEventListener("change", syncInsured);
-  ["sub_name","sub_rrn1","sub_rrn2","sub_phone1","sub_phone2","sub_phone3"].forEach(id=>{
-    el(id).addEventListener("input", syncInsured);
-  });
+  ["sub_name","sub_rrn1","sub_rrn2","sub_phone1","sub_phone2","sub_phone3"].forEach(id=>el(id).addEventListener("input", syncInsured));
 
   $carrier.addEventListener("change", updatePdfOptions);
   $pdfFile.addEventListener("change", ()=>{ $btnViewRaw.href = $pdfFile.value || "#"; });
 
-  // 자동 이동/백스페이스
-  [["sub_phone1","sub_phone2","sub_phone3",3,4],
-   ["ins_phone1","ins_phone2","ins_phone3",3,4]].forEach(([a,b,c,ma,mb])=>{
+  [["sub_phone1","sub_phone2","sub_phone3",3,4],["ins_phone1","ins_phone2","ins_phone3",3,4]].forEach(([a,b,c,ma,mb])=>{
     el(a).addEventListener("input", ()=>autoAdvance(el(a),b,ma));
     el(b).addEventListener("input", ()=>autoAdvance(el(b),c,mb));
     el(c).addEventListener("input", ()=>onlyDigits(el(c)));
@@ -383,7 +316,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
     el(b).addEventListener("keydown",(e)=>autoBackspace(e,a));
   });
 
-  // 주소칸 클릭 시 검색 레이어
   el("zip").addEventListener("click", openPostcode);
   el("addr").addEventListener("click", openPostcode);
   el("addrDetail").addEventListener("focus", ()=>{ if(!el("addr").value) openPostcode(); });
@@ -393,84 +325,97 @@ document.addEventListener("DOMContentLoaded", ()=>{
   document.getElementById("btnLoadEnc").addEventListener("click", ()=>{ loadEncrypted().catch(e=>alert(e.message)); });
 });
 
-/* ====== PDF 생성: 원본 1페이지에 스탬프, 주소 없는 회사는 자동 생략 ====== */
+/* ============== 폰트 로더(한글) ============== */
+async function loadKoreanFontBytes(){
+  const candidates = [
+    "/assets/fonts/NotoSansKR-Regular.otf",
+    "/assets/fonts/NanumGothic-Regular.ttf",
+    "https://cdn.jsdelivr.net/gh/googlefonts/noto-cjk@main/Sans/OTF/Korean/NotoSansKR-Regular.otf"
+  ];
+  for (const url of candidates){
+    try{
+      const resp = await fetch(url, { cache:"no-store", mode:"cors" });
+      if (resp.ok){
+        const buf = await resp.arrayBuffer();
+        if (buf.byteLength > 0) return buf;
+      }
+    }catch(_){}
+  }
+  return null;
+}
+
+/* ============== PDF 생성: 원본 1페이지 스탬프 + 폰트 임베드 ============== */
 async function makePdf(){
   const btn = document.getElementById("btnMake");
-  $status.textContent = "PDF 생성 중…";
-  btn.disabled = true;
+  $status.textContent = "PDF 생성 중…"; btn.disabled = true;
 
   try{
     const P = collectProfile();
     if(!P.policyholder.name){ alert("계약자 이름을 입력하세요."); return; }
 
     const carrier = $carrier.value;
-    const pos = POS_MAP[carrier] || {}; // 좌표 없으면 스탬프 건너뜀
+    const pos = POS_MAP[carrier] || {};
     const cfg = PDF_MAP[carrier] || { files:[], hasAddress:false };
-
     const srcPath = $pdfFile.value;
     if(!srcPath){ alert("청구서 PDF를 선택하세요."); return; }
 
     const { PDFDocument, StandardFonts, rgb } = PDFLib;
     const out = await PDFDocument.create();
+    out.registerFontkit(fontkit);
 
-    // 원본 복사
+    // 1) 폰트 임베드(한글)
+    let kFont = null;
+    try{
+      const bytes = await loadKoreanFontBytes();
+      if (bytes) kFont = await out.embedFont(bytes, { subset:true });
+    }catch(_){}
+    const helv = await out.embedFont(StandardFonts.Helvetica);
+    const chooseFont = (text)=> (/[^\x00-\x7F]/.test(String(text||"")) && kFont) ? kFont : helv;
+    const safeText  = (text)=> kFont ? String(text||"") : String(text||"").replace(/[^\x00-\x7F]/g,"?");
+
+    // 2) 원본 복사
     const url = new URL(encodeURI(srcPath), location.origin).toString();
     const resp = await fetch(url, { cache:"no-store" });
     if(!resp.ok) throw new Error(`원본 PDF 응답오류(${resp.status})`);
-    const bytes = await resp.arrayBuffer();
-    const src = await PDFDocument.load(bytes, { ignoreEncryption:true });
-    const copied = await out.copyPages(src, src.getPageIndices());
-    copied.forEach(p=>out.addPage(p));
+    const src = await PDFDocument.load(await resp.arrayBuffer(), { ignoreEncryption:true });
+    const pages = await out.copyPages(src, src.getPageIndices());
+    pages.forEach(p=>out.addPage(p));
 
-    // 안전모드 폰트 (ASCII만)
-    const helv = await out.embedFont(StandardFonts.Helvetica);
-    const toASCII = s => String(s??"").replace(/[^\x09\x0A\x0D\x20-\x7E]/g,"?"); // 한글→?
-
-    // 스탬프 헬퍼
-    const draw = (page, text, x, y, size=11)=>{
-      if (x==null || y==null) return;
-      page.drawText(toASCII(text), { x, y, size, font: helv, color: rgb(0,0,0) });
+    // 3) 스탬프(첫 페이지)
+    const page = out.getPage(0);
+    const draw = (xy, text, size=11)=>{ if(!xy) return;
+      page.drawText(safeText(text), { x:xy[0], y:xy[1], size, font: chooseFont(text), color: rgb(0,0,0) });
     };
 
-    // 첫 페이지만 처리(필요 시 확장)
-    const page = out.getPage(0);
-
-    // 계약자
     if(pos.policyholder){
-      const [sr1="",sr2=""] = (P.policyholder.rrn||"").split("-");
-      draw(page, P.policyholder.name, pos.policyholder.name?.[0], pos.policyholder.name?.[1], 12);
-      draw(page, sr1, pos.policyholder.rrn1?.[0], pos.policyholder.rrn1?.[1], 12);
-      draw(page, sr2, pos.policyholder.rrn2?.[0], pos.policyholder.rrn2?.[1], 12);
+      const [sr1="",sr2=""]=(P.policyholder.rrn||"").split("-");
+      draw(pos.policyholder.name, P.policyholder.name, 12);
+      draw(pos.policyholder.rrn1, sr1, 12);
+      draw(pos.policyholder.rrn2, sr2, 12);
     }
-
-    // 피보험자
     if(pos.insured){
-      const [ir1="",ir2=""] = (P.insured.rrn||"").split("-");
-      const [ip1="",ip2="",ip3=""] = (P.insured.phone||"").split("-");
-      draw(page, P.insured.name, pos.insured.name?.[0], pos.insured.name?.[1], 12);
-      draw(page, ir1, pos.insured.rrn1?.[0], pos.insured.rrn1?.[1], 12);
-      draw(page, ir2, pos.insured.rrn2?.[0], pos.insured.rrn2?.[1], 12);
-      draw(page, P.employerJob, pos.insured.job?.[0], pos.insured.job?.[1], 11);
-      draw(page, ip1, pos.insured.phone1?.[0], pos.insured.phone1?.[1], 12);
-      draw(page, ip2, pos.insured.phone2?.[0], pos.insured.phone2?.[1], 12);
-      draw(page, ip3, pos.insured.phone3?.[0], pos.insured.phone3?.[1], 12);
+      const [ir1="",ir2=""]=(P.insured.rrn||"").split("-");
+      const [ip1="",ip2="",ip3=""]=(P.insured.phone||"").split("-");
+      draw(pos.insured.name, P.insured.name, 12);
+      draw(pos.insured.rrn1, ir1, 12);
+      draw(pos.insured.rrn2, ir2, 12);
+      draw(pos.insured.job,  P.employerJob, 11);
+      draw(pos.insured.phone1, ip1, 12);
+      draw(pos.insured.phone2, ip2, 12);
+      draw(pos.insured.phone3, ip3, 12);
     }
-
-    // 주소 (회사에 주소칸이 없는 경우 자동 생략)
     if(cfg.hasAddress && pos.address){
-      draw(page, P.zip, pos.address.zip?.[0], pos.address.zip?.[1], 11);
-      draw(page, P.addr, pos.address.road?.[0], pos.address.road?.[1], 11);
-      draw(page, P.addrDetail, pos.address.detail?.[0], pos.address.detail?.[1], 11);
+      draw(pos.address.zip,   P.zip, 11);
+      draw(pos.address.road,  P.addr, 11);
+      draw(pos.address.detail,P.addrDetail, 11);
     }
-
-    // 수령계좌
     if(pos.bank){
-      draw(page, P.bankName, pos.bank.bankName?.[0], pos.bank.bankName?.[1], 11);
-      draw(page, P.accountNumber, pos.bank.account?.[0], pos.bank.account?.[1], 11);
-      draw(page, P.insured.name||P.policyholder.name, pos.bank.depositor?.[0], pos.bank.depositor?.[1], 11);
+      draw(pos.bank.bankName,  P.bankName, 11);
+      draw(pos.bank.account,   P.accountNumber, 11);
+      draw(pos.bank.depositor, P.insured.name||P.policyholder.name, 11);
     }
 
-    // 저장
+    // 4) 저장
     const pdfBytes = await out.save();
     const blob = new Blob([pdfBytes], {type:"application/pdf"});
     const a = document.createElement("a");
@@ -479,7 +424,7 @@ async function makePdf(){
     a.click();
     URL.revokeObjectURL(a.href);
 
-    $status.textContent = "완료(1페이지 스탬프 적용)";
+    $status.textContent = kFont ? "완료(한글 폰트 적용)" : "완료(ASCII 폴백)";
   }catch(err){
     console.error(err);
     alert("PDF 생성 실패: " + (err?.message||err));
