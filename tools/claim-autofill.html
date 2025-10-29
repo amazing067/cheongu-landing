@@ -17,20 +17,20 @@
   .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
   .muted{color:var(--muted);font-size:12px}
 
-  /* 상단 1줄: 이름 | 주민번호 | 전화번호 */
-  .rowTop{display:grid;grid-template-columns:140px 280px 1fr;gap:12px}
+  /* 한 줄 세그먼트 */
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+  /* 전화/주민번호 분할 */
   .seg{display:grid;gap:0;align-items:center}
   .seg-rrn{grid-template-columns:100px 14px 120px}
   .seg-phone{grid-template-columns:72px 14px 84px 14px 84px}
   .seg input{text-align:center;letter-spacing:1px}
   .dash{color:var(--muted);text-align:center}
 
-  /* 주소 1줄: 우편번호(작게) | 도로명(크게) | 상세주소(크게) */
+  /* 주소 한 줄: 우편번호(작게) | 도로명(크게) | 상세(크게) */
   .addr-line{display:grid;grid-template-columns:100px 1fr 1fr;gap:8px}
   .addr-line input{min-width:0}
-
-  /* 은행(좁게) | 계좌 | 직장/직무 */
-  .rowBankJob{display:grid;grid-template-columns:160px 1fr 1fr;gap:12px}
 
   .pass-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
   .pass-actions input{width:240px}
@@ -38,24 +38,22 @@
   /* 주소검색 레이어 */
   #postcode-layer{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;width:360px;height:480px;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.12);background:#fff;overflow:hidden}
   #postcode-layer .layer-hd{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
-  #postcode-layer .layer-hd strong{font-size:14px}
   #postcode-layer .layer-close{border:0;background:#fff;cursor:pointer;font-size:16px;line-height:1}
   #postcode-layer #postcode-container{width:100%;height:calc(100% - 44px)}
 
   @media(max-width:820px){
-    .rowTop{grid-template-columns:1fr}
-    .addr-line{grid-template-columns:100px 1fr}
-    .addr-line #addrDetail{grid-column:1 / -1}
-    .rowBankJob{grid-template-columns:1fr}
+    .row3{grid-template-columns:1fr}
+    .row2{grid-template-columns:1fr}
     .seg-rrn{grid-template-columns:1fr 14px 1fr}
     .seg-phone{grid-template-columns:1fr 14px 1fr 14px 1fr}
+    .addr-line{grid-template-columns:100px 1fr}
+    .addr-line #addrDetail{grid-column:1 / -1}
   }
 </style>
 <!-- 주소검색 -->
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<!-- pdf-lib & fontkit (한글 폰트 임베드용) -->
+<!-- pdf-lib -->
 <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-<script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -63,34 +61,58 @@
   <p class="muted" style="margin:0 0 16px 0">새로고침 시 입력값은 초기화됩니다. 내 정보는 <b>암호 저장/불러오기</b>로만 사용하세요.</p>
 
   <div class="card" style="margin-bottom:16px">
-    <h3 style="margin:0 0 12px 0">내 기본정보</h3>
-
-    <div class="rowTop">
-      <div>
-        <label>이름</label>
-        <input id="name" placeholder="이름" />
-      </div>
+    <h3 style="margin:0 0 8px 0">계약자</h3>
+    <div class="row3">
+      <div><label>이름</label><input id="sub_name" placeholder="계약자 이름" /></div>
       <div>
         <label>주민등록번호</label>
         <div class="seg seg-rrn">
-          <input id="rrn1" inputmode="numeric" maxlength="6" placeholder="앞 6자리" />
+          <input id="sub_rrn1" inputmode="numeric" maxlength="6" placeholder="앞 6자리" />
           <span class="dash">-</span>
-          <input id="rrn2" inputmode="numeric" maxlength="7" placeholder="뒤 7자리" />
+          <input id="sub_rrn2" inputmode="numeric" maxlength="7" placeholder="뒤 7자리" />
         </div>
       </div>
       <div>
         <label>전화번호</label>
         <div class="seg seg-phone">
-          <input id="phone1" inputmode="numeric" maxlength="3" placeholder="010" />
+          <input id="sub_phone1" inputmode="numeric" maxlength="3" placeholder="010" />
           <span class="dash">-</span>
-          <input id="phone2" inputmode="numeric" maxlength="4" placeholder="0000" />
+          <input id="sub_phone2" inputmode="numeric" maxlength="4" placeholder="0000" />
           <span class="dash">-</span>
-          <input id="phone3" inputmode="numeric" maxlength="4" placeholder="0000" />
+          <input id="sub_phone3" inputmode="numeric" maxlength="4" placeholder="0000" />
         </div>
       </div>
     </div>
 
-    <div style="margin-top:12px">
+    <div style="display:flex;align-items:center;gap:8px;margin:14px 0 6px 0">
+      <h3 style="margin:0">피보험자</h3>
+      <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)">
+        <input type="checkbox" id="samePerson" /> 계약자와 동일
+      </label>
+    </div>
+    <div class="row3">
+      <div><label>이름</label><input id="ins_name" placeholder="피보험자 이름" /></div>
+      <div>
+        <label>주민등록번호</label>
+        <div class="seg seg-rrn">
+          <input id="ins_rrn1" inputmode="numeric" maxlength="6" placeholder="앞 6자리" />
+          <span class="dash">-</span>
+          <input id="ins_rrn2" inputmode="numeric" maxlength="7" placeholder="뒤 7자리" />
+        </div>
+      </div>
+      <div>
+        <label>전화번호</label>
+        <div class="seg seg-phone">
+          <input id="ins_phone1" inputmode="numeric" maxlength="3" placeholder="010" />
+          <span class="dash">-</span>
+          <input id="ins_phone2" inputmode="numeric" maxlength="4" placeholder="0000" />
+          <span class="dash">-</span>
+          <input id="ins_phone3" inputmode="numeric" maxlength="4" placeholder="0000" />
+        </div>
+      </div>
+    </div>
+
+    <div id="addrBlock" style="margin-top:12px">
       <label>주소</label>
       <div class="addr-line">
         <input id="zip" placeholder="우편번호" readonly />
@@ -99,7 +121,7 @@
       </div>
     </div>
 
-    <div class="rowBankJob" style="margin-top:12px">
+    <div class="row3" style="margin-top:12px">
       <div><label>은행명</label><input id="bankName" placeholder="예: 국민은행" /></div>
       <div><label>계좌번호</label><input id="accountNumber" placeholder="숫자/하이픈 가능" /></div>
       <div><label>직장/직무</label><input id="employerJob" placeholder="예: 청구닷컴 / 보험상담사" /></div>
@@ -116,7 +138,7 @@
 
   <div class="card">
     <h3 style="margin:0 0 12px 0">보험사 선택 및 PDF 생성</h3>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="row2">
       <div>
         <label>보험사</label>
         <select id="carrier"></select>
@@ -131,7 +153,7 @@
       <a class="btn" id="btnViewRaw" target="_blank" rel="noopener">원본 PDF 보기</a>
       <span id="status" class="muted"></span>
     </div>
-    <p class="muted" style="margin-top:8px">다음 단계에서 각 보험사 PDF 내부 칸에 직접 텍스트를 찍는 “스탬프/폼 채움”을 추가합니다.</p>
+    <p class="muted" style="margin-top:8px">주소 칸이 없는 양식은 자동으로 주소 입력을 숨기고, PDF 스탬프에서도 주소를 생략합니다.</p>
   </div>
 </div>
 
@@ -145,33 +167,38 @@
 </div>
 
 <script>
-/* ====== PDF 경로 매핑 ====== */
+/* ====== PDF 경로 & 기능 플래그 ====== */
 const PDF_MAP = {
-  "삼성화재": [["보험금청구서", "/assets/pdf/삼성화재-보험금청구서.pdf"]],
-  "현대해상": [["보험금청구서", "/assets/pdf/현대해상-보험금청구서.pdf"]],
-  "DB손해": [
-    ["보험금청구서", "/assets/pdf/DB손해보험-보험금청구서.pdf"],
-    ["치과치료확인서", "/assets/pdf/DB손해보험 치과치료확인서.pdf"]
-  ],
-  "KB손해": [["보험금청구서", "/assets/pdf/KB손해보험-보험금청구서.pdf"]],
-  "KB라이프생명": [["보험금청구서", "/assets/pdf/KB라이프생명 보험금청구서.pdf"]],
-  "AIA생명": [
-    ["보험금청구서", "/assets/pdf/AIA생명-보험금청구서.pdf"],
-    ["치과치료확인서", "/assets/pdf/AIA생명 치과치료확인서.pdf"]
-  ],
-  "ABL생명": [
-    ["보험금청구서", "/assets/pdf/ABL생명-보험금청구서.pdf"],
-    ["치과치료확인서", "/assets/pdf/ABL생명 치과치료확인서.pdf"]
-  ],
-  "AXA손해보험": [
-    ["보험금청구서", "/assets/pdf/AXA손해보험.pdf"],
-    ["치과치료확인서", "/assets/pdf/AXA손해보험 치과치료확인서.pdf"]
-  ],
-  "AIG손해보험": [["치과치료확인서", "/assets/pdf/AIG손해보험 치과치료확인서.pdf"]],
-  "기타": [["공란 커버만 생성", ""]]
+  "삼성화재": { files:[["보험금청구서","/assets/pdf/삼성화재-보험금청구서.pdf"]], hasAddress:true },
+  "현대해상": { files:[["보험금청구서","/assets/pdf/현대해상-보험금청구서.pdf"]], hasAddress:true },
+  "DB손해":   { files:[["보험금청구서","/assets/pdf/DB손해보험-보험금청구서.pdf"]], hasAddress:true },
+  "KB손해":   { files:[["보험금청구서","/assets/pdf/KB손해보험-보험금청구서.pdf"]], hasAddress:true },
+  "AIG손해보험":{ files:[["치과치료확인서","/assets/pdf/AIG손해보험 치과치료확인서.pdf"]], hasAddress:false },
+  "기타":     { files:[["공란 커버만 생성",""]], hasAddress:false }
 };
 
-/* ====== AES-GCM 암호화 유틸 ====== */
+/* ====== 삼성화재 1페이지 좌표(임시) ======
+   좌표가 없으면 그 필드는 자동 생략됩니다. */
+const POS_MAP = {
+  "삼성화재": {
+    insured: { // 피보험자
+      name: [110, 681],
+      rrn1: [260, 681],
+      rrn2: [330, 681],
+      job:  [470, 681],
+      phone1: [455, 651], phone2:[515,651], phone3:[575,651]
+    },
+    policyholder: { // 계약자
+      name: [110, 711],
+      rrn1: [260, 711],
+      rrn2: [330, 711]
+    },
+    address: { zip:[110, 621], road:[170,621], detail:[410,621] },
+    bank: { bankName:[110, 586], account:[250,586], depositor:[480,586] }
+  }
+};
+
+/* ====== 암호화 스토리지 ====== */
 async function deriveKey(pass){
   const enc = new TextEncoder();
   const salt = enc.encode("claim-autofill-salt-v3");
@@ -197,239 +224,258 @@ async function decryptJSON(payload, pass){
 }
 const LS_KEY_SECURE = "claim-autofill.profile.enc.v3";
 
-/* ====== DOM ====== */
+/* ====== 도우미 ====== */
 const el = (id)=>document.getElementById(id);
-const $name=el("name");
-const $phone1=el("phone1"), $phone2=el("phone2"), $phone3=el("phone3");
-const $rrn1=el("rrn1"), $rrn2=el("rrn2");
-const $zip=el("zip"), $addr=el("addr"), $addrDetail=el("addrDetail");
-const $bankName=el("bankName"), $accountNumber=el("accountNumber");
-const $employerJob=el("employerJob");
-const $pass=el("passphrase");
 const $carrier=el("carrier"), $pdfFile=el("pdfFile"), $btnViewRaw=el("btnViewRaw"), $status=el("status");
+const $addrBlock=el("addrBlock");
+const $same=el("samePerson");
 
-/* ====== 셀렉터 ====== */
+function onlyDigits(e){ e.value = (e.value||"").replace(/\D/g,""); }
+function autoAdvance(cur, nextId, max){ onlyDigits(cur); if(cur.value.length>=max){const n=el(nextId); n&&n.focus(); n?.select?.();} }
+function autoBackspace(e, prevId){ if(e.key==="Backspace" && !e.target.value){ const p=el(prevId); p&&p.focus(); p?.select?.(); } }
+
 function initSelectors(){
   $carrier.innerHTML="";
-  Object.keys(PDF_MAP).forEach(k=>{
-    const o=document.createElement("option"); o.value=k; o.textContent=k; $carrier.appendChild(o);
-  });
+  for(const k of Object.keys(PDF_MAP)){
+    const o=document.createElement("option");
+    o.value=k; o.textContent=k; $carrier.appendChild(o);
+  }
   updatePdfOptions();
 }
 function updatePdfOptions(){
-  const list = PDF_MAP[$carrier.value] || [];
+  const cfg = PDF_MAP[$carrier.value] || {files:[],hasAddress:false};
   $pdfFile.innerHTML="";
-  list.forEach(([label, path])=>{
+  cfg.files.forEach(([label,path])=>{
     const o=document.createElement("option"); o.value=path; o.textContent=label; $pdfFile.appendChild(o);
   });
-  $btnViewRaw.href = (list[0]?.[1]||"#");
+  $btnViewRaw.href = (cfg.files[0]?.[1]||"#");
+  // 주소 블록 표시/숨김
+  $addrBlock.style.display = cfg.hasAddress ? "" : "none";
 }
 
-/* ====== 프로필 저장/불러오기 ====== */
+/* ====== 데이터 수집 ====== */
+function getSeg(id1,id2,id3){ return [el(id1).value,el(id2).value,el(id3).value].map(v=>(v||"").replace(/\D/g,"")); }
+function getRRN(a,b){ return [el(a).value,el(b).value].map(v=>(v||"").replace(/\D/g,"")); }
+
 function collectProfile(){
-  const phone = [$phone1.value,$phone2.value,$phone3.value].map(v=>(v||"").replace(/\D/g,"")).join("-");
-  const rrn = [$rrn1.value,$rrn2.value].map(v=>(v||"").replace(/\D/g,"")).join("-");
-  const addressFull = [($zip.value||"").trim(), ($addr.value||"").trim(), ($addrDetail.value||"").trim()].filter(Boolean).join(" ");
-  return {
-    name: ($name.value||"").trim(),
-    phone, rrn,
-    zip: ($zip.value||"").trim(),
-    addr: ($addr.value||"").trim(),
-    addrDetail: ($addrDetail.value||"").trim(),
-    address: addressFull,
-    bankName: ($bankName.value||"").trim(),
-    accountNumber: ($accountNumber.value||"").trim(),
-    employerJob: ($employerJob.value||"").trim()
+  const subPhone = getSeg("sub_phone1","sub_phone2","sub_phone3").join("-");
+  const insPhone = getSeg("ins_phone1","ins_phone2","ins_phone3").join("-");
+  const subRRN = getRRN("sub_rrn1","sub_rrn2").join("-");
+  const insRRN = getRRN("ins_rrn1","ins_rrn2").join("-");
+  const profile = {
+    policyholder: {
+      name:(el("sub_name").value||"").trim(),
+      rrn:subRRN,
+      phone:subPhone
+    },
+    insured: {
+      name:(el("ins_name").value||"").trim(),
+      rrn:insRRN,
+      phone:insPhone
+    },
+    zip:(el("zip").value||"").trim(),
+    addr:(el("addr").value||"").trim(),
+    addrDetail:(el("addrDetail").value||"").trim(),
+    bankName:(el("bankName").value||"").trim(),
+    accountNumber:(el("accountNumber").value||"").trim(),
+    employerJob:(el("employerJob").value||"").trim()
   };
+  return profile;
 }
 function applyProfile(p){
-  $name.value = p.name||"";
-  const [p1="",p2="",p3=""] = (p.phone||"").split("-");
-  $phone1.value=p1; $phone2.value=p2; $phone3.value=p3;
-  const [r1="",r2=""] = (p.rrn||"").split("-");
-  $rrn1.value=r1; $rrn2.value=r2;
-  $zip.value=p.zip||""; $addr.value=p.addr||""; $addrDetail.value=p.addrDetail||"";
-  $bankName.value=p.bankName||""; $accountNumber.value=p.accountNumber||"";
-  $employerJob.value=p.employerJob||"";
+  el("sub_name").value = p.policyholder?.name||"";
+  const [sr1="",sr2=""]= (p.policyholder?.rrn||"").split("-");
+  el("sub_rrn1").value=sr1; el("sub_rrn2").value=sr2;
+  const [sp1="",sp2="",sp3=""]= (p.policyholder?.phone||"").split("-");
+  el("sub_phone1").value=sp1; el("sub_phone2").value=sp2; el("sub_phone3").value=sp3;
+
+  el("ins_name").value = p.insured?.name||"";
+  const [ir1="",ir2=""]= (p.insured?.rrn||"").split("-");
+  el("ins_rrn1").value=ir1; el("ins_rrn2").value=ir2;
+  const [ip1="",ip2="",ip3=""]= (p.insured?.phone||"").split("-");
+  el("ins_phone1").value=ip1; el("ins_phone2").value=ip2; el("ins_phone3").value=ip3;
+
+  el("zip").value=p.zip||""; el("addr").value=p.addr||""; el("addrDetail").value=p.addrDetail||"";
+  el("bankName").value=p.bankName||""; el("accountNumber").value=p.accountNumber||"";
+  el("employerJob").value=p.employerJob||"";
 }
+
+/* ====== 샘플 채우기 ====== */
+function fillSample(){
+  applyProfile({
+    policyholder:{ name:"홍길동", rrn:"900101-1234567", phone:"010-1234-5678" },
+    insured:{ name:"홍길동", rrn:"900101-1234567", phone:"010-1234-5678" },
+    zip:"04524", addr:"서울특별시 중구 세종대로 110", addrDetail:"10층",
+    bankName:"국민은행", accountNumber:"123-456-789012", employerJob:"청구닷컴 / 보험상담사"
+  });
+}
+
+/* ====== 암호 저장/불러오기 ====== */
 async function saveEncrypted(){
-  if(!$pass.value){ alert("암호를 입력하세요."); return; }
-  const enc = await encryptJSON(collectProfile(), $pass.value);
+  const pass = el("passphrase").value;
+  if(!pass){ alert("암호를 입력하세요."); return; }
+  const enc = await encryptJSON(collectProfile(), pass);
   localStorage.setItem(LS_KEY_SECURE, JSON.stringify(enc));
   alert("암호 저장 완료");
 }
 async function loadEncrypted(){
-  if(!$pass.value){ alert("암호를 입력하세요."); return; }
+  const pass = el("passphrase").value;
+  if(!pass){ alert("암호를 입력하세요."); return; }
   const raw = localStorage.getItem(LS_KEY_SECURE);
   if(!raw){ alert("저장된 내 정보가 없습니다."); return; }
   try{
-    const obj = await decryptJSON(JSON.parse(raw), $pass.value);
+    const obj = await decryptJSON(JSON.parse(raw), pass);
     applyProfile(obj);
     alert("불러오기 완료");
   }catch(e){ alert("불러오기 실패: 암호를 확인하세요."); }
-}
-function fillSample(){
-  applyProfile({
-    name:"홍길동",
-    phone:"010-1234-5678",
-    rrn:"900101-1234567",
-    zip:"04524",
-    addr:"서울특별시 중구 세종대로 110",
-    addrDetail:"10층",
-    bankName:"국민은행",
-    accountNumber:"123-456-789012",
-    employerJob:"청구닷컴 / 보험상담사"
-  });
-}
-
-/* ====== 입력 보조 ====== */
-function onlyDigits(elm){ elm.value = (elm.value||"").replace(/\D/g,""); }
-function autoAdvance(cur, nextId, max){
-  onlyDigits(cur);
-  if(cur.value.length >= max){
-    const n = document.getElementById(nextId);
-    if(n){ n.focus(); n.select?.(); }
-  }
-}
-function autoBackspace(e, prevId){
-  if(e.key==="Backspace" && !e.target.value){
-    const p = document.getElementById(prevId);
-    if(p){ p.focus(); p.select?.(); }
-  }
 }
 
 /* ====== 주소검색 ====== */
 const $layer = document.getElementById('postcode-layer');
 const $container = document.getElementById('postcode-container');
 function openPostcode(){
-  $layer.style.display = 'block';
+  $layer.style.display='block';
   new daum.Postcode({
     oncomplete: function(data){
-      const road = data.roadAddress || data.address || "";
-      $zip.value = data.zonecode || "";
-      $addr.value = road;
-      $addrDetail.focus();
+      el("zip").value = data.zonecode || "";
+      el("addr").value = data.roadAddress || data.address || "";
+      el("addrDetail").focus();
       closePostcode();
-    },
-    width:'100%', height:'100%'
+    }, width:'100%', height:'100%'
   }).embed($container);
 }
-function closePostcode(){
-  $layer.style.display = 'none';
-  $container.innerHTML = '';
-}
+function closePostcode(){ $layer.style.display='none'; $container.innerHTML=''; }
 
-/* ====== 유니코드 폰트 로더 (한글용) ====== */
-async function loadKoreanFontBytes(){
-  // 1) 리포에 업로드된 로컬 폰트가 있으면 우선 사용
-  const candidates = [
-    "/assets/fonts/NanumGothic-Regular.ttf",
-    "/assets/fonts/NotoSansKR-Regular.otf",
-    // 2) CDN 예비 경로(없으면 무시)
-    "https://cdn.jsdelivr.net/gh/googlefonts/noto-cjk@main/Sans/OTF/Korean/NotoSansKR-Regular.otf"
-  ];
-  for (const url of candidates){
-    try{
-      const resp = await fetch(url, { cache:"no-store", mode:"cors" });
-      if (resp.ok){
-        const buf = await resp.arrayBuffer();
-        if (buf.byteLength > 0) return buf;
-      }
-    }catch(_){}
-  }
-  return null; // 없으면 null
-}
+/* ====== 이벤트 바인딩 ====== */
+document.addEventListener("DOMContentLoaded", ()=>{
+  initSelectors();
 
-/* ====== PDF 생성: 커버 삭제 + 1페이지에 스탬프(삼성화재 좌표) ====== */
+  // 계약자→피보험자 동일 체크 동기화
+  const syncInsured = ()=>{
+    if(!$same.checked) return;
+    el("ins_name").value   = el("sub_name").value;
+    el("ins_rrn1").value   = el("sub_rrn1").value;
+    el("ins_rrn2").value   = el("sub_rrn2").value;
+    el("ins_phone1").value = el("sub_phone1").value;
+    el("ins_phone2").value = el("sub_phone2").value;
+    el("ins_phone3").value = el("sub_phone3").value;
+  };
+  $same.addEventListener("change", syncInsured);
+  ["sub_name","sub_rrn1","sub_rrn2","sub_phone1","sub_phone2","sub_phone3"].forEach(id=>{
+    el(id).addEventListener("input", syncInsured);
+  });
+
+  $carrier.addEventListener("change", updatePdfOptions);
+  $pdfFile.addEventListener("change", ()=>{ $btnViewRaw.href = $pdfFile.value || "#"; });
+
+  // 자동 이동/백스페이스
+  [["sub_phone1","sub_phone2","sub_phone3",3,4],
+   ["ins_phone1","ins_phone2","ins_phone3",3,4]].forEach(([a,b,c,ma,mb])=>{
+    el(a).addEventListener("input", ()=>autoAdvance(el(a),b,ma));
+    el(b).addEventListener("input", ()=>autoAdvance(el(b),c,mb));
+    el(c).addEventListener("input", ()=>onlyDigits(el(c)));
+    el(b).addEventListener("keydown", (e)=>autoBackspace(e,a));
+    el(c).addEventListener("keydown", (e)=>autoBackspace(e,b));
+  });
+  [["sub_rrn1","sub_rrn2",6],["ins_rrn1","ins_rrn2",6]].forEach(([a,b,mx])=>{
+    el(a).addEventListener("input", ()=>autoAdvance(el(a),b,mx));
+    el(b).addEventListener("input", ()=>onlyDigits(el(b)));
+    el(b).addEventListener("keydown",(e)=>autoBackspace(e,a));
+  });
+
+  // 주소칸 클릭 시 검색 레이어
+  el("zip").addEventListener("click", openPostcode);
+  el("addr").addEventListener("click", openPostcode);
+  el("addrDetail").addEventListener("focus", ()=>{ if(!el("addr").value) openPostcode(); });
+
+  document.getElementById("btnSample").addEventListener("click", fillSample);
+  document.getElementById("btnSaveEnc").addEventListener("click", ()=>{ saveEncrypted().catch(e=>alert(e.message)); });
+  document.getElementById("btnLoadEnc").addEventListener("click", ()=>{ loadEncrypted().catch(e=>alert(e.message)); });
+});
+
+/* ====== PDF 생성: 원본 1페이지에 스탬프, 주소 없는 회사는 자동 생략 ====== */
 async function makePdf(){
   const btn = document.getElementById("btnMake");
-  const $status = document.getElementById("status");
   $status.textContent = "PDF 생성 중…";
   btn.disabled = true;
 
   try{
     const P = collectProfile();
-    if(!P.name){ alert("이름을 입력하세요."); return; }
+    if(!P.policyholder.name){ alert("계약자 이름을 입력하세요."); return; }
+
+    const carrier = $carrier.value;
+    const pos = POS_MAP[carrier] || {}; // 좌표 없으면 스탬프 건너뜀
+    const cfg = PDF_MAP[carrier] || { files:[], hasAddress:false };
+
+    const srcPath = $pdfFile.value;
+    if(!srcPath){ alert("청구서 PDF를 선택하세요."); return; }
 
     const { PDFDocument, StandardFonts, rgb } = PDFLib;
-
-    // 새 문서
     const out = await PDFDocument.create();
 
-    // 원본 PDF 병합(먼저)
-    const srcPath = document.getElementById("pdfFile").value;
-    if (!srcPath) { alert("청구서 PDF를 선택하세요."); return; }
-
+    // 원본 복사
     const url = new URL(encodeURI(srcPath), location.origin).toString();
-    const resp = await fetch(url, { cache: "no-store" });
-    if (!resp.ok) throw new Error(`원본 PDF 응답오류(${resp.status})`);
+    const resp = await fetch(url, { cache:"no-store" });
+    if(!resp.ok) throw new Error(`원본 PDF 응답오류(${resp.status})`);
     const bytes = await resp.arrayBuffer();
-    const src = await PDFDocument.load(bytes, { ignoreEncryption: true });
+    const src = await PDFDocument.load(bytes, { ignoreEncryption:true });
     const copied = await out.copyPages(src, src.getPageIndices());
-    copied.forEach(p => out.addPage(p));
+    copied.forEach(p=>out.addPage(p));
 
-    // 글꼴: 폰트 없으면 Helvetica + ASCII 세이프 처리
+    // 안전모드 폰트 (ASCII만)
     const helv = await out.embedFont(StandardFonts.Helvetica);
-    const toASCII = (s) => String(s ?? "").replace(/[^\x09\x0A\x0D\x20-\x7E]/g, "?");
-    const draw = (page, text, x, y, size=11) => {
+    const toASCII = s => String(s??"").replace(/[^\x09\x0A\x0D\x20-\x7E]/g,"?"); // 한글→?
+
+    // 스탬프 헬퍼
+    const draw = (page, text, x, y, size=11)=>{
+      if (x==null || y==null) return;
       page.drawText(toASCII(text), { x, y, size, font: helv, color: rgb(0,0,0) });
     };
 
-    // ----- 스탬프 대상 페이지: 원본 첫 페이지(인덱스 0) -----
+    // 첫 페이지만 처리(필요 시 확장)
     const page = out.getPage(0);
-    const { width, height } = page.getSize();
-    // 좌표는 A4 기준 임시값(왼쪽 아래가 (0,0))
-    // 필요 시 다음 단계에서 미세 조정
-    const POS = {
-      // 1. 인적 사항 라인
-      name:            [110, height-160],
-      rrn1:            [260, height-160],
-      rrn2:            [330, height-160],
-      employerJob:     [470, height-160],
-      // 2. 연락처/주소 라인
-      phone1:          [455, height-190],
-      phone2:          [515, height-190],
-      phone3:          [575, height-190],
-      zip:             [110, height-220],
-      addrRoad:        [170, height-220],
-      addrDetail:      [410, height-220],
-      // 3. 수령 계좌 라인
-      bankName:        [110, height-255],
-      accountNumber:   [250, height-255],
-      depositorHint:   [480, height-255] // 예금주(선택: 이름 복사)
-    };
 
-    // 값 분해
-    const [ph1="", ph2="", ph3=""] = (P.phone||"").split("-");
-    const [rr1="", rr2=""] = (P.rrn||"").split("-");
-    const road = P.addr || "";
-    const detail = P.addrDetail || "";
-    const zip = P.zip || "";
+    // 계약자
+    if(pos.policyholder){
+      const [sr1="",sr2=""] = (P.policyholder.rrn||"").split("-");
+      draw(page, P.policyholder.name, pos.policyholder.name?.[0], pos.policyholder.name?.[1], 12);
+      draw(page, sr1, pos.policyholder.rrn1?.[0], pos.policyholder.rrn1?.[1], 12);
+      draw(page, sr2, pos.policyholder.rrn2?.[0], pos.policyholder.rrn2?.[1], 12);
+    }
 
-    // ---- 스탬프 찍기(숫자·영문은 그대로, 한글은 임시로 '?') ----
-    draw(page, P.name,            ...POS.name,           12);
-    draw(page, rr1,               ...POS.rrn1,           12);
-    draw(page, rr2,               ...POS.rrn2,           12);
-    draw(page, P.employerJob,     ...POS.employerJob,    11);
+    // 피보험자
+    if(pos.insured){
+      const [ir1="",ir2=""] = (P.insured.rrn||"").split("-");
+      const [ip1="",ip2="",ip3=""] = (P.insured.phone||"").split("-");
+      draw(page, P.insured.name, pos.insured.name?.[0], pos.insured.name?.[1], 12);
+      draw(page, ir1, pos.insured.rrn1?.[0], pos.insured.rrn1?.[1], 12);
+      draw(page, ir2, pos.insured.rrn2?.[0], pos.insured.rrn2?.[1], 12);
+      draw(page, P.employerJob, pos.insured.job?.[0], pos.insured.job?.[1], 11);
+      draw(page, ip1, pos.insured.phone1?.[0], pos.insured.phone1?.[1], 12);
+      draw(page, ip2, pos.insured.phone2?.[0], pos.insured.phone2?.[1], 12);
+      draw(page, ip3, pos.insured.phone3?.[0], pos.insured.phone3?.[1], 12);
+    }
 
-    draw(page, ph1,               ...POS.phone1,         12);
-    draw(page, ph2,               ...POS.phone2,         12);
-    draw(page, ph3,               ...POS.phone3,         12);
+    // 주소 (회사에 주소칸이 없는 경우 자동 생략)
+    if(cfg.hasAddress && pos.address){
+      draw(page, P.zip, pos.address.zip?.[0], pos.address.zip?.[1], 11);
+      draw(page, P.addr, pos.address.road?.[0], pos.address.road?.[1], 11);
+      draw(page, P.addrDetail, pos.address.detail?.[0], pos.address.detail?.[1], 11);
+    }
 
-    draw(page, zip,               ...POS.zip,            11);
-    draw(page, road,              ...POS.addrRoad,       11);
-    draw(page, detail,            ...POS.addrDetail,     11);
-
-    draw(page, P.bankName,        ...POS.bankName,       11);
-    draw(page, P.accountNumber,   ...POS.accountNumber,  11);
-    draw(page, P.name,            ...POS.depositorHint,  11); // 예금주=이름(임시)
+    // 수령계좌
+    if(pos.bank){
+      draw(page, P.bankName, pos.bank.bankName?.[0], pos.bank.bankName?.[1], 11);
+      draw(page, P.accountNumber, pos.bank.account?.[0], pos.bank.account?.[1], 11);
+      draw(page, P.insured.name||P.policyholder.name, pos.bank.depositor?.[0], pos.bank.depositor?.[1], 11);
+    }
 
     // 저장
     const pdfBytes = await out.save();
     const blob = new Blob([pdfBytes], {type:"application/pdf"});
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `${(document.getElementById("carrier").value||"insurer")}_claim_autofill.pdf`;
+    a.download = `${carrier}_claim_autofill.pdf`;
     a.click();
     URL.revokeObjectURL(a.href);
 
@@ -443,32 +489,6 @@ async function makePdf(){
   }
 }
 window.makePdf = makePdf;
-/* ====== 이벤트 ====== */
-document.addEventListener("DOMContentLoaded", ()=>{
-  initSelectors();
-  document.getElementById("carrier").addEventListener("change", updatePdfOptions);
-  document.getElementById("pdfFile").addEventListener("change", ()=>{ document.getElementById("btnViewRaw").href = document.getElementById("pdfFile").value || "#"; });
-
-  document.getElementById("btnSample").addEventListener("click", fillSample);
-  document.getElementById("btnSaveEnc").addEventListener("click", ()=>{ saveEncrypted().catch(e=>alert(e.message)); });
-  document.getElementById("btnLoadEnc").addEventListener("click", ()=>{ loadEncrypted().catch(e=>alert(e.message)); });
-
-  // 자동 이동/백스페이스
-  $phone1.addEventListener("input", ()=>autoAdvance($phone1,"phone2",3));
-  $phone2.addEventListener("input", ()=>autoAdvance($phone2,"phone3",4));
-  $phone3.addEventListener("input", ()=>onlyDigits($phone3));
-  $phone2.addEventListener("keydown", (e)=>autoBackspace(e,"phone1"));
-  $phone3.addEventListener("keydown", (e)=>autoBackspace(e,"phone2"));
-
-  $rrn1.addEventListener("input", ()=>autoAdvance($rrn1,"rrn2",6));
-  $rrn2.addEventListener("input", ()=>onlyDigits($rrn2));
-  $rrn2.addEventListener("keydown", (e)=>autoBackspace(e,"rrn1"));
-
-  // 주소 검색 레이어
-  $zip.addEventListener("click", openPostcode);
-  $addr.addEventListener("click", openPostcode);
-  $addrDetail.addEventListener("focus", ()=>{ if(!$addr.value) openPostcode(); });
-});
 </script>
 </body>
 </html>
