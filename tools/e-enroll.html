@@ -67,7 +67,7 @@
   .spec{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px dashed rgba(100,116,139,.28)}
   .spec:first-child{border-top:0}
   .key{font-weight:700;color:#334155}
-  .val{color:#0f172a}
+  .val{color:#0f172a; white-space:pre-line}
 
   /* 실손 블록 */
   .silson{background:#fff;border:1px solid rgba(100,116,139,.22);border-radius:16px;padding:16px;box-shadow:0 3px 10px rgba(2,6,23,.04)}
@@ -245,6 +245,18 @@
       return null;
     };
 
+    // === 추가: 표시문구 유니온 처리(불리언/문자열 모두 허용) ===
+    function asDisplayText(value, trueText='가능', falseText='불가', fallback='정보 없음'){
+      if (typeof value === 'string' && value.trim()) return value.trim();
+      const b = asBool(value);
+      if (b === true) return trueText;
+      if (b === false) return falseText;
+      return fallback;
+    }
+    function getFlagBoolean(value){
+      return asBool(value) === true;
+    }
+
     const kvRow = (k,v) => `<div class="row-kv"><div class="k">${k}</div><div class="v">${v || '–'}</div></div>`;
 
     async function fetchMaybe(url){
@@ -339,17 +351,21 @@
         bindTelBtn('btn_fax_tel','txt_fax_tel',faxTel);
         bindTelBtn('btn_help_tel','txt_help_tel',helpTel);
 
-        // 상세 정보
+        // 상세 정보 (표시문구 유니온 적용)
         const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = (v ?? '') || '–'; };
-        const gps  = asBool(enr.gye_pi_sang_available);
-        const card = asBool(enr.card_payment_available);
+        const gpsDisplay  = enr.gye_pi_sang_display ?? enr.gye_pi_sang_available;
+        const cardDisplay = enr.card_payment_display ?? enr.card_payment_available;
+
         set('usage_period', enr.usage_period);
         set('usage_hours',  enr.usage_hours);
         set('call_hours',   enr.call_hours);
         set('mobile_age',   ageTxt);
-        set('gps',          gps===false?'불가':(gps===true?'가능':'정보 없음'));
+
+        // 가능/불가 + 커스텀 문구 허용
+        set('gps',     asDisplayText(gpsDisplay));
+        set('cardpay', asDisplayText(cardDisplay));
+
         set('monitoring_criteria', enr.monitoring_criteria || '');
-        set('cardpay',      card===false?'불가':(card===true?'가능':'정보 없음'));
         set('incall',       incall ? telfmt(incall) : '–');
 
         // 실손 카드
