@@ -340,7 +340,7 @@ async function loadKoreanFontBytes(){
   return null; // 없으면 null
 }
 
-/* ====== PDF 생성 (강제 ASCII 안전모드) ====== */
+/* ====== PDF 생성: 커버 삭제 + 1페이지에 스탬프(삼성화재 좌표) ====== */
 async function makePdf(){
   const btn = document.getElementById("btnMake");
   const $status = document.getElementById("status");
@@ -353,63 +353,78 @@ async function makePdf(){
 
     const { PDFDocument, StandardFonts, rgb } = PDFLib;
 
-    // 1) 새 문서
+    // 새 문서
     const out = await PDFDocument.create();
-    const helv = await out.embedFont(StandardFonts.Helvetica);
 
-    // ⚠ 안전모드: 비-ASCII 문자 제거/대체 (폰트 미로딩 시 오류 방지)
-    const toASCII = (s) => String(s ?? "")
-      // 줄바꿈, 탭은 허용
-      .replace(/[^\x09\x0A\x0D\x20-\x7E]/g, "?");
-
-    // 2) 커버 페이지 (표시는 영어/ASCII 임시표기)
-    const page = out.addPage([595.28, 841.89]); // A4
-    const title = "Claim Cover (Auto-Fill)";
-    const today = new Date();
-    const y = today.getFullYear();
-    const m = String(today.getMonth()+1).padStart(2,"0");
-    const d = String(today.getDate()).padStart(2,"0");
-
-    page.drawText(title, { x: 50, y: 790, size: 18, font: helv, color: rgb(0.1,0.1,0.2) });
-    page.drawText(`Generated: ${y}-${m}-${d}`, { x: 50, y: 770, size: 11, font: helv, color: rgb(0.4,0.4,0.5) });
-
-    page.drawRectangle({ x:40, y: 460, width: 515, height: 300, borderColor: rgb(0.85,0.87,0.92), borderWidth: 1, color: rgb(1,1,1) });
-
-    const rows = [
-      ["Name", P.name],
-      ["RRN", P.rrn],
-      ["Phone", P.phone],
-      ["Address", P.address],
-      ["Bank", P.bankName],
-      ["Account No.", P.accountNumber],
-      ["Employer/Job", P.employerJob]
-    ];
-    let yPos = 720;
-    for(const [label, val] of rows){
-      page.drawText(label, { x: 55, y: yPos, size: 11, font: helv, color: rgb(0.35,0.35,0.45) });
-      page.drawText(toASCII(val), { x: 200, y: yPos, size: 13, font: helv, color: rgb(0,0,0) });
-      yPos -= 32;
-    }
-    page.drawText("Note: Original insurer claim form is appended.", { x: 50, y: 440, size: 10, font: helv, color: rgb(0.4,0.4,0.5) });
-
-    // 3) 원본 PDF 병합
+    // 원본 PDF 병합(먼저)
     const srcPath = document.getElementById("pdfFile").value;
-    if (srcPath) {
-      try {
-        const url = new URL(encodeURI(srcPath), location.origin).toString();
-        const resp = await fetch(url, { cache: "no-store" });
-        if (!resp.ok) throw new Error(`원본 PDF 응답오류(${resp.status})`);
-        const bytes = await resp.arrayBuffer();
-        const src = await PDFDocument.load(bytes, { ignoreEncryption: true });
-        const pages = await out.copyPages(src, src.getPageIndices());
-        pages.forEach(p => out.addPage(p));
-      } catch (e) {
-        console.error("병합 실패:", e);
-        alert("원본 PDF 병합을 건너뛰고 커버만 저장합니다.\n사유: " + (e?.message || e));
-      }
-    }
+    if (!srcPath) { alert("청구서 PDF를 선택하세요."); return; }
 
-    // 4) 저장
+    const url = new URL(encodeURI(srcPath), location.origin).toString();
+    const resp = await fetch(url, { cache: "no-store" });
+    if (!resp.ok) throw new Error(`원본 PDF 응답오류(${resp.status})`);
+    const bytes = await resp.arrayBuffer();
+    const src = await PDFDocument.load(bytes, { ignoreEncryption: true });
+    const copied = await out.copyPages(src, src.getPageIndices());
+    copied.forEach(p => out.addPage(p));
+
+    // 글꼴: 폰트 없으면 Helvetica + ASCII 세이프 처리
+    const helv = await out.embedFont(StandardFonts.Helvetica);
+    const toASCII = (s) => String(s ?? "").replace(/[^\x09\x0A\x0D\x20-\x7E]/g, "?");
+    const draw = (page, text, x, y, size=11) => {
+      page.drawText(toASCII(text), { x, y, size, font: helv, color: rgb(0,0,0) });
+    };
+
+    // ----- 스탬프 대상 페이지: 원본 첫 페이지(인덱스 0) -----
+    const page = out.getPage(0);
+    const { width, height } = page.getSize();
+    // 좌표는 A4 기준 임시값(왼쪽 아래가 (0,0))
+    // 필요 시 다음 단계에서 미세 조정
+    const POS = {
+      // 1. 인적 사항 라인
+      name:            [110, height-160],
+      rrn1:            [260, height-160],
+      rrn2:            [330, height-160],
+      employerJob:     [470, height-160],
+      // 2. 연락처/주소 라인
+      phone1:          [455, height-190],
+      phone2:          [515, height-190],
+      phone3:          [575, height-190],
+      zip:             [110, height-220],
+      addrRoad:        [170, height-220],
+      addrDetail:      [410, height-220],
+      // 3. 수령 계좌 라인
+      bankName:        [110, height-255],
+      accountNumber:   [250, height-255],
+      depositorHint:   [480, height-255] // 예금주(선택: 이름 복사)
+    };
+
+    // 값 분해
+    const [ph1="", ph2="", ph3=""] = (P.phone||"").split("-");
+    const [rr1="", rr2=""] = (P.rrn||"").split("-");
+    const road = P.addr || "";
+    const detail = P.addrDetail || "";
+    const zip = P.zip || "";
+
+    // ---- 스탬프 찍기(숫자·영문은 그대로, 한글은 임시로 '?') ----
+    draw(page, P.name,            ...POS.name,           12);
+    draw(page, rr1,               ...POS.rrn1,           12);
+    draw(page, rr2,               ...POS.rrn2,           12);
+    draw(page, P.employerJob,     ...POS.employerJob,    11);
+
+    draw(page, ph1,               ...POS.phone1,         12);
+    draw(page, ph2,               ...POS.phone2,         12);
+    draw(page, ph3,               ...POS.phone3,         12);
+
+    draw(page, zip,               ...POS.zip,            11);
+    draw(page, road,              ...POS.addrRoad,       11);
+    draw(page, detail,            ...POS.addrDetail,     11);
+
+    draw(page, P.bankName,        ...POS.bankName,       11);
+    draw(page, P.accountNumber,   ...POS.accountNumber,  11);
+    draw(page, P.name,            ...POS.depositorHint,  11); // 예금주=이름(임시)
+
+    // 저장
     const pdfBytes = await out.save();
     const blob = new Blob([pdfBytes], {type:"application/pdf"});
     const a = document.createElement("a");
@@ -418,7 +433,7 @@ async function makePdf(){
     a.click();
     URL.revokeObjectURL(a.href);
 
-    $status.textContent = "완료";
+    $status.textContent = "완료(1페이지 스탬프 적용)";
   }catch(err){
     console.error(err);
     alert("PDF 생성 실패: " + (err?.message||err));
@@ -428,7 +443,6 @@ async function makePdf(){
   }
 }
 window.makePdf = makePdf;
-
 /* ====== 이벤트 ====== */
 document.addEventListener("DOMContentLoaded", ()=>{
   initSelectors();
