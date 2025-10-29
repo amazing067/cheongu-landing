@@ -2,8 +2,8 @@
   "items": [
     {
       "name": "DB손해보험",
-      "usage_period": "발송 당일\n서명완료 후 익일",
-      "usage_hours": "오후 11:30까지",
+      "usage_period": "발송 당일\n서명완료 후 익일까지 유효",
+      "usage_hours": "오후 11:00까지",
       "call_hours": "09:00~18:00\n(예약 시 날짜지정 불가,\n시간대만 가능)",
       "gye_pi_sang_available": true,
       "mobile_enroll_age": { "min": 19 },
