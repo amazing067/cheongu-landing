@@ -17,15 +17,12 @@
   .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
   .muted{color:var(--muted);font-size:12px}
 
-  /* ---- 레이아웃 ---- */
   /* 상단 1줄: 이름 | 주민번호 | 전화번호 */
   .rowTop{display:grid;grid-template-columns:140px 280px 1fr;gap:12px}
-  /* 주민번호, 전화번호 내부 분할 */
   .seg{display:grid;gap:0;align-items:center}
   .seg-rrn{grid-template-columns:100px 14px 120px}
   .seg-phone{grid-template-columns:72px 14px 84px 14px 84px}
   .seg input{text-align:center;letter-spacing:1px}
-
   .dash{color:var(--muted);text-align:center}
 
   /* 주소 1줄: 우편번호(작게) | 도로명(크게) | 상세주소(크게) */
@@ -35,7 +32,6 @@
   /* 은행(좁게) | 계좌 | 직장/직무 */
   .rowBankJob{display:grid;grid-template-columns:160px 1fr 1fr;gap:12px}
 
-  /* 암호 + 액션 */
   .pass-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
   .pass-actions input{width:240px}
 
@@ -47,7 +43,7 @@
   #postcode-layer #postcode-container{width:100%;height:calc(100% - 44px)}
 
   @media(max-width:820px){
-    .rowTop{grid-template-columns:1fr} /* 모바일: 이름/주민번호/전화번호 세로 */
+    .rowTop{grid-template-columns:1fr}
     .addr-line{grid-template-columns:100px 1fr}
     .addr-line #addrDetail{grid-column:1 / -1}
     .rowBankJob{grid-template-columns:1fr}
@@ -55,8 +51,11 @@
     .seg-phone{grid-template-columns:1fr 14px 1fr 14px 1fr}
   }
 </style>
-<!-- 카카오(다음) 우편번호 서비스 -->
+<!-- 주소검색 -->
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- pdf-lib & fontkit (한글 폰트 임베드용) -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -66,13 +65,11 @@
   <div class="card" style="margin-bottom:16px">
     <h3 style="margin:0 0 12px 0">내 기본정보</h3>
 
-    <!-- 한 줄: 이름 | 주민번호 | 전화번호 -->
     <div class="rowTop">
       <div>
         <label>이름</label>
         <input id="name" placeholder="이름" />
       </div>
-
       <div>
         <label>주민등록번호</label>
         <div class="seg seg-rrn">
@@ -81,7 +78,6 @@
           <input id="rrn2" inputmode="numeric" maxlength="7" placeholder="뒤 7자리" />
         </div>
       </div>
-
       <div>
         <label>전화번호</label>
         <div class="seg seg-phone">
@@ -94,7 +90,6 @@
       </div>
     </div>
 
-    <!-- 한 줄: 우편번호(작게) | 도로명주소(크게) | 상세주소(크게) -->
     <div style="margin-top:12px">
       <label>주소</label>
       <div class="addr-line">
@@ -104,14 +99,12 @@
       </div>
     </div>
 
-    <!-- 은행/계좌/직장 -->
     <div class="rowBankJob" style="margin-top:12px">
       <div><label>은행명</label><input id="bankName" placeholder="예: 국민은행" /></div>
       <div><label>계좌번호</label><input id="accountNumber" placeholder="숫자/하이픈 가능" /></div>
       <div><label>직장/직무</label><input id="employerJob" placeholder="예: 청구닷컴 / 보험상담사" /></div>
     </div>
 
-    <!-- 암호/저장/불러오기/샘플 -->
     <div class="pass-actions" style="margin-top:12px">
       <input id="passphrase" type="password" placeholder="AES-GCM 암호" />
       <button class="btn" id="btnSaveEnc" type="button">암호 저장</button>
@@ -151,8 +144,6 @@
   <div id="postcode-container"></div>
 </div>
 
-<!-- pdf-lib (CDN) -->
-<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script>
 /* ====== PDF 경로 매핑 ====== */
 const PDF_MAP = {
@@ -307,7 +298,7 @@ function autoBackspace(e, prevId){
   }
 }
 
-/* ====== 카카오 주소검색 ====== */
+/* ====== 주소검색 ====== */
 const $layer = document.getElementById('postcode-layer');
 const $container = document.getElementById('postcode-container');
 function openPostcode(){
@@ -328,24 +319,60 @@ function closePostcode(){
   $container.innerHTML = '';
 }
 
+/* ====== 유니코드 폰트 로더 (한글용) ====== */
+async function loadKoreanFontBytes(){
+  // 1) 리포에 업로드된 로컬 폰트가 있으면 우선 사용
+  const candidates = [
+    "/assets/fonts/NanumGothic-Regular.ttf",
+    "/assets/fonts/NotoSansKR-Regular.otf",
+    // 2) CDN 예비 경로(없으면 무시)
+    "https://cdn.jsdelivr.net/gh/googlefonts/noto-cjk@main/Sans/OTF/Korean/NotoSansKR-Regular.otf"
+  ];
+  for (const url of candidates){
+    try{
+      const resp = await fetch(url, { cache:"no-store", mode:"cors" });
+      if (resp.ok){
+        const buf = await resp.arrayBuffer();
+        if (buf.byteLength > 0) return buf;
+      }
+    }catch(_){}
+  }
+  return null; // 없으면 null
+}
+
 /* ====== PDF 생성 ====== */
 async function makePdf(){
   const btn = document.getElementById("btnMake");
   $status.textContent = "PDF 생성 중…";
   btn.disabled = true;
+
   try{
     const P = collectProfile();
     if(!P.name){ alert("이름을 입력하세요."); return; }
 
     const { PDFDocument, StandardFonts, rgb } = PDFLib;
     const out = await PDFDocument.create();
+
+    // ⓐ fontkit 등록 + 한글 폰트 시도
+    out.registerFontkit(fontkit);
+    let kFont = null;
+    try{
+      const fontBytes = await loadKoreanFontBytes();
+      if (fontBytes) kFont = await out.embedFont(fontBytes, { subset: true });
+    }catch(_){}
+    const helv = await out.embedFont(StandardFonts.Helvetica);
+
+    // 한글 출력 헬퍼: kFont 없으면 ASCII만 출력해 에러 회피
+    const safeText = (s)=> (kFont ? String(s||"") : String(s||"").replace(/[^\x00-\x7F]/g, "?"));
+    const useFont = (s)=> (/[^\x00-\x7F]/.test(String(s||"")) && kFont) ? kFont : helv;
+
+    // 1) 커버 페이지
     const page = out.addPage([595.28, 841.89]); // A4
-    const font = await out.embedFont(StandardFonts.Helvetica);
     const titleSize=18, labelSize=11, valueSize=13;
 
-    page.drawText("보험금 청구서 자동기입 커버", { x: 50, y: 790, size: titleSize, font, color: rgb(0.1,0.1,0.2) });
+    page.drawText(safeText("보험금 청구서 자동기입 커버"), { x: 50, y: 790, size: titleSize, font: (kFont||helv), color: rgb(0.1,0.1,0.2) });
     const t=new Date(), y=t.getFullYear(), m=String(t.getMonth()+1).padStart(2,"0"), d=String(t.getDate()).padStart(2,"0");
-    page.drawText(`생성일: ${y}-${m}-${d}`, { x: 50, y: 770, size: labelSize, font, color: rgb(0.4,0.4,0.5) });
+    page.drawText(`생성일: ${y}-${m}-${d}`, { x: 50, y: 770, size: labelSize, font: helv, color: rgb(0.4,0.4,0.5) });
 
     page.drawRectangle({ x:40, y: 460, width: 515, height: 300, borderColor: rgb(0.85,0.87,0.92), borderWidth: 1, color: rgb(1,1,1) });
 
@@ -360,13 +387,14 @@ async function makePdf(){
     ];
     let yPos = 720;
     rows.forEach(([label,val])=>{
-      page.drawText(label, { x: 55, y: yPos, size: labelSize, font, color: rgb(0.35,0.35,0.45) });
-      page.drawText(String(val||""), { x: 200, y: yPos, size: valueSize, font, color: rgb(0,0,0) });
+      page.drawText(safeText(label), { x: 55, y: yPos, size: labelSize, font: (kFont||helv), color: rgb(0.35,0.35,0.45) });
+      page.drawText(safeText(String(val||"")), { x: 200, y: yPos, size: valueSize, font: useFont(val), color: rgb(0,0,0) });
       yPos -= 32;
     });
-    page.drawText("※ 다음 장부터는 선택한 보험사의 원본 청구서가 이어집니다.", { x: 50, y: 440, size: 10, font, color: rgb(0.4,0.4,0.5) });
+    page.drawText(safeText("※ 다음 장부터는 선택한 보험사의 원본 청구서가 이어집니다."), { x: 50, y: 440, size: 10, font: (kFont||helv), color: rgb(0.4,0.4,0.5) });
 
-    const srcPath = $pdfFile.value;
+    // 2) 원본 PDF 병합
+    const srcPath = document.getElementById("pdfFile").value;
     if (srcPath) {
       try {
         const url = new URL(encodeURI(srcPath), location.origin).toString();
@@ -382,29 +410,33 @@ async function makePdf(){
       }
     }
 
+    // 3) 저장
     const pdfBytes = await out.save();
     const blob = new Blob([pdfBytes], {type:"application/pdf"});
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `${($carrier.value||"보험사")}_청구서_자동기입.pdf`;
+    a.download = `${(document.getElementById("carrier").value||"보험사")}_청구서_자동기입.pdf`;
     a.click();
     URL.revokeObjectURL(a.href);
-    $status.textContent = "완료";
+    document.getElementById("status").textContent = "완료";
+    if (!kFont){
+      alert("참고: 리포에 한글 폰트를 추가하면 커버 페이지가 한글로 인쇄됩니다.\n경로: /assets/fonts/NanumGothic-Regular.ttf");
+    }
   }catch(err){
     console.error(err);
     alert("PDF 생성 실패: " + (err?.message||err));
-    $status.textContent = "실패";
+    document.getElementById("status").textContent = "실패";
   }finally{
     document.getElementById("btnMake").disabled = false;
   }
 }
 window.makePdf = makePdf;
 
-/* ====== 이벤트 바인딩 ====== */
+/* ====== 이벤트 ====== */
 document.addEventListener("DOMContentLoaded", ()=>{
   initSelectors();
-  $carrier.addEventListener("change", updatePdfOptions);
-  $pdfFile.addEventListener("change", ()=>{ $btnViewRaw.href = $pdfFile.value || "#"; });
+  document.getElementById("carrier").addEventListener("change", updatePdfOptions);
+  document.getElementById("pdfFile").addEventListener("change", ()=>{ document.getElementById("btnViewRaw").href = document.getElementById("pdfFile").value || "#"; });
 
   document.getElementById("btnSample").addEventListener("click", fillSample);
   document.getElementById("btnSaveEnc").addEventListener("click", ()=>{ saveEncrypted().catch(e=>alert(e.message)); });
