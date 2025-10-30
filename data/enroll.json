@@ -5,26 +5,26 @@
       "usage_period": "발송 당일\n서명완료 후 익일까지 유효",
       "usage_hours": "오후 11:00까지",
       "call_hours": "09:00~18:00\n(예약 시 날짜지정 불가,\n시간대만 가능)",
-      "gye_pi_sang_available": true,
+      "gye_pi_sang_available": false,
       "mobile_enroll_age": { "min": 19 },
       "mobile_enroll_age_text": "만19세 이상",
       "incall_monitoring_phone": "1566-0757",
-      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
+      "monitoring_criteria": "",
       "card_payment_available": true,
-      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
+      "card_payment_detail": "가능(자동이체 O)\n설계사 직접 수납"
     },
     {
       "name": "KB손해보험",
       "usage_period": "발송일 +3일\n설계사 서명시 당일만 유효",
       "usage_hours": "오후 11:30까지",
-      "call_hours": "09:00~20:00\n인콜: 09:00~18:00",
+      "call_hours": "09:00~18:00",
       "gye_pi_sang_available": true,
       "mobile_enroll_age": null,
       "mobile_enroll_age_text": "~65세까지 가능",
       "incall_monitoring_phone": "1544-0019",
       "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
-      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
+      "card_payment_detail": "가능(자동이체 O)\n설계사 직접 수납"
     },
     {
       "name": "롯데손해보험",
@@ -35,9 +35,9 @@
       "mobile_enroll_age": { "min": 19 },
       "mobile_enroll_age_text": "만19세 이상",
       "incall_monitoring_phone": "1600-5182",
-      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
+      "monitoring_criteria": "",
       "card_payment_available": true,
-      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
+      "card_payment_detail": "가능(자동이체 O)\n설계사 직접 수납"
     },
     {
       "name": "메리츠화재",
