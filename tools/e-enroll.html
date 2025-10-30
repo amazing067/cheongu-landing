@@ -7,7 +7,7 @@
   <meta name="robots" content="noindex,nofollow"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/site.css?v=final-compact-12" />
+  <link rel="stylesheet" href="/assets/site.css?v=final-compact-13" />
   <style>
   :root{
     --ink:#0f172a; --muted:#475569; --line:#e2e8f0;
@@ -24,7 +24,7 @@
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 3px 10px rgba(2,6,23,.04)}
   .chip{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff}
-  .badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12px;background:#fff}
+  .badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:12px;background:#fff;white-space:nowrap}
   .badge.ok{border-color:#86efac;background:#ecfdf5;color:#065f46}
   .badge.no{border-color:#fecaca;background:#fef2f2;color:#991b1b}
 
@@ -88,38 +88,47 @@
   .kv-mini .k{font-weight:700;color:#334155}
   .kv-mini .v{color:#0f172a}
 
-  /* === 공통사항(1/2 배치) 칩 크기 축소 === */
-  .kv-chip{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;background:var(--chipbg);color:var(--chipfg);font-size:12px;flex:0 0 auto;white-space:nowrap}
-  .kv-vert .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;background:var(--chipbg);color:var(--chipfg);font-size:12px;flex:0 0 auto;white-space:nowrap}
+  /* === 4세대 공통사항(좌우 1/2) === */
+  #common_2col{display:grid;gap:12px}
+  @media (min-width:900px){ #common_2col{grid-template-columns:1fr 1fr} }
+  .common-box{border-top:1px dashed rgba(100,116,139,.26);padding-top:10px}
+  .common-box h5{margin:0 0 6px;font-weight:900}
+  .kv-vert .tt{font-size:12px;color:#64748b;margin-bottom:6px}
+  .kv-vert .ln{display:grid;grid-template-columns:auto auto;gap:8px;align-items:center;margin:6px 0}
+  .kv-vert .tag{
+    display:inline-block; /* 텍스트 길이만큼 */
+    padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;
+    font-size:12px;color:var(--chipfg);background:var(--chipbg);white-space:nowrap
+  }
+  .kv-vert .num{font-weight:800}
+  .kv-vert small{font-size:11px;color:#64748b}
 
   /* 제목 버튼들 */
   .quick-nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
   .quick-nav a{font-size:12px;padding:8px 10px}
-  </style>
 
-  <style id="enroll-override">
-.page-enroll.theme-pro{
-  background:
-    radial-gradient(28px 28px at 14px 14px, rgba(124,58,237,.08) 1px, transparent 1px),
-    linear-gradient(180deg, #eef3ff 0%, #eaf0ff 32%, #f7f9ff 100%) !important;
-  background-size:28px 28px, auto !important;
-}
-.page-enroll .section-title{
-  text-align:center; font-weight:900; margin:0 0 12px; padding:10px 16px; border-radius:999px;
-  color:#0f172a; letter-spacing:-.01em; box-shadow:0 6px 16px rgba(2,6,23,.10);
-  background:linear-gradient(135deg,#eef2ff,#e0f2fe);
-}
-.page-enroll .section-title.st-violet{ background:linear-gradient(135deg,#ede9fe,#e0e7ff); }
-.page-enroll .section-title.st-blue  { background:linear-gradient(135deg,#dbeafe,#e0f2fe); }
-.page-enroll .section-title.st-teal  { background:linear-gradient(135deg,#ccfbf1,#d1fae5); }
-
-.page-enroll.theme-pro .card,
-.page-enroll.theme-pro .silson{
-  background:#fff !important; border:1px solid rgba(100,116,139,.26) !important;
-  border-radius:18px !important; box-shadow:0 10px 24px rgba(2,6,23,.08) !important;
-}
-.page-enroll.theme-pro .btn{border-color:#cad3ff !important;background:#fff !important;box-shadow:0 5px 14px rgba(2,6,23,.10) !important}
-.page-enroll.theme-pro .btn:hover{ transform:translateY(-2px) !important; box-shadow:0 12px 26px rgba(2,6,23,.16) !important; }
+  /* 테마 보정 */
+  .page-enroll.theme-pro{
+    background:
+      radial-gradient(28px 28px at 14px 14px, rgba(124,58,237,.08) 1px, transparent 1px),
+      linear-gradient(180deg, #eef3ff 0%, #eaf0ff 32%, #f7f9ff 100%) !important;
+    background-size:28px 28px, auto !important;
+  }
+  .page-enroll .section-title{
+    text-align:center; font-weight:900; margin:0 0 12px; padding:10px 16px; border-radius:999px;
+    color:#0f172a; letter-spacing:-.01em; box-shadow:0 6px 16px rgba(2,6,23,.10);
+    background:linear-gradient(135deg,#eef2ff,#e0f2fe);
+  }
+  .page-enroll .section-title.st-violet{ background:linear-gradient(135deg,#ede9fe,#e0e7ff); }
+  .page-enroll .section-title.st-blue  { background:linear-gradient(135deg,#dbeafe,#e0f2fe); }
+  .page-enroll .section-title.st-teal  { background:linear-gradient(135deg,#ccfbf1,#d1fae5); }
+  .page-enroll.theme-pro .card,
+  .page-enroll.theme-pro .silson{
+    background:#fff !important; border:1px solid rgba(100,116,139,.26) !important;
+    border-radius:18px !important; box-shadow:0 10px 24px rgba(2,6,23,.08) !important;
+  }
+  .page-enroll.theme-pro .btn{border-color:#cad3ff !important;background:#fff !important;box-shadow:0 5px 14px rgba(2,6,23,.10) !important}
+  .page-enroll.theme-pro .btn:hover{ transform:translateY(-2px) !important; box-shadow:0 12px 26px rgba(2,6,23,.16) !important; }
   </style>
 </head>
 
@@ -173,8 +182,17 @@
         <div class="spec"><div class="key">사용시간</div><div class="val" id="usage_hours">–</div></div>
         <div class="spec"><div class="key">통화가능시간</div><div class="val" id="call_hours">–</div></div>
         <div class="spec"><div class="key">모바일 청약 가능 나이</div><div class="val" id="mobile_age">–</div></div>
-        <div class="spec"><div class="key wide">계약자·피보험자 불일치시 가능여부</div><div class="val" id="gps">–</div></div>
-        <div class="spec"><div class="key">카드납 가능 여부</div><div class="val" id="cardpay">–</div></div>
+
+        <div class="spec">
+          <div class="key wide">계약자·피보험자 불일치시 가능여부</div>
+          <div class="val" id="gps">–</div>
+        </div>
+
+        <div class="spec">
+          <div class="key">카드납 가능 여부</div>
+          <div class="val" id="cardpay">–</div>
+        </div>
+
         <div class="spec"><div class="key">인콜 모니터링</div><div class="val" id="incall">–</div></div>
       </div>
       <p class="subtitle" id="note" style="margin-top:12px;display:none"></p>
@@ -192,7 +210,10 @@
 
       <div class="card narrow" id="silson_common_card" style="margin-top:10px">
         <h4 class="section-title st-blue" style="margin-bottom:10px">4세대 실손 공통사항</h4>
-        <div class="list" id="silson_common"></div>
+        <!-- 좌우 1/2 출력 영역 -->
+        <div id="common_2col"></div>
+
+        <div class="list" id="silson_common_rest" style="margin-top:8px"></div>
       </div>
 
       <div class="card narrow" style="margin-top:10px">
@@ -289,34 +310,43 @@
 
       addBadgesFromSilson(record);
 
+      // 요약/배지
       $('#silson_summary').innerHTML =
         kvRow('단독가입여부', record['단독가입여부']) +
         kvRow('중복가입',     record['중복가입']) +
         kvRow('진단여부',     record['진단여부']) +
         kvRow('특이사항',     record['특이사항']);
 
+      // === 4세대 공통사항: 좌/우 1/2 출력 ===
       const c = record['공통사항'] || {};
-      // 1/2 배치용: 주계약/특약, 재가입/보험기간, 자기부담/차등제
-      $('#silson_common').innerHTML =
-        `<div class="row-kv"><div class="k">주계약(급여)</div>
-           <div class="v">
-             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-               <div>
-                 <div style="font-size:12px;color:#64748b">80% 보상 · 공제금액</div>
-                 <div class="kv-chip">의원</div> <strong>1만원</strong><br/>
-                 <div class="kv-chip">상급·종합병원</div> <strong>2만원</strong>
-               </div>
-               <div>
-                 <div style="font-size:12px;color:#64748b">보상/공제</div>
-                 <div class="kv-chip">보상비율</div> <strong>70%</strong><br/>
-                 <div class="kv-chip">공제</div> <strong>3만원</strong><div style="font-size:12px;color:#64748b">또는 30%</div>
-               </div>
-             </div>
-           </div>
-         </div>` +
-        `<div class="row-kv"><div class="k">재가입주기</div><div class="v" style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div>5년</div><div><span class="k" style="font-weight:800;color:#334155">보험기간</span> <span>${c['보험기간']||'1년 갱신형'}</span></div></div></div>` +
-        `<div class="row-kv"><div class="k">자기부담금</div><div class="v" style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div>급여 20% / 비급여 30%</div><div><span class="k" style="font-weight:800;color:#334155">보험료차등제</span> <span>${c['보험료차등제']||'있음(손해율 연동)'}</span></div></div></div>`;
+      const leftHTML = `
+        <div class="common-box">
+          <h5>주계약(급여)</h5>
+          <div class="kv-vert">
+            <div class="tt">80% 보상 · 공제금액</div>
+            <div class="ln"><span class="tag">의원</span><span class="num">1만원</span></div>
+            <div class="ln"><span class="tag">상급·종합병원</span><span class="num">2만원</span></div>
+          </div>
+        </div>`;
+      const rightHTML = `
+        <div class="common-box">
+          <h5>특약(비급여)</h5>
+          <div class="kv-vert">
+            <div class="tt">보상/공제</div>
+            <div class="ln"><span class="tag">보상비율</span><span class="num">70%</span></div>
+            <div class="ln"><span class="tag">공제</span><span class="num">3만원</span><small> 또는 30%</small></div>
+          </div>
+        </div>`;
+      $('#common_2col').innerHTML = leftHTML + rightHTML;
 
+      // 나머지 항목(재가입주기/보험기간/자기부담금/보험료차등제)
+      $('#silson_common_rest').innerHTML =
+        kvRow('재가입주기',   c['재가입주기'] || '5년') +
+        kvRow('보험기간',     c['보험기간']   || '1년 갱신형') +
+        kvRow('자기부담금',   c['자기부담금'] || '급여 20% / 비급여 30%') +
+        kvRow('보험료차등제', c['보험료차등제'] || '있음(손해율 연동)');
+
+      // 전환/인수
       const conv = record['전환/인수'] || {};
       $('#silson_convert').innerHTML =
         kvRow('전환인수기준 조건',      conv['전환인수기준조건']) +
@@ -394,26 +424,29 @@
         bindTelBtn('btn_fax_tel','txt_fax_tel',faxTel);
         bindTelBtn('btn_help_tel','txt_help_tel',helpTel);
 
-        // 상세 (배지 단독 + 상세문구는 title 툴팁)
-        const setText = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = (v ?? '') || '–'; };
-        setText('usage_period', enr.usage_period);
-        setText('usage_hours',  enr.usage_hours);
-        setText('call_hours',   enr.call_hours);
-        setText('mobile_age',   ageTxt);
+        // 상세 값 바인딩
+        const setTXT = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = (v ?? '') || '–'; };
+        const gpsBool  = asBool(enr.gye_pi_sang_available);
+        const cardBool = asBool(enr.card_payment_available);
 
-        const gps  = asBool(enr.gye_pi_sang_available);
-        const card = asBool(enr.card_payment_available);
-        const gpsDetail  = (enr.gye_pi_sang_detail || enr.monitoring_criteria || '').trim();
+        setTXT('usage_period', enr.usage_period);
+        setTXT('usage_hours',  enr.usage_hours);
+        setTXT('call_hours',   enr.call_hours);
+        setTXT('mobile_age',   ageTxt);
+        setTXT('incall', incall ? telfmt(incall) : '–');
+
+        // 배지 + 상세(계피상/카드)
+        const gpsDetail = (enr.gye_pi_sang_detail || enr.monitoring_criteria || '').trim();
+        const gpsWrap = document.getElementById('gps');
+        gpsWrap.innerHTML =
+          (gpsBool==null ? '' : `<span class="badge ${gpsBool?'ok':'no'}">${gpsBool?'계피상이 가능':'계피상이 불가'}</span>`)
+          + (gpsDetail ? ` <span style="color:#0f172a">${gpsDetail}</span>` : '');
+
         const cardDetail = (enr.card_payment_detail || '').trim();
-
-        const gpsEl = $('#gps');
-        const cardEl= $('#cardpay');
-        gpsEl.innerHTML  = (gps===null) ? '<span class="chip">정보 없음</span>' :
-                           `<span class="badge ${gps?'ok':'no'}">${gps?'계피상이 가능':'계피상이 불가'}</span>`;
-        cardEl.innerHTML = (card===null)? '<span class="chip">정보 없음</span>' :
-                           `<span class="badge ${card?'ok':'no'}">${card?'카드납 가능':'카드납 불가'}</span>`;
-        gpsEl.title  = gpsDetail  || '';
-        cardEl.title = cardDetail || '';
+        const cardWrap = document.getElementById('cardpay');
+        cardWrap.innerHTML =
+          (cardBool==null ? '' : `<span class="badge ${cardBool?'ok':'no'}">${cardBool?'카드납 가능':'카드납 불가'}</span>`)
+          + (cardDetail ? ` <span style="color:#0f172a;white-space:pre-line">${cardDetail}</span>` : '');
 
         // 실손 카드
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
@@ -436,8 +469,8 @@
           const n = document.getElementById('note'); n.style.display='block'; n.textContent = enr.note;
         }
 
-        // 헤더 배지: 계피상이
-        (function addGpsBadge(){
+        // 헤더 배지: 계피상 여부(상단)
+        (function addGpsBadgeTop(){
           const bf = $('#badges');
           const v = enr.gye_pi_sang_available;
           const s = String(v ?? '').trim().toLowerCase();
