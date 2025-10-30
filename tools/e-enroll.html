@@ -78,21 +78,8 @@
   .row-kv:first-child{border-top:0}
   .row-kv .k{font-weight:800;color:#334155}
   .row-kv .v{color:#0f172a;line-height:1.55;word-break:keep-all;white-space:normal}
-  .cols2{display:grid;gap:14px}
-  @media (min-width:900px){ .cols2{grid-template-columns:1fr 1fr} }
 
-  .kv-deduct{display:grid;gap:8px}
-  .kv-deduct .subtitle-line{font-size:12px;color:#475569}
-  .kv-deduct .grid{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center}
-  .kv-deduct .k-chip{
-    padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;font-size:12px;
-    color:var(--chipfg);background:var(--chipbg);white-space:nowrap
-  }
-  .kv-deduct .v-num{font-weight:800;white-space:nowrap;letter-spacing:.01em}
-
-  .quick-nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-  .quick-nav a{font-size:12px;padding:8px 10px}
-
+  /* 유병자/노후 요약 */
   .compact-grid{display:grid;gap:14px}
   @media (min-width:980px){ .compact-grid{grid-template-columns:1fr 1fr} }
   .compact-card .title-mini{font-weight:900;margin:0 0 10px}
@@ -100,6 +87,19 @@
   .kv-mini:first-child{border-top:0}
   .kv-mini .k{font-weight:700;color:#334155}
   .kv-mini .v{color:#0f172a}
+
+  /* === 좁은 카드/세로형 공통사항 === */
+  .silson .card.narrow{padding:12px;border-radius:14px}
+  #silson_common{gap:6px}
+  #silson_common .row-kv{grid-template-columns:1fr;gap:6px;padding:8px 0}
+  .kv-vert .tt{font-size:12px;color:#64748b;margin-bottom:4px}
+  .kv-vert .ln{display:grid;grid-template-columns:auto auto;gap:8px;align-items:center}
+  .kv-vert .tag{padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;font-size:12px;color:var(--chipfg);background:var(--chipbg)}
+  .kv-vert .num{font-weight:800}
+  .kv-vert small{font-size:11px;color:#64748b}
+  /* 제목 버튼들 */
+  .quick-nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .quick-nav a{font-size:12px;padding:8px 10px}
   </style>
 
   <style id="enroll-override">
@@ -191,21 +191,21 @@
       <h3 class="section-title st-violet">단독 실손 안내</h3>
       <div class="hstack" id="silson_badges" style="gap:8px;margin-bottom:6px"></div>
 
-      <div class="card" style="margin-top:8px">
+      <div class="card narrow" style="margin-top:8px">
         <div class="list" id="silson_summary"></div>
       </div>
 
-      <div class="card" id="silson_common_card" style="margin-top:10px">
-        <h4 class="section-title st-blue" style="margin-bottom:12px">4세대 실손 공통사항</h4>
-        <div class="list cols2" id="silson_common"></div>
+      <div class="card narrow" id="silson_common_card" style="margin-top:10px">
+        <h4 class="section-title st-blue" style="margin-bottom:10px">4세대 실손 공통사항</h4>
+        <div class="list" id="silson_common"></div>
       </div>
 
-      <div class="card" style="margin-top:10px">
-        <h4 class="section-title st-teal" style="margin-bottom:12px">전환/인수</h4>
+      <div class="card narrow" style="margin-top:10px">
+        <h4 class="section-title st-teal" style="margin-bottom:10px">전환/인수</h4>
         <div class="list" id="silson_convert"></div>
       </div>
 
-      <div class="card" style="margin-top:10px">
+      <div class="card narrow" style="margin-top:10px">
         <div class="list" id="silson_specials"></div>
       </div>
 
@@ -216,11 +216,11 @@
     <section class="card" style="grid-column:1/-1">
       <h2 class="section-title st-teal" style="margin-bottom:12px">유병자·노후 실손 요약</h2>
       <div class="compact-grid">
-        <div id="ub_section" class="card compact-card">
+        <div id="ub_section" class="card compact-card narrow">
           <h3 class="title-mini">유병자 실손의료비</h3>
           <div id="ub_kvs"></div>
         </div>
-        <div id="senior_section" class="card compact-card">
+        <div id="senior_section" class="card compact-card narrow">
           <h3 class="title-mini">노후 실손의료비</h3>
           <div id="senior_kvs"></div>
         </div>
@@ -279,7 +279,6 @@
       const el = $(container); el.innerHTML = '';
       fields.forEach(f=>{
         let v = (data && (data[f] ?? data[f.replace(/\s+/g,'')])) ?? '–';
-        // 3대비급여/약제비를 데이터가 분리되어 있을 때 합쳐서 표기
         if (f === '3대비급여/약제비' && data){
           const a = data['3대비급여'] ?? null;
           const b = data['약제비'] ?? null;
@@ -316,7 +315,7 @@
         kvRow('과거 실손상품별 전환여부', conv['과거실손상품별전환여부']) +
         kvRow('전환시 고지사항',        conv['전환시고지사항']);
 
-      // 기타 특이
+      // 기타
       const specials = [];
       Object.entries(record).forEach(([k,v])=>{
         if(!v) return;
@@ -327,15 +326,46 @@
 
       $('#silson_updated').textContent = updated ? `※ 데이터 기준일: ${updated}` : '';
 
-      // 유병자: 필드 고정 출력
       const ubData = record['유병자 실손 컴팩트'] || {};
       buildMini('#ub_kvs', ['입원','통원','재가입주기','보험기간','자기부담금','3대비급여/약제비','알릴의무'], ubData);
 
-      // 노후: 필드 고정 출력
       const snData = record['노후 실손 컴팩트'] || {};
       buildMini('#senior_kvs', ['기본계약1','기본계약2','선택계약1','선택계약2','재가입주기','보험기간','3대비급여/약제비','알릴의무'], snData);
     }
 
+    // 세로형 템플릿으로 재가공
+    function prettifyVerticalBenefits(){
+      // 주계약(급여)
+      (function(){
+        const rows = document.querySelectorAll('#silson_common .row-kv');
+        let target=null;
+        rows.forEach(r=>{ if(r.querySelector('.k')?.textContent?.trim()==='주계약(급여)') target=r; });
+        if(!target) return;
+        target.querySelector('.k').textContent='주계약(급여)';
+        target.querySelector('.v').innerHTML = `
+          <div class="kv-vert">
+            <div class="tt">80% 보상 · 공제금액</div>
+            <div class="ln"><span class="tag">의원</span><span class="num">1만원</span></div>
+            <div class="ln"><span class="tag">상급·종합종합</span><span class="num">2만원</span></div>
+          </div>`;
+      })();
+      // 특약(비급여)
+      (function(){
+        const rows = document.querySelectorAll('#silson_common .row-kv');
+        let target=null;
+        rows.forEach(r=>{ if(r.querySelector('.k')?.textContent?.trim()==='특약(비급여)') target=r; });
+        if(!target) return;
+        target.querySelector('.k').textContent='특약(비급여)';
+        target.querySelector('.v').innerHTML = `
+          <div class="kv-vert">
+            <div class="tt">보상/공제</div>
+            <div class="ln"><span class="tag">보상비율</span><span class="num">70%</span></div>
+            <div class="ln"><span class="tag">공제</span><span class="num">3만원</span><small> 또는 30%</small></div>
+          </div>`;
+      })();
+    }
+
+    // 스무스 스크롤
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click', (e)=>{
         const id = a.getAttribute('href');
@@ -357,10 +387,12 @@
         const enr  = (Array.isArray(enrollData?.items) ? enrollData.items : []).find(x => x.name === company) || {};
         const L = base.links || {};
 
+        // 헤더
         $('#company').textContent = company || '전자청약정보';
         const logoSrc = base.logo || (company ? `/assets/logos/${company}.png` : '');
         if (logoSrc){ const img = $('#logo'); img.src = logoSrc; img.alt = company + ' 로고'; }
 
+        // 히어로 KV
         const ageTxt = enr.mobile_enroll_age_text || (enr.mobile_enroll_age ? `${enr.mobile_enroll_age.min ?? '?'} ~ ${enr.mobile_enroll_age.max ?? '?'}세` : '–');
         $('#kv_mobile_age').textContent = ageTxt || '–';
         $('#kv_usage_hours').textContent = enr.usage_hours || '–';
@@ -368,6 +400,7 @@
         const incall = enr.incall_monitoring_phone || L.monitor || '';
         $('#kv_incall').textContent = incall ? telfmt(incall) : '–';
 
+        // 전화 버튼
         const csTel   = L.cs || '';
         const faxTel  = L.fax || '';
         const helpTel = enr.helpdesk_phone || L.helpdesk || '';
@@ -385,6 +418,7 @@
         bindTelBtn('btn_fax_tel','txt_fax_tel',faxTel);
         bindTelBtn('btn_help_tel','txt_help_tel',helpTel);
 
+        // 상세
         const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = (v ?? '') || '–'; };
         const gps  = asBool(enr.gye_pi_sang_available);
         const card = asBool(enr.card_payment_available);
@@ -392,34 +426,21 @@
         set('usage_hours',  enr.usage_hours);
         set('call_hours',   enr.call_hours);
         set('mobile_age',   ageTxt);
-
         const gpsDetail = (enr.gye_pi_sang_detail || enr.monitoring_criteria || '').trim();
         const gpsText = gps===false?'불가':(gps===true?('가능' + (gpsDetail?` — ${gpsDetail}`:'')):'정보 없음');
         set('gps', gpsText);
-
         const cardDetail = (enr.card_payment_detail || '').trim();
         const cardText = card===false?'불가':(card===true?('가능' + (cardDetail?` — ${cardDetail}`:'')):'정보 없음');
         set('cardpay', cardText);
+        set('incall', incall ? telfmt(incall) : '–');
 
-        set('incall',       incall ? telfmt(incall) : '–');
-
+        // 실손 카드
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
 
-        (function prettifyMainBenefit(){
-          const rows = document.querySelectorAll('#silson_common .row-kv');
-          let target = null;
-          rows.forEach(r => { if (r.querySelector('.k')?.textContent?.trim() === '주계약(급여)') target = r; });
-          if (!target) return;
-          target.querySelector('.v').innerHTML = `
-            <div class="kv-deduct">
-              <div class="subtitle-line">80% 보상 · 공제금액</div>
-              <div class="grid">
-                <span class="k-chip">의원</span> <span class="v-num">1만원</span>
-                <span class="k-chip">상급·종합종합</span> <span class="v-num">2만원</span>
-              </div>
-            </div>`;
-        })();
+        // 공통사항 세로형 재구성 + 압축
+        prettifyVerticalBenefits();
 
+        // 시간 외 경고/노트
         const inHours = (str) => {
           if(!str) return true;
           if(/24\s*시간/.test(str)) return true;
