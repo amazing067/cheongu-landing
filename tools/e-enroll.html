@@ -7,7 +7,7 @@
   <meta name="robots" content="noindex,nofollow"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/site.css?v=final-compact-12" />
+  <link rel="stylesheet" href="/assets/site.css?v=final-compact-13" />
   <style>
   :root{
     --ink:#0f172a; --muted:#475569; --line:#e2e8f0;
@@ -17,6 +17,7 @@
   }
   body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;}
   .maxw{max-width:78rem;margin:0 auto;padding:16px}
+
   .hstack{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
   .title{font-size:32px;font-weight:900;letter-spacing:-.01em;margin:0}
   .subtitle{font-size:13px;color:#64748b;margin-top:2px}
@@ -39,7 +40,10 @@
   .btn svg{width:16px;height:16px}
 
   .grid{display:grid;gap:16px}
-  @media (min-width:1024px){ .grid-2{grid-template-columns:1fr 1fr} } /* 반반 */
+  /* 반반 → 와이드에서 60:40로 */
+  .grid-2{grid-template-columns:1fr}
+  @media (min-width:1024px){ .grid-2{grid-template-columns:1fr 1fr} }
+  @media (min-width:1200px){ .grid-2{grid-template-columns:1.5fr 1fr} }
 
   .hero{ border-radius:20px; padding:22px; border:1px solid rgba(124,58,237,.25); }
   .hero .heading{
@@ -88,18 +92,24 @@
   .kv-mini .k{font-weight:700;color:#334155}
   .kv-mini .v{color:#0f172a}
 
-  /* === 4세대 공통사항: 1/2 배치 + 칩/숫자 축소 === */
+  /* === 좁은 카드/세로형 공통사항 === */
   .silson .card.narrow{padding:12px;border-radius:14px}
-  #silson_common{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  #silson_common .row-kv{grid-column:1 / -1;padding:8px 0}
-  #silson_common .row-kv.half{grid-column:auto} /* 좌우 1/2 */
-  .kv-vert .tt{font-size:11px;color:#64748b;margin-bottom:4px}
-  .kv-vert .ln{display:grid;grid-template-columns:auto auto;gap:6px;align-items:center}
-  .kv-vert .tag{padding:1px 6px;border:1px solid var(--chipbd);border-radius:999px;font-size:11px;color:var(--chipfg);background:var(--chipbg)}
-  .kv-vert .num{font-weight:800;font-size:14px}
-  .kv-vert small{font-size:10.5px;color:#64748b}
+  #silson_common{gap:6px}
+  #silson_common .row-kv{grid-template-columns:1fr;gap:6px;padding:8px 0}
 
-  /* 제목 버튼들 */
+  .kv-vert .tt{font-size:12px;color:#64748b;margin-bottom:4px}
+  .kv-vert .ln{
+    display:grid;align-items:center;gap:8px;
+    /* 칩 길이 = 내용만큼 / 숫자는 우측 정렬 */
+    grid-template-columns:max-content auto;
+  }
+  .kv-vert .tag{
+    display:inline-block; width:auto; white-space:nowrap;
+    padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;font-size:12px;color:var(--chipfg);background:var(--chipbg)
+  }
+  .kv-vert .num{font-weight:800}
+  .kv-vert small{font-size:11px;color:#64748b}
+
   .quick-nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
   .quick-nav a{font-size:12px;padding:8px 10px}
   </style>
@@ -260,8 +270,7 @@
       return null;
     };
 
-    // row helper(half 클래스 지원)
-    const kvRow = (k,v,cls='') => `<div class="row-kv ${cls}"><div class="k">${k}</div><div class="v">${v || '–'}</div></div>`;
+    const kvRow = (k,v) => `<div class="row-kv"><div class="k">${k}</div><div class="v">${v || '–'}</div></div>`;
 
     async function fetchMaybe(url){
       const res = await fetch(url);
@@ -297,27 +306,18 @@
 
       addBadgesFromSilson(record);
 
+      // 가입나이 / 단독가입여부 추가 포함
       $('#silson_summary').innerHTML =
+        kvRow('가입나이',     record['가입나이'] || record['가입연령']) +
         kvRow('단독가입여부', record['단독가입여부']) +
         kvRow('중복가입',     record['중복가입']) +
         kvRow('진단여부',     record['진단여부']) +
         kvRow('특이사항',     record['특이사항']);
 
       const c = record['공통사항'] || {};
-      // 주계약/특약 → 좌우 1/2, 나머지는 전폭
       $('#silson_common').innerHTML =
-        kvRow('주계약(급여)', `
-          <div class="kv-vert">
-            <div class="tt">80% 보상 · 공제금액</div>
-            <div class="ln"><span class="tag">의원</span><span class="num">1만원</span></div>
-            <div class="ln"><span class="tag">상급·종합종합</span><span class="num">2만원</span></div>
-          </div>`, 'half') +
-        kvRow('특약(비급여)', `
-          <div class="kv-vert">
-            <div class="tt">보상/공제</div>
-            <div class="ln"><span class="tag">보상비율</span><span class="num">70%</span></div>
-            <div class="ln"><span class="tag">공제</span><span class="num">3만원</span><small> 또는 30%</small></div>
-          </div>`, 'half') +
+        kvRow('주계약(급여)', c['주계약(급여)']) +
+        kvRow('특약(비급여)', c['특약(비급여)']) +
         kvRow('재가입주기',   c['재가입주기']) +
         kvRow('보험기간',     c['보험기간']) +
         kvRow('자기부담금',   c['자기부담금']) +
@@ -329,23 +329,53 @@
         kvRow('과거 실손상품별 전환여부', conv['과거실손상품별전환여부']) +
         kvRow('전환시 고지사항',        conv['전환시고지사항']);
 
-      // 기타
       const specials = [];
       Object.entries(record).forEach(([k,v])=>{
         if(!v) return;
-        if (['단독가입여부','중복가입','진단여부','특이사항','공통사항','전환/인수','유병자 실손의료비','노후 실손의료비','유병자 실손 컴팩트','노후 실손 컴팩트','유병자 공통사항'].includes(k)) return;
+        if (['가입나이','단독가입여부','중복가입','진단여부','특이사항','공통사항','전환/인수','유병자 실손의료비','노후 실손의료비','유병자 실손 컴팩트','노후 실손 컴팩트','유병자 공통사항'].includes(k)) return;
         specials.push(kvRow(k, v));
       });
       $('#silson_specials').innerHTML = specials.join('') || kvRow('추가안내','해당 없음');
 
       $('#silson_updated').textContent = updated ? `※ 데이터 기준일: ${updated}` : '';
 
-      // 유병자/노후 요약: 가입나이/단독가입여부 포함
       const ubData = record['유병자 실손 컴팩트'] || {};
-      buildMini('#ub_kvs', ['가입나이','단독가입여부','입원','통원','재가입주기','보험기간','자기부담금','3대비급여/약제비','알릴의무'], ubData);
+      buildMini('#ub_kvs', ['입원','통원','재가입주기','보험기간','자기부담금','3대비급여/약제비','알릴의무'], ubData);
 
       const snData = record['노후 실손 컴팩트'] || {};
-      buildMini('#senior_kvs', ['가입나이','단독가입여부','기본계약1','기본계약2','선택계약1','선택계약2','재가입주기','보험기간','3대비급여/약제비','알릴의무'], snData);
+      buildMini('#senior_kvs', ['기본계약1','기본계약2','선택계약1','선택계약2','재가입주기','보험기간','3대비급여/약제비','알릴의무'], snData);
+    }
+
+    // 세로형 템플릿(칩 길이 자동 / 텍스트 수정)
+    function prettifyVerticalBenefits(){
+      // 주계약(급여)
+      (function(){
+        const rows = document.querySelectorAll('#silson_common .row-kv');
+        let target=null;
+        rows.forEach(r=>{ if(r.querySelector('.k')?.textContent?.trim()==='주계약(급여)') target=r; });
+        if(!target) return;
+        target.querySelector('.k').textContent='주계약(급여)';
+        target.querySelector('.v').innerHTML = `
+          <div class="kv-vert">
+            <div class="tt">80% 보상 · 공제금액</div>
+            <div class="ln"><span class="tag">의원</span><span class="num">1만원</span></div>
+            <div class="ln"><span class="tag">상급·종합병원</span><span class="num">2만원</span></div>
+          </div>`;
+      })();
+      // 특약(비급여)
+      (function(){
+        const rows = document.querySelectorAll('#silson_common .row-kv');
+        let target=null;
+        rows.forEach(r=>{ if(r.querySelector('.k')?.textContent?.trim()==='특약(비급여)') target=r; });
+        if(!target) return;
+        target.querySelector('.k').textContent='특약(비급여)';
+        target.querySelector('.v').innerHTML = `
+          <div class="kv-vert">
+            <div class="tt">보상/공제</div>
+            <div class="ln"><span class="tag">보상비율</span><span class="num">70%</span></div>
+            <div class="ln"><span class="tag">공제</span><span class="num">3만원</span><small> 또는 30%</small></div>
+          </div>`;
+      })();
     }
 
     // 스무스 스크롤
@@ -419,6 +449,9 @@
 
         // 실손 카드
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
+
+        // 세로형 재구성
+        prettifyVerticalBenefits();
 
         // 시간 외 경고/노트
         const inHours = (str) => {
