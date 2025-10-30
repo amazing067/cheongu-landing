@@ -82,53 +82,29 @@
   /* 유병자/노후 요약 */
   .compact-grid{display:grid;gap:14px}
   @media (min-width:980px){ .compact-grid{grid-template-columns:1fr 1fr} }
-  .compact-card .title-mini{
-    font-weight:900;margin:0 auto 10px; text-align:center; display:inline-block; padding:8px 14px;
-    border-radius:999px; background:linear-gradient(135deg,#e0f2fe,#e9d5ff); color:#111827; letter-spacing:-.01em;
-  }
-  .compact-card{position:relative}
+  .compact-card .title-mini{font-weight:900;margin:0 0 10px}
   .kv-mini{display:grid;grid-template-columns:minmax(8rem,10rem) 1fr;gap:10px;align-items:center;border-top:1px dashed #e5e7eb;padding:8px 0}
   .kv-mini:first-child{border-top:0}
   .kv-mini .k{font-weight:700;color:#334155}
   .kv-mini .v{color:#0f172a}
 
-  /* === 4세대 공통사항(좌우 1/2) === */
-  #common_2col{display:grid;gap:12px}
-  @media (min-width:900px){ #common_2col{grid-template-columns:1fr 1fr} }
+  /* === 4세대 공통사항(좌우 1/2) — 항상 2열 유지 === */
+  #common_2col{
+    display:grid;
+    gap:12px;
+    grid-template-columns:1fr 1fr; /* ← 항상 2열 */
+  }
   .common-box{border-top:1px dashed rgba(100,116,139,.26);padding-top:10px}
   .common-box h5{margin:0 0 6px;font-weight:900}
   .kv-vert .tt{font-size:12px;color:#64748b;margin-bottom:6px}
-  .kv-vert .ln{
-  display:grid;
-  grid-template-columns:min-content auto; /* 칩은 글자만큼, 값은 나머지 */
-  gap:8px;
-  align-items:center;
-  margin:6px 0;
-}
+  .kv-vert .ln{display:grid;grid-template-columns:auto auto;gap:8px;align-items:center;margin:6px 0}
   .kv-vert .tag{
-  display:inline-flex;
-  align-items:center;
-  padding:2px 8px;
-  border:1px solid var(--chipbd);
-  border-radius:999px;
-  font-size:12px;
-  color:var(--chipfg);
-  background:var(--chipbg);
-  white-space:nowrap;
-
-  /* 전역 스타일이 늘리는 것 방지 */
-  width:auto !important;
-  min-width:0 !important;
-  max-width:max-content !important;
-  flex:0 0 auto !important;
-  box-sizing:border-box;
-}
+    display:inline-block; /* 텍스트 길이만큼 */
+    padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;
+    font-size:12px;color:var(--chipfg);background:var(--chipbg);white-space:nowrap
+  }
   .kv-vert .num{font-weight:800}
   .kv-vert small{font-size:11px;color:#64748b}
-
-  /* 4세대 공통사항 - 두 칸 행 */
-  .row-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .row-2col .row-kv{border-top:1px dashed rgba(100,116,139,.26);padding:12px 0}
 
   /* 제목 버튼들 */
   .quick-nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
@@ -240,7 +216,6 @@
         <!-- 좌우 1/2 출력 영역 -->
         <div id="common_2col"></div>
 
-        <!-- 2칸 행으로 묶인 나머지 -->
         <div class="list" id="silson_common_rest" style="margin-top:8px"></div>
       </div>
 
@@ -303,7 +278,6 @@
     };
 
     const kvRow = (k,v) => `<div class="row-kv"><div class="k">${k}</div><div class="v">${v || '–'}</div></div>`;
-    const kvCell = (k,v) => `<div class="row-kv"><div class="k">${k}</div><div class="v">${v||'–'}</div></div>`;
 
     async function fetchMaybe(url){
       const res = await fetch(url);
@@ -311,13 +285,37 @@
       try{ return await res.json(); }catch(e){ throw new Error(`[${url}] JSON 파싱 실패: ${e.message}`); }
     }
 
-    function addBadgesFromSilson(record){
+    /* === 상단 배지: enroll.json 우선 → silson-company 보완 === */
+    function addBadgesFromSilson(record, overrides={}){
       const bf = $('#badges');
       bf.innerHTML = '';
-      const solo = asBool(record['단독가입여부']);
-      const card = asBool(record['카드납 가능']);
-      bf.insertAdjacentHTML('beforeend', `<span class="badge ${solo===false?'no':(solo===true?'ok':'')}">${solo===false?'단독실손 가입 불가':(solo===true?'단독실손 가입가능':'단독실손 정보 없음')}</span>`);
-      bf.insertAdjacentHTML('beforeend', `<span class="badge ${card===false?'no':(card===true?'ok':'')}">${card===false?'카드납 불가':(card===true?'카드납 가능':'카드납 정보 없음')}</span>`);
+
+      const solo = (()=>{
+        const v = record['단독가입여부'];
+        const s = String(v ?? '').trim().toLowerCase();
+        if(!s) return null;
+        if (['가능','yes','true','o','ok','y','1'].includes(s)) return true;
+        if (['불가','no','false','x','0'].includes(s)) return false;
+        return null;
+      })();
+
+      let card = overrides.card; // true/false/null/undefined
+      if (card === undefined) {
+        const v = record['카드납 가능'];
+        const s = String(v ?? '').trim().toLowerCase();
+        if(!s) card = null;
+        else if (['가능','yes','true','o','ok','y','1'].includes(s)) card = true;
+        else if (['불가','no','false','x','0'].includes(s)) card = false;
+        else card = null;
+      }
+
+      bf.insertAdjacentHTML('beforeend',
+        `<span class="badge ${solo===false?'no':(solo===true?'ok':'')}">`+
+        `${solo===false?'단독실손 가입 불가':(solo===true?'단독실손 가입가능':'단독실손 정보 없음')}</span>`);
+
+      bf.insertAdjacentHTML('beforeend',
+        `<span class="badge ${card===false?'no':(card===true?'ok':'')}">`+
+        `${card===false?'카드납 불가':(card===true?'카드납 가능':'카드납 정보 없음')}</span>`);
     }
 
     function buildMini(container, fields, data){
@@ -337,16 +335,15 @@
       const updated = bundle?.last_updated || '';
       const record = bundle?.companies?.[name] || {};
 
-      addBadgesFromSilson(record);
+      // 배지 호출은 init()에서 enroll.json을 우선 적용해 처리하므로 여기서는 호출하지 않음
 
-      // 요약/배지
       $('#silson_summary').innerHTML =
         kvRow('단독가입여부', record['단독가입여부']) +
         kvRow('중복가입',     record['중복가입']) +
         kvRow('진단여부',     record['진단여부']) +
         kvRow('특이사항',     record['특이사항']);
 
-      // === 4세대 공통사항: 좌/우 1/2 출력 ===
+      // 4세대 공통사항 2열
       const c = record['공통사항'] || {};
       const leftHTML = `
         <div class="common-box">
@@ -368,16 +365,12 @@
         </div>`;
       $('#common_2col').innerHTML = leftHTML + rightHTML;
 
-      // 나머지 항목: 1/2 그리드로 묶어서 두 줄
-      $('#silson_common_rest').innerHTML = `
-        <div class="row-2col">
-          ${kvCell('재가입주기',   c['재가입주기'] || '5년')}
-          ${kvCell('보험기간',     c['보험기간']   || '1년 갱신형')}
-        </div>
-        <div class="row-2col">
-          ${kvCell('자기부담금',   c['자기부담금'] || '급여 20% / 비급여 30%')}
-          ${kvCell('보험료차등제', c['보험료차등제'] || '있음(손해율 연동)')}
-        </div>`;
+      // 나머지 항목
+      $('#silson_common_rest').innerHTML =
+        kvRow('재가입주기',   c['재가입주기'] || '5년') +
+        kvRow('보험기간',     c['보험기간']   || '1년 갱신형') +
+        kvRow('자기부담금',   c['자기부담금'] || '급여 20% / 비급여 30%') +
+        kvRow('보험료차등제', c['보험료차등제'] || '있음(손해율 연동)');
 
       // 전환/인수
       const conv = record['전환/인수'] || {};
@@ -397,7 +390,6 @@
 
       $('#silson_updated').textContent = updated ? `※ 데이터 기준일: ${updated}` : '';
 
-      // 유병자/노후 컴팩트: 가입나이/단독가입여부를 최상단에 추가
       const ubData = record['유병자 실손 컴팩트'] || {};
       buildMini('#ub_kvs', ['가입나이','단독가입여부','진단여부','입원','통원','재가입주기','보험기간','자기부담금','3대비급여/약제비','알릴의무'], ubData);
 
@@ -469,7 +461,7 @@
         setTXT('mobile_age',   ageTxt);
         setTXT('incall', incall ? telfmt(incall) : '–');
 
-        // 배지 + 상세(계피상/카드)
+        // 상세(계피상/카드) + 배지 동기화
         const gpsDetail = (enr.gye_pi_sang_detail || enr.monitoring_criteria || '').trim();
         const gpsWrap = document.getElementById('gps');
         gpsWrap.innerHTML =
@@ -482,7 +474,11 @@
           (cardBool==null ? '' : `<span class="badge ${cardBool?'ok':'no'}">${cardBool?'카드납 가능':'카드납 불가'}</span>`)
           + (cardDetail ? ` <span style="color:#0f172a;white-space:pre-line">${cardDetail}</span>` : '');
 
-        // 실손 카드
+        // 상단 배지(단독실손/카드납) — enroll.json 카드납을 우선 적용
+        const recordForBadges = (silsonCompany?.companies?.[company]) || {};
+        addBadgesFromSilson(recordForBadges, { card: cardBool });
+
+        // 실손 카드 렌더
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
 
         // 시간 외 경고/노트
