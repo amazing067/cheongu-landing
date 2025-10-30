@@ -39,7 +39,8 @@
   .btn svg{width:16px;height:16px}
 
   .grid{display:grid;gap:16px}
-  @media (min-width:1024px){ .grid-2{grid-template-columns:1.35fr 1fr} }
+  /* 👉 반반 레이아웃 */
+  @media (min-width:1024px){ .grid-2{grid-template-columns:1fr 1fr} }
 
   .hero{ border-radius:20px; padding:22px; border:1px solid rgba(124,58,237,.25); }
   .hero .heading{
@@ -93,7 +94,6 @@
   .quick-nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
   .quick-nav a{font-size:12px;padding:8px 10px}
 
-  /* 유병자/노후 요약 카드 */
   .compact-grid{display:grid;gap:14px}
   @media (min-width:980px){ .compact-grid{grid-template-columns:1fr 1fr} }
   .compact-card .title-mini{font-weight:900;margin:0 0 10px}
@@ -304,14 +304,10 @@
         kvRow('과거 실손상품별 전환여부', conv['과거실손상품별전환여부']) +
         kvRow('전환시 고지사항',        conv['전환시고지사항']);
 
-      // 특이사항: 유병자/노후 텍스트는 이 카드에서 제외(중복 방지)
       const specials = [];
-      const ubTxt = record['유병자 실손의료비'];
-      const srTxt = record['노후 실손의료비'];
       Object.entries(record).forEach(([k,v])=>{
         if(!v) return;
-        if (k==='유병자 실손의료비' || k==='노후 실손의료비') return;
-        if (['단독가입여부','중복가입','진단여부','특이사항','공통사항','전환/인수','유병자 실손 컴팩트','노후 실손 컴팩트','유병자 공통사항'].includes(k)) return;
+        if (['단독가입여부','중복가입','진단여부','특이사항','공통사항','전환/인수','유병자 실손의료비','노후 실손의료비','유병자 실손 컴팩트','노후 실손 컴팩트','유병자 공통사항'].includes(k)) return;
         specials.push(kvRow(k, v));
       });
       $('#silson_specials').innerHTML = specials.join('') || kvRow('추가안내','해당 없음');
@@ -329,7 +325,7 @@
         const ubCommon = record['유병자 공통사항'] || '';
         if(ubCommon){ $('#ub_common').innerHTML = `<div class="kv-mini"><div class="k">공통사항</div><div class="v">${ubCommon}</div></div>`; }
       }else{
-        ubEl.innerHTML = `<div class="kv-mini"><div class="k">요약</div><div class="v">${ubTxt || '–'}</div></div>`;
+        ubEl.innerHTML = `<div class="kv-mini"><div class="k">요약</div><div class="v">${record['유병자 실손의료비'] || '–'}</div></div>`;
       }
 
       // 노후 요약
@@ -341,11 +337,10 @@
           snEl.insertAdjacentHTML('beforeend', `<div class="kv-mini"><div class="k">${k}</div><div class="v">${sn[k] ?? '–'}</div></div>`);
         });
       }else{
-        snEl.innerHTML = `<div class="kv-mini"><div class="k">요약</div><div class="v">${srTxt || '–'}</div></div>`;
+        snEl.innerHTML = `<div class="kv-mini"><div class="k">요약</div><div class="v">${record['노후 실손의료비'] || '–'}</div></div>`;
       }
     }
 
-    // 부드러운 스크롤
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click', (e)=>{
         const id = a.getAttribute('href');
@@ -367,12 +362,10 @@
         const enr  = (Array.isArray(enrollData?.items) ? enrollData.items : []).find(x => x.name === company) || {};
         const L = base.links || {};
 
-        // 헤더
         $('#company').textContent = company || '전자청약정보';
         const logoSrc = base.logo || (company ? `/assets/logos/${company}.png` : '');
         if (logoSrc){ const img = $('#logo'); img.src = logoSrc; img.alt = company + ' 로고'; }
 
-        // 히어로 KV
         const ageTxt = enr.mobile_enroll_age_text || (enr.mobile_enroll_age ? `${enr.mobile_enroll_age.min ?? '?'} ~ ${enr.mobile_enroll_age.max ?? '?'}세` : '–');
         $('#kv_mobile_age').textContent = ageTxt || '–';
         $('#kv_usage_hours').textContent = enr.usage_hours || '–';
@@ -380,7 +373,6 @@
         const incall = enr.incall_monitoring_phone || L.monitor || '';
         $('#kv_incall').textContent = incall ? telfmt(incall) : '–';
 
-        // 전화 버튼
         const csTel   = L.cs || '';
         const faxTel  = L.fax || '';
         const helpTel = enr.helpdesk_phone || L.helpdesk || '';
@@ -398,7 +390,6 @@
         bindTelBtn('btn_fax_tel','txt_fax_tel',faxTel);
         bindTelBtn('btn_help_tel','txt_help_tel',helpTel);
 
-        // 상세 정보
         const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = (v ?? '') || '–'; };
         const gps  = asBool(enr.gye_pi_sang_available);
         const card = asBool(enr.card_payment_available);
@@ -407,22 +398,18 @@
         set('call_hours',   enr.call_hours);
         set('mobile_age',   ageTxt);
 
-        // 계피상이 + 상세
         const gpsDetail = (enr.gye_pi_sang_detail || enr.monitoring_criteria || '').trim();
         const gpsText = gps===false?'불가':(gps===true?('가능' + (gpsDetail?` — ${gpsDetail}`:'')):'정보 없음');
         set('gps', gpsText);
 
-        // 카드납: 가능/불가 + 상세
         const cardDetail = (enr.card_payment_detail || '').trim();
         const cardText = card===false?'불가':(card===true?('가능' + (cardDetail?` — ${cardDetail}`:'')):'정보 없음');
         set('cardpay', cardText);
 
         set('incall',       incall ? telfmt(incall) : '–');
 
-        // 실손(단독) 섹션 렌더
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
 
-        // 주계약(급여) 컴팩트 표현 치환
         (function prettifyMainBenefit(){
           const rows = document.querySelectorAll('#silson_common .row-kv');
           let target = null;
@@ -438,7 +425,6 @@
             </div>`;
         })();
 
-        // 시간 외 경고/노트
         const inHours = (str) => {
           if(!str) return true;
           if(/24\s*시간/.test(str)) return true;
@@ -456,7 +442,6 @@
           const n = document.getElementById('note'); n.style.display='block'; n.textContent = enr.note;
         }
 
-        // 헤더 배지: 계피상이
         (function addGpsBadge(){
           const bf = $('#badges');
           const v = enr.gye_pi_sang_available;
