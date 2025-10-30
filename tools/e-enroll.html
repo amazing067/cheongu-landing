@@ -11,7 +11,6 @@
   <style>
   :root{
     --ink:#0f172a; --muted:#475569; --line:#e2e8f0;
-    --brand:#7c3aed; --brand-2:#0ea5e9; --good:#10b981; --bad:#ef4444;
     --bg:#f8fafc; --card:#ffffff;
     --chipbg:#f4f3ff; --chipbd:#e9e5ff; --chipfg:#4c1d95;
   }
@@ -23,20 +22,14 @@
   .logo{height:56px;object-fit:contain}
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 3px 10px rgba(2,6,23,.04)}
-  .chip{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff}
+  .chip{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff;white-space:nowrap}
   .badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:12px;background:#fff;white-space:nowrap}
   .badge.ok{border-color:#86efac;background:#ecfdf5;color:#065f46}
   .badge.no{border-color:#fecaca;background:#fef2f2;color:#991b1b}
 
-  .btn{
-    display:inline-flex;align-items:center;gap:8px;border-radius:12px;border:1px solid var(--line);background:#fff;
-    padding:10px 14px;font-weight:800;text-decoration:none;color:#0f172a;
-    transition:transform .15s ease, box-shadow .15s ease, background-color .15s ease, opacity .15s ease;
-    box-shadow:0 4px 10px rgba(2,6,23,.06);
-  }
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;border:1px solid var(--line);background:#fff;padding:10px 14px;font-weight:800;text-decoration:none;color:#0f172a;transition:.15s;box-shadow:0 4px 10px rgba(2,6,23,.06)}
   .btn:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(2,6,23,.08);background:#f8fafc}
   .btn[disabled], .btn.muted{opacity:.55;cursor:not-allowed}
-  .btn svg{width:16px;height:16px}
 
   .grid{display:grid;gap:16px}
   @media (min-width:1024px){ .grid-2{grid-template-columns:1fr 1fr} } /* 반반 */
@@ -57,16 +50,9 @@
   .hero .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 
   .rowspec{display:grid;gap:10px}
-  .spec{
-    display:grid;grid-template-columns:minmax(12rem,16rem) 1fr;
-    align-items:center;gap:12px;padding:10px 0;border-top:1px dashed rgba(100,116,139,.28)
-  }
+  .spec{display:grid;grid-template-columns:minmax(12rem,16rem) 1fr;align-items:center;gap:12px;padding:10px 0;border-top:1px dashed rgba(100,116,139,.28)}
   .spec:first-child{border-top:0}
-  .key{
-    display:inline-flex;align-items:center;justify-content:center;
-    height:36px;padding:0 12px;border-radius:999px;background:#e6f0ff;border:1px solid #cfe1ff;
-    font-weight:700;color:#1e3a8a;white-space:nowrap
-  }
+  .key{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 12px;border-radius:999px;background:#e6f0ff;border:1px solid #cfe1ff;font-weight:700;color:#1e3a8a;white-space:nowrap}
   .key.wide{min-width:16rem;}
   .val{color:#0f172a;text-align:center}
 
@@ -77,16 +63,7 @@
   .row-kv{display:grid;grid-template-columns:minmax(10.5rem,13.5rem) 1fr;align-items:center;gap:12px;border-top:1px dashed rgba(100,116,139,.26);padding:12px 0}
   .row-kv:first-child{border-top:0}
   .row-kv .k{font-weight:800;color:#334155}
-  .row-kv .v{color:#0f172a;line-height:1.55;word-break:keep-all;white-space:normal}
-
-  /* 유병자/노후 요약 */
-  .compact-grid{display:grid;gap:14px}
-  @media (min-width:980px){ .compact-grid{grid-template-columns:1fr 1fr} }
-  .compact-card .title-mini{font-weight:900;margin:0 0 10px}
-  .kv-mini{display:grid;grid-template-columns:minmax(8rem,10rem) 1fr;gap:10px;align-items:center;border-top:1px dashed #e5e7eb;padding:8px 0}
-  .kv-mini:first-child{border-top:0}
-  .kv-mini .k{font-weight:700;color:#334155}
-  .kv-mini .v{color:#0f172a}
+  .row-kv .v{color:#0f172a;line-height:1.55;word-break:keep-all}
 
   /* === 4세대 공통사항(좌우 1/2) === */
   #common_2col{display:grid;gap:12px}
@@ -95,15 +72,16 @@
   .common-box h5{margin:0 0 6px;font-weight:900}
   .kv-vert .tt{font-size:12px;color:#64748b;margin-bottom:6px}
   .kv-vert .ln{display:grid;grid-template-columns:auto auto;gap:8px;align-items:center;margin:6px 0}
+  /* 칩: 글자 길이에 딱 맞게 */
   .kv-vert .tag{
-    display:inline-block; /* 텍스트 길이만큼 */
+    display:inline-block !important;
+    width:auto !important; min-width:0 !important; max-width:max-content !important;
     padding:2px 8px;border:1px solid var(--chipbd);border-radius:999px;
     font-size:12px;color:var(--chipfg);background:var(--chipbg);white-space:nowrap
   }
   .kv-vert .num{font-weight:800}
   .kv-vert small{font-size:11px;color:#64748b}
 
-  /* 제목 버튼들 */
   .quick-nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
   .quick-nav a{font-size:12px;padding:8px 10px}
 
@@ -210,9 +188,11 @@
 
       <div class="card narrow" id="silson_common_card" style="margin-top:10px">
         <h4 class="section-title st-blue" style="margin-bottom:10px">4세대 실손 공통사항</h4>
-        <!-- 좌우 1/2 출력 영역 -->
+
+        <!-- 좌우 1/2 출력 -->
         <div id="common_2col"></div>
 
+        <!-- 나머지 항목 -->
         <div class="list" id="silson_common_rest" style="margin-top:8px"></div>
       </div>
 
@@ -317,8 +297,7 @@
         kvRow('진단여부',     record['진단여부']) +
         kvRow('특이사항',     record['특이사항']);
 
-      // === 4세대 공통사항: 좌/우 1/2 출력 ===
-      const c = record['공통사항'] || {};
+      // === 4세대 공통사항: 좌/우 1/2 ===
       const leftHTML = `
         <div class="common-box">
           <h5>주계약(급여)</h5>
@@ -332,14 +311,15 @@
         <div class="common-box">
           <h5>특약(비급여)</h5>
           <div class="kv-vert">
-            <div class="tt">보상/공제</div>
+            <div class="tt">보상/공제 · 3만원 또는 30%</div>
             <div class="ln"><span class="tag">보상비율</span><span class="num">70%</span></div>
-            <div class="ln"><span class="tag">공제</span><span class="num">3만원</span><small> 또는 30%</small></div>
+            <div class="ln"><span class="tag">공제</span><span class="num">3만원</span></div>
           </div>
         </div>`;
       $('#common_2col').innerHTML = leftHTML + rightHTML;
 
-      // 나머지 항목(재가입주기/보험기간/자기부담금/보험료차등제)
+      // 나머지 항목
+      const c = record['공통사항'] || {};
       $('#silson_common_rest').innerHTML =
         kvRow('재가입주기',   c['재가입주기'] || '5년') +
         kvRow('보험기간',     c['보험기간']   || '1년 갱신형') +
@@ -406,24 +386,6 @@
         const incall = enr.incall_monitoring_phone || L.monitor || '';
         $('#kv_incall').textContent = incall ? telfmt(incall) : '–';
 
-        // 전화 버튼
-        const csTel   = L.cs || '';
-        const faxTel  = L.fax || '';
-        const helpTel = enr.helpdesk_phone || L.helpdesk || '';
-        const bindTelBtn = (btnId, txtId, tel) => {
-          const btn = document.getElementById(btnId);
-          const span= document.getElementById(txtId);
-          if (tel){
-            const fmt = telfmt(tel);
-            btn.href = 'tel:' + (tel.replace(/\D/g,'')); span.textContent = fmt || tel;
-          } else {
-            span.textContent = '–'; btn.removeAttribute('href'); btn.classList.add('muted');
-          }
-        };
-        bindTelBtn('btn_cs_tel','txt_cs_tel',csTel);
-        bindTelBtn('btn_fax_tel','txt_fax_tel',faxTel);
-        bindTelBtn('btn_help_tel','txt_help_tel',helpTel);
-
         // 상세 값 바인딩
         const setTXT = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = (v ?? '') || '–'; };
         const gpsBool  = asBool(enr.gye_pi_sang_available);
@@ -437,51 +399,17 @@
 
         // 배지 + 상세(계피상/카드)
         const gpsDetail = (enr.gye_pi_sang_detail || enr.monitoring_criteria || '').trim();
-        const gpsWrap = document.getElementById('gps');
-        gpsWrap.innerHTML =
+        $('#gps').innerHTML =
           (gpsBool==null ? '' : `<span class="badge ${gpsBool?'ok':'no'}">${gpsBool?'계피상이 가능':'계피상이 불가'}</span>`)
           + (gpsDetail ? ` <span style="color:#0f172a">${gpsDetail}</span>` : '');
 
         const cardDetail = (enr.card_payment_detail || '').trim();
-        const cardWrap = document.getElementById('cardpay');
-        cardWrap.innerHTML =
+        $('#cardpay').innerHTML =
           (cardBool==null ? '' : `<span class="badge ${cardBool?'ok':'no'}">${cardBool?'카드납 가능':'카드납 불가'}</span>`)
           + (cardDetail ? ` <span style="color:#0f172a;white-space:pre-line">${cardDetail}</span>` : '');
 
         // 실손 카드
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
-
-        // 시간 외 경고/노트
-        const inHours = (str) => {
-          if(!str) return true;
-          if(/24\s*시간/.test(str)) return true;
-          const m = str.match(/(\d{2}):(\d{2})\s*[–-]\s*(\d{2}):(\d{2})/);
-          if(!m) return true;
-          const now = new Date(), cur = now.getHours()*60 + now.getMinutes();
-          const a = (+m[1])*60+(+m[2]), b=(+m[3])*60+(+m[4]);
-          return cur>=a && cur<=b;
-        };
-        if(enr.usage_hours && !inHours(enr.usage_hours)){
-          const w = document.getElementById('warn'); w.style.display='block';
-          w.textContent = `지금은 사용시간(${enr.usage_hours}) 외일 수 있습니다. 회사 정책상 제한될 수 있습니다.`;
-        }
-        if(enr.note){
-          const n = document.getElementById('note'); n.style.display='block'; n.textContent = enr.note;
-        }
-
-        // 헤더 배지: 계피상 여부(상단)
-        (function addGpsBadgeTop(){
-          const bf = $('#badges');
-          const v = enr.gye_pi_sang_available;
-          const s = String(v ?? '').trim().toLowerCase();
-          let b = null;
-          if (!s) b = null;
-          else if (['가능','yes','true','o','ok','y','1'].includes(s)) b = true;
-          else if (['불가','no','false','x','0'].includes(s)) b = false;
-          if (b === null) return;
-          bf.insertAdjacentHTML('beforeend',
-            `<span class="badge ${b?'ok':'no'}">${b?'계피상이 가능':'계피상이 불가'}</span>`);
-        })();
 
       }catch(err){
         console.error(err);
