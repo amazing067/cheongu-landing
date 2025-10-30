@@ -39,8 +39,7 @@
   .btn svg{width:16px;height:16px}
 
   .grid{display:grid;gap:16px}
-  /* 👉 반반 레이아웃 */
-  @media (min-width:1024px){ .grid-2{grid-template-columns:1fr 1fr} }
+  @media (min-width:1024px){ .grid-2{grid-template-columns:1fr 1fr} } /* 반반 */
 
   .hero{ border-radius:20px; padding:22px; border:1px solid rgba(124,58,237,.25); }
   .hero .heading{
@@ -97,7 +96,7 @@
   .compact-grid{display:grid;gap:14px}
   @media (min-width:980px){ .compact-grid{grid-template-columns:1fr 1fr} }
   .compact-card .title-mini{font-weight:900;margin:0 0 10px}
-  .kv-mini{display:grid;grid-template-columns:minmax(7rem,9rem) 1fr;gap:10px;align-items:center;border-top:1px dashed #e5e7eb;padding:8px 0}
+  .kv-mini{display:grid;grid-template-columns:minmax(8rem,10rem) 1fr;gap:10px;align-items:center;border-top:1px dashed #e5e7eb;padding:8px 0}
   .kv-mini:first-child{border-top:0}
   .kv-mini .k{font-weight:700;color:#334155}
   .kv-mini .v{color:#0f172a}
@@ -220,7 +219,6 @@
         <div id="ub_section" class="card compact-card">
           <h3 class="title-mini">유병자 실손의료비</h3>
           <div id="ub_kvs"></div>
-          <div id="ub_common" style="margin-top:10px"></div>
         </div>
         <div id="senior_section" class="card compact-card">
           <h3 class="title-mini">노후 실손의료비</h3>
@@ -277,6 +275,20 @@
       bf.insertAdjacentHTML('beforeend', `<span class="badge ${card===false?'no':(card===true?'ok':'')}">${card===false?'카드납 불가':(card===true?'카드납 가능':'카드납 정보 없음')}</span>`);
     }
 
+    function buildMini(container, fields, data){
+      const el = $(container); el.innerHTML = '';
+      fields.forEach(f=>{
+        let v = (data && (data[f] ?? data[f.replace(/\s+/g,'')])) ?? '–';
+        // 3대비급여/약제비를 데이터가 분리되어 있을 때 합쳐서 표기
+        if (f === '3대비급여/약제비' && data){
+          const a = data['3대비급여'] ?? null;
+          const b = data['약제비'] ?? null;
+          if (a || b) v = [a,b].filter(Boolean).join(' / ');
+        }
+        el.insertAdjacentHTML('beforeend', `<div class="kv-mini"><div class="k">${f}</div><div class="v">${(v||'–')}</div></div>`);
+      });
+    }
+
     function renderSilsonCompany(bundle, name){
       const updated = bundle?.last_updated || '';
       const record = bundle?.companies?.[name] || {};
@@ -304,6 +316,7 @@
         kvRow('과거 실손상품별 전환여부', conv['과거실손상품별전환여부']) +
         kvRow('전환시 고지사항',        conv['전환시고지사항']);
 
+      // 기타 특이
       const specials = [];
       Object.entries(record).forEach(([k,v])=>{
         if(!v) return;
@@ -314,31 +327,13 @@
 
       $('#silson_updated').textContent = updated ? `※ 데이터 기준일: ${updated}` : '';
 
-      // 유병자 요약
-      const ub = record['유병자 실손 컴팩트'] || null;
-      const ubEl = $('#ub_kvs'); ubEl.innerHTML = '';
-      if (ub && typeof ub === 'object'){
-        const want = ['입원','통원','재가입주기','보험기간','자기부담금','3대비급여/약제비','알릴의무'];
-        want.forEach(k=>{
-          ubEl.insertAdjacentHTML('beforeend', `<div class="kv-mini"><div class="k">${k}</div><div class="v">${ub[k] ?? '–'}</div></div>`);
-        });
-        const ubCommon = record['유병자 공통사항'] || '';
-        if(ubCommon){ $('#ub_common').innerHTML = `<div class="kv-mini"><div class="k">공통사항</div><div class="v">${ubCommon}</div></div>`; }
-      }else{
-        ubEl.innerHTML = `<div class="kv-mini"><div class="k">요약</div><div class="v">${record['유병자 실손의료비'] || '–'}</div></div>`;
-      }
+      // 유병자: 필드 고정 출력
+      const ubData = record['유병자 실손 컴팩트'] || {};
+      buildMini('#ub_kvs', ['입원','통원','재가입주기','보험기간','자기부담금','3대비급여/약제비','알릴의무'], ubData);
 
-      // 노후 요약
-      const sn = record['노후 실손 컴팩트'] || null;
-      const snEl = $('#senior_kvs'); snEl.innerHTML='';
-      if (sn && typeof sn === 'object'){
-        const want = ['기본계약1','기본계약2','선택계약1','선택계약2','재가입주기','보험기간','3대비급여/약제비','알릴의무'];
-        want.forEach(k=>{
-          snEl.insertAdjacentHTML('beforeend', `<div class="kv-mini"><div class="k">${k}</div><div class="v">${sn[k] ?? '–'}</div></div>`);
-        });
-      }else{
-        snEl.innerHTML = `<div class="kv-mini"><div class="k">요약</div><div class="v">${record['노후 실손의료비'] || '–'}</div></div>`;
-      }
+      // 노후: 필드 고정 출력
+      const snData = record['노후 실손 컴팩트'] || {};
+      buildMini('#senior_kvs', ['기본계약1','기본계약2','선택계약1','선택계약2','재가입주기','보험기간','3대비급여/약제비','알릴의무'], snData);
     }
 
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
@@ -442,6 +437,7 @@
           const n = document.getElementById('note'); n.style.display='block'; n.textContent = enr.note;
         }
 
+        // 배지: 계피상이
         (function addGpsBadge(){
           const bf = $('#badges');
           const v = enr.gye_pi_sang_available;
