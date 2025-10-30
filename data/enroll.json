@@ -11,7 +11,7 @@
       "incall_monitoring_phone": "1566-0757",
       "monitoring_criteria": "",
       "card_payment_available": true,
-      "card_payment_detail": "가능(자동이체 O)\n설계사 직접 수납"
+      "card_payment_detail": "설계사 직접 수납"
     },
     {
       "name": "KB손해보험",
@@ -24,7 +24,7 @@
       "incall_monitoring_phone": "1544-0019",
       "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
       "card_payment_available": true,
-      "card_payment_detail": "가능(자동이체 O)\n설계사 직접 수납"
+      "card_payment_detail": "설계사 직접 수납"
     },
     {
       "name": "롯데손해보험",
@@ -37,7 +37,7 @@
       "incall_monitoring_phone": "1600-5182",
       "monitoring_criteria": "",
       "card_payment_available": true,
-      "card_payment_detail": "가능(자동이체 O)\n설계사 직접 수납"
+      "card_payment_detail": "설계사 직접 수납"
     },
     {
       "name": "메리츠화재",
@@ -63,7 +63,7 @@
       "incall_monitoring_phone": "1566-0553",
       "monitoring_criteria": "피보험자 바이오 인증(지문)만 가능",
       "card_payment_available": true,
-      "card_payment_detail": "가능(자동이체 O)\n설계사 직접 수납"
+      "card_payment_detail": "설계사 직접 수납"
     },
     {
       "name": "한화손해보험",
