@@ -93,36 +93,39 @@
   .kv-mini .v{color:#0f172a}
 
   /* === 4세대 공통사항(좌우 1/2) === */
-  #common_2col{display:grid;gap:12px}
-  @media (min-width:900px){ #common_2col{grid-template-columns:1fr 1fr} }
+  #common_2col{
+    display:grid;
+    gap:12px;
+    /* << 고정 1/2: 좁아져도 항상 두 칸 >> */
+    grid-template-columns:1fr 1fr;
+  }
   .common-box{border-top:1px dashed rgba(100,116,139,.26);padding-top:10px}
   .common-box h5{margin:0 0 6px;font-weight:900}
   .kv-vert .tt{font-size:12px;color:#64748b;margin-bottom:6px}
   .kv-vert .ln{
-  display:grid;
-  grid-template-columns:min-content auto; /* 칩은 글자만큼, 값은 나머지 */
-  gap:8px;
-  align-items:center;
-  margin:6px 0;
-}
+    display:grid;
+    grid-template-columns:min-content auto; /* 칩은 글자만큼, 값은 나머지 */
+    gap:8px;
+    align-items:center;
+    margin:6px 0;
+  }
   .kv-vert .tag{
-  display:inline-flex;
-  align-items:center;
-  padding:2px 8px;
-  border:1px solid var(--chipbd);
-  border-radius:999px;
-  font-size:12px;
-  color:var(--chipfg);
-  background:var(--chipbg);
-  white-space:nowrap;
-
-  /* 전역 스타일이 늘리는 것 방지 */
-  width:auto !important;
-  min-width:0 !important;
-  max-width:max-content !important;
-  flex:0 0 auto !important;
-  box-sizing:border-box;
-}
+    display:inline-flex;
+    align-items:center;
+    padding:2px 8px;
+    border:1px solid var(--chipbd);
+    border-radius:999px;
+    font-size:12px;
+    color:var(--chipfg);
+    background:var(--chipbg);
+    white-space:nowrap;
+    /* 전역 스타일이 늘리는 것 방지 */
+    width:auto !important;
+    min-width:0 !important;
+    max-width:max-content !important;
+    flex:0 0 auto !important;
+    box-sizing:border-box;
+  }
   .kv-vert .num{font-weight:800}
   .kv-vert small{font-size:11px;color:#64748b}
 
@@ -311,13 +314,16 @@
       try{ return await res.json(); }catch(e){ throw new Error(`[${url}] JSON 파싱 실패: ${e.message}`); }
     }
 
+    // 단독실손 배지만 생성(카드 배지는 enroll 데이터로 연동해서 따로 갱신)
     function addBadgesFromSilson(record){
       const bf = $('#badges');
       bf.innerHTML = '';
       const solo = asBool(record['단독가입여부']);
-      const card = asBool(record['카드납 가능']);
-      bf.insertAdjacentHTML('beforeend', `<span class="badge ${solo===false?'no':(solo===true?'ok':'')}">${solo===false?'단독실손 가입 불가':(solo===true?'단독실손 가입가능':'단독실손 정보 없음')}</span>`);
-      bf.insertAdjacentHTML('beforeend', `<span class="badge ${card===false?'no':(card===true?'ok':'')}">${card===false?'카드납 불가':(card===true?'카드납 가능':'카드납 정보 없음')}</span>`);
+      bf.insertAdjacentHTML(
+        'beforeend',
+        `<span class="badge ${solo===false?'no':(solo===true?'ok':'')}" data-badge="solo">`+
+        `${solo===false?'단독실손 가입 불가':(solo===true?'단독실손 가입가능':'단독실손 정보 없음')}</span>`
+      );
     }
 
     function buildMini(container, fields, data){
@@ -397,7 +403,7 @@
 
       $('#silson_updated').textContent = updated ? `※ 데이터 기준일: ${updated}` : '';
 
-      // 유병자/노후 컴팩트: 가입나이/단독가입여부를 최상단에 추가
+      // 유병자/노후 컴팩트
       const ubData = record['유병자 실손 컴팩트'] || {};
       buildMini('#ub_kvs', ['가입나이','단독가입여부','진단여부','입원','통원','재가입주기','보험기간','자기부담금','3대비급여/약제비','알릴의무'], ubData);
 
@@ -469,7 +475,7 @@
         setTXT('mobile_age',   ageTxt);
         setTXT('incall', incall ? telfmt(incall) : '–');
 
-        // 배지 + 상세(계피상/카드)
+        // 상세(계피상/카드) 영역
         const gpsDetail = (enr.gye_pi_sang_detail || enr.monitoring_criteria || '').trim();
         const gpsWrap = document.getElementById('gps');
         gpsWrap.innerHTML =
@@ -482,8 +488,25 @@
           (cardBool==null ? '' : `<span class="badge ${cardBool?'ok':'no'}">${cardBool?'카드납 가능':'카드납 불가'}</span>`)
           + (cardDetail ? ` <span style="color:#0f172a;white-space:pre-line">${cardDetail}</span>` : '');
 
-        // 실손 카드
+        // 실손 카드(이 호출로 상단에 '단독실손' 배지가 먼저 생김)
         renderSilsonCompany(silsonCompany || {companies:{}}, company);
+
+        // === 상단 배지의 '카드납 …'을 enroll.json 기준으로 동기화 ===
+        (function syncTopCardBadge(){
+          const bf = $('#badges');
+          // 기존 카드 배지 제거
+          const old = bf.querySelector('[data-badge="card"]');
+          if (old) old.remove();
+          // 새 카드 배지 삽입
+          if (cardBool !== null){
+            const label = cardBool ? '카드납 가능' : '카드납 불가';
+            bf.insertAdjacentHTML('beforeend',
+              `<span class="badge ${cardBool?'ok':'no'}" data-badge="card">${label}</span>`);
+          } else {
+            bf.insertAdjacentHTML('beforeend',
+              `<span class="badge" data-badge="card">카드납 정보 없음</span>`);
+          }
+        })();
 
         // 시간 외 경고/노트
         const inHours = (str) => {
