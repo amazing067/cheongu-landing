@@ -552,5 +552,26 @@
     })();
   })();
   </script>
+  <script>
+(() => {
+  // 공통 차단 함수
+  const block = (e) => { e.preventDefault(); e.stopPropagation(); return false; };
+
+  // 1) 오른쪽 클릭(컨텍스트 메뉴) 차단
+  document.addEventListener('contextmenu', block, { capture: true });
+
+  // 2) F12 및 개발자도구 단축키 차단
+  document.addEventListener('keydown', (e) => {
+    const k = (e.key || '').toLowerCase();
+    // F12
+    if (k === 'f12') return block(e);
+    // Ctrl+Shift+I / J / C  (개발자도구, 콘솔 등)
+    if (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(k)) return block(e);
+    // Ctrl+U(소스보기), Ctrl+S(저장), Ctrl+P(인쇄)
+    if (e.ctrlKey && ['u','s','p'].includes(k)) return block(e);
+  }, { capture: true });
+})();
+</script>
+
 </body>
 </html>
