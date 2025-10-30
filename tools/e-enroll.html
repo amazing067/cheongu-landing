@@ -268,14 +268,14 @@
       try{ return await res.json(); }catch(e){ throw new Error(`[${url}] JSON 파싱 실패: ${e.message}`); }
     }
 
-    function renderSilsonCompany(bundle, name){
+    function renderSilsonCompany(bundle, name, enr){
       const updated = bundle?.last_updated || '';
       const record = bundle?.companies?.[name] || {};
 
       const bf = $('#badges');
       bf.innerHTML = '';
       const solo = asBool(record['단독가입여부']);
-      const card = asBool(record['카드납 가능']);
+      const card = asBool(enr.card_payment_available ?? record['카드납 가능']);
       bf.insertAdjacentHTML('beforeend', `<span class="badge ${solo===false?'no':(solo===true?'ok':'')}">${solo===false?'단독실손 가입 불가':(solo===true?'단독실손 가입가능':'단독실손 정보 없음')}</span>`);
       bf.insertAdjacentHTML('beforeend', `<span class="badge ${card===false?'no':(card===true?'ok':'')}">${card===false?'카드납 불가':(card===true?'카드납 가능':'카드납 정보 없음')}</span>`);
 
@@ -359,8 +359,7 @@
         bindTelBtn('btn_fax_tel','txt_fax_tel', (L.fax||''));
         bindTelBtn('btn_help_tel','txt_help_tel', (enr.helpdesk_phone||L.helpdesk||''));
 
-        renderSilsonCompany(silsonCompany || {companies:{}}, company);
-
+        renderSilsonCompany(silsonCompany || {companies:{}}, company, enr);
         // 계피상이 배지
         (function addGpsBadge(){
           const bf = $('#badges');
