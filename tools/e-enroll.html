@@ -394,13 +394,30 @@
         kvRow('전환시 고지사항',        conv['전환시고지사항']);
 
       // 기타
-      const specials = [];
-      Object.entries(record).forEach(([k,v])=>{
-        if(!v) return;
-        if (['단독가입여부','중복가입','진단여부','특이사항','공통사항','전환/인수','유병자 실손의료비','노후 실손의료비','유병자 실손 컴팩트','노후 실손 컴팩트','유병자 공통사항'].includes(k)) return;
-        specials.push(kvRow(k, v));
-      });
-      $('#silson_specials').innerHTML = specials.join('') || kvRow('추가안내','해당 없음');
+      // 변경
+const specials = [];
+Object.entries(record).forEach(([k, v]) => {
+  if (!v) return;
+  // 화면에 따로 보여주는 키들은 전부 제외
+  const EXCLUDE = [
+    '단독가입여부','중복가입','진단여부','특이사항',
+    '공통사항','전환/인수',
+    '유병자 실손의료비','노후 실손의료비',
+    '유병자 실손 컴팩트','노후 실손 컴팩트','유병자 공통사항',
+    // 여기 추가: 기타 카드에 나오지 않게
+    '가입나이','카드납 가능'
+  ];
+  if (EXCLUDE.includes(k)) return;
+  specials.push(kvRow(k, v));
+});
+
+// 예비 문구 없이 렌더 + 내용 없으면 카드 자체 숨김
+const spHost = document.getElementById('silson_specials');
+spHost.innerHTML = specials.join('');
+if (!specials.length) {
+  const spCard = spHost.closest('.card');
+  if (spCard) spCard.style.display = 'none';
+}
       $('#silson_updated').textContent = updated ? `※ 데이터 기준일: ${updated}` : '';
 
       // 유병자/노후 컴팩트
