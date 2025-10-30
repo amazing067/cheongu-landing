@@ -552,26 +552,73 @@
     })();
   })();
   </script>
-  <script>
+  <!-- ===== CopyGuard: 무단복제 금지 배지 + 복사 안내 ===== -->
+<style>
+  .cg-badge{
+    position:fixed; right:12px; bottom:12px; z-index:9999;
+    padding:8px 12px; border-radius:999px; font-size:12px; font-weight:700;
+    color:#0f172a; background:rgba(255,255,255,.9); border:1px solid #e2e8f0;
+    box-shadow:0 6px 16px rgba(2,6,23,.12);
+    user-select:none; -webkit-user-select:none;
+    backdrop-filter:saturate(140%) blur(6px);
+  }
+  .cg-badge small{font-weight:600; color:#64748b; margin-left:6px}
+  /* 인쇄 시 배지 숨김 */
+  @media print { .cg-badge, .cg-toast{ display:none !important; } }
+
+  .cg-toast{
+    position:fixed; left:50%; bottom:64px; transform:translateX(-50%) translateY(20px);
+    z-index:10000; padding:10px 14px; border-radius:12px; font-size:13px; color:#111827;
+    background:#fff; border:1px solid #e2e8f0; box-shadow:0 10px 24px rgba(2,6,23,.16);
+    opacity:0; pointer-events:none; transition:transform .25s ease, opacity .25s ease;
+  }
+  .cg-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+
+<div class="cg-badge" aria-label="저작권 보호 안내">
+  무단복제 금지 <small>저작권 보호중</small>
+</div>
+<div class="cg-toast" id="cgToast" role="status" aria-live="polite">
+  복사 내용은 저작권 보호 대상입니다.
+</div>
+
+<script>
 (() => {
-  // 공통 차단 함수
-  const block = (e) => { e.preventDefault(); e.stopPropagation(); return false; };
+  // 복사 시 토스트 노출
+  const toast = document.getElementById('cgToast');
+  let t;
+  const showToast = (msg) => {
+    if (!toast) return;
+    if (msg) toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(t);
+    t = setTimeout(()=> toast.classList.remove('show'), 1600);
+  };
 
-  // 1) 오른쪽 클릭(컨텍스트 메뉴) 차단
-  document.addEventListener('contextmenu', block, { capture: true });
+  document.addEventListener('copy', (e) => {
+    // (선택) 클립보드에 출처 꼬리표 추가 — 필요 없으면 이 블록 주석 처리
+    try {
+      const sel = window.getSelection?.().toString() || '';
+      const src = location.origin + location.pathname;
+      const note = `\n\n— 출처: ${src} (무단복제 금지)`;
+      const text = sel ? (sel + note) : note;
+      e.clipboardData.setData('text/plain', text);
+      e.preventDefault();
+    } catch(_) {}
+    showToast('복사 내용은 저작권 보호 대상입니다.');
+  }, { capture:true });
 
-  // 2) F12 및 개발자도구 단축키 차단
+  // 우클릭/F12 차단 스크립트 이미 넣었다면 아래는 중복 실행돼도 무방
+  const block = (ev) => { ev.preventDefault(); ev.stopPropagation(); return false; };
+  document.addEventListener('contextmenu', block, { capture:true });
   document.addEventListener('keydown', (e) => {
-    const k = (e.key || '').toLowerCase();
-    // F12
+    const k = (e.key||'').toLowerCase();
     if (k === 'f12') return block(e);
-    // Ctrl+Shift+I / J / C  (개발자도구, 콘솔 등)
     if (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(k)) return block(e);
-    // Ctrl+U(소스보기), Ctrl+S(저장), Ctrl+P(인쇄)
     if (e.ctrlKey && ['u','s','p'].includes(k)) return block(e);
-  }, { capture: true });
+  }, { capture:true });
 })();
 </script>
-
+<!-- ===== /CopyGuard ===== -->
 </body>
 </html>
