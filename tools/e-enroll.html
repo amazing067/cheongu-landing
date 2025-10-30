@@ -127,6 +127,25 @@
 }
 .page-enroll.theme-pro .btn{border-color:#cad3ff !important;background:#fff !important;box-shadow:0 5px 14px rgba(2,6,23,.10) !important}
 .page-enroll.theme-pro .btn:hover{ transform:translateY(-2px) !important; box-shadow:0 12px 26px rgba(2,6,23,.16) !important; }
+  <style id="chip-size-fix">
+  /* 공통 칩(태그) 크기 축소 + 글자 길이만큼만 */
+  .kv-vert .tag{
+    display:inline-flex;
+    align-items:center;
+    height:22px;
+    padding:0 8px;
+    font-size:11px;
+    line-height:22px;
+    border-radius:999px;
+    white-space:nowrap;
+    border:1px solid var(--chipbd);
+    background:var(--chipbg);
+    color:var(--chipfg);
+  }
+  /* 좌우 여백 살짝 축소 */
+  #silson_common .kv-vert .ln{ gap:6px; }
+  /* 금액/숫자도 살짝만 줄이고 정렬 맞춤(선택) */
+  .kv-vert .num{ font-weight:800; font-size:13px; }
   </style>
 </head>
 
