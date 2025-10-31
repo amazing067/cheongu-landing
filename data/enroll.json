@@ -29,7 +29,7 @@
     {
       "name": "롯데손해보험",
       "usage_period": "발송일 +2일",
-      "usage_hours": "오후 11:30까지지",
+      "usage_hours": "오후 11:30까지",
       "call_hours": "09:00~17:30",
       "gye_pi_sang_available": false,
       "mobile_enroll_age": { "min": 19 },
@@ -67,7 +67,7 @@
     },
     {
       "name": "한화손해보험",
-      "usage_period": "모집자 서명일+2일\n(총3일. 영업일수 아님)\n*모바일청약은 23시까지"
+      "usage_period": "모집자 서명일+2일\n(총3일. 영업일수 아님)\n*모바일청약은 23시까지",
       "usage_hours": "23시까지\n(마감날 오후6시)",
       "call_hours": "09:00~18:00",
       "gye_pi_sang_available": true,
