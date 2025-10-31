@@ -82,7 +82,6 @@
       "name": "현대해상",
       "usage_period": "발송 당일만 사용",
       "usage_hours": "오후 11:30까지",
-      "call_hours": "10:00",
       "call_hours": "09:00~18:00",
       "gye_pi_sang_available": true,
       "mobile_enroll_age": { "min": 19 },
