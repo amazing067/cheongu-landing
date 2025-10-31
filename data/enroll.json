@@ -9,7 +9,7 @@
       "mobile_enroll_age": { "min": 19 },
       "mobile_enroll_age_text": "만19세 이상",
       "incall_monitoring_phone": "1566-0757",
-      "monitoring_criteria": "미성년자 : 불가능 , 피보험자 바이오인증(지문)만 가능",
+      "monitoring_criteria": "피보험자 바이오인증(지문)만 가능",
       "card_payment_available": true,
       "card_payment_detail": "가능 설계사 직접 수납"
     },
