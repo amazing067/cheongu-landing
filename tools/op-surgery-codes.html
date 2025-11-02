@@ -87,16 +87,17 @@ body{
 </main>
 
 <script>
-/* =======================
-   0) /assets 경로 설정
-   ======================= */
-const KCD_CSV_URL  = "/assets/건강보험심사평가원_상병마스터_20240131.csv";
-const KCD_XLSX_URL = "/assets/KCD-9 DB masterfile_250701_20250701010653.xlsx";
+/* =========================================================
+   0) /assets 경로 설정 (프로젝트 페이지에서도 안전)
+   ========================================================= */
+const assetURL = (path) => new URL(path.replace(/^\/+/,'./'), location.href).href;
+const KCD_CSV_URL  = assetURL("./assets/건강보험심사평가원_상병마스터_20240131.csv");
+const KCD_XLSX_URL = assetURL("./assets/KCD-9 DB masterfile_250701_20250701010653.xlsx");
 
-/* =======================
+/* =========================================================
    1) 수술 RAW: 앞자리=3종, 뒷자리=5종
    실제 운영 시, 질병종수술분류.txt 전체 붙여넣기
-   ======================= */
+   ========================================================= */
 const RAW_DATA = String.raw`
 12(내시경적) 위용종제거술
 12(내시경적) 위출혈지혈술
@@ -1406,10 +1407,9 @@ XX흡착식 혈관정화법
 
 `;
 
-/* =======================
-   2) 수술→KCD 정확 매핑(우선 사용)
-   필요 시 계속 확장
-   ======================= */
+/* =========================================================
+   2) 수술→KCD 정확 매핑(우선 사용) — 필요 시 계속 확장
+   ========================================================= */
 const CODE_MAP = {
   "대장용종절제술": ["D12","K63.5","C18","C19","C20","C21"],
   "결장용종절제술": ["D12","K63.5","C18"],
@@ -1420,20 +1420,21 @@ const CODE_MAP = {
   "수정체초음파유화흡입술": ["H25","H26","H27","H28"]
 };
 
-/* =======================
+/* =========================================================
    3) 유틸 & 정규화
-   ======================= */
+   ========================================================= */
 const nz   = s => (s||"").toString();
 const nkey = s => nz(s).replace(/\s+/g,'').trim();
 const isKcdCode = s => /^[A-TV-Z]\d{2}(\.\d+)?$/i.test(nz(s).trim());
+const stripBOM = s => s.replace(/^\uFEFF/, '');
 
 function normalizeCode(code){
   return nz(code).trim().toUpperCase().replace(/\s+/g,'');
 }
 
-/* =======================
+/* =========================================================
    4) 수술 RAW 파싱 & 자동완성 소스
-   ======================= */
+   ========================================================= */
 function normalizeSpaces(s){ return s.replace(/\s+/g,' ').trim(); }
 function parseRaw(text){
   const out=[], seen=new Set();
@@ -1453,13 +1454,11 @@ function parseRaw(text){
 }
 let DB = parseRaw(RAW_DATA);
 
-/* =======================
-   5) KCD 사전: CSV + XLSX 병합
-   - 헤더 강인 탐지(상병분류코드/한글명칭 등)
-   - K63.5와 K635 둘 다 키로 인덱싱
-   ======================= */
+/* =========================================================
+   5) KCD 사전: CSV + XLSX 병합 (강인 헤더/코드 키)
+   ========================================================= */
 let KCD_ROWS = [];
-let KCD_BY_CODE = new Map(); // code/코드무점 둘 다 키
+let KCD_BY_CODE = new Map(); // code 및 code(점 제거) 둘 다 인덱싱
 let KCD_NAME_IDX = [];       // [{name, code}]
 
 function addKcdRow(code, name){
@@ -1467,7 +1466,6 @@ function addKcdRow(code, name){
   const c = normalizeCode(code);
   const n = nz(name).trim();
   if(!c || !n) return;
-
   const cNoDot = c.replace('.', '');
 
   if(!KCD_BY_CODE.has(c)){
@@ -1480,54 +1478,40 @@ function addKcdRow(code, name){
   }
 }
 
-function parseKcdCSV(csv){
-  const d = csv.indexOf('\t')>-1 ? '\t' : ',';
-  const lines = csv.split(/\r?\n/).filter(Boolean);
-  if(!lines.length) return;
-  const head = lines[0].split(d).map(s=>s.trim());
+const isCodeH = h => /(상병분류코드|질병분류코드|KCD.?코드|상병코드|분류코드|코드)$/i.test(h);
+const isNameH = h => /(한글명칭|한글명|상병명|질병명|항목명|명칭)$/i.test(h);
 
-  const isCode = h => /(상병분류코드|질병분류코드|KCD.?코드|상병코드|분류코드|코드)$/i.test(h);
-  const isName = h => /(한글명칭|한글명|상병명|질병명|항목명|명칭)$/i.test(h);
-
-  const iCode = head.findIndex(isCode);
-  const iName = head.findIndex(isName);
-  if(iCode<0 || iName<0) return;
-
-  for(let i=1;i<lines.length;i++){
-    const cols = lines[i].split(d);
-    addKcdRow(cols[iCode], cols[iName]);
-  }
+function sheetToKcd(sheet){
+  const rows = XLSX.utils.sheet_to_json(sheet, {defval:"", raw:false, blankrows:false});
+  if(!rows.length) return;
+  const headers = Object.keys(rows[0]).map(h=>stripBOM(String(h).trim()));
+  const keyCode = headers.find(isCodeH) || headers[0];
+  const keyName = headers.find(isNameH) || headers[1];
+  rows.forEach(r=> addKcdRow(r[keyCode], r[keyName]));
 }
 
+// CSV도 XLSX 엔진으로 안정 파싱
 async function loadKcdCSV(){
   try{
-    const txt = await fetch(KCD_CSV_URL).then(r=>r.text());
-    parseKcdCSV(txt);
-  }catch(e){ /* CSV 없어도 진행 */ }
+    const txt = stripBOM(await fetch(KCD_CSV_URL).then(r=>r.text()));
+    const wb  = XLSX.read(txt, {type:"string"});
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    sheetToKcd(sheet);
+  }catch(e){ /* skip */ }
 }
 
 async function loadKcdXLSX(){
   try{
     const ab = await fetch(KCD_XLSX_URL).then(r=>r.arrayBuffer());
     const wb = XLSX.read(ab, {type:"array"});
-    const sheetName = wb.SheetNames.find(n=>/Masterfile/i.test(n)) || wb.SheetNames[0];
-    const sheet = wb.Sheets[sheetName];
-    const rows = XLSX.utils.sheet_to_json(sheet, {defval:""});
-    if(!rows.length) return;
-
-    const headers = Object.keys(rows[0]);
-    const isCode = h => /(상병분류코드|질병분류코드|KCD.?코드|상병코드|분류코드|코드)$/i.test(h);
-    const isName = h => /(한글명칭|한글명|상병명|질병명|항목명|명칭)$/i.test(h);
-    const keyCode = headers.find(isCode) || headers[0];
-    const keyName = headers.find(isName) || headers[1];
-
-    rows.forEach(r=> addKcdRow(r[keyCode], r[keyName]));
-  }catch(e){ /* XLSX 없어도 진행 */ }
+    const sheetName = wb.SheetNames.find(n=>/masterfile/i.test(n)) || wb.SheetNames[0];
+    sheetToKcd(wb.Sheets[sheetName]);
+  }catch(e){ /* skip */ }
 }
 
-/* =======================
+/* =========================================================
    6) 자동완성: 수술 + KCD(코드/이름)
-   ======================= */
+   ========================================================= */
 const elQ = document.getElementById('q');
 const elAC = document.getElementById('ac');
 const elACList = document.getElementById('acList');
@@ -1587,9 +1571,9 @@ function openAC(items){
 }
 function closeAC(){ elAC.classList.remove('open'); }
 
-/* =======================
+/* =========================================================
    7) 렌더링
-   ======================= */
+   ========================================================= */
 const elRA = document.getElementById('rA');
 const elRB = document.getElementById('rB');
 const elK  = document.getElementById('kcdList');
@@ -1608,9 +1592,9 @@ function renderKcdPairs(pairs){
   elK.innerHTML = pairs.map(p=>`<li><b>${p.code}</b> — ${p.name||''}</li>`).join('');
 }
 
-/* =======================
+/* =========================================================
    8) 검색/선택 동작
-   ======================= */
+   ========================================================= */
 function kcdPairsFromMap(name){
   const key = Object.keys(CODE_MAP).find(k=>nkey(k)===nkey(name));
   const codes = key ? CODE_MAP[key] : [];
@@ -1665,9 +1649,9 @@ function doSearch(){
   renderKcdPairs(names);
 }
 
-/* =======================
+/* =========================================================
    9) 이벤트
-   ======================= */
+   ========================================================= */
 document.getElementById('btn').addEventListener('click', doSearch);
 elQ.addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch(); });
 elQ.addEventListener('input', ()=> openAC(suggest(elQ.value)));
@@ -1685,12 +1669,12 @@ elACList.addEventListener('click', (e)=>{
   closeAC();
 });
 
-/* =======================
+/* =========================================================
    10) KCD 자산 로딩
-   ======================= */
+   ========================================================= */
 (async ()=>{
-  await loadKcdCSV();
-  await loadKcdXLSX();
+  await loadKcdCSV();   // CSV 먼저
+  await loadKcdXLSX();  // XLSX로 보강
 })();
 </script>
 </body>
