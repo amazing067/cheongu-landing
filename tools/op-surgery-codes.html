@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>질병 종수술 분류표 | 텍스트 파서 · 자동완성 · 요약카드</title>
+  <title>질병 종수술 분류표 | 1~3종 · 1~5종 그룹 출력</title>
   <style>
     :root{
       --bg:#f7f9ff; --card:#ffffff; --ink:#182340; --muted:#5b6b8c; --line:#e6ecf7;
-      --brand:#3a64ff; --brand-soft:#e8eeff; --accent:#00c2a8; --radius:16px; --shadow:0 10px 30px rgba(15,25,55,.08);
+      --brand:#3a64ff; --brand-soft:#e8eeff; --radius:16px; --shadow:0 10px 30px rgba(15,25,55,.08);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -37,34 +37,26 @@
     .ac li:hover,.ac li.active{background:#f6f9ff}
     .ac .code{font:12px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono";color:#2f5bff;background:#eef3ff;border:1px solid #d8e2ff;padding:2px 6px;border-radius:6px}
 
-    .summary-card{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 14px;background:linear-gradient(180deg,#ffffff,#fbfdff);border:1px solid var(--line);border-radius:var(--radius);padding:14px;align-items:stretch;margin-top:14px}
-    .pill{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:6px;background:#fff;border:1px solid var(--line);padding:10px 14px;border-radius:12px;font-weight:800;min-height:64px;word-break:keep-all;overflow-wrap:anywhere}
-    .pill b{font-size:12px;color:#60709a;letter-spacing:.2px}
-
-    .grid{display:grid;grid-template-columns:1fr;gap:16px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:16px}
     .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
     .card h3{margin:0;padding:14px 16px;font-size:16px;letter-spacing:.3px;border-bottom:1px solid var(--line)}
-    table{width:100%;border-collapse:collapse;font-size:14px}
-    thead th{text-align:center;background:#f7faff;color:#3a4a7a;border-bottom:1px solid var(--line);padding:10px}
-    tbody td{padding:12px 10px;border-bottom:1px dashed var(--line)}
-    tbody tr:hover{background:#fbfcff}
-    .center{text-align:center}
-    .muted{color:#60709a}
-    .note{color:var(--muted);font-size:12px;margin-top:10px}
+    .tier{padding:8px 14px;border-top:1px dashed var(--line)}
+    .tier h4{margin:6px 0 6px;font-size:14px}
+    ul.list{margin:0;padding:0 0 8px 18px}
+    ul.list li{margin:2px 0 2px;line-height:1.5}
+    .muted{color:var(--muted)}
     .raw-toggle{margin:10px 0 0;text-align:right}
     .raw-area{width:100%;height:160px;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:ui-monospace,Consolas,Menlo,monospace;display:none}
     .raw-area.show{display:block}
     .chips{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
     .chip{background:var(--brand-soft);color:#2a47b8;border:1px solid #d7e0ff;padding:8px 12px;border-radius:999px;font-weight:700;cursor:pointer}
+    .empty{padding:16px;color:var(--muted)}
   </style>
 </head>
 <body>
   <main class="wrap">
     <h1 class="title">질병 종수술 분류표</h1>
-    <p class="subtitle">
-      맨 앞 두 글자(숫자/X)에서 <b>앞자리=1~3종</b>, <b>뒷자리=1~5종</b>을 뽑아
-      ‘표시(3·5)’ 칸에 <b>숫자만</b> 나란히 보여줍니다. 예) <code>12(내시경적) 위용종제거술</code> → <b>표시: 1 2</b>
-    </p>
+    <p class="subtitle">검색 결과를 <b>1~3종 수술비</b>, <b>1~5종 수술비</b> 블록으로만 나눠서 종별 리스트로 보여줍니다.</p>
 
     <section class="panel">
       <div class="controls">
@@ -88,35 +80,33 @@
       </div>
       <textarea id="raw" class="raw-area" spellcheck="false"></textarea>
 
-      <div id="summary" class="summary-card" style="display:none"></div>
-
-      <div class="card" style="margin-top:14px">
-        <h3>검색 결과</h3>
-        <table>
-          <thead>
-            <tr>
-              <th style="width:32%">수술명</th>
-              <th style="width:14%">설명(괄호)</th>
-              <th style="width:12%">표시(3·5)</th>
-              <th style="width:12%">3종표(1~3)</th>
-              <th style="width:12%">5종표(1~5)</th>
-              <th>비고</th>
-            </tr>
-          </thead>
-          <tbody id="tbody"></tbody>
-        </table>
+      <div class="grid" id="resultGrid" style="display:none">
+        <div class="card" id="cardA">
+          <h3>1~3종 수술비</h3>
+          <div class="tier" id="a1"><h4>1종</h4><ul class="list"></ul></div>
+          <div class="tier" id="a2"><h4>2종</h4><ul class="list"></ul></div>
+          <div class="tier" id="a3"><h4>3종</h4><ul class="list"></ul></div>
+        </div>
+        <div class="card" id="cardB">
+          <h3>1~5종 수술비</h3>
+          <div class="tier" id="b1"><h4>1종</h4><ul class="list"></ul></div>
+          <div class="tier" id="b2"><h4>2종</h4><ul class="list"></ul></div>
+          <div class="tier" id="b3"><h4>3종</h4><ul class="list"></ul></div>
+          <div class="tier" id="b4"><h4>4종</h4><ul class="list"></ul></div>
+          <div class="tier" id="b5"><h4>5종</h4><ul class="list"></ul></div>
+        </div>
       </div>
 
-      <p class="note">
-        파싱 규칙: 맨 앞 두 글자(숫자 또는 X)를 기준으로 분류합니다.<br/>
-        예) <b>12(내시경적) 위용종제거술</b> → 표시 <b>1 2</b>, 3종표 <b>1종</b>, 5종표 <b>2종</b>.<br/>
-        ‘X’는 해당없음(—)으로 표시합니다(예: X1, 1X, XX). 3종표는 1~3만 유효.
-      </p>
+      <div id="emptyState" class="empty">검색어를 입력하세요.</div>
     </section>
   </main>
 
   <script>
-    // 텍스트 원문: 줄바꿈 포함 그대로 교체 가능
+    // 설정: 설명(괄호) 표시 여부
+    const SHOW_DESC = true;       // false로 변경하면 설명 숨김
+    const MAX_PER_TIER = 200;     // 각 종별 최대 표시 개수
+
+    // 원문 데이터 (줄바꿈 포함 그대로 교체 가능)
     const RAW_DATA = String.raw`
 12(내시경적) 위용종제거술
 12(내시경적) 위출혈지혈술
@@ -142,51 +132,21 @@ XX각막 수술(굴절이상교정술)
 12각막 이식술
 1X각막 절개술 및 절제술
 12각막 종양 냉동응고술
-12각막 판누스 냉동응고술
-XX각막궤양 결막피복술
-XX각막궤양소작술 및 소파술
-XX각막이물제거술
-XX각막표층제거 및 결막피복술
-12간경변에서 줄기세포이식술
-12간경변에서 줄기세포이식술
-24간낭종 적출술
-24간내담관 공장문합술
-24간내담관 문합술
-24간농양 절개 배농술
-24간동맥 결찰술(관혈술)
-12간동맥화학색전술
-24간분절절제술
-13간암에 대한 고주파치료술
-24간엽절제술
-25간이식수술
-24간파열 봉합술
-24간폐고정술
-23감각피판술
-XX감돈 탈장 비관혈적 정복술
-XX감돈포경정복술
-13감마나이프수술
-23감압 개두술
-23감압 척수 절개술
-23감압개두술
-23갑상선 부분절제술
-11갑상선 설관낭종 절제술
-11갑상선 설관낭종 절제술
-23갑상선 전절제술
-23갑상선 종양적출술
-23갑상선암의 고주파치료술
-12갑상선양성종양고주파제거술
-... (중략: 기존 목록 그대로 이어붙이세요)
+... (생략 가능: 기존 전체 목록을 그대로 이어 붙이세요)
     `.trim();
 
     // DOM
     const elQ = document.getElementById('q');
     const elBtn = document.getElementById('searchBtn');
-    const elBody = document.getElementById('tbody');
     const elAC = document.getElementById('ac');
     const elACList = document.getElementById('acList');
-    const elSummary = document.getElementById('summary');
     const elRaw = document.getElementById('raw');
     const elToggleRaw = document.getElementById('toggleRaw');
+    const elGrid = document.getElementById('resultGrid');
+    const elEmpty = document.getElementById('emptyState');
+
+    const elA = {1: document.querySelector('#a1 ul'), 2: document.querySelector('#a2 ul'), 3: document.querySelector('#a3 ul')};
+    const elB = {1: document.querySelector('#b1 ul'), 2: document.querySelector('#b2 ul'), 3: document.querySelector('#b3 ul'), 4: document.querySelector('#b4 ul'), 5: document.querySelector('#b5 ul')};
 
     // utils
     function normalizeSpaces(s){ return s.replace(/\s+/g,' ').trim(); }
@@ -199,8 +159,8 @@ XX감돈포경정복술
       for(const line of lines){
         const m = line.match(re);
         if(!m) continue;
-        const aKey = m[1]; // 앞자리(3종표)
-        const bKey = m[2]; // 뒷자리(5종표)
+        const aKey = m[1]; // 앞자리(3종)
+        const bKey = m[2]; // 뒷자리(5종)
         const desc = m[3] ? normalizeSpaces(m[3]) : '';
         const name = normalizeSpaces(m[4]);
         const aTier = (aKey>='1' && aKey<='3') ? Number(aKey) : null;
@@ -208,26 +168,15 @@ XX감돈포경정복술
         const id = `${name}||${desc}||${aTier??'NA'}||${bTier??'NA'}`;
         if(seen.has(id)) continue;
         seen.add(id);
-        out.push({ name, desc, aKey, bKey, aTier, bTier, raw: line });
+        out.push({ name, desc, aTier, bTier });
       }
       return out;
     }
 
-    // 초기 데이터 세팅
+    // 초기 세팅
     elRaw.value = RAW_DATA;
     let DB = parseRaw(elRaw.value);
 
-    function buildIndex(rows){
-      const dict = new Map();
-      for(const r of rows){
-        const key = r.name.replace(/\s+/g,'');
-        if(!dict.has(key)) dict.set(key, r.name);
-      }
-      return dict;
-    }
-    let NAME_INDEX = buildIndex(DB);
-
-    // 자동완성
     function suggest(q){
       const key = q.replace(/\s+/g,'');
       if(!key) return [];
@@ -249,57 +198,50 @@ XX감돈포경정복술
     }
     function closeAC(){ elAC.classList.remove('open'); }
 
-    // 렌더 보조
-    const fmt3 = v => (v==null ? '—' : `${v}종`);
-    const fmt5 = v => (v==null ? '—' : `${v}종`);
-    const fmtDisplay = (a,b) => `${a==null?'—':a} ${b==null?'—':b}`;
-    const pill = (label, value, hint="") => `<span class="pill"><b>${label}</b> ${value}${hint?` <span class="muted">${hint}</span>`:""}</span>`;
-
-    function renderSummary(query, rows){
-      const total = rows.length;
-      const aVals = rows.map(r=>r.aTier).filter(v=>v!=null);
-      const bVals = rows.map(r=>r.bTier).filter(v=>v!=null);
-      const aMin = aVals.length ? Math.min(...aVals) : null;
-      const aMax = aVals.length ? Math.max(...aVals) : null;
-      const bMin = bVals.length ? Math.min(...bVals) : null;
-      const bMax = bVals.length ? Math.max(...bVals) : null;
-
-      elSummary.innerHTML = [
-        pill('검색어', query || '—'),
-        pill('결과 수', String(total)),
-        pill('3종표 범위', aMin==null?'—':`${aMin}~${aMax}종`),
-        pill('5종표 범위', bMin==null?'—':`${bMin}~${bMax}종`),
-        pill('표시 예시', total? fmtDisplay(rows[0].aTier, rows[0].bTier) : '—', '앞자리=3 · 뒷자리=5')
-      ].join('');
-      elSummary.style.display = 'grid';
+    function liText(r){
+      if(SHOW_DESC && r.desc) return `${r.name} <span class="muted">(${r.desc})</span>`;
+      return r.name;
     }
 
-    function renderTable(rows){
-      if(!rows.length){
-        elBody.innerHTML = `<tr><td class="center" colspan="6">검색 결과가 없습니다. 다른 표현으로 시도해 주세요.</td></tr>`;
-        return;
+    function renderGroups(rows){
+      // 초기화
+      for(let i=1;i<=3;i++) elA[i].innerHTML = '';
+      for(let i=1;i<=5;i++) elB[i].innerHTML = '';
+
+      // 그룹화
+      const A = {1:[],2:[],3:[]};
+      const B = {1:[],2:[],3:[],4:[],5:[]};
+
+      for(const r of rows){
+        if(r.aTier!=null && A[r.aTier]) A[r.aTier].push(r);
+        if(r.bTier!=null && B[r.bTier]) B[r.bTier].push(r);
       }
-      const html = rows.map(r=>{
-        return `<tr>
-          <td><b>${r.name}</b></td>
-          <td class="center">${r.desc||'—'}</td>
-          <td class="center"><b>${fmtDisplay(r.aTier,r.bTier)}</b></td>
-          <td class="center">${fmt3(r.aTier)}</td>
-          <td class="center">${fmt5(r.bTier)}</td>
-          <td class="muted">${r.aKey}${r.bKey} · 원문: ${r.raw}</td>
-        </tr>`;
-      }).join('');
-      elBody.innerHTML = html;
+
+      // 렌더 (각 종별 최대 MAX_PER_TIER개)
+      for(let i=1;i<=3;i++){
+        const items = A[i].slice(0, MAX_PER_TIER)
+          .map(r=> `<li>${liText(r)}</li>`).join('');
+        elA[i].innerHTML = items || `<li class="muted">해당 수술 없음</li>`;
+      }
+      for(let i=1;i<=5;i++){
+        const items = B[i].slice(0, MAX_PER_TIER)
+          .map(r=> `<li>${liText(r)}</li>`).join('');
+        elB[i].innerHTML = items || `<li class="muted">해당 수술 없음</li>`;
+      }
     }
 
     function doSearch(){
       const q = elQ.value.trim();
-      if(!q){ elBody.innerHTML=''; elSummary.style.display='none'; return; }
+      if(!q){
+        elGrid.style.display = 'none';
+        elEmpty.style.display = 'block';
+        return;
+      }
       const key = q.replace(/\s+/g,'');
       const rows = DB.filter(r=> r.name.replace(/\s+/g,'').includes(key));
-      const limited = rows.slice(0, 200);
-      renderSummary(q, rows);
-      renderTable(limited);
+      renderGroups(rows);
+      elEmpty.style.display = 'none';
+      elGrid.style.display = 'grid';
       closeAC();
     }
 
@@ -326,15 +268,11 @@ XX감돈포경정복술
       elRaw.classList.toggle('show');
     });
 
-    // 원문이 바뀌면 즉시 재파싱
+    // 원문 변경 시 재파싱
     elRaw.addEventListener('input', ()=>{
       DB = parseRaw(elRaw.value);
-      NAME_INDEX = buildIndex(DB);
       if(elQ.value.trim()) doSearch();
     });
-
-    // 초기
-    elBody.innerHTML = '';
   </script>
 </body>
 </html>
