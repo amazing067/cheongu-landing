@@ -3,13 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>질병 종수술 분류표 | 그룹 뷰(선택형)</title>
+  <title>질병 종수술 분류표 | 단일등급 표시</title>
   <style>
     :root{
       --bg:#f7f9ff; --card:#ffffff; --ink:#182340; --muted:#5b6b8c; --line:#e6ecf7;
-      --brand1:#6a88ff; --brand2:#3a64ff; --accent1:#ff7ac0; --accent2:#ff5d8f;
-      --ok1:#33d6a6; --ok2:#07b7a4;
-      --radius:16px; --shadow:0 10px 30px rgba(15,25,55,.08);
+      --brand:#3a64ff; --brand2:#00c2a8; --radius:16px; --shadow:0 10px 30px rgba(15,25,55,.08);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -18,54 +16,55 @@
         radial-gradient(900px 500px at 10% -10%, #ebf2ff 0%, transparent 60%),
         radial-gradient(900px 500px at 120% 0%, #f2fffb 0%, transparent 60%),
         var(--bg);
-      color:var(--ink);font:14px/1.65 "Pretendard",ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Noto Sans KR,Arial;
+      color:var(--ink);
+      font:14px/1.65 "Pretendard",ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Noto Sans KR,Arial;
       padding:34px;display:flex;align-items:flex-start;justify-content:center
     }
     .wrap{width:min(1200px,100%)}
+
     .title{margin:0 0 8px;font-weight:900;letter-spacing:.2px;font-size:clamp(22px,3.4vw,34px);text-align:center}
-    .subtitle{margin:0 0 16px;color:var(--muted);text-align:center}
+    .subtitle{margin:0 0 18px;color:var(--muted);text-align:center}
 
     .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
     .controls{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
-    .searchbox{position:relative}
     .searchbox input{width:100%;height:56px;border:1px solid var(--line);border-radius:14px;padding:0 56px 0 18px;font-size:16px;outline:none;background:#fff;color:var(--ink);box-shadow:inset 0 1px 0 rgba(0,0,0,.02)}
-    .searchbox input:focus{border-color:var(--brand2);box-shadow:0 0 0 4px #e8eeff}
-    .btn{height:56px;padding:0 22px;border:0;border-radius:14px;font-weight:800;letter-spacing:.2px;cursor:pointer;color:#fff;
-         background:linear-gradient(180deg,var(--brand1),var(--brand2)); box-shadow:0 8px 20px rgba(58,100,255,.25)}
-    .chips{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
-    .chip{background:#e8eeff;color:#2a47b8;border:1px solid #d7e0ff;padding:8px 12px;border-radius:999px;font-weight:700;cursor:pointer}
+    .searchbox input:focus{border-color:var(--brand);box-shadow:0 0 0 4px #e8eeff}
+    .search-btn{height:56px;padding:0 22px;border:0;border-radius:14px;font-weight:900;letter-spacing:.2px;cursor:pointer;
+      background:linear-gradient(135deg,var(--brand),#2e53d9);color:#fff;box-shadow:0 10px 24px rgba(58,100,255,.25)}
 
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-top:16px}
+    .chips{margin:12px 0 18px;display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-start}
+    .chip{border:0;padding:10px 14px;border-radius:999px;font-weight:800;cursor:pointer;color:#fff;
+      background:linear-gradient(135deg,#7aa8ff,#3a64ff);box-shadow:0 4px 14px rgba(58,100,255,.25)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:10px}
+    @media (max-width:900px){ .grid{grid-template-columns:1fr} }
+
     .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-    .card h3{margin:0;padding:14px 16px;font-size:16px;letter-spacing:.3px;border-bottom:1px solid var(--line);text-align:center}
-
-    .filters{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border-bottom:1px dashed var(--line)}
-    .seg{padding:8px 12px;border-radius:999px;border:1px solid #d7e0ff;cursor:pointer;
-         background:linear-gradient(180deg,#ffffff,#f6f9ff); font-weight:800;color:#334; min-width:56px;text-align:center}
-    .seg.active{color:#fff;border-color:transparent;
-      background:linear-gradient(135deg,var(--ok1),var(--ok2)); box-shadow:0 6px 16px rgba(7,183,164,.25)}
-    .seg.clear{background:linear-gradient(135deg,var(--accent1),var(--accent2)); color:#fff;border-color:transparent}
-
-    .tier{padding:8px 16px;border-top:1px dashed var(--line)}
-    .tier h4{margin:8px 0 6px;font-size:14px}
-    ul.list{margin:0;padding:0 0 8px 18px}
-    ul.list li{margin:2px 0 2px;line-height:1.5}
-    .muted{color:var(--muted)}
-    .hidden{display:none!important}
-    .empty{padding:16px;color:var(--muted)}
+    .card .hd{
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      padding:14px 16px;border-bottom:1px solid var(--line);font-size:16px;font-weight:900;letter-spacing:.3px;
+      background:linear-gradient(135deg,#00c2a8,#3a64ff);color:#fff;
+    }
+    .tier-bar{display:flex;gap:8px;justify-content:center;padding:12px;border-bottom:1px solid var(--line);background:#fafcff}
+    .btn{padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:800;color:#fff;
+      background:linear-gradient(135deg,#8fe3d6,#00b3a3);box-shadow:0 6px 16px rgba(0,195,171,.25)}
+    .list{padding:10px 14px}
+    .item{padding:6px 0;border-bottom:1px dashed var(--line)}
+    .cap{display:block;color:#60709a;font-size:12px;margin-top:2px}
+    .muted{color:#60709a}
+    .badge{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;background:#eef3ff;color:#2f5bff;
+      font:12px/1.2 ui-monospace,Consolas,Menlo,monospace;border:1px solid #d8e2ff}
+    .none{padding:12px 14px;color:#8fa0c6}
   </style>
 </head>
 <body>
   <main class="wrap">
     <h1 class="title">질병 종수술 분류표</h1>
-    <p class="subtitle">검색 → 아래 카드에서 종 버튼을 선택하면 그 종만 표시됩니다.</p>
+    <p class="subtitle">검색 후, 각 패널에서 선택된 등급만 표시됩니다. (앞자리=3종, 뒷자리=5종)</p>
 
     <section class="panel">
       <div class="controls">
-        <div class="searchbox">
-          <input id="q" type="text" placeholder="예: 용종, 담낭절제, 갑상선, 혈전제거, 자궁…" aria-label="수술명 검색" />
-        </div>
-        <button id="searchBtn" class="btn">검색</button>
+        <div class="searchbox"><input id="q" type="text" placeholder="예: 위용종, 담낭, 갑상선, 혈전, 자궁" aria-label="수술명 검색" /></div>
+        <button id="searchBtn" class="search-btn">검색</button>
       </div>
 
       <div class="chips" aria-label="빠른검색">
@@ -76,48 +75,38 @@
         <button class="chip" data-k="자궁">자궁</button>
       </div>
 
-      <div class="grid" id="resultGrid" style="display:none">
-        <!-- 1~3 -->
+      <div class="grid">
         <div class="card" id="cardA">
-          <h3>1~3종 수술비</h3>
-          <div class="filters" id="filtersA">
-            <button class="seg" data-tier="1">1종</button>
-            <button class="seg" data-tier="2">2종</button>
-            <button class="seg" data-tier="3">3종</button>
-            <button class="seg clear" data-tier="all">전체</button>
-          </div>
-          <div class="tier" id="a1"><h4>1종</h4><ul class="list"></ul></div>
-          <div class="tier" id="a2"><h4>2종</h4><ul class="list"></ul></div>
-          <div class="tier" id="a3"><h4>3종</h4><ul class="list"></ul></div>
+          <div class="hd">1~3종 수술비</div>
+          <div class="tier-bar" id="tierA"></div>
+          <div class="list" id="listA"></div>
         </div>
-
-        <!-- 1~5 -->
         <div class="card" id="cardB">
-          <h3>1~5종 수술비</h3>
-          <div class="filters" id="filtersB">
-            <button class="seg" data-tier="1">1종</button>
-            <button class="seg" data-tier="2">2종</button>
-            <button class="seg" data-tier="3">3종</button>
-            <button class="seg" data-tier="4">4종</button>
-            <button class="seg" data-tier="5">5종</button>
-            <button class="seg clear" data-tier="all">전체</button>
-          </div>
-          <div class="tier" id="b1"><h4>1종</h4><ul class="list"></ul></div>
-          <div class="tier" id="b2"><h4>2종</h4><ul class="list"></ul></div>
-          <div class="tier" id="b3"><h4>3종</h4><ul class="list"></ul></div>
-          <div class="tier" id="b4"><h4>4종</h4><ul class="list"></ul></div>
-          <div class="tier" id="b5"><h4>5종</h4><ul class="list"></ul></div>
+          <div class="hd">1~5종 수술비</div>
+          <div class="tier-bar" id="tierB"></div>
+          <div class="list" id="listB"></div>
         </div>
       </div>
-
-      <div id="emptyState" class="empty">검색어를 입력하세요.</div>
     </section>
   </main>
 
   <script>
-    // === 원문 데이터: 네가 쓰던 전체 목록을 그대로 붙여넣기 ===
+    // ------------------------------------------------------------
+    // ① 코드 매핑: 아래 객체에 "수술명(필요시 괄호설명 포함)" : "질병분류코드" 형태로 채워 넣으세요.
+    //    JSON 템플릿은 제가 만들어둔 파일을 참고해서 그대로 복붙하면 됩니다.
+    //    예) "위용종제거술 (내시경적)": "K31.7"
+    // ------------------------------------------------------------
+    const CODE_MAP = {
+      // 붙여 넣기 영역 (현재는 빈 상태)
+    };
+
+    // ------------------------------------------------------------
+    // ② 업로드 텍스트 본문: 이미 구축해 두신 목록을 그대로 붙여 넣어도 동작합니다.
+    //    (정규식: ^([0-9X])([0-9X])(\(옵션설명\))? 수술명)
+    // ------------------------------------------------------------
     const RAW_DATA = String.raw`
-12(내시경적) 위용종제거술
+${''/* 여기에 기존 txt를 붙여넣어도 되고, 그대로 비워두고 제가 만든 CSV/JSON로만 운용해도 됩니다. */}
+    12(내시경적) 위용종제거술
 12(내시경적) 위출혈지혈술
 11andrew method
 11bassini repair
@@ -1423,109 +1412,100 @@ XX회음절개 및 봉합술
 33흉선절제술
 XX흡착식 혈관정화법
 
-    `.trim();
+    `;
 
-    // --- DOM
-    const elQ = document.getElementById('q');
-    const elBtn = document.getElementById('searchBtn');
-    const elGrid = document.getElementById('resultGrid');
-    const elEmpty = document.getElementById('emptyState');
-
-    const ALists = {1: document.querySelector('#a1 ul'), 2: document.querySelector('#a2 ul'), 3: document.querySelector('#a3 ul')};
-    const BLists = {1: document.querySelector('#b1 ul'), 2: document.querySelector('#b2 ul'), 3: document.querySelector('#b3 ul'), 4: document.querySelector('#b4 ul'), 5: document.querySelector('#b5 ul')};
-    const ATiers = {1: document.getElementById('a1'), 2: document.getElementById('a2'), 3: document.getElementById('a3')};
-    const BTiers = {1: document.getElementById('b1'), 2: document.getElementById('b2'), 3: document.getElementById('b3'), 4: document.getElementById('b4'), 5: document.getElementById('b5')};
-
-    const normalizeSpaces = s => s.replace(/\s+/g,' ').trim();
-    const keyOf = s => s.replace(/\s+/g,'').trim();
-
+    // ----------------- 파서 -----------------
+    function normalizeSpaces(s){ return s.replace(/\s+/g,' ').trim(); }
     function parseRaw(text){
       const out = [];
       const seen = new Set();
       const lines = text.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
       const re = /^\s*([0-9X])([0-9X])\s*(?:\(([^)]+)\))?\s*(.+?)\s*$/;
       for(const line of lines){
-        const m = line.match(re); if(!m) continue;
-        const aKey = m[1], bKey = m[2];
+        const m = line.match(re);
+        if(!m) continue;
+        const aKey = m[1]; // 3종표 키
+        const bKey = m[2]; // 5종표 키
         const desc = m[3] ? normalizeSpaces(m[3]) : '';
         const name = normalizeSpaces(m[4]);
         const aTier = (aKey>='1' && aKey<='3') ? Number(aKey) : null;
         const bTier = (bKey>='1' && bKey<='5') ? Number(bKey) : null;
-        const id = `${name}||${aTier??'NA'}||${bTier??'NA'}||${desc}`;
+        const id = `${name}||${desc}||${aTier??'NA'}||${bTier??'NA'}`;
         if(seen.has(id)) continue;
         seen.add(id);
-        out.push({ name, desc, aTier, bTier });
+        // 질병분류코드 찾기 키: "수술명 (설명)" → 없으면 "수술명"
+        const keyFull = desc ? `${name} (${desc})` : name;
+        const code = CODE_MAP[keyFull] ?? CODE_MAP[name] ?? '';
+        out.push({ name, desc, aTier, bTier, code });
       }
       return out;
     }
 
-    let DB = parseRaw(RAW_DATA);
+    const DB = parseRaw(RAW_DATA);
 
-    // 상태: 선택된 종 (null=전체)
-    let selA = null; // 1|2|3|null
-    let selB = null; // 1|2|3|4|5|null
+    // ----------------- 검색 & 렌더 -----------------
+    const elQ = document.getElementById('q');
+    const elBtn = document.getElementById('searchBtn');
+    const elTierA = document.getElementById('tierA');
+    const elTierB = document.getElementById('tierB');
+    const elListA = document.getElementById('listA');
+    const elListB = document.getElementById('listB');
 
-    function renderGroups(rows){
-      // 초기화
-      for(let i=1;i<=3;i++){ ALists[i].innerHTML=''; ATiers[i].classList.remove('hidden'); }
-      for(let i=1;i<=5;i++){ BLists[i].innerHTML=''; BTiers[i].classList.remove('hidden'); }
+    function groupByTier(rows, mode){ // mode: 'A'(1~3) / 'B'(1~5)
+      const maxTier = (mode==='A') ? 3 : 5;
+      const key = (mode==='A') ? 'aTier' : 'bTier';
+      const bucket = new Map(); // tier -> rows
+      for(let t=1; t<=maxTier; t++) bucket.set(t, []);
+      rows.forEach(r=>{
+        const t = r[key];
+        if(t!=null && t>=1 && t<=maxTier) bucket.get(t).push(r);
+      });
+      return bucket;
+    }
 
-      const AG = {1:[],2:[],3:[]};
-      const BG = {1:[],2:[],3:[],4:[],5:[]};
-
-      for(const r of rows){
-        if(r.aTier!=null) AG[r.aTier].push(r);
-        if(r.bTier!=null) BG[r.bTier].push(r);
+    function makeTierButtons(mode, callback){
+      const max = (mode==='A') ? 3 : 5;
+      const frag = document.createDocumentFragment();
+      for(let i=1;i<=max;i++){
+        const b = document.createElement('button');
+        b.className='btn';
+        b.textContent = `${i}종만 보기`;
+        b.addEventListener('click', ()=>callback(i));
+        frag.appendChild(b);
       }
+      return frag;
+    }
 
-      // 렌더(설명은 괄호로 표시)
-      for(let i=1;i<=3;i++){
-        ALists[i].innerHTML = AG[i].map(r => `<li>${r.name}${r.desc?` <span class="muted">(${r.desc})</span>`:''}</li>`).join('');
-        if(!AG[i].length) ATiers[i].classList.add('hidden');
-      }
-      for(let i=1;i<=5;i++){
-        BLists[i].innerHTML = BG[i].map(r => `<li>${r.name}${r.desc?` <span class="muted">(${r.desc})</span>`:''}</li>`).join('');
-        if(!BG[i].length) BTiers[i].classList.add('hidden');
-      }
-
-      // 선택된 종만 보이기
-      if(selA){ for(let i=1;i<=3;i++) ATiers[i].classList.toggle('hidden', i!==selA); }
-      if(selB){ for(let i=1;i<=5;i++) BTiers[i].classList.toggle('hidden', i!==selB); }
+    function renderList(container, rows){
+      container.innerHTML = rows.map(r=>{
+        const name = r.name;
+        const code = r.code ? `<span class="badge">${r.code}</span>` : '';
+        return `<div class="item">• ${name} ${code}</div>`;
+      }).join('') || `<div class="none">표시할 항목이 없습니다.</div>`;
     }
 
     function doSearch(){
-      const q = elQ.value.trim();
-      if(!q){ elGrid.style.display='none'; elEmpty.style.display='block'; return; }
-      const k = keyOf(q);
-      const rows = DB.filter(r => keyOf(r.name).includes(k));
-      elEmpty.style.display='none';
-      elGrid.style.display='grid';
-      renderGroups(rows);
+      const q = elQ.value.replace(/\s+/g,'').trim();
+      const hit = DB.filter(r => (r.name.replace(/\s+/g,'').includes(q)));
+      const gA = groupByTier(hit,'A');
+      const gB = groupByTier(hit,'B');
+
+      // 버튼(클릭하면 해당 등급만 표시)
+      elTierA.innerHTML=''; elTierA.appendChild(makeTierButtons('A',(sel)=> renderList(elListA, gA.get(sel))));
+      elTierB.innerHTML=''; elTierB.appendChild(makeTierButtons('B',(sel)=> renderList(elListB, gB.get(sel))));
+
+      // 기본: 아무 것도 선택되지 않았을 때는 비워 둠
+      elListA.innerHTML = `<div class="none">왼쪽 버튼으로 등급을 선택하세요.</div>`;
+      elListB.innerHTML = `<div class="none">오른쪽 버튼으로 등급을 선택하세요.</div>`;
     }
 
-    // 버튼 이벤트
+    // 이벤트
     elBtn.addEventListener('click', doSearch);
-    elQ.addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch(); });
-    document.querySelectorAll('.chip').forEach(ch=> ch.addEventListener('click', ()=>{
-      elQ.value = ch.dataset.k; doSearch();
-    }));
+    elQ.addEventListener('keydown', (e)=>{ if(e.key==='Enter') doSearch(); });
+    document.querySelectorAll('.chip').forEach(ch=> ch.addEventListener('click', ()=>{ elQ.value = ch.dataset.k; doSearch(); }));
 
-    // 종 필터(1~3)
-    document.getElementById('filtersA').addEventListener('click', (e)=>{
-      const b = e.target.closest('.seg'); if(!b) return;
-      const t = b.dataset.tier;
-      document.querySelectorAll('#filtersA .seg').forEach(x=> x.classList.remove('active'));
-      if(t==='all'){ selA=null; } else { selA = Number(t); b.classList.add('active'); }
-      doSearch();
-    });
-    // 종 필터(1~5)
-    document.getElementById('filtersB').addEventListener('click', (e)=>{
-      const b = e.target.closest('.seg'); if(!b) return;
-      const t = b.dataset.tier;
-      document.querySelectorAll('#filtersB .seg').forEach(x=> x.classList.remove('active'));
-      if(t==='all'){ selB=null; } else { selB = Number(t); b.classList.add('active'); }
-      doSearch();
-    });
+    // 최초 빈 렌더
+    elTierA.innerHTML=''; elTierB.innerHTML='';
   </script>
 </body>
 </html>
