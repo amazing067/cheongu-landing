@@ -3,93 +3,95 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>질병 종수술 분류 + KCD 코드</title>
+<title>종수술 등급 + KCD 코드 통합 검색</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
-  :root{
-    --bg:#f6f8ff; --ink:#172036; --muted:#6b7898; --line:#e6eaf6;
-    --brand1:#6a8dff; --brand2:#3a64ff; --brand3:#00c2a8; --card:#fff;
-    --radius:16px; --shadow:0 12px 30px rgba(20,35,80,.10);
-  }
-  *{box-sizing:border-box} html,body{height:100%}
-  body{margin:0;background:
-    radial-gradient(1200px 600px at -10% -10%, #edf2ff 0%, transparent 60%),
-    radial-gradient(1000px 600px at 110% 0%, #f1fffb 0%, transparent 60%),
-    var(--bg);
-    color:var(--ink);font:15px/1.65 "Pretendard",ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans KR",Arial;
-    padding:34px;display:flex;justify-content:center}
-  .wrap{width:min(1100px,100%)}
-  .title{margin:0 0 8px;text-align:center;font-weight:900;letter-spacing:.2px;
-    font-size:clamp(22px,3.2vw,32px)}
-  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
-  .controls{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
-  .searchbox{position:relative}
-  .searchbox input{width:100%;height:58px;border:1px solid var(--line);border-radius:14px;padding:0 58px 0 18px;font-size:16px;outline:none;background:#fff;color:var(--ink);box-shadow:inset 0 1px 0 rgba(0,0,0,.02)}
-  .searchbox input:focus{border-color:#cfe1ff;box-shadow:0 0 0 5px #eaf1ff}
-  .btn{height:58px;padding:0 22px;border:0;border-radius:14px;font-weight:900;letter-spacing:.2px;cursor:pointer;color:#fff;
-    background:linear-gradient(135deg,var(--brand1),var(--brand2));box-shadow:0 12px 25px rgba(58,100,255,.28)}
-  .ac{position:absolute;left:0;right:0;top:62px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;z-index:20;display:none;max-height:380px;overflow:auto}
-  .ac.open{display:block}
-  .ac ul{list-style:none;margin:0;padding:8px}
-  .ac li{padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:10px}
-  .ac li:hover,.ac li.active{background:#f6f9ff}
-  .badge{font:11px/1.2 ui-monospace,Consolas,Menlo,monospace;padding:3px 8px;border-radius:999px;border:1px solid #dbe4ff;background:#eef3ff;color:#2f5bff}
-  .badge.kcd{border-color:#cfeee7;background:#edfdf9;color:#0b806f}
+:root{
+  --bg:#f6f8ff; --ink:#172036; --muted:#6b7898; --line:#e6eaf6; --card:#fff;
+  --brand1:#6a8dff; --brand2:#3a64ff; --accent:#00c2a8; --radius:18px;
+  --shadow:0 12px 30px rgba(20,35,80,.10);
+}
+*{box-sizing:border-box} html,body{height:100%}
+body{margin:0;background:
+  radial-gradient(1200px 600px at -10% -10%, #edf2ff 0%, transparent 60%),
+  radial-gradient(1000px 600px at 110% 0%, #f1fffb 0%, transparent 60%),
+  var(--bg);
+  color:var(--ink);font:15px/1.65 "Pretendard",ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans KR",Arial;
+  padding:34px;display:flex;justify-content:center}
+.wrap{width:min(1100px,100%)}
+.title{margin:0 0 8px;text-align:center;font-weight:900;letter-spacing:.2px;font-size:clamp(22px,3.2vw,32px)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+.controls{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.searchbox{position:relative}
+.searchbox input{width:100%;height:58px;border:1px solid var(--line);border-radius:14px;padding:0 58px 0 18px;font-size:16px;outline:none;background:#fff}
+.searchbox input:focus{border-color:#cfe1ff;box-shadow:0 0 0 5px #eaf1ff}
+.btn{height:58px;padding:0 22px;border:0;border-radius:14px;font-weight:900;letter-spacing:.2px;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--brand1),var(--brand2));box-shadow:0 12px 25px rgba(58,100,255,.28)}
+.ac{position:absolute;left:0;right:0;top:62px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;z-index:20;display:none;max-height:380px;overflow:auto}
+.ac.open{display:block}
+.ac ul{list-style:none;margin:0;padding:8px}
+.ac li{padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.ac li:hover,.ac li.active{background:#f6f9ff}
+.ac .name{font-weight:900}
+.ac .desc{font-size:12px;color:#60709a}
+.ac .code{font:12px/1.2 ui-monospace,Consolas,Menlo,monospace;color:#2f5bff}
 
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
-  .card{background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
-  .card h3{margin:0;padding:14px 16px;font-size:16px;letter-spacing:.3px;border-bottom:1px solid var(--line);text-align:center;background:linear-gradient(135deg,#ffffff,#f6f8ff)}
-  .only{padding:12px 16px 16px}
-  .pill{display:flex;gap:10px;align-items:flex-start;margin:8px 0;padding:10px 12px;border:1px dashed #e3e9f7;border-radius:12px;background:#fff}
-  .pill b{font-size:14px}
-  .muted{color:var(--muted)}
-  .center{text-align:center}
-  .kcd{margin-top:18px;border-top:1px solid var(--line);padding:12px 16px}
-  .kcd h4{margin:0 0 6px;font-size:14px}
-  .kcd ul{margin:0;padding-left:18px}
-  .kcd li{margin:4px 0}
-  .foot{margin-top:10px;text-align:center;color:#98a3c4;font-size:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.card .hd{padding:14px 16px;border-bottom:1px solid var(--line);text-align:center;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--brand2));color:#fff}
+.result{display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px 16px 26px}
+.big{font-size:44px;font-weight:900}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.center{text-align:center}
+
+.kcd-card{margin-top:16px}
+.kcd-list{margin:0;padding:0 20px}
+.kcd-list li{margin:6px 0}
 </style>
 </head>
 <body>
-  <main class="wrap">
-    <h1 class="title">질병 종수술 분류 + KCD 코드</h1>
+<main class="wrap">
+  <h1 class="title">종수술 등급 + KCD 코드 통합 검색</h1>
 
-    <section class="panel">
-      <div class="controls">
-        <div class="searchbox">
-          <input id="q" type="text" placeholder="예: 대장용종절제술, 갑상선, 담낭, 용종…" aria-label="검색"/>
-          <div class="ac" id="ac"><ul id="acList"></ul></div>
-        </div>
-        <button id="searchBtn" class="btn">검색</button>
+  <section class="panel">
+    <div class="controls">
+      <div class="searchbox">
+        <input id="q" type="text" placeholder="예: 대장용종절제술 / K63.5 / 갑상선 전절제술 …" aria-label="검색"/>
+        <div class="ac" id="ac"><ul id="acList"></ul></div>
       </div>
+      <button id="btn" class="btn">검색</button>
+    </div>
 
-      <div class="grid" style="margin-top:18px">
-        <article class="card">
-          <h3>1~3종 수술비</h3>
-          <div class="only" id="colA">
-            <div class="pill muted">검색 결과가 여기에 표시됩니다.</div>
-          </div>
-        </article>
-        <article class="card">
-          <h3>1~5종 수술비</h3>
-          <div class="only" id="colB">
-            <div class="pill muted">검색 결과가 여기에 표시됩니다.</div>
-          </div>
-        </article>
-      </div>
-
-      <article class="card kcd">
-        <h4>관련 KCD 코드</h4>
-        <ul id="kcdList"><li class="muted">검색어와 일치하는 상병명이 여기에 표시됩니다.</li></ul>
+    <div class="grid" style="margin-top:18px">
+      <article class="card">
+        <div class="hd">1~3종 수술비</div>
+        <div class="result" id="rA"><div class="muted">수술을 선택하면 표시됩니다.</div></div>
       </article>
+      <article class="card">
+        <div class="hd">1~5종 수술비</div>
+        <div class="result" id="rB"><div class="muted">수술을 선택하면 표시됩니다.</div></div>
+      </article>
+    </div>
 
-      <p class="foot">앞자리=1~3종, 뒷자리=1~5종 (X는 해당없음)</p>
-    </section>
-  </main>
+    <article class="card kcd-card">
+      <div class="hd" style="background:linear-gradient(135deg,#32d5bd,#3a64ff)">KCD 결과</div>
+      <div class="result" style="gap:10px; padding:16px">
+        <ul id="kcdList" class="kcd-list">
+          <li class="muted">수술 선택 시: 관련 KCD(정확 매핑 → 후보) / 코드 입력 시: 해당 한글명+코드만 표시</li>
+        </ul>
+      </div>
+    </article>
+  </section>
+</main>
 
 <script>
-/* ===== 1) 수술 분류 RAW (앞자리=3종, 뒷자리=5종) ===== */
-const RAW_DATA = String.raw`12(내시경적) 위용종제거술
+/* ========== 0) 설정: /assets 경로의 파일 이름만 바꿔서 사용 ========== */
+const KCD_CSV_URL  = "/assets/건강보험심사평가원_상병마스터_20240131.csv"; // CSV
+const KCD_XLSX_URL = "/assets/KCD-9 DB masterfile_250701_20250701010653.xlsx"; // XLSX (마스터)
+
+/* ========== 1) 수술 RAW (앞자리=3종, 뒷자리=5종) — 실제 전체 텍스트로 교체 ========== */
+const RAW_DATA = String.raw`
 12(내시경적) 위용종제거술
 12(내시경적) 위출혈지혈술
 11andrew method
@@ -1395,156 +1397,252 @@ XX회음절개 및 봉합술
 23흉벽루 근본수술
 33흉선절제술
 XX흡착식 혈관정화법
-...`;
-// ↑ 실제 배포 시, 네가 가진 전체 텍스트(질병종수술분류.txt)를 그대로 붙여넣기.
+`;
 
-/* ===== 2) KCD CSV 경로(네 사이트에 올린 파일로 변경) ===== */
-const KCD_CSV_URL = "/assets/건강보험심사평가원_상병마스터_20240131.csv"; // 예시 경로
+/* ========== 2) 수술→KCD 정확 매핑 (필요 시 계속 확장) ========== */
+const CODE_MAP = {
+  "대장용종절제술": ["D12","K63.5","C18","C19","C20","C21"],
+  "결장용종절제술": ["D12","K63.5","C18"],
+  "위용종제거술":   ["K31.7","D13.1","C16"],
+  "담낭절제술":     ["K81.1","K80.1","K82.9","C23"],
+  "갑상선전절제술": ["C73","D34.0","E04.2"],
+  "충수절제술":     ["K35.9","K36"],
+  "수정체초음파유화흡입술": ["H25","H26","H27","H28"] // 백내장
+};
 
-/* ===== 파서: 수술 RAW → 구조화 ===== */
+/* ========== 3) 유틸 ========== */
+const nz = s => (s||"").toString();
+const nkey = s => nz(s).replace(/\s+/g,'').trim();
+const isKcdCode = s => /^[A-TV-Z]\d{2}(\.\d+)?$/i.test(nz(s).trim()); // KCD 패턴 대략
+
+/* ========== 4) 수술 RAW 파싱 & 자동완성 소스 ========== */
 function normalizeSpaces(s){ return s.replace(/\s+/g,' ').trim(); }
 function parseRaw(text){
   const out=[], seen=new Set();
   const lines = text.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
   const re = /^\s*([0-9X])([0-9X])\s*(?:\(([^)]+)\))?\s*(.+?)\s*$/;
   for(const line of lines){
-    const m = line.match(re); if(!m) continue;
+    const m=line.match(re); if(!m) continue;
     const aKey=m[1], bKey=m[2], desc=m[3]?normalizeSpaces(m[3]):"", name=normalizeSpaces(m[4]);
     const aTier=(aKey>='1'&&aKey<='3')?Number(aKey):null;
     const bTier=(bKey>='1'&&bKey<='5')?Number(bKey):null;
+    const label = desc ? `${name} (${desc})` : name;
     const id = name+"||"+desc+"||"+(aTier??'NA')+"||"+(bTier??'NA');
     if(seen.has(id)) continue; seen.add(id);
-    out.push({name, desc, aKey, bKey, aTier, bTier});
+    out.push({type:"op", name, desc, label, aTier, bTier});
   }
   return out;
 }
 let DB = parseRaw(RAW_DATA);
 
-/* ===== 인덱스 & 자동완성(수술명) ===== */
-function buildSurgeryIndex(rows){
-  const set=new Set(); const list=[];
-  for(const r of rows){
-    const key=r.name.replace(/\s+/g,'');
-    if(!set.has(key)){ set.add(key); list.push({type:"op", label:r.name}); }
-  }
-  return list;
-}
-let SURG_SUGG = buildSurgeryIndex(DB);
+/* ========== 5) KCD 데이터 적재 (CSV + XLSX) ========== */
+let KCD_ROWS = [];       // { code, name }
+let KCD_BY_CODE = new Map();  // code -> name
+let KCD_NAME_IDX = [];        // [{ name, code }], 이름 검색용
 
-/* ===== KCD 로더 & 인덱스 =====
-   CSV 포맷(심평원 상병마스터): 열에 'KCD' 코드와 '상병명'이 포함되어 있다고 가정.
-   구분자 자동 감지(탭/콤마 둘 다 지원) */
-let KCD = []; // {code, name}
-function parseKCD(csv){
-  const delim = csv.indexOf('\t')>-1 ? '\t' : ',';
+function addKcdRow(code, name){
+  if(!code || !name) return;
+  code = code.trim().toUpperCase();
+  name = name.trim();
+  if(!KCD_BY_CODE.has(code)){
+    KCD_BY_CODE.set(code, name);
+    KCD_ROWS.push({code, name});
+    KCD_NAME_IDX.push({name, code});
+  }
+}
+
+function parseKcdCSV(csv){
+  const d = csv.indexOf('\t')>-1 ? '\t' : ',';
   const lines = csv.split(/\r?\n/).filter(Boolean);
-  if(lines.length===0) return;
-  const header = lines[0].split(delim).map(h=>h.trim());
-  const idxCode = header.findIndex(h=>/^(KCD|상병코드)/i.test(h));
-  const idxName = header.findIndex(h=>/(상병명|질병명)/.test(h));
+  if(!lines.length) return;
+  const head = lines[0].split(d).map(s=>s.trim());
+  const iCode = head.findIndex(h=>/^(KCD|상병코드|코드)/i.test(h));
+  const iName = head.findIndex(h=>/(상병명|질병명|항목명|명칭)/.test(h));
   for(let i=1;i<lines.length;i++){
-    const cols = lines[i].split(delim);
-    const code = (cols[idxCode]||"").trim();
-    const name = (cols[idxName]||"").trim();
-    if(code && name) KCD.push({code,name});
+    const cols = lines[i].split(d);
+    addKcdRow(cols[iCode], cols[iName]);
   }
 }
-function buildKcdSugg(){
-  return KCD.slice(0,300000).map(r=>({type:"kcd", label:r.name, code:r.code}));
-}
-let KCD_SUGG = [];
 
-/* ===== 공통 자동완성(수술+KCD) ===== */
+async function loadKcdCSV(){
+  try{
+    const txt = await fetch(KCD_CSV_URL).then(r=>r.text());
+    parseKcdCSV(txt);
+  }catch(e){ /* CSV 없어도 진행 */ }
+}
+
+async function loadKcdXLSX(){
+  try{
+    const ab = await fetch(KCD_XLSX_URL).then(r=>r.arrayBuffer());
+    const wb = XLSX.read(ab, {type:"array"});
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(sheet, {defval:""});
+    // 헤더 추정: 코드/명칭 컬럼 자동 감지
+    const headers = Object.keys(rows[0]||{});
+    const keyCode = headers.find(h=>/^(KCD|코드|상병코드)/i.test(h)) || headers[0];
+    const keyName = headers.find(h=>/(한글?명|상병명|질병명|항목명)/.test(h)) || headers[1];
+    rows.forEach(r=> addKcdRow(r[keyCode], r[keyName]));
+  }catch(e){ /* XLSX 없어도 진행 */ }
+}
+
+/* ========== 6) 자동완성: 수술 + KCD(이름, 코드) ========== */
 const elQ = document.getElementById('q');
 const elAC = document.getElementById('ac');
 const elACList = document.getElementById('acList');
 
+function suggest(q){
+  const k = nkey(q); if(!k) return [];
+  const out = [];
+
+  // 코드 매치 먼저
+  if(isKcdCode(q)){
+    const code = q.trim().toUpperCase();
+    const name = KCD_BY_CODE.get(code);
+    if(name) out.push({type:"code", code, label: name});
+  }
+
+  // 수술명
+  for(const r of DB){
+    if(nkey(r.name).includes(k)){
+      out.push({type:"op", label:r.label, name:r.name, aTier:r.aTier, bTier:r.bTier});
+      if(out.length>=30) break;
+    }
+  }
+
+  // KCD 이름
+  if(out.length<30){
+    for(const r of KCD_NAME_IDX){
+      if(nkey(r.name).includes(k)){
+        out.push({type:"kcd", label:r.name, code:r.code});
+        if(out.length>=30) break;
+      }
+    }
+  }
+  return out.slice(0,30);
+}
+
 function openAC(items){
-  if(!items.length){ elAC.classList.remove('open'); return; }
-  elACList.innerHTML = items.slice(0,20).map((it,i)=>{
-    const badge = it.type==="op" ? '<span class="badge">수술</span>' :
-                                   '<span class="badge kcd">KCD</span>';
-    return `<li data-i="${i}" data-t="${it.type}">
-      ${badge} <strong>${it.label}</strong>${it.code?` <span class="muted">(${it.code})</span>`:''}
-    </li>`;
+  if(!items.length){ elAC.classList.remove('open'); elACList.innerHTML=''; return; }
+  elACList.innerHTML = items.map((it,i)=>{
+    if(it.type==="op"){
+      return `<li data-i="${i}" data-t="op">
+        <span class="name">${it.label}</span>
+        <span class="desc">수술 · 선택 시 등급 표시</span>
+      </li>`;
+    }else if(it.type==="code"){
+      return `<li data-i="${i}" data-t="code">
+        <span class="name">${it.label}</span>
+        <span class="code">${it.code}</span>
+      </li>`;
+    }else{ // kcd by name
+      return `<li data-i="${i}" data-t="kcd">
+        <span class="name">${it.label}</span>
+        <span class="code">${it.code}</span>
+      </li>`;
+    }
   }).join('');
   elAC.classList.add('open');
 }
 function closeAC(){ elAC.classList.remove('open'); }
-function suggAll(q){
-  const key = q.replace(/\s+/g,''); if(!key) return [];
-  const fromOp = SURG_SUGG.filter(s => s.label.replace(/\s+/g,'').includes(key));
-  const fromKcd = KCD_SUGG.filter(s => s.label.replace(/\s+/g,'').includes(key));
-  // 우선 수술 10개, 상병 10개
-  return [...fromOp.slice(0,10), ...fromKcd.slice(0,10)];
+
+/* ========== 7) 렌더 ========== */
+const elRA = document.getElementById('rA');
+const elRB = document.getElementById('rB');
+const elK  = document.getElementById('kcdList');
+
+function renderTier(el, tier, hint){
+  el.innerHTML = tier!=null
+    ? `<div class="big">${tier}종</div><div class="small muted">${hint}</div>`
+    : `<div class="muted">해당 없음</div>`;
 }
 
-/* ===== 렌더 ===== */
-const elA = document.getElementById('colA');
-const elB = document.getElementById('colB');
-const elK = document.getElementById('kcdList');
-
-function renderTier(col, titleTier, items){
-  if(!items.length){
-    col.innerHTML = `<div class="pill muted">일치 수술이 없습니다.</div>`;
+function renderKcdPairs(pairs){
+  if(!pairs || !pairs.length){
+    elK.innerHTML = `<li class="muted">관련 KCD 없음</li>`;
     return;
   }
-  // 같은 수술명이 여러 줄이면 그룹화
-  const first = items[0];
-  col.innerHTML = `<div class="pill"><b>${titleTier}종</b><span>${first.name}${first.desc?` <span class="muted">(${first.desc})</span>`:''}</span></div>`;
+  elK.innerHTML = pairs.map(p=>`<li><b>${p.code}</b> — ${p.name}</li>`).join('');
+}
+
+/* ========== 8) 검색 동작 ========== */
+function kcdPairsFromMap(name){
+  const codes = CODE_MAP[Object.keys(CODE_MAP).find(k=>nkey(k)===nkey(name))] || [];
+  return codes.map(c=>({code:c.toUpperCase(), name: KCD_BY_CODE.get(c.toUpperCase()) || ""}));
+}
+function kcdPairsFromName(keyword, limit=15){
+  const k = nkey(keyword); const out=[];
+  for(const r of KCD_NAME_IDX){
+    if(nkey(r.name).includes(k)){
+      out.push({code:r.code, name:r.name});
+      if(out.length>=limit) break;
+    }
+  }
+  return out;
+}
+
+function pickOp(label){
+  const rec = DB.find(x=>x.label===label) || DB.find(x=>x.name===label);
+  if(!rec){ elRA.innerHTML='<div class="muted">결과 없음</div>'; elRB.innerHTML=elRA.innerHTML; renderKcdPairs([]); return; }
+  renderTier(elRA, rec.aTier, "1~3종 결과");
+  renderTier(elRB, rec.bTier, "1~5종 결과");
+
+  // KCD: CODE_MAP 우선 → 없으면 이름기반 후보
+  let pairs = kcdPairsFromMap(rec.name);
+  if(!pairs.length) pairs = kcdPairsFromName(rec.name, 15);
+  renderKcdPairs(pairs.length ? pairs : []);
+}
+
+function pickKcdByCode(code){
+  const name = KCD_BY_CODE.get(code.toUpperCase());
+  elRA.innerHTML = `<div class="muted">수술 선택 시 표시</div>`;
+  elRB.innerHTML = `<div class="muted">수술 선택 시 표시</div>`;
+  renderKcdPairs(name ? [{code:code.toUpperCase(), name}] : []);
 }
 
 function doSearch(){
   const q = elQ.value.trim();
-  const key = q.replace(/\s+/g,''); if(!key){ elA.innerHTML=elB.innerHTML=`<div class="pill muted">검색어를 입력하세요.</div>`; elK.innerHTML='<li class="muted">상병 코드가 여기 표시됩니다.</li>'; return; }
+  if(!q) return;
 
-  // 1) 수술 매칭
-  const rows = DB.filter(r => r.name.replace(/\s+/g,'').includes(key));
-  // 가장 이름이 짧은(정확도 높은) 것으로 우선 선택
-  rows.sort((a,b)=>a.name.length - b.name.length);
-
-  const aOnly = rows.filter(r => r.aTier!=null);
-  const bOnly = rows.filter(r => r.bTier!=null);
-
-  if(aOnly.length){ renderTier(elA, aOnly[0].aTier, [aOnly[0]]); }
-  else { elA.innerHTML = `<div class="pill muted">1~3종 등급 정보 없음</div>`; }
-
-  if(bOnly.length){ renderTier(elB, bOnly[0].bTier, [bOnly[0]]); }
-  else { elB.innerHTML = `<div class="pill muted">1~5종 등급 정보 없음</div>`; }
-
-  // 2) KCD 매칭(상병명에 검색어 포함)
-  const k = KCD.filter(r => r.name.replace(/\s+/g,'').includes(key)).slice(0,12);
-  if(!k.length){
-    elK.innerHTML = `<li class="muted">일치하는 상병명이 없습니다.</li>`;
-  }else{
-    elK.innerHTML = k.map(r=>`<li><b>${r.code}</b> — ${r.name}</li>`).join('');
+  if(isKcdCode(q)){
+    pickKcdByCode(q);
+    return;
   }
-  closeAC();
+
+  // 수술 우선
+  const k = nkey(q);
+  const ops = DB.filter(r=> nkey(r.name).includes(k)).sort((a,b)=>a.name.length-b.name.length);
+  if(ops.length){ pickOp(ops[0].label); return; }
+
+  // 수술이 없으면 KCD 이름
+  const names = kcdPairsFromName(q, 15);
+  elRA.innerHTML = `<div class="muted">수술 선택 시 표시</div>`;
+  elRB.innerHTML = `<div class="muted">수술 선택 시 표시</div>`;
+  renderKcdPairs(names);
 }
 
-/* ===== 이벤트 ===== */
-document.getElementById('searchBtn').addEventListener('click', doSearch);
+/* ========== 9) 이벤트 연결 ========== */
+document.getElementById('btn').addEventListener('click', doSearch);
 elQ.addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch(); });
-elQ.addEventListener('input', ()=> openAC(suggAll(elQ.value)));
-elQ.addEventListener('focus', ()=> openAC(suggAll(elQ.value)));
+elQ.addEventListener('input', ()=> openAC(suggest(elQ.value)));
+elQ.addEventListener('focus', ()=> openAC(suggest(elQ.value)));
 elQ.addEventListener('blur', ()=> setTimeout(closeAC,120));
 elACList.addEventListener('click', (e)=>{
   const li = e.target.closest('li'); if(!li) return;
   const idx = Number(li.dataset.i);
-  const items = suggAll(elQ.value);
+  const items = suggest(elQ.value);
   const it = items[idx];
-  if(it){ elQ.value = it.label; doSearch(); }
+  if(!it) return;
+  if(it.type==="op"){ elQ.value = it.label; pickOp(it.label); }
+  else if(it.type==="code"){ elQ.value = it.code; pickKcdByCode(it.code); }
+  else { elQ.value = it.label; renderKcdPairs([{code:it.code, name:it.label}]); elRA.innerHTML='<div class="muted">수술 선택 시 표시</div>'; elRB.innerHTML='<div class="muted">수술 선택 시 표시</div>'; }
+  closeAC();
 });
 
-/* ===== KCD CSV 로드 ===== */
-fetch(KCD_CSV_URL)
-  .then(r=>r.text())
-  .then(txt=>{
-    parseKCD(txt);
-    KCD_SUGG = buildKcdSugg();
-  })
-  .catch(()=>{ /* KCD 미로딩 시에도 수술 검색은 동작 */ });
-
+/* ========== 10) KCD 자산 로딩 (CSV → XLSX 순으로 병합) ========== */
+(async ()=>{
+  await loadKcdCSV();
+  await loadKcdXLSX(); // 둘 다 성공하면 코드/이름 사전이 병합됩니다.
+})();
 </script>
 </body>
 </html>
