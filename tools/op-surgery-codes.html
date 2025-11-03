@@ -3,25 +3,19 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>종수술 등급 + KCD 코드 통합 검색</title>
+<title>종수술 등급 + KCD + ICD-O(형태/신생물코드) 통합 검색</title>
 <style>
-  :root{
-    --bg:#f6f8ff; --card:#ffffff; --ink:#14203a; --muted:#66759a; --line:#e6ecf7;
-    --g1:#5b8cff; --g2:#22d3ee; --accent:#00c2a8; --radius:18px; --shadow:0 12px 36px rgba(20,32,58,.08);
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;background:
-      radial-gradient(900px 500px at 10% -10%, #eaf1ff 0%, transparent 60%),
-      radial-gradient(900px 500px at 120% 0%, #f2fffb 0%, transparent 60%),
-      var(--bg);
-    color:var(--ink);font:15px/1.6 "Pretendard",ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Noto Sans KR,Arial;
-    padding:28px;display:flex;justify-content:center;align-items:flex-start
-  }
-  .wrap{width:min(1100px,100%)}
-  .title{margin:0 0 10px;text-align:center;font-weight:900;letter-spacing:.3px;font-size:clamp(22px,3.4vw,34px)}
-  .subtitle{margin:0 0 18px;text-align:center;color:var(--muted)}
+  :root{ --bg:#f6f8ff; --card:#fff; --ink:#14203a; --muted:#66759a; --line:#e6ecf7;
+         --g1:#5b8cff; --g2:#22d3ee; --radius:18px; --shadow:0 12px 36px rgba(20,32,58,.08); }
+  *{box-sizing:border-box} html,body{height:100%}
+  body{margin:0;background:
+       radial-gradient(900px 500px at 10% -10%, #eaf1ff 0%, transparent 60%),
+       radial-gradient(900px 500px at 120% 0%, #f2fffb 0%, transparent 60%), var(--bg);
+       color:var(--ink);font:15px/1.6 "Pretendard",ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Noto Sans KR,Arial;
+       padding:28px;display:flex;justify-content:center;align-items:flex-start}
+  .wrap{width:min(1120px,100%)}
+  .title{margin:0 0 18px;text-align:center;font-weight:900;letter-spacing:.3px;font-size:clamp(22px,3.4vw,34px)}
+
   .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
   .searchrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
   .searchbox{position:relative}
@@ -30,6 +24,7 @@
   .btn{height:58px;padding:0 22px;border:0;border-radius:14px;font-weight:900;letter-spacing:.2px;cursor:pointer;
        background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;box-shadow:0 10px 24px rgba(91,140,255,.28)}
   .status{margin-top:8px;font-size:12px;color:var(--muted);text-align:right}
+
   /* autocomplete */
   .ac{position:absolute;left:0;right:0;top:62px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;z-index:10;display:none}
   .ac.open{display:block}
@@ -39,40 +34,35 @@
   .ac .code{font:12px/1.2 ui-monospace,Consolas,Menlo;color:#2f5bff;background:#eef3ff;border:1px solid #d8e2ff;padding:2px 6px;border-radius:6px}
   .ac .desc{font-size:12px;color:#6b7aa6}
 
-  /* result blocks */
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
   .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-  .card h3{
-    margin:0;padding:14px 16px;font-size:16px;letter-spacing:.3px;color:#fff;
-    background:linear-gradient(135deg,var(--g1),var(--g2));text-align:center
-  }
+  .card h3{margin:0;padding:14px 16px;font-size:16px;letter-spacing:.3px;color:#fff;background:linear-gradient(135deg,var(--g1),var(--g2));text-align:center}
   .card .body{padding:24px 16px;display:flex;align-items:center;justify-content:center;min-height:140px}
   .big{font-size:56px;font-weight:900;line-height:1}
   .muted{color:var(--muted)}
-  /* KCD list */
-  .kcd{margin-top:14px}
-  .kcd h3{margin:0;padding:14px 16px;font-size:16px;letter-spacing:.3px;color:#fff;background:linear-gradient(135deg,var(--g1),var(--g2));text-align:center;border-radius:12px 12px 0 0}
-  .kcd .body{border:1px solid var(--line);border-top:0;background:#fff;border-radius:0 0 12px 12px;padding:12px}
-  .kcd ul{margin:0;padding-left:20px}
-  .kcd li{padding:6px 0;border-bottom:1px dashed var(--line)}
-  .kcd li:last-child{border-bottom:0}
+
+  .blk{margin-top:14px}
+  .blk h3{margin:0;padding:14px 16px;font-size:16px;letter-spacing:.3px;color:#fff;background:linear-gradient(135deg,var(--g1),var(--g2));text-align:center;border-radius:12px 12px 0 0}
+  .blk .body{border:1px solid var(--line);border-top:0;background:#fff;border-radius:0 0 12px 12px;padding:12px}
+  .blk ul{margin:0;padding-left:20px}
+  .blk li{padding:6px 0;border-bottom:1px dashed var(--line)}
+  .blk li:last-child{border-bottom:0}
   .error{color:#c0392b}
 </style>
 </head>
 <body>
   <main class="wrap">
-    <h1 class="title">종수술 등급 + KCD 코드 통합 검색</h1>
-    <p class="subtitle">수술명을 치면 등급(1~3, 1~5)을 즉시 표시하고, KCD 코드/명칭을 함께 보여줍니다.</p>
+    <h1 class="title">종수술 등급 + KCD + ICD-O 통합 검색</h1>
 
     <section class="panel">
       <div class="searchrow">
         <div class="searchbox">
-          <input id="q" type="text" placeholder="예: 대장용종절제술 / K63.5 / 결장의 용종…" aria-label="검색" autocomplete="off" />
+          <input id="q" type="text" placeholder="예: 대장용종절제술 / K63.5 / 결장의 폴립 / M9523/3 / C30.0…" aria-label="검색" autocomplete="off" />
           <div class="ac" id="ac"><ul id="acList"></ul></div>
         </div>
         <button id="btn" class="btn">검색</button>
       </div>
-      <div class="status" id="status">KCD 로딩 대기…</div>
+      <div class="status" id="status">데이터 로딩 대기…</div>
 
       <div class="grid2">
         <div class="card">
@@ -85,23 +75,24 @@
         </div>
       </div>
 
-      <div class="kcd">
+      <div class="blk">
         <h3>KCD 결과</h3>
         <div class="body"><ul id="kcdList"><li class="muted">검색 후 표시</li></ul></div>
+      </div>
+
+      <div class="blk">
+        <h3>ICD-O(형태/연결 C코드)</h3>
+        <div class="body"><ul id="icdoList"><li class="muted">검색 후 표시</li></ul></div>
       </div>
     </section>
   </main>
 
   <script>
-  /* ======================================================
-     0) KCD 엑셀 위치 (공백 포함 파일명은 %20 인코딩도 시도)
-  ====================================================== */
-  const KCD_XLSX_CANDIDATES = [
-    "/assets/KCD-9.xlsx",
-    "/assets/KCD-9%20.xlsx" // 혹시 모를 공백 대응(무시돼도 OK)
-  ];
+  /* ===== 파일 경로 ===== */
+  const KCD_XLSX  = "/assets/KCD-9.xlsx";     // A=KCD, B=한글명
+  const ICDO_XLSX = "/assets/ICDO-3.xlsx";    // A=M코드, B=형태명칭, C=신생물(C코드)
 
-  /* ===== 기본 DOM ===== */
+  /* ===== DOM ===== */
   const elQ = document.getElementById('q');
   const elBtn = document.getElementById('btn');
   const elAC = document.getElementById('ac');
@@ -110,13 +101,16 @@
   const elRA = document.getElementById('rA');
   const elRB = document.getElementById('rB');
   const elK = document.getElementById('kcdList');
+  const elM = document.getElementById('icdoList');
 
   const nz = v => (v ?? '').toString();
   const nkey = s => nz(s).replace(/\s+/g,'').trim();
-  const isKcdCode = s => /^[A-TV-Z]\d{2}(\.\d+)?$/i.test(nz(s).trim());
+  const isKcd = s => /^[A-TV-Z]\d{2}(\.\d+)?$/i.test(nz(s).trim());
+  const isTopography = s => /^C\d{2}(\.\d)?$/i.test(nz(s).trim()); // C코드 허용
+  const isIcdo = s => /^M\d{4}\/[0-9]$/i.test(nz(s).trim());
   const normalizeCode = c => nz(c).trim().toUpperCase().replace(/\s+/g,'');
 
-  /* ===== xlsx.js 로드 ===== */
+  /* xlsx.js 로드 */
   (function ensureXLSX(){
     if(window.XLSX) return;
     const s=document.createElement('script');
@@ -124,27 +118,61 @@
     document.head.appendChild(s);
   })();
 
-  /* ===== KCD 저장소 ===== */
-  let READY=false;
-  let KCD_BY_CODE = new Map();   // 'K63.5' 또는 'K635' → '결장의 용종'
-  let KCD_NAME_IDX = [];         // [{code,name}] 자동완성용
+  /* ===== 저장소 ===== */
+  let READY=false, READY_K=false, READY_M=false;
 
+  // KCD
+  let KCD_BY_CODE = new Map();     // 'K63.5' / 'K635' / 'C300' → '한글명'
+  let KCD_NAME_IDX = [];           // [{code,name}]
   function addKcdRow(code, name){
     const c = normalizeCode(code);
     const n = nz(name).trim();
-    if(!isKcdCode(c) || !n) return;
+    if(!isKcd(c) || !n) return;
     const cNoDot = c.replace('.','');
-    if(!KCD_BY_CODE.has(c)){ KCD_BY_CODE.set(c,n); KCD_NAME_IDX.push({code:c,name:n}); }
-    if(cNoDot!==c && !KCD_BY_CODE.has(cNoDot)) KCD_BY_CODE.set(cNoDot,n);
+    if(!KCD_BY_CODE.has(c))      KCD_BY_CODE.set(c,n);
+    if(!KCD_BY_CODE.has(cNoDot)) KCD_BY_CODE.set(cNoDot,n);
+    KCD_NAME_IDX.push({code:c,name:n});
   }
 
-  function parseTwoCols(sheet){
-    const rows = XLSX.utils.sheet_to_json(sheet, {header:1, defval:"", raw:false, blankrows:false});
-    for(const r of rows){
-      const code = nz(r[0]).trim();
-      const name = nz(r[1]).trim();
-      if(isKcdCode(code) && name) addKcdRow(code, name);
+  // ICD-O (형태+연결 C코드)
+  // M_BY_CODE: M코드 → {name, cTopos:[…]}
+  // M_NAME_IDX: 형태명칭 인덱스
+  // TOPO_TO_M: C코드(점/하이픈 제거 prefix) → Set(M코드)
+  let M_BY_CODE = new Map();
+  let M_NAME_IDX = [];
+  let TOPO_TO_M = new Map();
+
+  function normTopo(c){ // C34, C34.1, C34- → 'C34' / 'C341'
+    if(!c) return null;
+    let t = normalizeCode(c).replace(/[^A-Z0-9.]/g,'');
+    if(!/^C\d{2}(\.\d)?$/.test(t)) {
+      // 'C34-' 같이 접미 하이픈이 있을 수 있음 → 앞 3자리만
+      const m = t.match(/^C(\d{2})/); if(m) return 'C'+m[1];
+      return null;
     }
+    return t.replace('.','');
+  }
+  function addIcdoRow(mCode, mName, cTopoRaw){
+    const mc = normalizeCode(mCode);
+    const mn = nz(mName).trim();
+    const topo = normTopo(cTopoRaw); // null 허용
+    if(!isIcdo(mc) || !mn) return;
+    if(!M_BY_CODE.has(mc)) M_BY_CODE.set(mc, {name:mn, cTopos:new Set()});
+    if(topo){
+      M_BY_CODE.get(mc).cTopos.add(topo);
+      if(!TOPO_TO_M.has(topo)) TOPO_TO_M.set(topo, new Set());
+      TOPO_TO_M.get(topo).add(mc);
+    }
+    M_NAME_IDX.push({code:mc, name:mn});
+  }
+
+  function parseTwoColsKCD(sheet){
+    const rows = XLSX.utils.sheet_to_json(sheet, {header:1, defval:"", raw:false, blankrows:false});
+    for(const r of rows){ addKcdRow(r[0], r[1]); }
+  }
+  function parseThreeColsICDO(sheet){
+    const rows = XLSX.utils.sheet_to_json(sheet, {header:1, defval:"", raw:false, blankrows:false});
+    for(const r of rows){ addIcdoRow(r[0], r[1], r[2]); }
   }
 
   async function fetchAB(url){
@@ -152,28 +180,34 @@
     if(!res.ok) throw new Error(`HTTP ${res.status} @ ${url}`);
     return await res.arrayBuffer();
   }
-
   async function loadKCD(){
-    elStatus.textContent = "KCD 로딩 중…";
-    const errors=[];
-    for(const url of KCD_XLSX_CANDIDATES){
-      try{
-        const ab = await fetchAB(url);
-        const wb = XLSX.read(ab, {type:'array'});
-        const sh = wb.Sheets[wb.SheetNames[0]];
-        parseTwoCols(sh);
-        elStatus.textContent = `KCD 로드 완료 (${KCD_BY_CODE.size}개)`;
-        return true;
-      }catch(e){ errors.push(e.message); }
+    try{
+      const ab = await fetchAB(KCD_XLSX);
+      const wb = XLSX.read(ab, {type:'array'});
+      parseTwoColsKCD(wb.Sheets[wb.SheetNames[0]]);
+      READY_K = true;
+      return true;
+    }catch(e){
+      READY_K = false;
+      elK.innerHTML = `<li class="error">KCD 로드 실패: ${e.message}</li>`;
+      return false;
     }
-    elStatus.innerHTML = `<span class="error">KCD XLSX 로드 실패</span>`;
-    elK.innerHTML = `<li class="error">엑셀을 /assets/KCD-9.xlsx 로 올렸는지 확인하세요.<br>${errors.join(' | ')}</li>`;
-    return false;
+  }
+  async function loadICDO(){
+    try{
+      const ab = await fetchAB(ICDO_XLSX);
+      const wb = XLSX.read(ab, {type:'array'});
+      parseThreeColsICDO(wb.Sheets[wb.SheetNames[0]]);
+      READY_M = true;
+      return true;
+    }catch(e){
+      READY_M = false;
+      elM.innerHTML = `<li class="error">ICD-O 로드 실패: ${e.message}</li>`;
+      return false;
+    }
   }
 
-  /* ===== 수술 RAW =====
-     네가 쓰던 ‘앞 2글자(숫자/X) + (괄호설명,선택) + 수술명’ 포맷을
-     그대로 붙여넣으면 됨. (예시는 짧게) */
+  /* ===== 수술 RAW: 앞자리=1~3, 뒷자리=1~5 ===== */
   const RAW_DATA = String.raw`
 12(내시경적) 위용종제거술
 12(내시경적) 위출혈지혈술
@@ -1481,7 +1515,6 @@ XX회음절개 및 봉합술
 33흉선절제술
 XX흡착식 혈관정화법
   `;
-
   function parseOps(text){
     const out=[], seen=new Set();
     const lines = text.split(/\r?\n/).map(s=>s.trim()).filter(Boolean).filter(s=>!s.startsWith('//'));
@@ -1500,17 +1533,17 @@ XX흡착식 혈관정화법
   const OP_DB = parseOps(RAW_DATA);
 
   /* ===== 렌더 ===== */
-  const renderTier = (el, tier, hint) => {
+  const renderTier = (el, tier) => {
     el.innerHTML = (tier!=null)
-      ? `<div class="big">${tier}종</div>${hint?`<div class="muted" style="margin-top:6px">${hint}</div>`:''}`
+      ? `<div class="big">${tier}종</div>`
       : `<span class="muted">해당 없음</span>`;
   };
-  function renderKcdList(pairs){
-    if(!pairs.length){ elK.innerHTML = `<li class="muted">관련 KCD 없음</li>`; return; }
-    elK.innerHTML = pairs.map(p=> `<li><b>${p.code}</b> — ${p.name||''}</li>`).join('');
+  function renderList(target, pairs){
+    if(!pairs.length){ target.innerHTML = `<li class="muted">관련 항목 없음</li>`; return; }
+    target.innerHTML = pairs.map(p=> `<li><b>${p.code}</b> — ${p.name||''}${p.extra?` <span class="muted">(${p.extra})</span>`:""}</li>`).join('');
   }
 
-  /* ===== 매칭 ===== */
+  /* ===== 이름 정규화/검색 ===== */
   function normalizeQueryName(s){
     let t = nz(s);
     t = t.replace(/[()\[\]]/g,' ');
@@ -1519,17 +1552,18 @@ XX흡착식 혈관정화법
     t = t.replace(/맹장/g,'충수');
     return t.replace(/\s+/g,' ').trim();
   }
-  function kcdFromName(keyword, limit=20){
+  function findKCDByName(keyword, limit=20){
+    if(!READY_K) return [];
     const norm = normalizeQueryName(keyword);
     const tokens = norm.split(/\s+/).filter(Boolean);
     const out=[];
     outer: for(const r of KCD_NAME_IDX){
       const key = nkey(r.name);
-      for(const t of tokens){ if(!key.includes(nkey(t))) continue outer; }
+      for(const tt of tokens){ if(!key.includes(nkey(tt))) continue outer; }
       out.push({code:r.code, name:r.name});
       if(out.length>=limit) break;
     }
-    if(!out.length){ // 토큰 매칭이 없으면 포함검색
+    if(!out.length){
       for(const r of KCD_NAME_IDX){
         if(nkey(r.name).includes(nkey(norm))){
           out.push({code:r.code, name:r.name});
@@ -1539,55 +1573,148 @@ XX흡착식 혈관정화법
     }
     return out;
   }
-
-  function showByOp(opName){
-    const rec = OP_DB.find(x=>x.name===opName) || OP_DB.find(x=> nkey(x.name)===nkey(opName) );
-    if(!rec){ renderTier(elRA,null,''); renderTier(elRB,null,''); renderKcdList([]); return; }
-    renderTier(elRA, rec.aTier, '1~3종 결과');
-    renderTier(elRB, rec.bTier, '1~5종 결과');
-    // 1) 힌트가 KCD 코드처럼 생겼다면 우선 노출
-    let pairs=[];
-    if(rec.kcdHint && isKcdCode(rec.kcdHint)){
-      const code = normalizeCode(rec.kcdHint);
-      const name = KCD_BY_CODE.get(code) || KCD_BY_CODE.get(code.replace('.',''));
-      if(name) pairs.push({code, name});
+  function findMByName(keyword, limit=20){
+    if(!READY_M) return [];
+    const norm = normalizeQueryName(keyword);
+    const tokens = norm.split(/\s+/).filter(Boolean);
+    const out=[];
+    outer: for(const r of M_NAME_IDX){
+      const key = nkey(r.name);
+      for(const tt of tokens){ if(!key.includes(nkey(tt))) continue outer; }
+      const rec = M_BY_CODE.get(r.code);
+      out.push({code:r.code, name:r.name, extra:[...rec.cTopos].join(', ')});
+      if(out.length>=limit) break;
     }
-    // 2) 수술명으로 검색
-    const found = kcdFromName(rec.name, 20);
-    pairs = pairs.concat(found.filter(p=> !pairs.some(x=>x.code===p.code)));
-    renderKcdList(pairs);
+    if(!out.length){
+      for(const r of M_NAME_IDX){
+        if(nkey(r.name).includes(nkey(norm))){
+          const rec = M_BY_CODE.get(r.code);
+          out.push({code:r.code, name:r.name, extra:[...rec.cTopos].join(', ')});
+          if(out.length>=limit) break;
+        }
+      }
+    }
+    return out;
   }
 
-  function showByCode(codeInput){
-    const code = normalizeCode(codeInput);
-    const name = KCD_BY_CODE.get(code) || KCD_BY_CODE.get(code.replace('.',''));
-    renderTier(elRA,null,''); renderTier(elRB,null,'');
-    renderKcdList(name ? [{code, name}] : []);
+  /* ===== 표시 로직 ===== */
+  function showByOp(opName){
+    const rec = OP_DB.find(x=>x.name===opName) || OP_DB.find(x=> nkey(x.name)===nkey(opName) );
+    renderTier(elRA, rec?.aTier ?? null);
+    renderTier(elRB, rec?.bTier ?? null);
+
+    // KCD
+    let kcdPairs = [];
+    if(rec?.kcdHint && isKcd(rec.kcdHint)){
+      const code = normalizeCode(rec.kcdHint);
+      const name = KCD_BY_CODE.get(code) || KCD_BY_CODE.get(code.replace('.',''));
+      if(name) kcdPairs.push({code, name});
+    }
+    kcdPairs = kcdPairs.concat(findKCDByName(rec?.name || opName, 20)
+      .filter(p=>!kcdPairs.some(x=>x.code===p.code)));
+    renderList(elK, kcdPairs);
+
+    // ICD-O
+    const icdoPairs = findMByName(rec?.name || opName, 20);
+    renderList(elM, icdoPairs);
+  }
+
+  function showByKCD(codeOrName){
+    renderTier(elRA,null); renderTier(elRB,null);
+    const codeNorm = normalizeCode(codeOrName);
+    const kcdName = READY_K ? (KCD_BY_CODE.get(codeNorm) || KCD_BY_CODE.get(codeNorm.replace('.',''))) : null;
+    if(kcdName){
+      renderList(elK, [{code:codeNorm, name:kcdName}]);
+      // 같은 명칭으로 형태코드 탐색
+      renderList(elM, findMByName(kcdName, 20));
+      return;
+    }
+    // 명칭 검색
+    renderList(elK, findKCDByName(codeOrName, 20));
+    renderList(elM, findMByName(codeOrName, 20));
+  }
+
+  function showByTopography(cCode){
+    // C코드 → KCD명 / 연결된 형태코드(M)
+    const topo = normTopo(cCode);
+    const kName = topo ? (KCD_BY_CODE.get(topo) || KCD_BY_CODE.get(topo.replace('.',''))) : null;
+    renderList(elK, kName ? [{code:topo, name:kName}] : []);
+    if(READY_M && topo && TOPO_TO_M.has(topo)){
+      const set = TOPO_TO_M.get(topo);
+      const arr = [...set].slice(0,100).map(m=>{
+        const rec = M_BY_CODE.get(m);
+        return {code:m, name:rec?.name||'', extra:[...rec.cTopos].join(', ')};
+      });
+      renderList(elM, arr);
+    }else{
+      renderList(elM, []);
+    }
+    renderTier(elRA,null); renderTier(elRB,null);
+  }
+
+  function showByICDO(mCodeOrName){
+    renderTier(elRA,null); renderTier(elRB,null);
+    const c = normalizeCode(mCodeOrName);
+    const rec = READY_M ? M_BY_CODE.get(c) : null;
+    if(rec){
+      renderList(elM, [{code:c, name:rec.name, extra:[...rec.cTopos].join(', ')}]);
+      // 연결된 C코드로 KCD 명칭도 함께
+      let kPairs=[];
+      for(const t of rec.cTopos){
+        const nm = KCD_BY_CODE.get(t) || KCD_BY_CODE.get(t.replace('.',''));
+        if(nm) kPairs.push({code:t, name:nm});
+      }
+      if(!kPairs.length) kPairs = findKCDByName(rec.name, 10);
+      renderList(elK, kPairs);
+      return;
+    }
+    // 명칭으로 형태코드 검색
+    renderList(elM, findMByName(mCodeOrName, 20));
+    renderList(elK, findKCDByName(mCodeOrName, 20));
   }
 
   /* ===== 자동완성 ===== */
   function suggest(q){
-    const k = nkey(q); if(!k || !READY) return [];
+    const k = nkey(q); if(!k || !(READY_K||READY_M)) return [];
     const out=[];
-    if(isKcdCode(q)){
+    // 코드 직접
+    if(READY_K && isKcd(q)){
       const code = normalizeCode(q);
       const name = KCD_BY_CODE.get(code) || KCD_BY_CODE.get(code.replace('.',''));
-      if(name) out.push({type:'code', code, label:name});
+      if(name) out.push({type:'kcd_code', label:name, code});
     }
-    for(const r of OP_DB){
-      if(nkey(r.name).includes(k)){ out.push({type:'op', label:r.name}); if(out.length>=30) break; }
+    if(READY_K && isTopography(q)){
+      const code = normTopo(q);
+      const name = KCD_BY_CODE.get(code) || KCD_BY_CODE.get(code.replace('.',''));
+      if(name) out.push({type:'topo_code', label:name, code});
     }
-    for(const r of KCD_NAME_IDX){
-      if(nkey(r.name).includes(k)){ out.push({type:'kcd', label:r.name, code:r.code}); if(out.length>=30) break; }
+    if(READY_M && isIcdo(q)){
+      const code = normalizeCode(q);
+      const rec = M_BY_CODE.get(code);
+      if(rec) out.push({type:'icdo_code', label:rec.name, code});
+    }
+    // 수술명
+    for(const r of OP_DB){ if(nkey(r.name).includes(k)){ out.push({type:'op', label:r.name}); if(out.length>=30) break; } }
+    // 명칭들
+    if(READY_K){
+      for(const r of KCD_NAME_IDX){ if(nkey(r.name).includes(k)){ out.push({type:'kcd_name', label:r.name, code:r.code}); if(out.length>=30) break; } }
+    }
+    if(READY_M){
+      for(const r of M_NAME_IDX){ if(nkey(r.name).includes(k)){ out.push({type:'icdo_name', label:r.name, code:r.code}); if(out.length>=30) break; } }
     }
     return out.slice(0,30);
   }
   function openAC(items){
     if(!items.length){ elAC.classList.remove('open'); elACList.innerHTML=''; return; }
     elACList.innerHTML = items.map((it,i)=>{
-      if(it.type==='op')   return `<li data-i="${i}" data-t="op"><span>${it.label}</span><span class="desc">수술 · 등급 표시</span></li>`;
-      if(it.type==='code') return `<li data-i="${i}" data-t="code"><span>${it.label}</span><span class="code">${it.code}</span></li>`;
-      return `<li data-i="${i}" data-t="kcd"><span>${it.label}</span><span class="code">${it.code}</span></li>`;
+      let tag='수술';
+      if(it.type.startsWith('kcd')) tag='KCD';
+      else if(it.type.startsWith('icdo')) tag='ICD-O';
+      else if(it.type.startsWith('topo')) tag='C코드';
+      return `<li data-i="${i}" data-t="${it.type}">
+        <span>${it.label}</span>
+        ${it.code?`<span class="code">${it.code}</span>`:`<span class="desc">${tag}</span>`}
+      </li>`;
     }).join('');
     elAC.classList.add('open');
   }
@@ -1595,20 +1722,22 @@ XX흡착식 혈관정화법
 
   /* ===== 검색 ===== */
   function doSearch(){
-    const q = elQ.value.trim(); if(!q || !READY) return;
-    if(isKcdCode(q)) { showByCode(q); return; }
-    const ops = OP_DB.filter(r=> nkey(r.name).includes(nkey(q))).sort((a,b)=>a.name.length-b.name.length);
-    if(ops.length){ showByOp(ops[0].name); return; }
-    // 수술명이 아니면 KCD 명칭으로 직접 검색해 노출
-    renderTier(elRA,null,''); renderTier(elRB,null,'');
-    renderKcdList( kcdFromName(q, 20) );
+    const q = elQ.value.trim(); if(!q || !(READY_K||READY_M)) return;
+    if(isIcdo(q)) return showByICDO(q);
+    if(isTopography(q)) return showByTopography(q);
+    if(isKcd(q)) return showByKCD(q);
+    // 수술명 우선
+    const op = OP_DB.find(r=> nkey(r.name).includes(nkey(q)));
+    if(op) return showByOp(op.name);
+    // 명칭 기반
+    showByKCD(q);
   }
 
   /* ===== 이벤트 ===== */
   elBtn.addEventListener('click', doSearch);
   elQ.addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch(); });
-  elQ.addEventListener('input', ()=> READY && openAC(suggest(elQ.value)));
-  elQ.addEventListener('focus', ()=> READY && openAC(suggest(elQ.value)));
+  elQ.addEventListener('input', ()=> (READY_K||READY_M) && openAC(suggest(elQ.value)));
+  elQ.addEventListener('focus', ()=> (READY_K||READY_M) && openAC(suggest(elQ.value)));
   elQ.addEventListener('blur', ()=> setTimeout(closeAC,120));
   elACList.addEventListener('click', (e)=>{
     const li = e.target.closest('li'); if(!li) return;
@@ -1616,22 +1745,26 @@ XX흡착식 혈관정화법
     const items = suggest(elQ.value);
     const it = items[idx]; if(!it) return;
     if(it.type==='op'){ elQ.value = it.label; showByOp(it.label); }
-    else if(it.type==='code'){ elQ.value = it.code; showByCode(it.code); }
-    else { elQ.value = it.label; renderTier(elRA,null,''); renderTier(elRB,null,''); renderKcdList([{code:it.code, name:it.label}]); }
+    else if(it.type==='kcd_code'){ elQ.value = it.code; showByKCD(it.code); }
+    else if(it.type==='kcd_name'){ elQ.value = it.label; showByKCD(it.label); }
+    else if(it.type==='topo_code'){ elQ.value = it.code; showByTopography(it.code); }
+    else if(it.type==='icdo_code'){ elQ.value = it.code; showByICDO(it.code); }
+    else if(it.type==='icdo_name'){ elQ.value = it.label; showByICDO(it.label); }
     closeAC();
   });
 
-  /* ===== 부팅: KCD가 성공해야 검색 활성화 ===== */
+  /* ===== 부팅 ===== */
   (async()=>{
-    // xlsx 로딩 대기
     await new Promise(r=>{
       if(window.XLSX) return r();
       const t=setInterval(()=>{ if(window.XLSX){ clearInterval(t); r(); } },50);
     });
-    const ok = await loadKCD();
-    if(!ok){ elQ.disabled=true; elBtn.disabled=true; return; }
-    READY=true; elQ.disabled=false; elBtn.disabled=false;
-    elStatus.textContent += " · 검색 가능";
+    let msgs=[];
+    const okK = await loadKCD();  msgs.push(okK?`KCD ${KCD_BY_CODE.size}건`:`KCD 실패`);
+    const okM = await loadICDO(); msgs.push(okM?`ICD-O ${M_BY_CODE.size}건`:`ICD-O 실패`);
+    READY = okK || okM;
+    elStatus.textContent = READY ? `로드 완료 · ${msgs.join(' / ')}` : `로드 실패`;
+    elQ.disabled = !READY; elBtn.disabled = !READY;
   })();
   </script>
 </body>
