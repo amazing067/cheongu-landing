@@ -23,7 +23,20 @@
 
   <!-- Tailwind(@apply) 빌드 CSS -->
   <link rel="stylesheet" href="/assets/site.css?v=final-compact-14" />
-
+<script>
+(function(){
+  if (location.search.indexOf('mobile=1') !== -1) {
+    // 모바일 전용 CSS 강제 로드
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/assets/mobile.css?v=1';
+    document.head.appendChild(link);
+    // 데스크톱에서도 모바일 폭으로 고정 미리보기
+    var meta = document.querySelector('meta[name="viewport"]');
+    if (meta) meta.setAttribute('content','width=390, initial-scale=1');
+  }
+})();
+</script>
 <style id="hotfix">
   /* ===== 기본 ===== */
   body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
