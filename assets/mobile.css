@@ -35,28 +35,37 @@
 }
 /* === 모바일: 행은 세로 스택, 버튼은 2열 래핑 === */
 @media (max-width: 480px){
-  /* 행을 단일 컬럼으로 (브랜드/이름 위, 버튼 아래) */
+  /* 행을 플렉스 래핑으로 전환 (DOM 순서와 무관하게 배치 제어) */
   .row{
-    display: block !important;
-    padding: .5rem .75rem !important;
-    gap: 0 !important;
+    display:flex !important;
+    flex-wrap:wrap !important;
+    align-items:flex-start !important;
+    gap:6px !important;
+    padding:.5rem .75rem !important;
   }
 
-  /* 로고/회사명 컴팩트 */
-  .brand{ display:flex !important; align-items:center !important; gap:10px !important; margin-bottom:8px !important; }
+  /* 브랜드(로고+회사명)를 항상 첫 줄 전체로 */
+  .brand{
+    order:-1 !important;             /* 항상 맨 위 */
+    flex:0 0 100% !important;        /* 한 줄 전체 차지 */
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+    margin-bottom:2px !important;
+  }
   .logo{ width:40px !important; height:40px !important; border-radius:10px !important; }
   .logo img{ max-height:28px !important; }
   .name{ font-size:18px !important; line-height:1.2 !important; }
 
-  /* 버튼 영역: 자동 줄바꿈 + 2열 */
-  .row .btn{ 
-    display:inline-flex !important; 
-    white-space:nowrap !important; 
-    overflow:hidden !important; 
+  /* 버튼: 자동 줄바꿈 2열 */
+  .row .btn{
+    flex:0 0 calc(50% - 6px) !important;  /* 2열 */
+    display:inline-flex !important;
+    margin:3px !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
     text-overflow:ellipsis !important;
-    width: calc(50% - 6px) !important;   /* 2열 */
-    margin: 3px !important;              /* 간격 */
-    font-size:13px !important; 
+    font-size:13px !important;
     padding:8px 10px !important;
     min-width:0 !important;
   }
