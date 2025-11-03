@@ -909,5 +909,13 @@
     })();
   </script>
 <a href="tools/claim-autofill.html?demo">청구서 자동채움 데모 열기</a>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js')
+      .catch(function (e) { console.error('SW register failed:', e); });
+  });
+}
+</script>
 </body>
 </html>
