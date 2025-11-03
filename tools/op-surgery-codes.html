@@ -1673,37 +1673,75 @@ XX흡착식 혈관정화법
     renderList(elK, findKCDByName(mCodeOrName, 20));
   }
 
-  /* ===== 자동완성 ===== */
-  function suggest(q){
-    const k = nkey(q); if(!k || !(READY_K||READY_M)) return [];
-    const out=[];
-    // 코드 직접
-    if(READY_K && isKcd(q)){
-      const code = normalizeCode(q);
-      const name = KCD_BY_CODE.get(code) || KCD_BY_CODE.get(code.replace('.',''));
-      if(name) out.push({type:'kcd_code', label:name, code});
-    }
-    if(READY_K && isTopography(q)){
-      const code = normTopo(q);
-      const name = KCD_BY_CODE.get(code) || KCD_BY_CODE.get(code.replace('.',''));
-      if(name) out.push({type:'topo_code', label:name, code});
-    }
-    if(READY_M && isIcdo(q)){
-      const code = normalizeCode(q);
-      const rec = M_BY_CODE.get(code);
-      if(rec) out.push({type:'icdo_code', label:rec.name, code});
-    }
-    // 수술명
-    for(const r of OP_DB){ if(nkey(r.name).includes(k)){ out.push({type:'op', label:r.name}); if(out.length>=30) break; } }
-    // 명칭들
-    if(READY_K){
-      for(const r of KCD_NAME_IDX){ if(nkey(r.name).includes(k)){ out.push({type:'kcd_name', label:r.name, code:r.code}); if(out.length>=30) break; } }
-    }
-    if(READY_M){
-      for(const r of M_NAME_IDX){ if(nkey(r.name).includes(k)){ out.push({type:'icdo_name', label:r.name, code:r.code}); if(out.length>=30) break; } }
-    }
-    return out.slice(0,30);
+/* ===== 자동완성 (부분 코드 Prefix 지원) ===== */
+function suggest(q){
+  const raw = (q ?? "").trim();
+  const k = nkey(raw);
+  if(!k || !(READY_K || READY_M)) return [];
+
+  const out = [];
+  const seen = new Set();
+  const push = (item)=>{
+    const id = item.type + '|' + (item.code || item.label);
+    if(seen.has(id)) return true;
+    out.push(item); seen.add(id);
+    return out.length < 30;
+  };
+
+  const norm = normalizeCode(raw);
+
+  // 1) 코드 완전 매치 우선
+  if(READY_K && isKcd(raw)){
+    const code = norm;
+    const name = KCD_BY_CODE.get(code) || KCD_BY_CODE.get(code.replace('.',''));
+    if(name) push({type:'kcd_code', label:name, code});
   }
+  if(READY_K && isTopography(raw)){
+    const code = normTopo(raw);
+    const name = KCD_BY_CODE.get(code) || KCD_BY_CODE.get(code.replace('.',''));
+    if(name) push({type:'topo_code', label:name, code});
+  }
+  if(READY_M && isIcdo(raw)){
+    const rec = M_BY_CODE.get(norm);
+    if(rec) push({type:'icdo_code', label:rec.name, code:norm});
+  }
+
+  // 2) 코드 부분(Prefix) 매치
+  if(READY_K && /^[A-TV-Z]\d{0,2}(\.\d?)?$/i.test(raw)){
+    const pref = norm.replace('.','');
+    for(const [code,name] of KCD_BY_CODE){
+      const key = code.replace('.','');
+      if(key.startsWith(pref)){
+        const type = code.startsWith('C') ? 'topo_code' : 'kcd_code';
+        if(!push({type, label:name, code})) break;
+      }
+    }
+  }
+  if(READY_M && /^M\d{0,4}(\/[0-9]?)?$/i.test(raw)){
+    const pref = norm;
+    for(const [code,rec] of M_BY_CODE){
+      if(code.startsWith(pref)){
+        if(!push({type:'icdo_code', label:rec.name, code})) break;
+      }
+    }
+  }
+
+  // 3) 수술명/한글명 부분 포함
+  for(const r of OP_DB){
+    if(nkey(r.name).includes(k)){ if(!push({type:'op', label:r.name})) break; }
+  }
+  if(READY_K){
+    for(const r of KCD_NAME_IDX){
+      if(nkey(r.name).includes(k)){ if(!push({type:'kcd_name', label:r.name, code:r.code})) break; }
+    }
+  }
+  if(READY_M){
+    for(const r of M_NAME_IDX){
+      if(nkey(r.name).includes(k)){ if(!push({type:'icdo_name', label:r.name, code:r.code})) break; }
+    }
+  }
+  return out;
+}
   function openAC(items){
     if(!items.length){ elAC.classList.remove('open'); elACList.innerHTML=''; return; }
     elACList.innerHTML = items.map((it,i)=>{
