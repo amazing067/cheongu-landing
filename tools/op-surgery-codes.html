@@ -1690,7 +1690,20 @@ function suggest(q){
     out.push(item); seen.add(id);
     return out.length < 30;
   };
+// 자동완성 항목을 즉시 실행하는 공통 헬퍼 (추가)
+function activateSuggestionByIndex(idx){
+  const items = suggest(elQ.value);
+  const it = items[idx]; if(!it) return;
 
+  if(it.type === 'op'){ elQ.value = it.label; showByOp(it.label); }
+  else if(it.type === 'kcd_code'){ elQ.value = it.code; showByKCD(it.code); }
+  else if(it.type === 'kcd_name'){ elQ.value = it.label; showByKCD(it.label); }
+  else if(it.type === 'topo_code'){ elQ.value = it.code; showByTopography(it.code); }
+  else if(it.type === 'icdo_code'){ elQ.value = it.code; showByICDO(it.code); }
+  else if(it.type === 'icdo_name'){ elQ.value = it.label; showByICDO(it.label); }
+
+  closeAC();
+}
   const norm = normalizeCode(raw);
 
   // 1) 코드 완전 매치 우선
