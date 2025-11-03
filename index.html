@@ -482,7 +482,7 @@
     // 일반 버튼
     function btn(label, href, cls) {
       if (!href) return `<button class="btn btn-muted" disabled>${label}</button>`;
-      const isExternal = /홈페이지|필요서류/.test(label);
+      const isExternal = /전산|홈페이지|필요서류/.test(label);
       const downloadAttr = /PDF/.test(label) ? ` download="${label}.pdf"` : "";
       return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
     }
