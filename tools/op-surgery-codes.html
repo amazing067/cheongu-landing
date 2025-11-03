@@ -1773,7 +1773,19 @@ function suggest(q){
 
   /* ===== 이벤트 ===== */
   elBtn.addEventListener('click', doSearch);
-  elQ.addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch(); });
+  // Enter로 항상 검색 (한글 조합 중에는 제외)
+let isComposing = false;
+elQ.addEventListener('compositionstart', ()=> isComposing = true);
+elQ.addEventListener('compositionend',  ()=> { isComposing = false; });
+
+elQ.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){
+    if(isComposing) return;      // 한글 조합 중이면 무시
+    e.preventDefault();          // 폼 기본동작/캐럿 줄바꿈 방지
+    closeAC();                   // 자동완성 닫기
+    doSearch();                  // 즉시 검색
+  }
+});
   elQ.addEventListener('input', ()=> (READY_K||READY_M) && openAC(suggest(elQ.value)));
   elQ.addEventListener('focus', ()=> (READY_K||READY_M) && openAC(suggest(elQ.value)));
   elQ.addEventListener('blur', ()=> setTimeout(closeAC,120));
