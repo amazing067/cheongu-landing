@@ -92,7 +92,7 @@ body{
 // ---------------- assets 경로 ----------------
 const assetURL = (path) => new URL(path.replace(/^\/+/,'./'), location.href).href;
 // 새 파일명: 공백 포함 그대로
-const KCD_XLSX_URL = assetURL("./assets/KCD-9 250701.xlsx");   // 먼저(두 컬럼 A/B)
+const KCD_XLSX_URL = assetURL("./assets/KCD-9.xlsx");   // 먼저(두 컬럼 A/B)
 const KCD_CSV_URL  = assetURL("./assets/KCD_20240131.csv");    // 선택(있으면 병합)
 
 // ---------------- 상태 ----------------
