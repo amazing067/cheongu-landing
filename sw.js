@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = 'cheongu-v1';
+const CACHE_NAME = 'cheongu-v2';
 const ASSETS = [
   '/',                // 시작 페이지
   '/assets/site.css', // 실제 경로로 교체
