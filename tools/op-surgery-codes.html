@@ -91,7 +91,7 @@ body{
    0) /assets 경로 설정 (프로젝트 페이지에서도 안전)
    ========================================================= */
 const assetURL = (path) => new URL(path.replace(/^\/+/,'./'), location.href).href;
-const KCD_CSV_URL  = assetURL("./assets/건강보험심사평가원_상병마스터_20240131.csv");
+const KCD_CSV_URL  = assetURL("./assets/KCD_20240131.csv");
 const KCD_XLSX_URL = assetURL("./assets/KCD-9 DB masterfile_250701_20250701010653.xlsx");
 
 /* =========================================================
