@@ -71,3 +71,29 @@ h1, .text-4xl, .text-5xl{
   :root{ --fs-h1: clamp(22px, 6.5vw, 32px); --btn-px: clamp(10px, 3vw, 14px); }
   .grid-cols-4{ grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)) !important; }
 }
+/* === Compact rows for mobile (force shrink) === */
+@media (max-width: 480px){
+  /* 섹션 큰 제목 축소 */
+  h1{ font-size:24px !important; line-height:1.2 !important; margin-top:8px !important; }
+
+  /* 표 한 줄(행) 압축 */
+  .row{
+    grid-template-columns: minmax(140px,1fr) 1fr !important;
+    padding: .5rem .75rem !important;
+    gap: .5rem !important;
+    min-height: 72px !important;
+  }
+
+  /* 로고 박스/이미지 축소 */
+  .logo{ width:40px !important; height:40px !important; border-radius:10px !important; }
+  .logo img{ max-height:28px !important; }
+
+  /* 회사명 글자 축소 */
+  .name{ font-size:18px !important; line-height:1.2 !important; }
+
+  /* 우측 버튼 축소 */
+  .row .btn{ font-size:13px !important; padding:8px 10px !important; }
+
+  /* 테이블 모서리/그림자 가볍게 */
+  .table{ border-radius:12px !important; box-shadow: 0 2px 10px rgba(0,0,0,.04) !important; }
+}
