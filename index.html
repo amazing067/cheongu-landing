@@ -186,6 +186,32 @@
   }
 </style>
 <!-- Anti-copy END -->
+<style id="mobile-hotfix">
+  /* 767px 이하의 모든 모바일 화면에 적용 */
+  @media (max-width: 767px) {
+    
+    /* 헤더의 안쪽 컨테이너(maxw) */
+    header > .maxw {
+        justify-content: center !important; /* 가운데 정렬 강제 */
+        padding-top: 16px !important;
+        padding-bottom: 16px !important;
+    }
+
+    /* '청구닷컴' 글씨 (a 태그) */
+    header > .maxw > a[href="/"] {
+        /* 세로 쓰기를 강제로 가로로 변경 */
+        writing-mode: horizontal-tb !important;
+        
+        /* 모든 위치/변형 초기화 */
+        transform: none !important;
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        
+        font-size: 22px !important; 
+    }
+  }
+</style>
 
 </head>
 
