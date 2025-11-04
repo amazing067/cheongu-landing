@@ -280,11 +280,9 @@ const CARRIER_TEMPLATE_DATA = {
     templatePath: "../assets/pdf-templates/SAMSUNG_FIRE-template.pdf", // (★경로 예시)
     sigPositions: [ // (★예시: 4개) - PDF를 보고 어떤 서명인지 type을 정확히 지정해야 합니다.
       { type: 'BENEFICIARY', page: 0, x: 235, y: 188, width: 100, height: 50 }, // 1페이지 (청구자(수익자) 서명)
-      { type: 'BENEFICIARY', page: 0, x: 244, y: 188, width: 100, height: 50 }, // 1페이지 (청구자(수익자) 서명)
-      { type: 'BENEFICIARY', page: 4, x: 141, y: 188, width: 100, height: 50 }, // 5페이지 (청구자(수익자) 서명)
-      { type: 'BENEFICIARY', page: 4, x: 155, y: 188, width: 100, height: 50 }, // 5페이지 (청구자(수익자) 서명)
-      { type: 'GUARDIAN',  page: 0, x: 239, y: 188, width: 100, height: 50 }  // 1페이지 (법정대리인(미성년) 동의)
-      { type: 'GUARDIAN',  page: 4, x: 149, y: 188, width: 100, height: 50 }  // 5페이지 (법정대리인(미성년) 동의)
+      { type: 'INSURED',   page: 4, x: 141, y: 188, width: 100, height: 50 }, // 5페이지 (피보험자(성인) 동의)
+      { type: 'GUARDIAN',  page: 4, x: 155, y: 188, width: 100, height: 50 }  // 5페이지 (법정대리인(미성년) 동의)
+      // { type: 'BENEFICIARY', page: 0, x: 244, y: 188, width: 100, height: 50 }, // 1페이지 (동의서 서명) -> 예: 이것도 수익자 서명?
     ]
   },
   "HYUNDAI_MARINE": {
@@ -590,7 +588,6 @@ function initCarrierList(){
     const item = document.createElement('div');
     item.className = 'carrier-item';
     
-    // (NEW) 템플릿(path)이 없으면 비활성화
     const hasTemplate = config.template && config.template.path;
     if (!hasTemplate) {
       item.classList.add('disabled');
@@ -668,10 +665,17 @@ function navigateToStep(stepNumber) {
     if (!signaturePad) { // 1. signaturePad가 아직 초기화되지 않았다면
       const canvas = el('signature-canvas');
       if (canvas) { // 2. 캔버스가 존재하는지 확인
-        signaturePad = new SignaturePad(canvas, { penColor: "rgb(0, 0, 0)" });
-        el('clear_signature').addEventListener('click', () => { signaturePad.clear(); });
-        window.addEventListener("resize", resizeCanvas); // 리사이즈 이벤트도 여기서 연결
-        resizeCanvas(); // 3. 캔버스 크기를 즉시 조절
+        try {
+          signaturePad = new SignaturePad(canvas, { penColor: "rgb(0, 0, 0)" });
+          el('clear_signature').addEventListener('click', () => { 
+            if (signaturePad) signaturePad.clear(); 
+          });
+          window.addEventListener("resize", resizeCanvas); // 리사이즈 이벤트도 여기서 연결
+          resizeCanvas(); // 3. 캔버스 크기를 즉시 조절
+        } catch(e) {
+          console.error("SignaturePad 초기화 실패:", e);
+          alert("서명패드를 불러오는 데 실패했습니다.");
+        }
       }
     } else {
       resizeCanvas(); // 4. 이미 초기화되었다면 크기만 조절
@@ -912,9 +916,10 @@ function syncSameInsBen() {
 }
 
 /* ============== 캔버스 크기 조절 ============== */
-const canvas = el('signature-canvas');
+// (NEW) canvas 변수 선언 위치 변경
 function resizeCanvas() {
-  if (!canvas || !canvas.getContext) return; // (NEW) 캔버스 존재 여부 확인
+  const canvas = el('signature-canvas'); // (NEW) 함수 내에서 캔버스 찾기
+  if (!canvas || !canvas.getContext) return; 
   const ratio =  Math.max(window.devicePixelRatio || 1, 1);
   canvas.width = canvas.offsetWidth * ratio;
   canvas.height = canvas.offsetHeight * ratio;
@@ -1157,7 +1162,7 @@ async function handleSubmit(action) {
   }
 }
 
-/* ============== (NEW) 개별 PDF 생성 로직 (조건부 서명) ============== */
+/* ============== (NEW) 개별 PDF 생성 로직 (조건부 서명 + 빈칸 수정) ============== */
 async function generateSinglePdf(P, templateConfig, kFontBytes, sigImageBytes) {
   const { PDFDocument, StandardFonts } = PDFLib;
   if (!templateConfig || !templateConfig.path) {
@@ -1190,6 +1195,11 @@ async function generateSinglePdf(P, templateConfig, kFontBytes, sigImageBytes) {
     try {
       if (typeof text === 'string') {
         const field = form.getTextField(fieldName);
+        
+        // (NEW) 빈칸 문제 해결: 서식 있는 텍스트 끄고 폰트 크기 강제
+        field.disableRichFormatting();
+        field.setFontSize(10); // (10pt는 예시, 필요시 조절)
+
         field.setText(text);
         field.updateAppearances(fontToUse);
       } else if (typeof text === 'boolean' && text === true) {
