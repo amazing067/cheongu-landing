@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>보험금 청구서 자동기입 PDF 생성 (단계별)</title>
+<title>보험금 청구서 자동기입 PDF 생성 (서명패드 포함)</title>
 <meta name="format-detection" content="telephone=no" />
 <style>
   :root{--bg:#f6f8fb;--card:#fff;--ink:#111827;--muted:#6b7280;--brand:#3a64ff;--line:#e5e7eb;--radius:16px;--shadow:0 10px 30px rgba(17,24,39,.08)}
@@ -56,7 +56,30 @@
 
   .step-footer {margin-top:20px;display:flex;justify-content:space-between;align-items:center}
 
-  /* --- (NEW) 서명 확인란 --- */
+  /* --- (NEW) 서명패드 --- */
+  .signature-pad-wrapper {
+    position:relative;
+    border:2px dashed var(--line);
+    border-radius:12px;
+    margin-top:12px;
+    height: 200px;
+    background: #fff;
+  }
+  .signature-pad-wrapper canvas {
+    width:100%;
+    height:100%;
+    border-radius:12px;
+    cursor:crosshair;
+  }
+  #clear_signature {
+    position:absolute;
+    top:8px;
+    right:8px;
+    z-index: 10;
+    font-size:12px;
+    padding:6px 10px;
+  }
+
   .signature-confirm {margin-top:16px;padding:14px;background:var(--bg);border-radius:8px}
   .signature-confirm label {display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink);cursor:pointer}
   .signature-confirm input[type="checkbox"] {width:auto;flex-shrink:0}
@@ -78,6 +101,7 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -95,7 +119,7 @@
   <div class="step-nav">
     <div id="step-nav-1" class="step-nav-item active">1. 청구자 정보</div>
     <div id="step-nav-2" class="step-nav-item">2. 사고/질병 정보</div>
-    <div id="step-nav-3" class="step-nav-item">3. 서류 생성</div>
+    <div id="step-nav-3" class="step-nav-item">3. 서명 및 생성</div>
   </div>
 
   <div class="card">
@@ -238,12 +262,12 @@
 
       <div class="step-footer">
         <button class="btn" type="button" onclick="navigateToStep(1)">이전 (청구자 정보)</button>
-        <button class="btn primary" type="button" onclick="navigateToStep(3)">다음 (서류 생성)</button>
+        <button class="btn primary" type="button" onclick="navigateToStep(3)">다음 (서명 및 생성)</button>
       </div>
     </div>
 
     <div id="step-3" class="step">
-      <h3>3. 서류 생성 (어디에?)</h3>
+      <h3>3. 서명 및 생성</h3>
 
       <div>
         <label>보험사 템플릿 PDF</label>
@@ -254,10 +278,16 @@
         <input type="date" id="claim_date_today" />
       </div>
 
+      <label style="margin-top:16px;font-weight:600">서명 (청구자)</label>
+      <div class="signature-pad-wrapper">
+        <canvas id="signature-canvas"></canvas>
+        <button class="btn" id="clear_signature" type="button">지우기</button>
+      </div>
+
       <div class="signature-confirm">
         <label>
           <input type="checkbox" id="signature_confirm" />
-          <span>본인은 위 청구서 내용을 모두 확인하였으며,<br />PDF 생성 후 **직접 서명**하겠습니다. (필수 동의)</span>
+          <span>본인은 위 청구서 내용과 상기 서명을 확인하였으며, 이는 법적 서명과 동일한 효력을 가짐에 동의합니다. (필수)</span>
         </label>
       </div>
 
@@ -283,19 +313,29 @@
 </div>
 
 <script>
-/* ============== (NEW) PDF 템플릿 경로 ============== */
+/* ============== (NEW) PDF 템플릿 경로 및 서명 좌표 ============== */
+// (중요!) Acrobat에서 '포인트(pt)' 단위로 (x,y) 좌표를 찾아서 입력하세요.
+// (x,y)는 서명 이미지의 "왼쪽 아래" 모서리 기준입니다.
 const PDF_TEMPLATES = {
-  "삼성생명 (템플릿 예시)": "/assets/pdf-templates/samsung-life-template.pdf",
-  "KB손해보험 (템플릿 예시)": "/assets/pdf-templates/kb-insurance-template.pdf",
-  "삼성화재 (템플릿 예시)": "/assets/pdf-templates/samsung-fire-template.pdf",
-  "DB손해 (템플릿 예시)": "/assets/pdf-templates/db-insurance-template.pdf",
-  "현대해상 (템플릿 예시)": "/assets/pdf-templates/hyundai-marine-template.pdf"
+  "삼성생명 (템플릿 예시)": {
+    path: "/assets/pdf-templates/samsung-life-template.pdf",
+    sigPos: { x: 450, y: 120, width: 100, height: 50 } // (예시 좌표)
+  },
+  "KB손해보험 (템플릿 예시)": {
+    path: "/assets/pdf-templates/kb-insurance-template.pdf",
+    sigPos: { x: 480, y: 210, width: 100, height: 50 } // (예시 좌표)
+  },
+  "삼성화재 (템플릿 예시)": {
+    path: "/assets/pdf-templates/samsung-fire-template.pdf",
+    sigPos: { x: 400, y: 150, width: 100, height: 50 } // (예시 좌표)
+  }
 };
 
 
 /* ============== 공통 유틸 ============== */
 const el = id=>document.getElementById(id);
 const $pdfFile=el("pdfFile"), $btnViewRaw=el("btnViewRaw"), $status=el(id="status");
+let signaturePad = null; // (NEW) 서명패드 인스턴스
 
 function onlyDigits(e){ e.value = (e.value||"").replace(/\D/g,""); }
 function autoAdvance(cur, nextId, max){ onlyDigits(cur); if(cur.value.length>=max){const n=el(nextId); n&&n.focus(); n?.select?.();} }
@@ -303,8 +343,8 @@ function autoBackspace(e, prevId){ if(e.key==="Backspace" && !e.target.value){ c
 
 function initSelectors(){
   $pdfFile.innerHTML="";
-  for(const [label, path] of Object.entries(PDF_TEMPLATES)){
-    const o=document.createElement("option"); o.value=path; o.textContent=label; $pdfFile.appendChild(o);
+  for(const [label, config] of Object.entries(PDF_TEMPLATES)){
+    const o=document.createElement("option"); o.value=config.path; o.textContent=label; $pdfFile.appendChild(o);
   }
   updatePdfOptions();
 }
@@ -315,18 +355,16 @@ function updatePdfOptions(){
 /* ============== (NEW) 단계별 UI 관리 ============== */
 let currentStep = 1;
 function navigateToStep(stepNumber) {
-  // 현재 단계 숨기기
   el(`step-${currentStep}`).classList.remove('active');
   el(`step-nav-${currentStep}`).classList.remove('active');
   
-  // 새 단계 보이기
   currentStep = stepNumber;
   el(`step-${currentStep}`).classList.add('active');
   el(`step-nav-${currentStep}`).classList.add('active');
 
-  // 3단계 진입 시 오늘 날짜 자동 설정
   if (currentStep === 3) {
     el('claim_date_today').value = new Date().toISOString().split('T')[0];
+    resizeCanvas(); // (NEW) 3단계 진입 시 캔버스 크기 조절
   }
 }
 
@@ -346,31 +384,26 @@ function collectProfile(){
     p[id] = (el(id).value || "").trim();
   });
   
-  // (수정) 수익자(예금주) 및 계좌 정보 분기 처리
   const sameInsBen = el('sameInsBen').checked;
   if (sameInsBen) {
-    p['ben_name'] = p.ins_name; // 예금주는 피보험자
-    p['bank_name'] = p.ins_bank_name; // 은행
-    p['bank_account'] = p.ins_bank_account; // 계좌
+    p['ben_name'] = p.ins_name;
+    p['bank_name'] = p.ins_bank_name;
+    p['bank_account'] = p.ins_bank_account;
   } else {
-    // ben_name, bank_name, bank_account 는 이미 위에서 수집됨
     p['bank_name'] = el('bank_name').value.trim();
     p['bank_account'] = el('bank_account').value.trim();
   }
-  // (삭제) 임시 필드 제거
   delete p.ins_bank_name;
   delete p.ins_bank_account;
 
-  p['bank_depositor'] = p.ben_name; // PDF용 최종 예금주 필드
+  p['bank_depositor'] = p.ben_name;
   
-  // 라디오/체크박스
   p['claim_type_sickness'] = el('claim_type_sickness').checked;
   p['claim_type_injury'] = el('claim_type_injury').checked;
   p['claim_detail_hospital'] = el('claim_detail_hospital').checked;
   p['claim_detail_outpatient'] = el('claim_detail_outpatient').checked;
   p['claim_detail_surgery'] = el('claim_detail_surgery').checked;
   
-  // (추가) PDF 템플릿용 필드 조합
   p['ins_full_phone'] = [p.ins_phone1, p.ins_phone2, p.ins_phone3].join('-');
   p['sub_full_phone'] = [p.sub_phone1, p.sub_phone2, p.sub_phone3].join('-');
   p['ins_full_rrn'] = [p.ins_rrn1, p.ins_rrn2].join('-');
@@ -385,13 +418,12 @@ function applyProfile(p){
     if (!field) continue;
     
     if (field.type === 'checkbox' || field.type === 'radio') {
-      field.checked = !!value; // true/false
+      field.checked = !!value;
     } else {
       field.value = value || "";
     }
   }
 
-  // (수정) 수익자 계좌 정보 분리 적용
   const sameInsBen = !p.ben_name || (p.ins_name === p.ben_name);
   el('sameInsBen').checked = sameInsBen;
   
@@ -403,7 +435,6 @@ function applyProfile(p){
     el('bank_account').value = p.bank_account || '';
   }
 
-  // 체크박스 상태에 따라 UI 동기화
   syncSameSubIns();
   syncSameInsBen();
 }
@@ -414,14 +445,10 @@ function fillSample(){
     ins_name:"김청구", ins_rrn1:"950505", ins_rrn2:"2345678", ins_phone1:"010", sub_phone2:"5555", ins_phone3:"6666",
     zip:"04524", addr:"서울특별시 중구 세종대로 110", addr_detail:"10층 (태평로1가)",
     employer_job:"청구닷컴 / 보험상담사",
-    
-    ben_name: "김청구", // 피보험자와 동일
-    bank_name: "청구은행", 
-    bank_account: "123-456-789012",
-
+    ben_name: "김청구", bank_name: "청구은행", bank_account: "123-456-789012",
     claim_type_sickness: true,
     claim_detail_outpatient: true,
-    accident_date: "2025-11-02",
+    accident_date: "2025-11-04", // (오늘 날짜로 변경)
     diagnosis: "급성 위염",
     hospital_name: "서울병원"
   });
@@ -463,7 +490,7 @@ function openPostcode(){ $layer.style.display='block';
   new daum.Postcode({ oncomplete:(data)=>{ el("zip").value=data.zonecode||""; el("addr").value=data.roadAddress||data.address||""; el("addr_detail").focus(); closePostcode(); }, width:'100%', height:'100%' }).embed($container); }
 function closePostcode(){ $layer.style.display='none'; $container.innerHTML=''; }
 
-/* ============== (NEW) '동일' 체크박스 로직 (수정) ============== */
+/* ============== '동일' 체크박스 로직 (기존과 동일) ============== */
 function syncSameSubIns() {
   const same = el('sameSubIns').checked;
   const fields = ['name', 'rrn1', 'rrn2', 'phone1', 'phone2', 'phone3'];
@@ -481,14 +508,34 @@ function syncSameSubIns() {
 }
 function syncSameInsBen() {
   const same = el('sameInsBen').checked;
-  // '피보험자와 동일'이 체크되면, '별도 수익자' 블록을 숨기고 '피보험자 계좌' 블록을 보여줌
   el('beneficiaryBlock').style.display = same ? 'none' : 'block';
   el('beneficiaryAccountBlock').style.display = same ? 'block' : 'none';
+}
+
+/* ============== (NEW) 캔버스 크기 조절 ============== */
+const canvas = el('signature-canvas');
+function resizeCanvas() {
+  const ratio =  Math.max(window.devicePixelRatio || 1, 1);
+  canvas.width = canvas.offsetWidth * ratio;
+  canvas.height = canvas.offsetHeight * ratio;
+  canvas.getContext("2d").scale(ratio, ratio);
+  if (signaturePad) {
+    signaturePad.clear(); // 캔버스 크기가 바뀌면 내용 지움
+  }
 }
 
 /* ============== 이벤트 초기화 ============== */
 document.addEventListener("DOMContentLoaded", ()=>{
   initSelectors();
+
+  // (NEW) 서명패드 초기화
+  signaturePad = new SignaturePad(canvas, {
+    penColor: "rgb(0, 0, 0)"
+  });
+  el('clear_signature').addEventListener('click', () => {
+    signaturePad.clear();
+  });
+  window.addEventListener("resize", resizeCanvas);
 
   // '동일' 체크박스 이벤트
   el('sameSubIns').addEventListener("change", syncSameSubIns);
@@ -497,16 +544,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
   
   el('sameInsBen').addEventListener("change", syncSameInsBen);
-  syncSameInsBen(); // 초기 로드 시 한 번 실행
+  syncSameInsBen();
 
-  // (NEW) 서명 확인 체크박스 이벤트
+  // 서명 확인 체크박스 이벤트
   el('signature_confirm').addEventListener('change', (e) => {
     el('btnMake').disabled = !e.target.checked;
   });
 
   $pdfFile.addEventListener("change", updatePdfOptions);
 
-  // 자동이동/백스페이스 이벤트 (기존과 동일)
+  // 자동이동/백스페이스 이벤트
   [["sub_phone1","sub_phone2","sub_phone3",3,4],["ins_phone1","ins_phone2","ins_phone3",3,4]].forEach(([a,b,c,ma,mb])=>{
     el(a).addEventListener("input", ()=>autoAdvance(el(a),b,ma)); el(b).addEventListener("input", ()=>autoAdvance(el(b),c,mb)); el(c).addEventListener("input", ()=>onlyDigits(el(c)));
     el(b).addEventListener("keydown", (e)=>autoBackspace(e,a)); el(c).addEventListener("keydown", (e)=>autoBackspace(e,b));
@@ -547,20 +594,33 @@ async function loadKoreanFontBytes(){
   return null;
 }
 
-/* ============== PDF 생성: 폼 필드 채우기 (기존과 동일) ============== */
-// (중요) 이 로직은 UI와 완벽히 분리되어 있으므로 수정할 필요가 없습니다.
+/* ============== (NEW) PDF 생성: 폼 필드 채우기 + 서명 이미지 삽입 ============== */
 async function makePdf(){
   const btn = el("btnMake");
   $status.textContent = "PDF 생성 중…";
-  btn.disabled = true; // 작업 시작 시 비활성화
+  btn.disabled = true;
 
   try {
-    const P = collectProfile(); // 모든 단계의 정보가 P 객체에 수집됩니다.
+    // (NEW) 서명 확인
+    if (signaturePad.isEmpty()) {
+      alert("서명란에 서명을 해주세요.");
+      navigateToStep(3);
+      return;
+    }
+
+    const P = collectProfile();
     if(!P?.ins_name){ alert("피보험자 이름을 입력하세요."); navigateToStep(1); return; }
     if(!P?.accident_date){ alert("발병/사고일을 입력하세요."); navigateToStep(2); return; }
 
     const srcPath = $pdfFile.value;
     if(!srcPath){ alert("템플릿 PDF를 선택하세요."); navigateToStep(3); return; }
+
+    // (NEW) 템플릿 설정(좌표 포함) 가져오기
+    const templateConfig = Object.values(PDF_TEMPLATES).find(t => t.path === srcPath);
+    if (!templateConfig || !templateConfig.sigPos) {
+      alert("선택된 템플릿의 서명 좌표(sigPos)가 코드에 정의되지 않았습니다.");
+      return;
+    }
 
     const { PDFDocument, StandardFonts } = PDFLib;
     
@@ -577,28 +637,21 @@ async function makePdf(){
     }catch(e){ console.error("폰트 임베딩 실패:", e); }
     
     const fontToUse = kFont || await pdfDoc.embedFont(StandardFonts.Helvetica);
-
     const form = pdfDoc.getForm();
     
-    // P 객체에 있는 모든 키-값을 PDF 템플릿 필드에 매핑
+    // --- 1. 텍스트/체크박스 폼 필드 채우기 ---
     for (const [fieldName, text] of Object.entries(P)) {
       if (text === "" || text === false || text === undefined) continue;
       
       try {
-        // 텍스트 필드 채우기
         if (typeof text === 'string') {
           const field = form.getTextField(fieldName);
           field.setText(text);
           field.updateAppearances(fontToUse);
         }
-        // 체크박스/라디오 채우기
         else if (typeof text === 'boolean' && text === true) {
-          // (라디오 그룹은 이름이 같아야 함)
           const field = form.getRadioGroup(fieldName) || form.getCheckBox(fieldName);
-          
           if(field.constructor.name === 'PDFRadioGroup') {
-             // 템플릿에 설정된 'On' 값 (예: 'Yes', '질병')을 찾아 선택
-             // 여기서는 간단히 첫 번째 옵션을 선택하도록 단순화 (템플릿 제작 시 주의)
              const options = field.getOptions();
              if(options.length > 0) field.select(options[0]);
           } else {
@@ -610,8 +663,20 @@ async function makePdf(){
          // console.warn(`폼 필드 '${fieldName}'를 찾거나 채울 수 없습니다.`);
       }
     }
+    
+    // (NEW) --- 2. 서명 이미지 삽입하기 ---
+    // (AcroForms 필드가 아닌, 페이지에 직접 그립니다)
+    const sigDataUrl = signaturePad.toDataURL("image/png");
+    const sigImageBytes = await fetch(sigDataUrl).then(res => res.arrayBuffer());
+    const sigImage = await pdfDoc.embedPng(sigImageBytes);
 
-    form.flatten(); // 수정 불가하게 고정
+    const page = pdfDoc.getPage(0); // 보통 첫 번째 페이지에 서명
+    const { x, y, width, height } = templateConfig.sigPos; // 코드에 정의된 좌표 사용
+    
+    page.drawImage(sigImage, { x, y, width, height });
+    
+    // --- 3. PDF 고정 및 저장 ---
+    form.flatten(); // 텍스트/체크박스 수정 불가하게 고정
 
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type:"application/pdf" });
@@ -630,9 +695,9 @@ async function makePdf(){
     alert("PDF 생성 실패: " + (err?.message||err));
     $status.textContent = "실패";
   } finally {
-    // (NEW) 작업 완료 후 버튼 상태 복원
-    el('signature_confirm').checked = false; // 동의 체크 해제
-    btn.disabled = true; // 다시 비활성화
+    el('signature_confirm').checked = false;
+    btn.disabled = true;
+    signaturePad.clear(); // (NEW) 서명패드 비우기
   }
 }
 window.makePdf = makePdf;
