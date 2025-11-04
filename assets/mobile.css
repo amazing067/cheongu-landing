@@ -150,3 +150,28 @@ header nav {
 .section-title {
     font-size: 24px;
 }
+/* ===== 6. (추가) 헤더 로고 가로/가운데 정렬 ===== */
+
+/* 헤더의 안쪽 컨테이너(maxw)가 자식(a태그)을 가운데 정렬하도록 */
+header > .maxw {
+    justify-content: center !important; /* 가운데 정렬 강제 */
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+/* 세로로 나오는 '청구닷컴' a 태그를 직접 타겟 */
+header > .maxw > a[href="/"] {
+    /* 데스크탑의 세로 쓰기(writing-mode)를 강제로 가로로 변경 */
+    writing-mode: horizontal-tb !important;
+    
+    /* 데스크탑에서 사용했을 수 있는 transform, position 초기화 */
+    transform: none !important;
+    position: static !important;
+    
+    /* 너비/높이도 자동으로 */
+    width: auto !important;
+    height: auto !important;
+    
+    /* 모바일에 맞는 폰트 크기 */
+    font-size: 22px; 
+}
