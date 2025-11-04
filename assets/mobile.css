@@ -171,7 +171,46 @@ header > .maxw > a[href="/"] {
     /* 너비/높이도 자동으로 */
     width: auto !important;
     height: auto !important;
-    
+    /*
+=========================================
+  e-enroll.html 모바일 전용 스타일
+=========================================
+*/
+
+/* 1. 상단 네비게이션 버튼 숨기기 (헤더 길이 축소) */
+.page-enroll .quick-nav {
+  display: none;
+}
+
+/* 2. 로고(img)와 제목(h1)이 줄바꿈되지 않도록 강제 */
+.page-enroll header.maxw .hstack:nth-of-type(2) {
+  flex-wrap: nowrap; /* 로고와 제목이 한 줄에 있도록 강제 */
+  gap: 10px !important;
+}
+
+/* 3. 로고 크기 줄이기 (데스크탑 56px -> 모바일 32px) */
+.page-enroll header.maxw .logo {
+  height: 32px !important;
+  width: 32px !important;
+  /* site.css의 네모난 배경/테두리 제거 */
+  border: none !important;
+  background: none !important;
+  border-radius: 0 !important;
+}
+
+/* 4. h1 제목 폰트 크기 줄이기 (데스크탑 32px -> 모바일 24px) */
+.page-enroll header.maxw .title {
+  font-size: 24px !important;
+}
+
+/* 5. 카드 짤림 현상 방지 (히어로 영역 패딩 줄이기) */
+.page-enroll .hero {
+  padding: 16px;
+}
+.page-enroll .hero .heading {
+  font-size: 18px;
+  padding: 10px 14px;
+}
     /* 모바일에 맞는 폰트 크기 */
     font-size: 22px; 
 }
