@@ -30,9 +30,9 @@
   .seg input{text-align:center;letter-spacing:1px}
   .dash{color:var(--muted);text-align:center}
   
-  /* (NEW) 주소 라인 스타일 수정 */
+  /* (MODIFIED) 주소 라인 스타일 수정 */
   .addr-line{display:grid;grid-template-columns:100px 1fr;gap:8px;}
-  /* .addr-line #addr_detail{grid-column:1 / -1} (이제 필요 없음) */
+  input[readonly]#addr {cursor: pointer;} /* (NEW) 도로명주소 클릭 커서 */
 
   .check-group {display:flex;flex-wrap:wrap;gap:10px}
   .check-group label {display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink);margin:0;padding:10px 12px;border:1px solid var(--line);border-radius:12px;cursor:pointer;transition:all .2s}
@@ -155,12 +155,12 @@
         <div><label>주민등록번호</label><div class="seg seg-rrn"><input id="ins_rrn1" inputmode="numeric" maxlength="6" placeholder="앞 6자리" /><span class="dash">-</span><input id="ins_rrn2" inputmode="numeric" maxlength="7" placeholder="뒤 7자리" /></div></div>
         <div><label>전화번호</label><div class="seg seg-phone"><input id="ins_phone1" inputmode="numeric" maxlength="3" placeholder="010" /><span class="dash">-</span><input id="ins_phone2" inputmode="numeric" maxlength="4" placeholder="0000" /><span class="dash">-</span><input id="ins_phone3" inputmode="numeric" maxlength="4" placeholder="0000" /></div></div>
       </div>
-
+      
       <div style="margin-top:12px">
         <label>주소</label>
         <div class="addr-line" style="margin-bottom: 8px;">
           <input id="zip" placeholder="우편번호" readonly />
-          <input id="addr" placeholder="도로명주소 (클릭하여 검색)" readonly />
+          <input id="addr" placeholder="도로명주소 (클릭하여 검색)" readonly style="cursor: pointer;" />
         </div>
         <div class="addr-line">
           <input id="addr_detail" placeholder="상세주소 (예: 101동 102호, A아파트)" style="grid-column: 1 / -1;" />
@@ -179,7 +179,7 @@
         <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin:0"><input type="checkbox" id="sameInsBen" style="width:auto" checked /> 피보험자와 동일</label>
       </div>
       <div id="beneficiaryBlock" style="display:none"><div class="row3"><div><label>이름 (예금주)</label><input id="ben_name" placeholder="수익자 이름" /></div><div><label>은행명</label><input id="bank_name" placeholder="예: 국민은행" /></div><div><label>계좌번호</label><input id="bank_account" placeholder="숫자/하이픈 가능" /></div></div></div>
-      <div id="beneficiaryAccountBlock"><div class="row3"><div><label>은행명</label><input id="ins_bank_name" placeholder="피보험자 본인 은행" /></div><div><label>계좌번호</label><input id="ins_bank_account" placeholder="피보험자 본인 계좌" /></div></div></div>
+      <div id="beneficiaryAccountBlock"><div class="row3"><div><label>은행명</label><input id="ins_bank_name" placeholder="수익자 본인 은행" /></div><div><label>계좌번호</label><input id="ins_bank_account" placeholder="수익자 본인 계좌" /></div></div></div>
       <div class="step-footer"><button class="btn" disabled>이전</button><button class="btn primary" type="button" onclick="navigateToStep(2)">다음 (사고/질병 정보)</button></div>
     </div>
 
@@ -280,11 +280,9 @@ const CARRIER_TEMPLATE_DATA = {
     templatePath: "../assets/pdf-templates/SAMSUNG_FIRE-template.pdf", // (★경로 예시)
     sigPositions: [ // (★예시: 4개) - PDF를 보고 어떤 서명인지 type을 정확히 지정해야 합니다.
       { type: 'BENEFICIARY', page: 0, x: 235, y: 188, width: 100, height: 50 }, // 1페이지 (청구자(수익자) 서명)
-      { type: 'BENEFICIARY', page: 0, x: 244, y: 188, width: 100, height: 50 }, // 1페이지 (청구자(수익자) 서명)
-      { type: 'BENEFICIARY', page: 4, x: 141, y: 188, width: 100, height: 50 }, // 5페이지 (청구자(수익자) 서명)
-      { type: 'BENEFICIARY', page: 4, x: 155, y: 188, width: 100, height: 50 }, // 5페이지 (청구자(수익자) 서명)
-      { type: 'GUARDIAN',  page: 0, x: 239, y: 188, width: 100, height: 50 }  // 1페이지 (법정대리인(미성년) 동의)
-      { type: 'GUARDIAN',  page: 4, x: 149, y: 188, width: 100, height: 50 }  // 5페이지 (법정대리인(미성년) 동의)
+      { type: 'INSURED',   page: 4, x: 141, y: 188, width: 100, height: 50 }, // 5페이지 (피보험자(성인) 동의)
+      { type: 'GUARDIAN',  page: 4, x: 155, y: 188, width: 100, height: 50 }  // 5페이지 (법정대리인(미성년) 동의)
+      // { type: 'BENEFICIARY', page: 0, x: 244, y: 188, width: 100, height: 50 }, // 1페이지 (동의서 서명) -> 예: 이것도 수익자 서명?
     ]
   },
   "HYUNDAI_MARINE": {
@@ -897,11 +895,12 @@ function syncSameSubIns() {
   });
   
   // (NEW) "관계" 필드 보이기/숨기기
-  el('relationBlock').style.display = same ? 'none' : 'block';
-  if (same) {
-    el('sub_relation').value = '본인'; // 계약자와 피보험자가 같으면 '본인'
-  } else {
-    // el('sub_relation').value = ''; // (옵션) 비워두기
+  const relationBlock = el('relationBlock');
+  if (relationBlock) {
+    relationBlock.style.display = same ? 'none' : 'block';
+    if (same) {
+      el('sub_relation').value = '본인'; // 계약자와 피보험자가 같으면 '본인'
+    }
   }
 }
 function syncSameInsBen() {
@@ -976,15 +975,12 @@ async function initializeApp() {
   initCarrierList(); // 3단계 보험사 목록 생성
   
   // 4. 나머지 모든 이벤트 리스너 등록
-  // (NEW) 서명패드 초기화 로직을 navigateToStep(4)로 이동
-  // signaturePad = new SignaturePad(canvas, { penColor: "rgb(0, 0, 0)" });
-  // el('clear_signature').addEventListener('click', () => { signaturePad.clear(); });
-  // window.addEventListener("resize", resizeCanvas);
+  // (NEW) 서명패드 초기화 로직을 navigateToStep(4)로 이동 (여기서 삭제)
 
   el('sameSubIns').addEventListener("change", syncSameSubIns);
   ['sub_name', 'sub_rrn1', 'sub_rrn2', 'sub_phone1', 'sub_phone2', 'sub_phone3'].forEach(id => { el(id).addEventListener("input", syncSameSubIns); });
   el('sameInsBen').addEventListener("change", syncSameInsBen);
-  syncSameInsBen();
+  syncSameInsBen(); // (NEW) 페이지 로드 시 수익자 UI 상태 즉시 반영
 
   el('signature_confirm').addEventListener('change', (e) => {
     const isDisabled = !e.target.checked;
@@ -993,7 +989,7 @@ async function initializeApp() {
   });
 
   el("zip").addEventListener("click", openPostcode); 
-  el("addr").addEventListener("click", openPostcode);
+  el("addr").addEventListener("click", openPostcode); // (NEW) 주소창 클릭 이벤트
   el("addr_detail").addEventListener("focus", ()=>{ if(!el("addr").value) openPostcode(); });
   el("btnSample").addEventListener("click", fillSample);
   el("btnSaveEnc").addEventListener("click", ()=>{ saveEncrypted().catch(e=>alert(e.message)); });
@@ -1224,10 +1220,10 @@ async function generateSinglePdf(P, templateConfig, kFontBytes, sigImageBytes) {
       else if (pos.type === 'GUARDIAN' && isInsuredMinor) { // 법정대리인 서명은 미성년자일 때만
         shouldStamp = true;
       }
-      // (참고) type이 없으면 항상 찍도록 하려면 아래 주석 해제
-      // else if (!pos.type) {
-      //   shouldStamp = true;
-      // }
+      // (참고) type이 없으면(꼬리표 안붙이면) 항상 찍도록 처리
+      else if (!pos.type) {
+        shouldStamp = true;
+      }
 
       // 4. 스탬프 찍기
       if (shouldStamp) {
