@@ -280,9 +280,11 @@ const CARRIER_TEMPLATE_DATA = {
     templatePath: "../assets/pdf-templates/SAMSUNG_FIRE-template.pdf", // (★경로 예시)
     sigPositions: [ // (★예시: 4개) - PDF를 보고 어떤 서명인지 type을 정확히 지정해야 합니다.
       { type: 'BENEFICIARY', page: 0, x: 235, y: 188, width: 100, height: 50 }, // 1페이지 (청구자(수익자) 서명)
-      { type: 'INSURED',   page: 4, x: 141, y: 188, width: 100, height: 50 }, // 5페이지 (피보험자(성인) 동의)
-      { type: 'GUARDIAN',  page: 4, x: 155, y: 188, width: 100, height: 50 }  // 5페이지 (법정대리인(미성년) 동의)
-      // { type: 'BENEFICIARY', page: 0, x: 244, y: 188, width: 100, height: 50 }, // 1페이지 (동의서 서명) -> 예: 이것도 수익자 서명?
+      { type: 'BENEFICIARY', page: 0, x: 244, y: 188, width: 100, height: 50 }, // 1페이지 (청구자(수익자) 서명)
+      { type: 'BENEFICIARY', page: 4, x: 141, y: 188, width: 100, height: 50 }, // 5페이지 (청구자(수익자) 서명)
+      { type: 'BENEFICIARY', page: 4, x: 155, y: 188, width: 100, height: 50 }, // 5페이지 (청구자(수익자) 서명)
+      { type: 'GUARDIAN',  page: 0, x: 239, y: 188, width: 100, height: 50 }  // 1페이지 (법정대리인(미성년) 동의)
+      { type: 'GUARDIAN',  page: 4, x: 149, y: 188, width: 100, height: 50 }  // 5페이지 (법정대리인(미성년) 동의)
     ]
   },
   "HYUNDAI_MARINE": {
