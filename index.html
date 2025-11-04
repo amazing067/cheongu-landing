@@ -496,7 +496,10 @@
     function btn(label, href, cls) {
       if (!href) return `<button class="btn btn-muted" disabled>${label}</button>`;
       const isExternal = /전산|홈페이지|필요서류/.test(label);
-      const downloadAttr = /PDF/.test(label) ? ` download="${label}.pdf"` : "";
+      // [수정] btn-pdf 또는 btn-dental 클래스일 경우
+      const isDownload = (cls === 'btn-pdf' || cls === 'btn-dental');
+      // [수정] download="" (값 없음)으로 설정해 '원본 파일명'으로 다운로드
+      const downloadAttr = isDownload ? ' download=""' : '';
       return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
     }
 
