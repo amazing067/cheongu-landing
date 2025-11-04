@@ -22,22 +22,26 @@
 }
 
 /* ===== 2. 아코디언 헤더 (로고 영역) ===== */
-/* [수정] 로고 가운데 정렬을 위해 flex + justify-content: center 사용 */
 .row > div:first-child {
     padding: 12px 15px;
     display: flex !important;
     justify-content: center; /* 로고를 가운데로 정렬 */
     align-items: center;
     position: relative; /* 토글 버튼 위치 지정을 위해 */
+    
+    /*
+     * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+     * (요청 1) 헤더 배경색 변경 (옅은 회색 -> 옅은 파란색)
+     * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+     */
+    background-color: #f0f7ff;
 }
 
 .row > div:first-child a {
-    /* 로고 링크가 가운데 영역을 차지하도록 */
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-grow: 1; /* 남는 공간을 모두 차지 */
-    background-color: #f8f9fa; /* 옅은 회색 배경 */
+    flex-grow: 1;
 }
 
 /* 모바일에서 로고 크기 살짝 줄이기 */
@@ -45,8 +49,7 @@
     max-height: 24px !important;
 }
 
-/* [추가] JS가 생성한 .accordion-toggle 버튼 스타일 */
-/* + 버튼을 헤더 오른쪽에 절대 위치로 배치 */
+/* JS가 생성한 .accordion-toggle 버튼 스타일 */
 .accordion-toggle {
     display: inline-block;
     background: none;
@@ -58,25 +61,28 @@
     padding: 5px 10px;
     line-height: 1;
     z-index: 10;
-    
-    /* 오른쪽 끝에 배치 */
     position: absolute;
-    right: 10px; /* 오른쪽 여백 */
+    right: 10px;
     top: 50%;
-    transform: translateY(-50%); /* 세로 중앙 정렬 */
+    transform: translateY(-50%);
 }
 
 
 /* ===== 3. 아코디언 콘텐츠 (버튼 묶음) ===== */
-/* [수정] 아코디언을 위해 기본 상태에서 숨김 */
+/*
+ * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+ * (요청 2) 아코디언 전체 숨김
+ * .stack은 .grid-top과 .grid-bottom을 모두 포함하는 '전체' 컨테이너입니다.
+ * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+ */
 .row .stack {
-    display: none; 
+    display: none; /* 기본 상태에서 '전체'를 숨김 */
     padding: 12px 15px; 
     border-top: 1px dashed #eee;
     background-color: #fcfdff; 
 }
 
-/* 상단 2열 버튼 그리드 (유지) */
+/* 상단 2열 버튼 그리드 */
 .row .stack .grid-top {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -84,7 +90,7 @@
     align-items: stretch;
 }
 
-/* 하단 1열 버튼 리스트 (유지) */
+/* 하단 1열 버튼 리스트 */
 .row .stack .grid-bottom {
     display: flex;
     flex-direction: column;
@@ -93,7 +99,7 @@
     margin-top: 6px;
 }
 
-/* [수정] 모든 버튼 (글씨 가운데 정렬) */
+/* 모든 버튼 (글씨 가운데 정렬) */
 .row .stack .btn {
     display: block;
     width: 100%;
@@ -104,7 +110,7 @@
     min-height: 34px; 
 }
 
-/* [수정] 전화 버튼 (flex 아이템 가운데 정렬) */
+/* 전화 버튼 (flex 아이템 가운데 정렬) */
 .row .stack .btn-call {
     justify-content: center !important; /* flex 아이템(글씨, 숫자)을 가운데로 */
     font-size: 13px;
@@ -115,22 +121,27 @@
     margin-left: 8px;
 }
 
-/* "전산 접속" 버튼 숨기기 (유지) */
+/* "전산 접속" 버튼 숨기기 */
 .row .stack .btn-primary {
     display: none !important;
 }
 
 
 /* ===== 4. 활성화 상태 ===== */
-/* [추가] .row.active 일 때 .stack을 보여줌 */
+/*
+ * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+ * (요청 2) 아코디언 '전체' 표시
+ * .row.active 일 때 .stack (전체)을 보여줌
+ * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+ */
 .row.active .stack {
     display: block;
 }
 
-/* [추가] 아코디언 아이콘 회전 (JS가 .active 추가 시) */
+/* 아코디언 아이콘 회전 */
 .row.active .accordion-toggle {
     transform: translateY(-50%) rotate(45deg);
-    color: #dc3545; /* 열렸을 때 X 아이콘 색상 (선택 사항) */
+    color: #dc3545; 
 }
 
 
