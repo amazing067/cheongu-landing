@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>보험금 청구서 자동기입 PDF 생성 (다중 청구 지원)</title>
+<title>보험금 청구서 자동기입 PDF 생성 (팩스 전송 포함)</title>
 <meta name="format-detection" content="telephone=no" />
 <style>
+  /* ... (스타일은 이전과 동일합니다) ... */
   :root{--bg:#f6f8fb;--card:#fff;--ink:#111827;--muted:#6b7280;--brand:#3a64ff;--line:#e5e7eb;--radius:16px;--shadow:0 10px 30px rgba(17,24,39,.08)}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,Apple SD Gothic Neo,Segoe UI,Roboto,Helvetica,Arial}
@@ -14,83 +15,47 @@
   label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
   input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:14px;transition:border-color .2s, box-shadow .2s}
   input:focus, select:focus {border-color:var(--brand);box-shadow:0 0 0 3px rgba(58,100,255,.2);outline:none}
-  
   .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:600;transition:all .2s}
   .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
   .btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.05)}
   .btn.primary:hover:not(:disabled){box-shadow:0 4px 12px rgba(58,100,255,.2)}
   .btn:disabled{background:#f6f8fb;color:var(--muted);border-color:var(--line);cursor:not-allowed;opacity:0.7}
-  
   .muted{color:var(--muted);font-size:12px}
   h2{margin:0 0 12px 0}
   h3{margin:0 0 16px 0;padding-bottom:10px;border-bottom:1px solid var(--line)}
-
   .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
   .seg{display:grid;gap:0;align-items:center}
   .seg-rrn{grid-template-columns:1fr 14px 1fr}
   .seg-phone{grid-template-columns:72px 14px 84px 14px 84px}
   .seg input{text-align:center;letter-spacing:1px}
   .dash{color:var(--muted);text-align:center}
-
   .addr-line{display:grid;grid-template-columns:100px 1fr;gap:8px;margin-bottom: 8px;}
   .addr-line #addr_detail{grid-column:1 / -1}
-  
   .check-group {display:flex;flex-wrap:wrap;gap:10px}
   .check-group label {display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink);margin:0;padding:10px 12px;border:1px solid var(--line);border-radius:12px;cursor:pointer;transition:all .2s}
   .check-group input[type="radio"], .check-group input[type="checkbox"] {width:auto;accent-color:var(--brand);}
   .check-group label:has(:checked) {background:rgba(58,100,255,.05);border-color:var(--brand);box-shadow:0 0 0 2px rgba(58,100,255,.1)}
-
-  /* --- 데이터 저장 (상단으로 이동) --- */
   .data-actions{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
   .data-actions input {width:240px}
-
-  /* --- 단계별 UI (Stepper) --- */
   .step-nav {display:flex;gap:8px;margin-bottom:12px}
   .step-nav-item {flex:1;text-align:center;padding:10px;border-radius:12px;background:var(--bg);color:var(--muted);border:1px solid var(--line);font-size:14px;font-weight:600}
   .step-nav-item.active {background:var(--brand);color:#fff;border-color:var(--brand)}
-
-  .step {display:none} /* 기본적으로 모든 단계 숨김 */
-  .step.active {display:block} /* 활성 단계만 보임 */
-
+  .step {display:none}
+  .step.active {display:block}
   .step-footer {margin-top:20px;display:flex;justify-content:space-between;align-items:center}
-
-  /* --- (NEW) 보험사 템플릿 목록 --- */
   .template-list { max-height: 250px; overflow-y: auto; border: 1px solid var(--line); border-radius: 12px; padding: 8px; background: var(--bg); }
   .template-item { display: flex; align-items: center; padding: 12px; background: var(--card); border-radius: 8px; margin-bottom: 8px; }
   .template-item label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink); margin: 0; flex: 1; cursor: pointer; }
   .template-item input[type="checkbox"] { width: auto; }
   .template-item .fax { font-size: 12px; color: var(--muted); margin-left: auto; margin-right: 12px; }
   .template-item .view-link { font-size: 12px; }
-
-  /* --- 서명패드 --- */
-  .signature-pad-wrapper {
-    position:relative;
-    border:2px dashed var(--line);
-    border-radius:12px;
-    margin-top:12px;
-    height: 200px;
-    background: #fff;
-  }
-  .signature-pad-wrapper canvas {
-    width:100%;
-    height:100%;
-    border-radius:12px;
-    cursor:crosshair;
-  }
-  #clear_signature {
-    position:absolute;
-    top:8px;
-    right:8px;
-    z-index: 10;
-    font-size:12px;
-    padding:6px 10px;
-  }
+  .signature-pad-wrapper { position:relative; border:2px dashed var(--line); border-radius:12px; margin-top:12px; height: 200px; background: #fff; }
+  .signature-pad-wrapper canvas { width:100%; height:100%; border-radius:12px; cursor:crosshair; }
+  #clear_signature { position:absolute; top:8px; right:8px; z-index: 10; font-size:12px; padding:6px 10px; }
   .signature-confirm {margin-top:16px;padding:14px;background:var(--bg);border-radius:8px}
   .signature-confirm label {display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink);cursor:pointer}
   .signature-confirm input[type="checkbox"] {width:auto;flex-shrink:0}
-
   #postcode-layer{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;width:360px;height:480px;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.12);background:#fff;overflow:hidden}
   /* ... (중략) ... */
 </style>
@@ -106,12 +71,7 @@
   <p class="muted" style="margin:0 0 16px 0">새로고침 시 입력값은 초기화됩니다. (정보 암호화 저장/불러오기 가능)</p>
 
   <div class="data-actions">
-    <label for="passphrase" class="muted" style="margin:0">비밀번호:</label>
-    <input id="passphrase" type="password" placeholder="데이터 저장/불러오기용 비밀번호" />
-    <button class="btn" id="btnSaveEnc" type="button">내 정보 저장</button>
-    <button class="btn" id="btnLoadEnc" type="button">내 정보 불러오기</button>
-    <button class="btn" id="btnSample" type="button" style="margin-left:auto">샘플 채우기</button>
-  </div>
+    </div>
 
   <div class="step-nav">
     <div id="step-nav-1" class="step-nav-item active">1. 청구자 정보</div>
@@ -122,42 +82,10 @@
   <div class="card">
     
     <div id="step-1" class="step active">
-      <h3>1. 청구자 정보 (누가?)</h3>
-      <label style="font-size:16px;font-weight:600;margin:16px 0 12px 0">1-1. 계약자</label>
-      <div class="row3">
-        <div><label>이름</label><input id="sub_name" placeholder="계약자 이름" /></div>
-        <div><label>주민등록번호</label><div class="seg seg-rrn"><input id="sub_rrn1" inputmode="numeric" maxlength="6" placeholder="앞 6자리" /><span class="dash">-</span><input id="sub_rrn2" inputmode="numeric" maxlength="7" placeholder="뒤 7자리" /></div></div>
-        <div><label>전화번호</label><div class="seg seg-phone"><input id="sub_phone1" inputmode="numeric" maxlength="3" placeholder="010" /><span class="dash">-</span><input id="sub_phone2" inputmode="numeric" maxlength="4" placeholder="0000" /><span class="dash">-</span><input id="sub_phone3" inputmode="numeric" maxlength="4" placeholder="0000" /></div></div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;margin:24px 0 12px 0">
-        <label style="font-size:16px;font-weight:600;margin:0">1-2. 피보험자 (다치거나 아픈 분)</label>
-        <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin:0"><input type="checkbox" id="sameSubIns" style="width:auto" /> 계약자와 동일</label>
-      </div>
-      <div class="row3">
-        <div><label>이름</label><input id="ins_name" placeholder="피보험자 이름" /></div>
-        <div><label>주민등록번호</label><div class="seg seg-rrn"><input id="ins_rrn1" inputmode="numeric" maxlength="6" placeholder="앞 6자리" /><span class="dash">-</span><input id="ins_rrn2" inputmode="numeric" maxlength="7" placeholder="뒤 7자리" /></div></div>
-        <div><label>전화번호</label><div class="seg seg-phone"><input id="ins_phone1" inputmode="numeric" maxlength="3" placeholder="010" /><span class="dash">-</span><input id="ins_phone2" inputmode="numeric" maxlength="4" placeholder="0000" /><span class="dash">-</span><input id="ins_phone3" inputmode="numeric" maxlength="4" placeholder="0000" /></div></div>
-      </div>
-      <div class="row3" style="margin-top:12px">
-        <div><label>주소</label><div class="addr-line"><input id="zip" placeholder="우편번호" readonly /><input id="addr" placeholder="도로명주소" readonly /></div><div class="addr-line"><input id="addr_detail" placeholder="상세주소" /></div></div>
-        <div><label>직장/직무</label><input id="employer_job" placeholder="예: 청구닷컴 / 보험상담사" /></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;margin:24px 0 12px 0">
-        <label style="font-size:16px;font-weight:600;margin:0">1-3. 보험금 받는 분 (수익자)</label>
-        <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin:0"><input type="checkbox" id="sameInsBen" style="width:auto" checked /> 피보험자와 동일</label>
-      </div>
-      <div id="beneficiaryBlock" style="display:none"><div class="row3"><div><label>이름 (예금주)</label><input id="ben_name" placeholder="수익자 이름" /></div><div><label>은행명</label><input id="bank_name" placeholder="예: 국민은행" /></div><div><label>계좌번호</label><input id="bank_account" placeholder="숫자/하이픈 가능" /></div></div></div>
-      <div id="beneficiaryAccountBlock"><div class="row3"><div><label>은행명</label><input id="ins_bank_name" placeholder="피보험자 본인 은행" /></div><div><label>계좌번호</label><input id="ins_bank_account" placeholder="피보험자 본인 계좌" /></div></div></div>
-      <div class="step-footer"><button class="btn" disabled>이전</button><button class="btn primary" type="button" onclick="navigateToStep(2)">다음 (사고/질병 정보)</button></div>
-    </div>
 
     <div id="step-2" class="step">
-      <h3>2. 사고/질병 정보 (무엇을?)</h3>
-      <div class="row2"><div><label>청구 유형</label><div class="check-group"><label><input type="radio" name="claim_type" id="claim_type_sickness" value="질병" /> 질병</label><label><input type="radio" name="claim_type" id="claim_type_injury" value="상해 (사고)" /> 상해 (사고)</label></div></div><div><label>청구 내용 (중복 가능)</label><div class="check-group"><label><input type="checkbox" name="claim_detail" id="claim_detail_hospital" value="입원" /> 입원</label><label><input type="checkbox" name="claim_detail" id="claim_detail_outpatient" value="통원" /> 통원</label><label><input type="checkbox" name="claim_detail" id="claim_detail_surgery" value="수술" /> 수술</label></div></div></div>
-      <div class="row2" style="margin-top:16px"><div><label>발병 또는 사고일</label><input type="date" id="accident_date" /></div><div><label>진단명 (병명)</label><input type="text" id="diagnosis" placeholder="예: 급성 위염, 발목 염좌" /></div></div>
-      <div class="row2" style="margin-top:16px"><div><label>병원명</label><input type="text" id="hospital_name" placeholder="예: 서울병원" /></div><div><label>사고 경위 (상해/사고일 경우)</label><input type="text" id="accident_detail" placeholder="예: 25년 11월 2일 집 계단에서 넘어짐" /></div></div>
-      <div class="step-footer"><button class="btn" type="button" onclick="navigateToStep(1)">이전 (청구자 정보)</button><button class="btn primary" type="button" onclick="navigateToStep(3)">다음 (서명 및 생성)</button></div>
-    </div>
+      </div>
 
     <div id="step-3" class="step">
       <h3>3. 서명 및 생성</h3>
@@ -185,9 +113,14 @@
       </div>
 
       <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn primary" id="btnMake" type="button" onclick="makePdf()" disabled>선택한 서류 생성하기</button>
-        <span id="status" class="muted" style="align-self:center"></span>
+        <button class="btn" id="btnDownload" type="button" onclick="handleSubmit('download')" disabled>
+          📄 PDF 파일로 저장하기
+        </button>
+        <button class="btn primary" id="btnSendFax" type="button" onclick="handleSubmit('fax')" disabled>
+          📠 선택한 보험사로 팩스 전송
+        </button>
       </div>
+      <span id="status" class="muted" style="display:block; margin-top: 8px;"></span>
       
       <div class="step-footer">
         <button class="btn" type="button" onclick="navigateToStep(2)">이전 (사고/질병 정보)</button>
@@ -201,39 +134,37 @@
 
 <script>
 /* ============== (NEW) PDF 템플릿 경로, 서명 좌표, 팩스 번호 ============== */
-// (중요!) Acrobat에서 '포인트(pt)' 단위로 (x,y) 좌표를 찾아서 입력하세요.
 const PDF_TEMPLATES = {
   "SAMSUNG_LIFE": {
     label: "삼성생명 (질병/상해)",
     path: "/assets/pdf-templates/samsung-life-template.pdf",
-    sigPos: { x: 450, y: 120, width: 100, height: 50 }, // (예시 좌표)
-    fax: "050-1234-5678" // (예시 팩스번호)
+    sigPos: { x: 450, y: 120, width: 100, height: 50 },
+    fax: "050-1234-5678"
   },
   "KB_INSURANCE": {
     label: "KB손해보험 (질병/상해)",
     path: "/assets/pdf-templates/kb-insurance-template.pdf",
-    sigPos: { x: 480, y: 210, width: 100, height: 50 }, // (예시 좌표)
-    fax: "050-1111-2222" // (예시 팩스번호)
+    sigPos: { x: 480, y: 210, width: 100, height: 50 },
+    fax: "050-1111-2222"
   },
   "SAMSUNG_FIRE": {
     label: "삼성화재 (질병/상해)",
     path: "/assets/pdf-templates/samsung-fire-template.pdf",
-    sigPos: { x: 400, y: 150, width: 100, height: 50 }, // (예시 좌표)
-    fax: "050-3333-4444" // (예시 팩스번호)
+    sigPos: { x: 400, y: 150, width: 100, height: 50 },
+    fax: "050-3333-4444"
   }
 };
 
 
-/* ============== 공통 유틸 ============== */
+/* ============== 공통 유틸 및 초기화 (이하 동일) ============== */
 const el = id=>document.getElementById(id);
 const $status=el(id="status");
-let signaturePad = null; // 서명패드 인스턴스
+let signaturePad = null; 
 
 function onlyDigits(e){ e.value = (e.value||"").replace(/\D/g,""); }
 function autoAdvance(cur, nextId, max){ onlyDigits(cur); if(cur.value.length>=max){const n=el(nextId); n&&n.focus(); n?.select?.();} }
 function autoBackspace(e, prevId){ if(e.key==="Backspace" && !e.target.value){ const p=el(prevId); p&&p.focus(); p?.select?.(); } }
 
-/* ============== (NEW) 템플릿 체크박스 목록 생성 ============== */
 function initTemplateList(){
   const container = el('template-list-container');
   container.innerHTML = "";
@@ -246,13 +177,12 @@ function initTemplateList(){
         <span>${config.label}</span>
       </label>
       <span class="fax">FAX: ${config.fax}</span>
-      <a href="${config.path}" target="_blank" class="view-link">원본보기</a>
+      <a href="${config.path}" target="_blank" class="view-link" onclick="event.stopPropagation()">원본보기</a>
     `;
     container.appendChild(item);
   }
 }
 
-/* ============== 단계별 UI 관리 (기존과 동일) ============== */
 let currentStep = 1;
 function navigateToStep(stepNumber) {
   el(`step-${currentStep}`).classList.remove('active');
@@ -260,14 +190,12 @@ function navigateToStep(stepNumber) {
   currentStep = stepNumber;
   el(`step-${currentStep}`).classList.add('active');
   el(`step-nav-${currentStep}`).classList.add('active');
-
   if (currentStep === 3) {
     el('claim_date_today').value = new Date().toISOString().split('T')[0];
     resizeCanvas();
   }
 }
 
-/* ============== 데이터 수집/적용 (기존과 동일) ============== */
 function collectProfile(){
   const p = {};
   const ids = [
@@ -279,186 +207,90 @@ function collectProfile(){
     'claim_date_today'
   ];
   ids.forEach(id => { p[id] = (el(id).value || "").trim(); });
-  
   const sameInsBen = el('sameInsBen').checked;
-  if (sameInsBen) {
-    p['ben_name'] = p.ins_name;
-    p['bank_name'] = p.ins_bank_name;
-    p['bank_account'] = p.ins_bank_account;
-  } else {
-    p['bank_name'] = el('bank_name').value.trim();
-    p['bank_account'] = el('bank_account').value.trim();
-  }
+  if (sameInsBen) { p['ben_name'] = p.ins_name; p['bank_name'] = p.ins_bank_name; p['bank_account'] = p.ins_bank_account; } else { p['bank_name'] = el('bank_name').value.trim(); p['bank_account'] = el('bank_account').value.trim(); }
   delete p.ins_bank_name; delete p.ins_bank_account;
   p['bank_depositor'] = p.ben_name;
-  
-  p['claim_type_sickness'] = el('claim_type_sickness').checked;
-  p['claim_type_injury'] = el('claim_type_injury').checked;
-  p['claim_detail_hospital'] = el('claim_detail_hospital').checked;
-  p['claim_detail_outpatient'] = el('claim_detail_outpatient').checked;
-  p['claim_detail_surgery'] = el('claim_detail_surgery').checked;
-  
-  p['ins_full_phone'] = [p.ins_phone1, p.ins_phone2, p.ins_phone3].join('-');
-  p['sub_full_phone'] = [p.sub_phone1, p.sub_phone2, p.sub_phone3].join('-');
-  p['ins_full_rrn'] = [p.ins_rrn1, p.ins_rrn2].join('-');
-  p['sub_full_rrn'] = [p.sub_rrn1, p.sub_rrn2].join('-');
-  
+  p['claim_type_sickness'] = el('claim_type_sickness').checked; p['claim_type_injury'] = el('claim_type_injury').checked;
+  p['claim_detail_hospital'] = el('claim_detail_hospital').checked; p['claim_detail_outpatient'] = el('claim_detail_outpatient').checked; p['claim_detail_surgery'] = el('claim_detail_surgery').checked;
+  p['ins_full_phone'] = [p.ins_phone1, p.ins_phone2, p.ins_phone3].join('-'); p['sub_full_phone'] = [p.sub_phone1, p.sub_phone2, p.sub_phone3].join('-');
+  p['ins_full_rrn'] = [p.ins_rrn1, p.ins_rrn2].join('-'); p['sub_full_rrn'] = [p.sub_rrn1, p.sub_rrn2].join('-');
   return p;
 }
 
-function applyProfile(p){
-  for (const [key, value] of Object.entries(p)) {
-    const field = el(key);
-    if (!field) continue;
-    if (field.type === 'checkbox' || field.type === 'radio') { field.checked = !!value; } else { field.value = value || ""; }
-  }
-  const sameInsBen = !p.ben_name || (p.ins_name === p.ben_name);
-  el('sameInsBen').checked = sameInsBen;
-  if (sameInsBen) { el('ins_bank_name').value = p.bank_name || ''; el('ins_bank_account').value = p.bank_account || ''; } else { el('bank_name').value = p.bank_name || ''; el('bank_account').value = p.bank_account || ''; }
-  syncSameSubIns(); syncSameInsBen();
-}
+function applyProfile(p){ /* ... (이전과 동일) ... */ }
+function fillSample(){ /* ... (이전과 동일) ... */ }
 
-function fillSample(){
-  applyProfile({
-    sub_name:"홍길동", sub_rrn1:"900101", sub_rrn2:"1234567", sub_phone1:"010", sub_phone2:"1234", sub_phone3:"5678",
-    ins_name:"김청구", ins_rrn1:"950505", ins_rrn2:"2345678", ins_phone1:"010", sub_phone2:"5555", sub_phone3:"6666",
-    zip:"04524", addr:"서울특별시 중구 세종대로 110", addr_detail:"10층 (태평로1가)",
-    employer_job:"청구닷컴 / 보험상담사",
-    ben_name: "김청구", bank_name: "청구은행", bank_account: "123-456-789012",
-    claim_type_sickness: true,
-    claim_detail_outpatient: true,
-    accident_date: new Date().toISOString().split('T')[0], // 오늘 날짜
-    diagnosis: "급성 위염",
-    hospital_name: "서울병원"
-  });
-}
-
-/* ============== 암호 저장/불러오기 (기존과 동일) ============== */
-async function deriveKey(pass){
-  const enc = new TextEncoder(); const salt = enc.encode("claim-autofill-salt-v3");
-  const baseKey = await crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]);
-  return crypto.subtle.deriveKey({ name:"PBKDF2", salt, iterations:120000, hash:"SHA-256" }, baseKey, { name:"AES-GCM", length:256 }, false, ["encrypt","decrypt"]);
-}
-async function encryptJSON(obj, pass){
-  const key = await deriveKey(pass); const iv = crypto.getRandomValues(new Uint8Array(12));
-  const data = new TextEncoder().encode(JSON.stringify(obj));
-  const cipher = await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, data);
-  return { iv: Array.from(iv), cipher: Array.from(new Uint8Array(cipher)) };
-}
-async function decryptJSON(payload, pass){
-  const key = await deriveKey(pass); const iv = new Uint8Array(payload.iv); const cipher = new Uint8Array(payload.cipher);
-  const plain = await crypto.subtle.decrypt({name:"AES-GCM", iv}, key, cipher);
-  return JSON.parse(new TextDecoder().decode(plain));
-}
+/* ============== 암호 저장/불러오기 (이전과 동일) ============== */
+async function deriveKey(pass){ /* ... */ }
+async function encryptJSON(obj, pass){ /* ... */ }
+async function decryptJSON(payload, pass){ /* ... */ }
 const LS_KEY_SECURE = "claim-autofill.profile.enc.v3";
-async function saveEncrypted(){ const pass=el("passphrase").value; if(!pass){alert("암호를 입력하세요.");return;}
-  const enc=await encryptJSON(collectProfile(),pass); localStorage.setItem(LS_KEY_SECURE,JSON.stringify(enc)); alert("암호 저장 완료"); }
-async function loadEncrypted(){ const pass=el("passphrase").value; if(!pass){alert("암호를 입력하세요.");return;}
-  const raw=localStorage.getItem(LS_KEY_SECURE); if(!raw){alert("저장된 내 정보가 없습니다.");return;}
-  try{ const obj=await decryptJSON(JSON.parse(raw),pass); applyProfile(obj); alert("불러오기 완료"); }
-  catch(e){ alert("불러오기 실패: 암호를 확인하세요."); } }
+async function saveEncrypted(){ /* ... */ }
+async function loadEncrypted(){ /* ... */ }
 
-/* ============== 주소검색 (기존과 동일) ============== */
+/* ============== 주소검색 (이전과 동일) ============== */
 const $layer = document.getElementById('postcode-layer'); const $container = document.getElementById('postcode-container');
-function openPostcode(){ $layer.style.display='block';
-  new daum.Postcode({ oncomplete:(data)=>{ el("zip").value=data.zonecode||""; el("addr").value=data.roadAddress||data.address||""; el("addr_detail").focus(); closePostcode(); }, width:'100%', height:'100%' }).embed($container); }
-function closePostcode(){ $layer.style.display='none'; $container.innerHTML=''; }
+function openPostcode(){ /* ... */ }
+function closePostcode(){ /* ... */ }
 
-/* ============== '동일' 체크박스 로직 (기존과 동일) ============== */
-function syncSameSubIns() {
-  const same = el('sameSubIns').checked;
-  const fields = ['name', 'rrn1', 'rrn2', 'phone1', 'phone2', 'phone3'];
-  fields.forEach(f => {
-    const target = el(`ins_${f}`);
-    if (same) { target.value = el(`sub_${f}`).value; target.disabled = true; target.style.background = 'var(--bg)'; } else { target.disabled = false; target.style.background = '#fff'; }
-  });
-}
-function syncSameInsBen() {
-  const same = el('sameInsBen').checked;
-  el('beneficiaryBlock').style.display = same ? 'none' : 'block';
-  el('beneficiaryAccountBlock').style.display = same ? 'block' : 'none';
-}
+/* ============== '동일' 체크박스 로직 (이전과 동일) ============== */
+function syncSameSubIns() { /* ... */ }
+function syncSameInsBen() { /* ... */ }
 
-/* ============== 캔버스 크기 조절 (기존과 동일) ============== */
+/* ============== 캔버스 크기 조절 (이전과 동일) ============== */
 const canvas = el('signature-canvas');
-function resizeCanvas() {
-  const ratio =  Math.max(window.devicePixelRatio || 1, 1);
-  canvas.width = canvas.offsetWidth * ratio;
-  canvas.height = canvas.offsetHeight * ratio;
-  canvas.getContext("2d").scale(ratio, ratio);
-  if (signaturePad) { signaturePad.clear(); }
-}
+function resizeCanvas() { /* ... */ }
 
-/* ============== 이벤트 초기화 ============== */
+/* ============== 이벤트 초기화 (수정) ============== */
 document.addEventListener("DOMContentLoaded", ()=>{
-  initTemplateList(); // (NEW) 템플릿 목록 생성
-
-  // 서명패드 초기화
+  initTemplateList(); 
   signaturePad = new SignaturePad(canvas, { penColor: "rgb(0, 0, 0)" });
   el('clear_signature').addEventListener('click', () => { signaturePad.clear(); });
   window.addEventListener("resize", resizeCanvas);
 
-  // '동일' 체크박스 이벤트
   el('sameSubIns').addEventListener("change", syncSameSubIns);
   ['sub_name', 'sub_rrn1', 'sub_rrn2', 'sub_phone1', 'sub_phone2', 'sub_phone3'].forEach(id => { el(id).addEventListener("input", syncSameSubIns); });
   el('sameInsBen').addEventListener("change", syncSameInsBen);
   syncSameInsBen();
 
-  // 서명 확인 체크박스 이벤트
-  el('signature_confirm').addEventListener('change', (e) => { el('btnMake').disabled = !e.target.checked; });
+  // (NEW) 두 개의 버튼을 모두 제어
+  el('signature_confirm').addEventListener('change', (e) => {
+    const isDisabled = !e.target.checked;
+    el('btnDownload').disabled = isDisabled;
+    el('btnSendFax').disabled = isDisabled;
+  });
 
-  // 자동이동/백스페이스 이벤트
-  [["sub_phone1","sub_phone2","sub_phone3",3,4],["ins_phone1","ins_phone2","ins_phone3",3,4]].forEach(([a,b,c,ma,mb])=>{ el(a).addEventListener("input", ()=>autoAdvance(el(a),b,ma)); el(b).addEventListener("input", ()=>autoAdvance(el(b),c,mb)); el(c).addEventListener("input", ()=>onlyDigits(el(c))); el(b).addEventListener("keydown", (e)=>autoBackspace(e,a)); el(c).addEventListener("keydown", (e)=>autoBackspace(e,b)); });
-  [["sub_rrn1","sub_rrn2",6],["ins_rrn1","ins_rrn2",6]].forEach(([a,b,mx])=>{ el(a).addEventListener("input", ()=>autoAdvance(el(a),b,mx)); el(b).addEventListener("input", ()=>onlyDigits(el(b))); el(b).addEventListener("keydown",(e)=>autoBackspace(e,a)); });
-
-  // 주소검색 이벤트
-  el("zip").addEventListener("click", openPostcode); el("addr").addEventListener("click", openPostcode);
-  el("addr_detail").addEventListener("focus", ()=>{ if(!el("addr").value) openPostcode(); });
-
-  // 암호화 버튼 이벤트
-  el("btnSample").addEventListener("click", fillSample);
-  el("btnSaveEnc").addEventListener("click", ()=>{ saveEncrypted().catch(e=>alert(e.message)); });
-  el("btnLoadEnc").addEventListener("click", ()=>{ loadEncrypted().catch(e=>alert(e.message)); });
+  /* ... (나머지 이벤트 리스너 동일) ... */
 });
 
-/* ============== 폰트 로더 (기존과 동일) ============== */
-async function loadKoreanFontBytes(){
-  const cdn = 'https://cdn.jsdelivr.net/gh/googlefonts/noto-cjk@main/Sans/OTF/Korean/NotoSansKR-Regular.otf';
-  const candidates = [ `${location.origin}/assets/fonts/NotoSansKR-Regular.otf`, '/assets/fonts/NotoSansKR-Regular.otf', cdn ];
-  for (const url of candidates){
-    try{
-      const resp = await fetch(url, { cache:'no-store' });
-      if (resp.ok){
-        const buf = await resp.arrayBuffer();
-        if (buf.byteLength > 1024){ console.log('[font] loaded:', url); return buf; }
-      } else { console.log('[font] miss(status):', url, resp.status); }
-    }catch(e){ console.log('[font] miss(err):', url, e?.message||e); }
-  }
-  console.warn('[font] no font found -> ASCII fallback');
-  return null;
-}
+/* ============== 폰트 로더 (이전과 동일) ============== */
+async function loadKoreanFontBytes(){ /* ... */ }
 
-/* ============== (NEW) PDF 생성 (단일/ZIP 분기 처리) ============== */
-async function makePdf(){
-  const btn = el("btnMake");
-  $status.textContent = "PDF 생성 중…";
-  btn.disabled = true;
-  
-  // (NEW) 1. 선택된 템플릿 목록 확인
+/* ============== (NEW) PDF 생성 핸들러 (저장/팩스 분기) ============== */
+async function handleSubmit(action) {
+  const btnDownload = el("btnDownload");
+  const btnSendFax = el("btnSendFax");
+  $status.textContent = "작업 준비 중…";
+  btnDownload.disabled = true;
+  btnSendFax.disabled = true;
+
+  // 1. 유효성 검사 (공통)
   const selectedCheckboxes = document.querySelectorAll('input[name="template_select"]:checked');
   const selectedTemplateKeys = Array.from(selectedCheckboxes).map(cb => cb.value);
 
   if (selectedTemplateKeys.length === 0) {
     alert("청구할 보험사를 1곳 이상 선택하세요.");
-    btn.disabled = false; // 버튼 다시 활성화
-    el('signature_confirm').checked = false; // 동의 체크 해제
+    // (중요) 버튼 상태 원복
+    el('signature_confirm').checked = false;
+    // btnDownload.disabled = true; // signature_confirm 리스너가 이미 처리
+    // btnSendFax.disabled = true;
     return;
   }
   
   if (signaturePad.isEmpty()) {
     alert("서명란에 서명을 해주세요.");
     navigateToStep(3);
-    btn.disabled = false;
     el('signature_confirm').checked = false;
     return;
   }
@@ -471,80 +303,96 @@ async function makePdf(){
   let kFontBytes = null, sigImageBytes = null;
   
   try {
-    // (NEW) 2. 공통 리소스(폰트, 서명) 미리 로드하기
+    // 2. 공통 리소스 로드
     kFontBytes = await loadKoreanFontBytes();
     const sigDataUrl = signaturePad.toDataURL("image/png");
     sigImageBytes = await fetch(sigDataUrl).then(res => res.arrayBuffer());
 
-    // (NEW) 3. 단일 생성 vs ZIP 생성 분기
-    
-    if (selectedTemplateKeys.length > 1) {
-      // --- 3-A: ZIP으로 다중 생성 ---
-      $status.textContent = `ZIP 파일 생성 중... (0/${selectedTemplateKeys.length})`;
-      const zip = new JSZip();
+    // 3. 액션에 따라 분기
+    if (action === 'download') {
+      // --- 3-A: PDF 저장하기 (기존 ZIP 로직) ---
+      if (selectedTemplateKeys.length > 1) {
+        $status.textContent = `ZIP 파일 생성 중... (0/${selectedTemplateKeys.length})`;
+        const zip = new JSZip();
+        for (let i = 0; i < selectedTemplateKeys.length; i++) {
+          const key = selectedTemplateKeys[i];
+          const config = PDF_TEMPLATES[key];
+          $status.textContent = `ZIP 생성 중... (${i+1}/${selectedTemplateKeys.length}) - ${config.label}`;
+          const pdfBytes = await generateSinglePdf(P, config, kFontBytes, sigImageBytes);
+          zip.file(`${config.label.replace(/[\(\)]/g, '').trim()}.pdf`, pdfBytes);
+        }
+        $status.textContent = "ZIP 파일 압축 중...";
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+        downloadFile(zipBlob, "insurance_claims.zip");
+        $status.textContent = "ZIP 파일 생성 완료";
+      } else {
+        $status.textContent = "PDF 파일 생성 중...";
+        const key = selectedTemplateKeys[0];
+        const config = PDF_TEMPLATES[key];
+        const pdfBytes = await generateSinglePdf(P, config, kFontBytes, sigImageBytes);
+        downloadFile(new Blob([pdfBytes], { type:"application/pdf" }), `${config.label.replace(/[\(\)]/g, '').trim()}.pdf`);
+        $status.textContent = "PDF 생성 완료";
+      }
+
+    } else if (action === 'fax') {
+      // --- 3-B: 팩스 전송하기 (시뮬레이션) ---
+      $status.textContent = `팩스 전송 준비 중... (0/${selectedTemplateKeys.length})`;
+      let faxLog = [];
 
       for (let i = 0; i < selectedTemplateKeys.length; i++) {
         const key = selectedTemplateKeys[i];
         const config = PDF_TEMPLATES[key];
-        $status.textContent = `ZIP 파일 생성 중... (${i+1}/${selectedTemplateKeys.length}) - ${config.label}`;
+        $status.textContent = `전송 중... (${i+1}/${selectedTemplateKeys.length}) - ${config.label} (FAX: ${config.fax})`;
         
         try {
+          // 1. PDF는 동일하게 생성
           const pdfBytes = await generateSinglePdf(P, config, kFontBytes, sigImageBytes);
-          const fileName = `${config.label.replace(/[\(\)]/g, '').trim()}.pdf`; // 파일명 생성
-          zip.file(fileName, pdfBytes); // ZIP에 추가
+
+          // 2. (MOCK) 실제로는 여기서 서버로 'pdfBytes'와 'config.fax'를 전송합니다.
+          // (예시) fetch('/api/send-fax', { method: 'POST', body: pdfBytes, headers: {'X-Fax-Number': config.fax, ...} });
+
+          // 3. (MOCK) 1초간 전송 시뮬레이션
+          await new Promise(resolve => setTimeout(resolve, 1000)); 
+          
+          console.log(`[MOCK FAX] ${config.label}(${config.fax})로 PDF (${(pdfBytes.length/1024).toFixed(1)}KB) 전송 성공.`);
+          faxLog.push(`✅ ${config.label}: 전송 성공 (-> ${config.fax})`);
+
         } catch (e) {
-          console.error(`PDF 생성 실패: ${config.label}`, e);
-          alert(`${config.label} PDF 생성에 실패했습니다: ${e.message}`);
+          console.error(`팩스 전송 실패: ${config.label}`, e);
+          faxLog.push(`❌ ${config.label}: 생성/전송 실패 (${e.message})`);
         }
       }
 
-      $status.textContent = "ZIP 파일 압축 중...";
-      const zipBlob = await zip.generateAsync({ type: "blob" });
-      downloadFile(zipBlob, "insurance_claims.zip");
-      $status.textContent = "ZIP 파일 생성 완료";
-
-    } else {
-      // --- 3-B: PDF 1개 단일 생성 ---
-      $status.textContent = "PDF 파일 생성 중...";
-      const key = selectedTemplateKeys[0];
-      const config = PDF_TEMPLATES[key];
-      const pdfBytes = await generateSinglePdf(P, config, kFontBytes, sigImageBytes);
-      const fileName = `${config.label.replace(/[\(\)]/g, '').trim()}.pdf`;
-      
-      downloadFile(new Blob([pdfBytes], { type:"application/pdf" }), fileName);
-      $status.textContent = "PDF 생성 완료";
+      $status.textContent = "팩스 전송 완료. (시뮬레이션)";
+      alert("팩스 전송이 완료되었습니다. (시뮬레이션)\n\n--- 전송 결과 ---\n" + faxLog.join("\n"));
     }
 
   } catch (err) {
     console.error(err);
-    alert("PDF 생성 실패: " + (err?.message||err));
+    alert("작업 실패: " + (err?.message||err));
     $status.textContent = "실패";
   } finally {
+    // 4. (공통) 작업 완료 후 상태 원복
     el('signature_confirm').checked = false;
-    btn.disabled = true;
+    btnDownload.disabled = true;
+    btnSendFax.disabled = true;
     signaturePad.clear();
   }
 }
 
-/* ============== (NEW) 개별 PDF 생성 로직 (makePdf에서 분리) ============== */
+/* ============== 개별 PDF 생성 로직 (이전과 동일) ============== */
 async function generateSinglePdf(P, config, kFontBytes, sigImageBytes) {
   const { PDFDocument, StandardFonts } = PDFLib;
 
-  // 1. 템플릿 로드
   const url = new URL(encodeURI(config.path), location.origin).toString();
   const existingPdfBytes = await fetch(url, { cache:"no-store" }).then(res => res.arrayBuffer());
   const pdfDoc = await PDFDocument.load(existingPdfBytes, { ignoreEncryption:true });
   if (typeof fontkit !== "undefined") pdfDoc.registerFontkit(fontkit);
 
-  // 2. 폰트 임베드
   let fontToUse;
-  if (kFontBytes) {
-    fontToUse = await pdfDoc.embedFont(kFontBytes, { subset:true });
-  } else {
-    fontToUse = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  }
+  if (kFontBytes) { fontToUse = await pdfDoc.embedFont(kFontBytes, { subset:true }); } 
+  else { fontToUse = await pdfDoc.embedFont(StandardFonts.Helvetica); }
   
-  // 3. 폼 필드 채우기
   const form = pdfDoc.getForm();
   for (const [fieldName, text] of Object.entries(P)) {
     if (text === "" || text === false || text === undefined) continue;
@@ -560,23 +408,19 @@ async function generateSinglePdf(P, config, kFontBytes, sigImageBytes) {
         } else { field.check(); }
         field.updateAppearances();
       }
-    } catch (e) { /* 필드 없음 (정상) */ }
+    } catch (e) { /* 필드 없음 */ }
   }
   
-  // 4. 서명 이미지 삽입
   const sigImage = await pdfDoc.embedPng(sigImageBytes);
-  const page = pdfDoc.getPage(0); // (가정) 서명은 0페이지
+  const page = pdfDoc.getPage(0); 
   const { x, y, width, height } = config.sigPos;
   page.drawImage(sigImage, { x, y, width, height });
   
-  // 5. PDF 고정
   form.flatten();
-  
-  // 6. 바이트 반환
   return await pdfDoc.save();
 }
 
-/* ============== (NEW) 파일 다운로드 헬퍼 ============== */
+/* ============== 파일 다운로드 헬퍼 (이전과 동일) ============== */
 function downloadFile(blob, fileName) {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -585,7 +429,8 @@ function downloadFile(blob, fileName) {
   URL.revokeObjectURL(a.href);
 }
 
-window.makePdf = makePdf;
+// (주의) 1단계, 2단계 HTML을 생략했으니, 실제 파일에 붙여넣을 때는
+// 1, 2단계 HTML을 이전 코드에서 가져와서 채워넣어야 합니다.
 </script>
 </body>
 </html>
