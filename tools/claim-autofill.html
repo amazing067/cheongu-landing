@@ -19,7 +19,7 @@
   .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
   .btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.05)}
   .btn.primary:hover:not(:disabled){box-shadow:0 4px 12px rgba(58,100,255,.2)}
-  .btn:disabled{background:#f6f8fb;color:var(--muted);border-color:var(--line);cursor:not-allowed}
+  .btn:disabled{background:#f6f8fb;color:var(--muted);border-color:var(--line);cursor:not-allowed;opacity:0.7}
   
   .muted{color:var(--muted);font-size:12px}
   h2{margin:0 0 12px 0}
@@ -55,6 +55,11 @@
   .step.active {display:block} /* 활성 단계만 보임 */
 
   .step-footer {margin-top:20px;display:flex;justify-content:space-between;align-items:center}
+
+  /* --- (NEW) 서명 확인란 --- */
+  .signature-confirm {margin-top:16px;padding:14px;background:var(--bg);border-radius:8px}
+  .signature-confirm label {display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink);cursor:pointer}
+  .signature-confirm input[type="checkbox"] {width:auto;flex-shrink:0}
 
   #postcode-layer{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;width:360px;height:480px;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.12);background:#fff;overflow:hidden}
   #postcode-layer .layer-hd{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
@@ -168,11 +173,17 @@
           <input type="checkbox" id="sameInsBen" style="width:auto" checked /> 피보험자와 동일
         </label>
       </div>
-      <div id="beneficiaryBlock">
+      <div id="beneficiaryBlock" style="display:none">
         <div class="row3">
           <div><label>이름 (예금주)</label><input id="ben_name" placeholder="수익자 이름" /></div>
           <div><label>은행명</label><input id="bank_name" placeholder="예: 국민은행" /></div>
           <div><label>계좌번호</label><input id="bank_account" placeholder="숫자/하이픈 가능" /></div>
+        </div>
+      </div>
+      <div id="beneficiaryAccountBlock">
+        <div class="row3">
+          <div><label>은행명</label><input id="ins_bank_name" placeholder="피보험자 본인 은행" /></div>
+          <div><label>계좌번호</label><input id="ins_bank_account" placeholder="피보험자 본인 계좌" /></div>
         </div>
       </div>
       
@@ -243,12 +254,15 @@
         <input type="date" id="claim_date_today" />
       </div>
 
-      <p class="muted" style="margin-top:16px;padding:10px;background:var(--bg);border-radius:8px">
-        'PDF 만들기'를 누르면 위 1~2단계에서 입력한 정보와 오늘 날짜가 포함된 PDF 파일이 생성됩니다.
-      </p>
+      <div class="signature-confirm">
+        <label>
+          <input type="checkbox" id="signature_confirm" />
+          <span>본인은 위 청구서 내용을 모두 확인하였으며,<br />PDF 생성 후 **직접 서명**하겠습니다. (필수 동의)</span>
+        </label>
+      </div>
 
-      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn primary" id="btnMake" type="button" onclick="makePdf()">PDF 만들기</button>
+      <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn primary" id="btnMake" type="button" onclick="makePdf()" disabled>PDF 만들기</button>
         <a class="btn" id="btnViewRaw" target="_blank" rel="noopener">원본 템플릿 보기</a>
         <span id="status" class="muted" style="align-self:center"></span>
       </div>
@@ -323,7 +337,8 @@ function collectProfile(){
     'sub_name', 'sub_rrn1', 'sub_rrn2', 'sub_phone1', 'sub_phone2', 'sub_phone3',
     'ins_name', 'ins_rrn1', 'ins_rrn2', 'ins_phone1', 'ins_phone2', 'ins_phone3',
     'zip', 'addr', 'addr_detail', 'employer_job',
-    'ben_name', 'bank_name', 'bank_account',
+    'ben_name', // '피보험자와 동일' 해제 시
+    'ins_bank_name', 'ins_bank_account', // '피보험자와 동일' 체크 시
     'accident_date', 'diagnosis', 'hospital_name', 'accident_detail',
     'claim_date_today'
   ];
@@ -331,8 +346,22 @@ function collectProfile(){
     p[id] = (el(id).value || "").trim();
   });
   
-  // (수정) 수익자(예금주)는 ben_name을 우선 사용, 없으면 ins_name
-  p['bank_depositor'] = p.ben_name || p.ins_name;
+  // (수정) 수익자(예금주) 및 계좌 정보 분기 처리
+  const sameInsBen = el('sameInsBen').checked;
+  if (sameInsBen) {
+    p['ben_name'] = p.ins_name; // 예금주는 피보험자
+    p['bank_name'] = p.ins_bank_name; // 은행
+    p['bank_account'] = p.ins_bank_account; // 계좌
+  } else {
+    // ben_name, bank_name, bank_account 는 이미 위에서 수집됨
+    p['bank_name'] = el('bank_name').value.trim();
+    p['bank_account'] = el('bank_account').value.trim();
+  }
+  // (삭제) 임시 필드 제거
+  delete p.ins_bank_name;
+  delete p.ins_bank_account;
+
+  p['bank_depositor'] = p.ben_name; // PDF용 최종 예금주 필드
   
   // 라디오/체크박스
   p['claim_type_sickness'] = el('claim_type_sickness').checked;
@@ -342,7 +371,6 @@ function collectProfile(){
   p['claim_detail_surgery'] = el('claim_detail_surgery').checked;
   
   // (추가) PDF 템플릿용 필드 조합
-  // 예: 템플릿에 'full_phone' 필드가 있다면
   p['ins_full_phone'] = [p.ins_phone1, p.ins_phone2, p.ins_phone3].join('-');
   p['sub_full_phone'] = [p.sub_phone1, p.sub_phone2, p.sub_phone3].join('-');
   p['ins_full_rrn'] = [p.ins_rrn1, p.ins_rrn2].join('-');
@@ -362,6 +390,19 @@ function applyProfile(p){
       field.value = value || "";
     }
   }
+
+  // (수정) 수익자 계좌 정보 분리 적용
+  const sameInsBen = !p.ben_name || (p.ins_name === p.ben_name);
+  el('sameInsBen').checked = sameInsBen;
+  
+  if (sameInsBen) {
+    el('ins_bank_name').value = p.bank_name || '';
+    el('ins_bank_account').value = p.bank_account || '';
+  } else {
+    el('bank_name').value = p.bank_name || '';
+    el('bank_account').value = p.bank_account || '';
+  }
+
   // 체크박스 상태에 따라 UI 동기화
   syncSameSubIns();
   syncSameInsBen();
@@ -370,18 +411,20 @@ function applyProfile(p){
 function fillSample(){
   applyProfile({
     sub_name:"홍길동", sub_rrn1:"900101", sub_rrn2:"1234567", sub_phone1:"010", sub_phone2:"1234", sub_phone3:"5678",
-    ins_name:"김청구", ins_rrn1:"950505", ins_rrn2:"2345678", ins_phone1:"010", ins_phone2:"5555", ins_phone3:"6666",
+    ins_name:"김청구", ins_rrn1:"950505", ins_rrn2:"2345678", ins_phone1:"010", sub_phone2:"5555", ins_phone3:"6666",
     zip:"04524", addr:"서울특별시 중구 세종대로 110", addr_detail:"10층 (태평로1가)",
     employer_job:"청구닷컴 / 보험상담사",
-    ben_name: "김청구", bank_name: "청구은행", bank_account: "123-456-789012",
+    
+    ben_name: "김청구", // 피보험자와 동일
+    bank_name: "청구은행", 
+    bank_account: "123-456-789012",
+
     claim_type_sickness: true,
     claim_detail_outpatient: true,
     accident_date: "2025-11-02",
     diagnosis: "급성 위염",
     hospital_name: "서울병원"
   });
-  el('sameSubIns').checked = false;
-  el('sameInsBen').checked = true;
 }
 
 /* ============== 암호 저장/불러오기 (기존과 동일) ============== */
@@ -417,10 +460,10 @@ async function loadEncrypted(){ const pass=el("passphrase").value; if(!pass){ale
 /* ============== 주소검색 (기존과 동일) ============== */
 const $layer = document.getElementById('postcode-layer'); const $container = document.getElementById('postcode-container');
 function openPostcode(){ $layer.style.display='block';
-  new daum.Postcode({ oncomplete:(data)=>{ el("zip").value=data.zonecode||""; el("addr").value=data.roadAddress||data.address||""; el("addr_detail").focus(); closePostGode(); }, width:'100%', height:'100%' }).embed($container); }
+  new daum.Postcode({ oncomplete:(data)=>{ el("zip").value=data.zonecode||""; el("addr").value=data.roadAddress||data.address||""; el("addr_detail").focus(); closePostcode(); }, width:'100%', height:'100%' }).embed($container); }
 function closePostcode(){ $layer.style.display='none'; $container.innerHTML=''; }
 
-/* ============== (NEW) '동일' 체크박스 로직 ============== */
+/* ============== (NEW) '동일' 체크박스 로직 (수정) ============== */
 function syncSameSubIns() {
   const same = el('sameSubIns').checked;
   const fields = ['name', 'rrn1', 'rrn2', 'phone1', 'phone2', 'phone3'];
@@ -438,15 +481,9 @@ function syncSameSubIns() {
 }
 function syncSameInsBen() {
   const same = el('sameInsBen').checked;
-  const block = el('beneficiaryBlock');
-  if (same) {
-    block.style.display = 'none';
-    el('ben_name').value = el('ins_name').value; // 예금주 이름 동기화
-    el('bank_name').value = ''; // 은행 정보는 피보험자 것이 아니므로 초기화
-    el('bank_account').value = '';
-  } else {
-    block.style.display = 'block';
-  }
+  // '피보험자와 동일'이 체크되면, '별도 수익자' 블록을 숨기고 '피보험자 계좌' 블록을 보여줌
+  el('beneficiaryBlock').style.display = same ? 'none' : 'block';
+  el('beneficiaryAccountBlock').style.display = same ? 'block' : 'none';
 }
 
 /* ============== 이벤트 초기화 ============== */
@@ -460,12 +497,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
   
   el('sameInsBen').addEventListener("change", syncSameInsBen);
-  el('ins_name').addEventListener("input", () => {
-    if (el('sameInsBen').checked) {
-      el('ben_name').value = el('ins_name').value;
-    }
-  });
   syncSameInsBen(); // 초기 로드 시 한 번 실행
+
+  // (NEW) 서명 확인 체크박스 이벤트
+  el('signature_confirm').addEventListener('change', (e) => {
+    el('btnMake').disabled = !e.target.checked;
+  });
 
   $pdfFile.addEventListener("change", updatePdfOptions);
 
@@ -515,12 +552,12 @@ async function loadKoreanFontBytes(){
 async function makePdf(){
   const btn = el("btnMake");
   $status.textContent = "PDF 생성 중…";
-  btn.disabled = true;
+  btn.disabled = true; // 작업 시작 시 비활성화
 
   try {
     const P = collectProfile(); // 모든 단계의 정보가 P 객체에 수집됩니다.
     if(!P?.ins_name){ alert("피보험자 이름을 입력하세요."); navigateToStep(1); return; }
-    if(!P?.accident_date){ alert("발병/사고일을 입력하세요."); navigateToAtep(2); return; }
+    if(!P?.accident_date){ alert("발병/사고일을 입력하세요."); navigateToStep(2); return; }
 
     const srcPath = $pdfFile.value;
     if(!srcPath){ alert("템플릿 PDF를 선택하세요."); navigateToStep(3); return; }
@@ -560,7 +597,10 @@ async function makePdf(){
           const field = form.getRadioGroup(fieldName) || form.getCheckBox(fieldName);
           
           if(field.constructor.name === 'PDFRadioGroup') {
-             field.select(P[fieldName + '_value'] || 'Yes'); // 값이 'Yes'인 옵션을 선택 (템플릿에서 설정한 값)
+             // 템플릿에 설정된 'On' 값 (예: 'Yes', '질병')을 찾아 선택
+             // 여기서는 간단히 첫 번째 옵션을 선택하도록 단순화 (템플릿 제작 시 주의)
+             const options = field.getOptions();
+             if(options.length > 0) field.select(options[0]);
           } else {
              field.check();
           }
@@ -590,7 +630,9 @@ async function makePdf(){
     alert("PDF 생성 실패: " + (err?.message||err));
     $status.textContent = "실패";
   } finally {
-    btn.disabled = false;
+    // (NEW) 작업 완료 후 버튼 상태 복원
+    el('signature_confirm').checked = false; // 동의 체크 해제
+    btn.disabled = true; // 다시 비활성화
   }
 }
 window.makePdf = makePdf;
