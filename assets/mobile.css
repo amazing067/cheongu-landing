@@ -24,40 +24,34 @@
 /* ===== 2. 아코디언 헤더 (로고 영역) ===== */
 .row > div:first-child {
     padding: 18px 15px;
-    display: flex !important; /* 로고와 + 아이콘 정렬 */
+    display: flex !important;
     justify-content: space-between;
     align-items: center;
-    position: relative; /* 토글 버튼 위치 조정을 위해 */
+    position: relative;
 }
 
 .row > div:first-child a {
     display: contents; 
 }
 
-/* [수정됨] 기존 CSS ::after 아이콘 제거 
-  (JS가 실제 버튼을 만들 것이므로 불필요)
-*/
 .row > div:first-child::after {
     content: none; 
 }
 
-/* [새로 추가] JS가 생성한 .accordion-toggle 버튼 스타일 
-*/
 .accordion-toggle {
     display: inline-block;
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 1.8rem; /* 아이콘 크기 */
+    font-size: 1.8rem;
     font-weight: 300;
-    color: #007bff; /* 아이콘 색상 */
-    padding: 5px 10px; /* 클릭 영역 확보 */
+    color: #007bff;
+    padding: 5px 10px;
     line-height: 1;
-    z-index: 10; /* 로고 링크 위에 있도록 */
+    z-index: 10;
 }
 
 /* ===== 3. 아코디언 콘텐츠 (버튼 묶음) ===== */
-/* .stack (버튼 묶음)을 평소에 숨김 */
 .row .stack {
     display: none; 
     padding: 15px;
@@ -65,38 +59,57 @@
     background-color: #fcfdff; 
 }
 
-/* .stack 내부의 버튼들을 세로로 정렬 */
-.row .stack .grid-top,
-.row .stack .grid-bottom {
-    display: flex;
-    flex-direction: column; 
-    gap: 8px;
+/* * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+ * * * 🛠️ 여기가 핵심 수정 부분입니다 (1) 
+ *
+ * .grid-top을 2열 그리드로 변경
+ *
+ * * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+*/
+.row .stack .grid-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 1:1 비율의 2열 그리드 */
+    gap: 8px; /* 버튼 사이 간격 */
     align-items: stretch;
 }
 
+/* * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+ * * * 🛠️ 여기가 핵심 수정 부분입니다 (2) 
+ *
+ * .grid-bottom (긴 버튼들)은 1열을 유지
+ *
+ * * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+*/
 .row .stack .grid-bottom {
+    display: flex;
+    flex-direction: column; /* 세로 1열 */
+    gap: 8px;
+    align-items: stretch;
     margin-top: 8px;
 }
 
-/* 모든 버튼을 꽉 찬 블록 버튼으로 */
+/* 모든 버튼 스타일 */
 .row .stack .btn {
     display: block;
     width: 100%;
     text-align: center;
+    font-size: 13px; /* 글자 크기 살짝 줄여서 2열에 잘 맞게 */
+    padding-top: 10px; /* 버튼 위아래 여백 확보 */
+    padding-bottom: 10px;
+    min-height: 38px; /* 버튼 최소 높이 */
 }
 
 /* 전화 버튼은 왼쪽 정렬 */
 .row .stack .btn-call {
     text-align: left;
     justify-content: flex-start;
+    font-size: 14px; /* 전화번호는 좀 더 잘보이게 */
 }
 .row .stack .btn-call.center {
     justify-content: center;
 }
 
-/* [새로 추가] "전산 접속" 버튼 숨기기
-  (btn-primary 클래스 기준)
-*/
+/* "전산 접속" 버튼 숨기기 (유지) */
 .row .stack .btn-primary {
     display: none !important;
 }
