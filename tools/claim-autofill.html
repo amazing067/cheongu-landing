@@ -1004,6 +1004,16 @@ async function initializeApp() {
   
   [["sub_phone1","sub_phone2","sub_phone3",3,4],["ins_phone1","ins_phone2","ins_phone3",3,4]].forEach(([a,b,c,ma,mb])=>{ el(a).addEventListener("input", ()=>autoAdvance(el(a),b,ma)); el(b).addEventListener("input", ()=>autoAdvance(el(b),c,mb)); el(c).addEventListener("input", ()=>onlyDigits(el(c))); el(b).addEventListener("keydown", (e)=>autoBackspace(e,a)); el(c).addEventListener("keydown", (e)=>autoBackspace(e,b)); });
   [["sub_rrn1","sub_rrn2",6],["ins_rrn1","ins_rrn2",6]].forEach(([a,b,mx])=>{ el(a).addEventListener("input", ()=>autoAdvance(el(a),b,mx)); el(b).addEventListener("input", ()=>onlyDigits(el(b))); el(b).addEventListener("keydown",(e)=>autoBackspace(e,a)); });
+  // (NEW) 우클릭 및 F12 개발자 도구 방지
+  document.addEventListener('contextmenu', event => event.preventDefault());
+  document.addEventListener('keydown', event => {
+    if (event.key === 'F12' || // F12
+        (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) || // Ctrl+Shift+I/J/C
+        (event.metaKey && event.altKey && (event.key === 'I' || event.key === 'J'))) { // Cmd+Opt+I/J (Mac)
+      event.preventDefault();
+    }
+  });
+  // --- (END NEW) ---
 }
 
 /* ============== 이벤트 초기화 (DOMContentLoaded) ============== */
