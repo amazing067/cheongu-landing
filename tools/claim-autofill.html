@@ -242,189 +242,260 @@
 </div>
 
 <script>
-/* ============== (NEW) 기본 템플릿 정보 (links.json과 병합될 정보) ============== */
+/* ============== (NEW) 기본 템플릿 정보 (sigPositions 배열 사용) ============== */
 // (중요!)
 // 1. 'name'은 links.json의 'name'과 정확히 일치해야 합니다. (병합 기준)
 // 2. 'logo'는 ../assets/logos/ 경로의 파일명과 일치해야 합니다.
-// 3. 'sigPos'는 Acrobat(pt단위)에서 찾은 서명 좌표입니다. (★반드시 직접 수정 필요★)
+// 3. 'sigPositions'는 Acrobat(pt단위)에서 찾은 서명 좌표 '배열'입니다.
+//    (page: 0은 1페이지, page: 1은 2페이지를 의미)
 const CARRIER_TEMPLATE_DATA = {
   // --- 손해보험사 ---
   "SAMSUNG_FIRE": {
     name: "삼성화재",
     logo: "../assets/logos/삼성화재.png",
-    sigPos: { x: 400, y: 150, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [ // (★예시: 2개)
+      { page: 0, x: 235, y: 188, width: 100, height: 50 }, // 1페이지 (청구자 서명)
+      { page: 0, x: 244, y: 188, width: 100, height: 50 }  // 1페이지 (동의서 서명)
+    ]
   },
   "HYUNDAI_MARINE": {
     name: "현대해상",
     logo: "../assets/logos/현대해상.png",
-    sigPos: { x: 480, y: 210, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 480, y: 210, width: 100, height: 50 }
+    ]
   },
   "DB_INSURANCE": {
     name: "DB손해보험",
     logo: "../assets/logos/DB손해보험.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "KB_INSURANCE": {
     name: "KB손해보험",
     logo: "../assets/logos/KB손해보험.png",
-    sigPos: { x: 480, y: 210, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [ // (★예시: 2개)
+      { page: 0, x: 480, y: 210, width: 100, height: 50 }, // 1페이지 (청구자 서명)
+      { page: 2, x: 150, y: 100, width: 100, height: 50 }  // 3페이지 (동의서 서명)
+    ]
   },
   "MERITZ_FIRE": {
     name: "메리츠화재",
     logo: "../assets/logos/메리츠화재.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
+  // ... (다른 모든 보험사들도 sigPos -> sigPositions: [ { page: 0, ... } ] 형태로 수정) ...
+  
   "LOTTE_INSURANCE": {
     name: "롯데손해보험",
     logo: "../assets/logos/롯데손해보험.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "HEUNGKUK_FIRE": {
     name: "흥국화재",
     logo: "../assets/logos/흥국화재.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "HANA_INSURANCE": {
     name: "하나손해보험",
     logo: "../assets/logos/하나손해보험.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "NH_INSURANCE": {
     name: "농협손해보험",
     logo: "../assets/logos/농협손해보험.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "KAKAO_PAY_INSURANCE": {
     name: "카카오페이손해보험",
     logo: "../assets/logos/카카오페이손해보험.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "SHINHAN_EZ_INSURANCE": {
     name: "신한EZ손해보험",
     logo: "../assets/logos/신한EZ손해보험.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "CARROT_INSURANCE": {
     name: "캐롯손해보험",
     logo: "../assets/logos/캐롯손해보험.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "AIG_INSURANCE": {
     name: "AIG손해보험",
     logo: "../assets/logos/AIG손해보험.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "LINA_G_INSURANCE": {
     name: "라이나손해보험",
-    logo: "../assets/logos/라이나생명.png", // 로고 확인 필요
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    logo: "../assets/logos/라이나생명.png",
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "HANWHA_INSURANCE": {
     name: "한화손해보험",
     logo: "../assets/logos/한화손해보험.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
-  
-  // --- 생명보험사 ---
   "SAMSUNG_LIFE": {
     name: "삼성생명",
     logo: "../assets/logos/삼성생명.png",
-    sigPos: { x: 450, y: 120, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 450, y: 120, width: 100, height: 50 }
+    ]
   },
   "HANWHA_LIFE": {
     name: "한화생명",
     logo: "../assets/logos/한화생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "KYOBO_LIFE": {
     name: "교보생명",
     logo: "../assets/logos/교보생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "MIRAE_ASSET_LIFE": {
     name: "미래에셋생명",
     logo: "../assets/logos/미래에셋생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "KB_LIFE": {
     name: "KB라이프생명",
     logo: "../assets/logos/KB라이프생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "SHINHAN_LIFE": {
     name: "신한라이프",
     logo: "../assets/logos/신한라이프.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "NH_LIFE": {
     name: "농협생명",
     logo: "../assets/logos/농협생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "HANA_LIFE": {
     name: "하나생명",
     logo: "../assets/logos/하나생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "DB_LIFE": {
     name: "DB생명",
     logo: "../assets/logos/DB생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "KDB_LIFE": {
     name: "KDB생명",
     logo: "../assets/logos/KDB생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "ABL_LIFE": {
     name: "ABL생명",
     logo: "../assets/logos/ABL생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "HEUNGKUK_LIFE": {
     name: "흥국생명",
     logo: "../assets/logos/흥국생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "METLIFE_LIFE": {
     name: "메트라이프",
     logo: "../assets/logos/메트라이프.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "AIA_LIFE": {
     name: "AIA생명",
     logo: "../assets/logos/AIA생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "IBK_PENSION": {
     name: "IBK연금보험",
     logo: "../assets/logos/IBK연금보험.png",
-    sigPos: null // (템플릿 없음)
+    sigPositions: null // (템플릿 없음)
   },
   "CHUBB_LIFE": {
     name: "처브라이프",
     logo: "../assets/logos/처브라이프.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "FUBON_HYUNDAI_LIFE": {
     name: "푸본현대생명",
     logo: "../assets/logos/푸본현대생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "LINA_LIFE": {
     name: "라이나생명",
     logo: "../assets/logos/라이나생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "IM_LIFE": {
     name: "iM라이프생명",
     logo: "../assets/logos/iM라이프생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   },
   "TONGYANG_LIFE": {
     name: "동양생명",
     logo: "../assets/logos/동양생명.png",
-    sigPos: { x: 400, y: 100, width: 100, height: 50 } // (★예시 좌표)
+    sigPositions: [
+      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+    ]
   }
 };
 
@@ -566,6 +637,13 @@ function collectProfile(){
   p['sub_full_phone'] = [p.sub_phone1, p.sub_phone2, p.sub_phone3].filter(Boolean).join('-');
   p['ins_full_rrn'] = [p.ins_rrn1, p.ins_rrn2].filter(Boolean).join('-');
   p['sub_full_rrn'] = [p.sub_rrn1, p.sub_rrn2].filter(Boolean).join('-');
+
+  // --- (NEW) ---
+  // 1. 보상 안내는 '문자'로 강제 선택 (Acrobat에서 'notify_sms' 이름표 필요)
+  p['notify_sms'] = true; 
+  // 2. '추가청구'는 강제 해제 (Acrobat에서 'claim_additional' 이름표가 있어도 됨)
+  p['claim_additional'] = false; 
+  // --- (END NEW) ---
   
   return p;
 }
@@ -697,11 +775,12 @@ async function initializeApp() {
     };
     
     const pdfPath = linksEntry.links.pdf;
-    if (pdfPath && templateData.sigPos) { // links.json에 'pdf' 경로가 있고, 우리 코드에 'sigPos'가 정의된 경우
+    // (NEW) sigPositions가 있는지 확인
+    if (pdfPath && templateData.sigPositions && templateData.sigPositions.length > 0) {
       GLOBAL_MERGED_DATA[key].template = {
-        label: "보험금청구서", // 'pdf' 키는 항상 '보험금청구서'로 간주
-        path: pdfPath, // links.json에서 가져온 경로
-        sigPos: templateData.sigPos // CARRIER_TEMPLATE_DATA에서 가져온 좌표
+        label: "보험금청구서",
+        path: pdfPath,
+        sigPositions: templateData.sigPositions // (NEW) sigPos가 아닌 sigPositions 배열을 통째로 주입
       };
     }
   }
