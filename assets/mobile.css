@@ -1,4 +1,4 @@
-/* ===== 1. 데스크탑 '표' 레이아웃 덮어쓰기 ===== */
+/* ===== 1. 기본 레이아웃 덮어쓰기 ===== */
 .table {
     background: none;
     border: none;
@@ -12,8 +12,8 @@
     border-radius: 8px;
     background: #fff;
     border: 1px solid #e2e8f0;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 8px; /* 보험사 간 간격을 줄임 (12px -> 8px) */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     overflow: hidden;
 }
 
@@ -21,89 +21,78 @@
     display: block;
 }
 
-/* ===== 2. 아코디언 헤더 (로고 영역) ===== */
+/* ===== 2. 보험사 로고 헤더 (컴팩트하게) ===== */
 .row > div:first-child {
-    padding: 18px 15px;
+    padding: 12px 15px; /* 상하 여백 줄임 (18px -> 12px) */
     display: flex !important;
     justify-content: space-between;
     align-items: center;
     position: relative;
+    border-bottom: 1px dashed #eee; /* 헤더와 버튼 영역 구분선 */
 }
 
 .row > div:first-child a {
     display: contents; 
 }
 
-.row > div:first-child::after {
-    content: none; 
+/* 모바일에서 로고 크기 살짝 줄이기 */
+.row .brand .logo {
+    max-height: 24px !important;
 }
 
+/* 아코디언 버튼/::after 아이콘 모두 제거 */
+.row > div:first-child::after,
 .accordion-toggle {
-    display: inline-block;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.8rem;
-    font-weight: 300;
-    color: #007bff;
-    padding: 5px 10px;
-    line-height: 1;
-    z-index: 10;
+    content: none; 
+    display: none;
 }
 
-/* ===== 3. 아코디언 콘텐츠 (버튼 묶음) ===== */
+
+/* ===== 3. 아코디언 콘텐츠 -> 항상 보이도록 변경 ===== */
 .row .stack {
-    display: none; 
-    padding: 15px;
-    border-top: 1px dashed #eee;
+    display: block; /* display: none; -> display: block; 변경 (항상 보임) */
+    padding: 12px 15px; /* 여백 줄임 (15px -> 12px) */
     background-color: #fcfdff; 
 }
 
-/* * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
- * * * 🛠️ 여기가 핵심 수정 부분입니다 (1) 
- *
- * .grid-top을 2열 그리드로 변경
- *
- * * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-*/
+/* 상단 2열 버튼 그리드 (컴팩트하게) */
 .row .stack .grid-top {
     display: grid;
     grid-template-columns: 1fr 1fr; /* 1:1 비율의 2열 그리드 */
-    gap: 8px; /* 버튼 사이 간격 */
+    gap: 6px; /* 버튼 사이 간격 줄임 (8px -> 6px) */
     align-items: stretch;
 }
 
-/* * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
- * * * 🛠️ 여기가 핵심 수정 부분입니다 (2) 
- *
- * .grid-bottom (긴 버튼들)은 1열을 유지
- *
- * * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-*/
+/* 하단 1열 버튼 리스트 (컴팩트하게) */
 .row .stack .grid-bottom {
     display: flex;
-    flex-direction: column; /* 세로 1열 */
-    gap: 8px;
+    flex-direction: column;
+    gap: 6px; /* 버튼 사이 간격 줄임 (8px -> 6px) */
     align-items: stretch;
-    margin-top: 8px;
+    margin-top: 6px; /* 상단 그리드와의 간격 줄임 (8px -> 6px) */
 }
 
-/* 모든 버튼 스타일 */
+/* 모든 버튼 (컴팩트하게) */
 .row .stack .btn {
     display: block;
     width: 100%;
     text-align: center;
-    font-size: 13px; /* 글자 크기 살짝 줄여서 2열에 잘 맞게 */
-    padding-top: 10px; /* 버튼 위아래 여백 확보 */
-    padding-bottom: 10px;
-    min-height: 38px; /* 버튼 최소 높이 */
+    font-size: 12px; /* 폰트 크기 줄임 (13px -> 12px) */
+    font-weight: 600;
+    padding: 8px 6px; /* 버튼 여백 줄임 (10px -> 8px) */
+    min-height: 34px; /* 버튼 최소 높이 줄임 (38px -> 34px) */
 }
 
 /* 전화 버튼은 왼쪽 정렬 */
 .row .stack .btn-call {
     text-align: left;
     justify-content: flex-start;
-    font-size: 14px; /* 전화번호는 좀 더 잘보이게 */
+    font-size: 13px;
+    padding-top: 6px; /* 전화 버튼은 여백 더 줄임 */
+    padding-bottom: 6px;
+}
+.row .stack .btn-call .num {
+    margin-left: 8px;
 }
 .row .stack .btn-call.center {
     justify-content: center;
@@ -115,14 +104,26 @@
 }
 
 
-/* ===== 4. 활성화 상태 (JS가 .row.active를 추가) ===== */
-.row.active .stack {
-    display: block;
-}
+/* ===== 4. 활성화 상태 -> 모두 제거 ===== */
+/* .row.active 관련 스타일이 더 이상 필요 없으므로 삭제 */
 
-/* ===== 5. 모바일에서 불필요한 요소 숨기기 ===== */
+
+/* ===== 5. 모바일에서 불필요한 요소 숨기기 (유지) ===== */
 .section-head .section-sub,
 #loss-count, #life-count,
 header nav /* 모바일에서는 상단 네비게이션도 숨김 */ {
     display: none;
+}
+
+/* 검색창 하단 '단축키' 안내 숨김 */
+.hero-search .text-xs {
+    display: none;
+}
+
+/* 섹션 타이틀 컴팩트하게 */
+.section-head {
+    margin: 20px 0 10px; /* 여백 줄임 */
+}
+.section-title {
+    font-size: 24px; /* 폰트 크기 줄임 (28px -> 24px) */
 }
