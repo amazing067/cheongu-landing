@@ -253,215 +253,223 @@
 // 2. 'logo'는 ../assets/logos/ 경로의 파일명과 일치해야 합니다.
 // 3. 'sigPositions'는 Acrobat(pt단위)에서 찾은 서명 좌표 '배열'입니다.
 //    (page: 0은 1페이지, page: 1은 2페이지를 의미)
+// 4. (NEW) 'type' 꼬리표를 추가했습니다.
+//    - type: 'BENEFICIARY' : 수익자(청구인) 서명란 (항상 찍힘)
+//    - type: 'INSURED' : 피보험자 서명란 (피보험자가 성인일 때만 찍힘)
+//    - type: 'GUARDIAN' : 법정대리인 서명란 (피보험자가 미성년자일 때만 찍힘)
 const CARRIER_TEMPLATE_DATA = {
   // --- 손해보험사 ---
   "SAMSUNG_FIRE": {
     name: "삼성화재",
     logo: "../assets/logos/삼성화재.png",
-    sigPositions: [ // (★예시: 4개)
-      { page: 0, x: 235, y: 188, width: 100, height: 50 }, // 1페이지 (청구자 서명)
-      { page: 0, x: 244, y: 188, width: 100, height: 50 }, // 1페이지 (동의서 서명)
-      { page: 4, x: 141, y: 188, width: 100, height: 50 }, // 1페이지 (동의서 서명)
-      { page: 4, x: 155, y: 188, width: 100, height: 50 }  // 1페이지 (동의서 서명)
+    sigPositions: [ // (★예시: 4개) - PDF를 보고 어떤 서명인지 type을 정확히 지정해야 합니다.
+      { type: 'BENEFICIARY', page: 0, x: 235, y: 188, width: 100, height: 50 }, // 1페이지 (청구자(수익자) 서명)
+      { type: 'BENEFICIARY', page: 0, x: 244, y: 188, width: 100, height: 50 }, // 1페이지 (청구자(수익자) 서명)
+      { type: 'BENEFICIARY', page: 4, x: 141, y: 188, width: 100, height: 50 }, // 5페이지 (청구자(수익자) 서명)
+      { type: 'BENEFICIARY', page: 4, x: 155, y: 188, width: 100, height: 50 }, // 5페이지 (청구자(수익자) 서명)
+      { type: 'INSURED',   page: 4, x: 141, y: 188, width: 100, height: 50 }, // 5페이지 (피보험자(성인) 동의)
+      { type: 'GUARDIAN',  page: 4, x: 155, y: 188, width: 100, height: 50 }  // 5페이지 (법정대리인(미성년) 동의)
+      // { type: 'BENEFICIARY', page: 0, x: 244, y: 188, width: 100, height: 50 }, // 1페이지 (동의서 서명) -> 예: 이것도 수익자 서명?
     ]
   },
   "HYUNDAI_MARINE": {
     name: "현대해상",
     logo: "../assets/logos/현대해상.png",
     sigPositions: [
-      { page: 0, x: 480, y: 210, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 480, y: 210, width: 100, height: 50 }
     ]
   },
   "DB_INSURANCE": {
     name: "DB손해보험",
     logo: "../assets/logos/DB손해보험.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "KB_INSURANCE": {
     name: "KB손해보험",
     logo: "../assets/logos/KB손해보험.png",
     sigPositions: [ // (★예시: 2개)
-      { page: 0, x: 480, y: 210, width: 100, height: 50 }, // 1페이지 (청구자 서명)
-      { page: 2, x: 150, y: 100, width: 100, height: 50 }  // 3페이지 (동의서 서명)
+      { type: 'BENEFICIARY', page: 0, x: 480, y: 210, width: 100, height: 50 }, // 1페이지 (청구자 서명)
+      { type: 'INSURED',   page: 2, x: 150, y: 100, width: 100, height: 50 }  // 3페이지 (피보험자(성인) 동의)
+      // { type: 'GUARDIAN',  page: 2, x: 250, y: 100, width: 100, height: 50 }  // 3페이지 (법정대리인(미성년) 동의)
     ]
   },
   "MERITZ_FIRE": {
     name: "메리츠화재",
     logo: "../assets/logos/메리츠화재.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
-  // ... (다른 모든 보험사들도 sigPos -> sigPositions: [ { page: 0, ... } ] 형태로 수정) ...
+  // ... (다른 모든 보험사들도 sigPositions에 'type' 꼬리표 추가 필요) ...
   
   "LOTTE_INSURANCE": {
     name: "롯데손해보험",
     logo: "../assets/logos/롯데손해보험.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "HEUNGKUK_FIRE": {
     name: "흥국화재",
     logo: "../assets/logos/흥국화재.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "HANA_INSURANCE": {
     name: "하나손해보험",
     logo: "../assets/logos/하나손해보험.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "NH_INSURANCE": {
     name: "농협손해보험",
     logo: "../assets/logos/농협손해보험.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "KAKAO_PAY_INSURANCE": {
     name: "카카오페이손해보험",
     logo: "../assets/logos/카카오페이손해보험.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "SHINHAN_EZ_INSURANCE": {
     name: "신한EZ손해보험",
     logo: "../assets/logos/신한EZ손해보험.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "CARROT_INSURANCE": {
     name: "캐롯손해보험",
     logo: "../assets/logos/캐롯손해보험.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "AIG_INSURANCE": {
     name: "AIG손해보험",
     logo: "../assets/logos/AIG손해보험.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "LINA_G_INSURANCE": {
     name: "라이나손해보험",
     logo: "../assets/logos/라이나생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "HANWHA_INSURANCE": {
     name: "한화손해보험",
     logo: "../assets/logos/한화손해보험.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "SAMSUNG_LIFE": {
     name: "삼성생명",
     logo: "../assets/logos/삼성생명.png",
     sigPositions: [
-      { page: 0, x: 450, y: 120, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 450, y: 120, width: 100, height: 50 }
     ]
   },
   "HANWHA_LIFE": {
     name: "한화생명",
     logo: "../assets/logos/한화생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "KYOBO_LIFE": {
     name: "교보생명",
     logo: "../assets/logos/교보생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "MIRAE_ASSET_LIFE": {
     name: "미래에셋생명",
     logo: "../assets/logos/미래에셋생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "KB_LIFE": {
     name: "KB라이프생명",
     logo: "../assets/logos/KB라이프생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "SHINHAN_LIFE": {
     name: "신한라이프",
     logo: "../assets/logos/신한라이프.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "NH_LIFE": {
     name: "농협생명",
     logo: "../assets/logos/농협생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "HANA_LIFE": {
     name: "하나생명",
     logo: "../assets/logos/하나생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "DB_LIFE": {
     name: "DB생명",
     logo: "../assets/logos/DB생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "KDB_LIFE": {
     name: "KDB생명",
     logo: "../assets/logos/KDB생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "ABL_LIFE": {
     name: "ABL생명",
     logo: "../assets/logos/ABL생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "HEUNGKUK_LIFE": {
     name: "흥국생명",
     logo: "../assets/logos/흥국생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "METLIFE_LIFE": {
     name: "메트라이프",
     logo: "../assets/logos/메트라이프.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "AIA_LIFE": {
     name: "AIA생명",
     logo: "../assets/logos/AIA생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "IBK_PENSION": {
@@ -473,35 +481,35 @@ const CARRIER_TEMPLATE_DATA = {
     name: "처브라이프",
     logo: "../assets/logos/처브라이프.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "FUBON_HYUNDAI_LIFE": {
     name: "푸본현대생명",
     logo: "../assets/logos/푸본현대생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "LINA_LIFE": {
     name: "라이나생명",
     logo: "../assets/logos/라이나생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "IM_LIFE": {
     name: "iM라이프생명",
     logo: "../assets/logos/iM라이프생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   },
   "TONGYANG_LIFE": {
     name: "동양생명",
     logo: "../assets/logos/동양생명.png",
     sigPositions: [
-      { page: 0, x: 400, y: 100, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 400, y: 100, width: 100, height: 50 }
     ]
   }
 };
@@ -641,7 +649,7 @@ function isMinor(rrn1_str, rrn2_str) {
   }
 }
 
-/* ============== 데이터 수집 (1, 2단계) ============== */
+/* ============== 데이터 수집 (1, 2단계) (NEW) ============== */
 function collectProfile(){
   const p = {};
   const ids = [
@@ -698,7 +706,8 @@ function collectProfile(){
   // --- (END NEW) ---
 
   // --- (NEW) 미성년자 처리 ---
-  if (isMinor(p.ins_rrn1, p.ins_rrn2)) {
+  p['isMinor'] = isMinor(p.ins_rrn1, p.ins_rrn2); // (NEW) isMinor 플래그를 P 객체에 저장
+  if (p['isMinor']) {
     console.log("피보험자가 미성년자입니다. 법정대리인 정보를 채웁니다.");
     // 계약자 정보를 법정대리인 정보로 매핑
     p['guardian_name'] = p.sub_name;
@@ -722,24 +731,42 @@ function collectProfile(){
   return p;
 }
 
-/* ============== 데이터 적용 (샘플/불러오기) ============== */
+/* ============== 데이터 적용 (샘플/불러오기) (NEW) ============== */
 function applyProfile(p){
   for (const [key, value] of Object.entries(p)) {
     const field = el(key);
     if (!field) continue;
     if (field.type === 'checkbox' || field.type === 'radio') { field.checked = !!value; } else { field.value = value || ""; }
   }
-  const sameInsBen = !p.ben_name || (p.ins_name === p.ben_name);
+  // (NEW) 수익자/관계 필드 적용
+  const sameSubIns = (p.sub_name === p.ins_name) && (p.sub_rrn1 === p.ins_rrn1);
+  el('sameSubIns').checked = sameSubIns;
+
+  const sameInsBen = (p.ins_name === p.ben_name);
   el('sameInsBen').checked = sameInsBen;
-  if (sameInsBen) { el('ins_bank_name').value = p.bank_name || ''; el('ins_bank_account').value = p.bank_account || ''; } else { el('bank_name').value = p.bank_name || ''; el('bank_account').value = p.bank_account || ''; }
-  syncSameSubIns(); syncSameInsBen();
+  
+  if (sameInsBen) { 
+    el('ins_bank_name').value = p.bank_name || ''; 
+    el('ins_bank_account').value = p.bank_account || ''; 
+  } else { 
+    el('ben_name').value = p.ben_name || '';
+    el('bank_name').value = p.bank_name || ''; 
+    el('bank_account').value = p.bank_account || ''; 
+  }
+
+  if (!sameSubIns) {
+    el('sub_relation').value = p.sub_relation || '';
+  }
+  
+  syncSameSubIns(); 
+  syncSameInsBen();
 }
 
 function fillSample(){
   applyProfile({
     sub_name:"홍길동", sub_rrn1:"900101", sub_rrn2:"1234567", sub_phone1:"010", sub_phone2:"1234", sub_phone3:"5678",
     // (NEW) 미성년자 테스트를 위해 2010년생으로 변경
-    ins_name:"김청구", ins_rrn1:"100505", ins_rrn2:"3345678", ins_phone1:"010", sub_phone2:"5555", sub_phone3:"6666",
+    ins_name:"김청구", ins_rrn1:"100505", ins_rrn2:"3345678", ins_phone1:"010", sub_phone2:"5555", ins_phone3:"6666",
     sub_relation: "부", // (NEW)
     zip:"04524", addr:"서울특별시 중구 세종대로 110", addr_detail:"10층 (태평로1가)",
     employer_job:"청구닷컴 / 보험상담사",
@@ -751,11 +778,6 @@ function fillSample(){
     diagnosis: "급성 위염",
     hospital_name: "서울병원"
   });
-  // (NEW) 샘플 시나리오에 맞게 체크박스 상태 강제 설정
-  el('sameSubIns').checked = false;
-  el('sameInsBen').checked = false;
-  syncSameSubIns(); // '관계' 필드 표시
-  syncSameInsBen(); // '수익자' 정보 표시
 }
 
 /* ============== 암호 저장/불러오기 ============== */
@@ -791,7 +813,7 @@ function openPostcode(){ $layer.style.display='block';
   new daum.Postcode({ oncomplete:(data)=>{ el("zip").value=data.zonecode||""; el("addr").value=data.roadAddress||data.address||""; el("addr_detail").focus(); closePostcode(); }, width:'100%', height:'100%' }).embed($container); }
 function closePostcode(){ $layer.style.display='none'; $container.innerHTML=''; }
 
-/* ============== '동일' 체크박스 로직 (수정) ============== */
+/* ============== '동일' 체크박스 로직 (NEW) ============== */
 function syncSameSubIns() {
   const same = el('sameSubIns').checked;
   const fields = ['name', 'rrn1', 'rrn2', 'phone1', 'phone2', 'phone3'];
@@ -1067,7 +1089,7 @@ async function handleSubmit(action) {
   }
 }
 
-/* ============== 개별 PDF 생성 로직 ============== */
+/* ============== (NEW) 개별 PDF 생성 로직 (조건부 서명) ============== */
 async function generateSinglePdf(P, templateConfig, kFontBytes, sigImageBytes) {
   const { PDFDocument, StandardFonts } = PDFLib;
   if (!templateConfig || !templateConfig.path) {
@@ -1113,18 +1135,35 @@ async function generateSinglePdf(P, templateConfig, kFontBytes, sigImageBytes) {
     } catch (e) { /* 필드 없음 */ }
   }
   
-  // (NEW) 서명 로직 수정 (배열 순회)
+  // (NEW) 서명 로직 수정 (배열 순회 및 조건부 스탬프)
   if (sigImageBytes && templateConfig.sigPositions && templateConfig.sigPositions.length > 0) {
     const sigImage = await pdfDoc.embedPng(sigImageBytes);
-    
+    const isInsuredMinor = P.isMinor; // 1. 미성년자 여부 플래그 가져오기
+
     // (NEW) 정의된 모든 서명 위치를 순회
     for (const pos of templateConfig.sigPositions) {
-      if (pos.page >= 0 && pos.page < pdfDoc.getPageCount()) {
-        const page = pdfDoc.getPage(pos.page); // (NEW) 해당 페이지 가져오기
-        const { x, y, width, height } = pos;
-        page.drawImage(sigImage, { x, y, width, height });
-      } else {
-        console.warn(`잘못된 페이지 번호(${pos.page})로 서명을 건너뜁니다.`);
+      let shouldStamp = false; // 2. 기본값은 '찍지 않음'
+
+      // 3. 꼬리표(type)에 따라 스탬프 여부 결정
+      if (pos.type === 'BENEFICIARY') { // 수익자 서명은 항상 찍음
+        shouldStamp = true;
+      }
+      else if (pos.type === 'INSURED' && !isInsuredMinor) { // 피보험자 서명은 성인일 때만
+        shouldStamp = true;
+      }
+      else if (pos.type === 'GUARDIAN' && isInsuredMinor) { // 법정대리인 서명은 미성년자일 때만
+        shouldStamp = true;
+      }
+
+      // 4. 스탬프 찍기
+      if (shouldStamp) {
+        if (pos.page >= 0 && pos.page < pdfDoc.getPageCount()) {
+          const page = pdfDoc.getPage(pos.page); // (NEW) 해당 페이지 가져오기
+          const { x, y, width, height } = pos;
+          page.drawImage(sigImage, { x, y, width, height });
+        } else {
+          console.warn(`잘못된 페이지 번호(${pos.page})로 서명을 건너뜁니다.`);
+        }
       }
     }
   }
