@@ -923,23 +923,38 @@
     })();
   </script>
 <a href="tools/claim-autofill.html?demo">청구서 자동채움 데모 열기</a>
-<script>
-// site.css를 포함한 모든 리소스가 로드된 후 실행합니다.
-window.addEventListener('load', function() {
-  // 767px 이하 모바일인지 다시 확인
-  if (window.innerWidth <= 767) {
-    try {
-      // '청구닷컴' 로고 a 태그를 찾습니다.
-      var logo = document.querySelector('body.mode-compact header > .maxw > a.text-xl[href="/"]');
-      if (logo) {
-        // site.css를 이기기 위해 !important로 강제 적용합니다.
-        logo.style.setProperty('writing-mode', 'horizontal-tb', 'important');
-        logo.style.setProperty('transform', 'none', 'important');
-        logo.style.setProperty('position', 'static', 'important');
-        logo.style.setProperty('font-size', '22px', 'important');
-      }
-    } catch (e) { console.error('Logo hotfix (load event) failed:', e); }
+<script id="logo-hotfix-final">
+function forceLogoHorizontal() {
+  // 767px 이하 모바일일 때만 실행
+  if (window.innerWidth > 767) return;
+
+  try {
+    // '청구닷컴' 로고 a 태그를 가장 구체적인 선택자로 찾습니다
+    var logo = document.querySelector('body.mode-compact header > .maxw > a.text-xl.font-extrabold.no-underline[href="/"]');
+    
+    if (logo) {
+      // site.css의 모든 !important를 이기기 위해 JS로 강제 적용
+      logo.style.setProperty('writing-mode', 'horizontal-tb', 'important');
+      logo.style.setProperty('transform', 'none', 'important');
+      logo.style.setProperty('position', 'static', 'important');
+      logo.style.setProperty('font-size', '22px', 'important');
+    }
+  } catch (e) { 
+    console.error('Logo hotfix attempt failed:', e); 
   }
+}
+
+// 시도 1: HTML 파싱 직후
+document.addEventListener('DOMContentLoaded', forceLogoHorizontal);
+
+// 시도 2: CSS, 이미지 등 모든 로드 완료 후 (site.css 로드 후)
+window.addEventListener('load', forceLogoHorizontal);
+
+// 시도 3: (최후의 수단) 모든 로드가 끝나고 0.5초, 1.5초 뒤에
+//          다른 JS가 스타일을 덮어쓰는 것까지 이기기 위해
+window.addEventListener('load', function() {
+  setTimeout(forceLogoHorizontal, 500);  // 0.5초 후
+  setTimeout(forceLogoHorizontal, 1500); // 1.5초 후
 });
 </script>
 
