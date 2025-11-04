@@ -546,6 +546,7 @@
       if (lossCount) lossCount.textContent = `${loss.length}개`;
       if (lifeCount) lifeCount.textContent = `${life.length}개`;
       filter();
+      initMobileAccordion();
       attachWideMode(document.getElementById('loss-list'));
       attachWideMode(document.getElementById('life-list'));
     }
