@@ -61,11 +61,6 @@
 
 
 /* ===== 3. 아코디언 콘텐츠 (버튼 묶음) ===== */
-/*
- * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
- * (핵심 수정) !important를 추가하여 강제로 숨깁니다.
- * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
- */
 .row .stack {
     display: none !important; /* 기본 상태에서 '전체'를 강제로 숨김 */
     padding: 12px 15px; 
@@ -119,11 +114,6 @@
 
 
 /* ===== 4. 활성화 상태 ===== */
-/*
- * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
- * (핵심 수정) !important를 추가하여 강제로 표시합니다.
- * ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
- */
 .row.active .stack {
     display: block !important;
 }
@@ -150,31 +140,31 @@ header nav {
 .section-title {
     font-size: 24px;
 }
-/* ===== 6. (추가) 헤더 로고 가로/가운데 정렬 ===== */
 
-/* 헤더의 안쪽 컨테이너(maxw)가 자식(a태그)을 가운데 정렬하도록 */
+/* * =========================================
+ * index.html '청구닷컴' 로고 가로 정렬
+ * =========================================
+ * (이전에 실패했던 코드지만, 혹시 모르니 남겨둡니다)
+*/
 header > .maxw {
-    justify-content: center !important; /* 가운데 정렬 강제 */
+    justify-content: center !important;
     padding-top: 16px;
     padding-bottom: 16px;
 }
-
-/* 세로로 나오는 '청구닷컴' a 태그를 직접 타겟 */
 header > .maxw > a[href="/"] {
-    /* 데스크탑의 세로 쓰기(writing-mode)를 강제로 가로로 변경 */
     writing-mode: horizontal-tb !important;
-    
-    /* 데스크탑에서 사용했을 수 있는 transform, position 초기화 */
     transform: none !important;
     position: static !important;
-    
-    /* 너비/높이도 자동으로 */
     width: auto !important;
     height: auto !important;
-    /*
-=========================================
-  e-enroll.html 모바일 전용 스타일
-=========================================
+    font-size: 22px; 
+}
+
+
+/* * =========================================
+ * e-enroll.html 모바일 전용 스타일
+ * =========================================
+ * (여기가 분리된 부분입니다)
 */
 
 /* 1. 상단 네비게이션 버튼 숨기기 (헤더 길이 축소) */
@@ -210,7 +200,4 @@ header > .maxw > a[href="/"] {
 .page-enroll .hero .heading {
   font-size: 18px;
   padding: 10px 14px;
-}
-    /* 모바일에 맞는 폰트 크기 */
-    font-size: 22px; 
 }
