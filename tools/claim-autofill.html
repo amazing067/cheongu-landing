@@ -155,7 +155,12 @@
       <div class="row3" style="margin-top:12px">
         <div><label>주소</label><div class="addr-line"><input id="zip" placeholder="우편번호" readonly /><input id="addr" placeholder="도로명주소" readonly /></div><div class="addr-line"><input id="addr_detail" placeholder="상세주소" /></div></div>
         <div><label>직장/직무</label><input id="employer_job" placeholder="예: 청구닷컴 / 보험상담사" /></div>
-      </div>
+        
+        <div id="relationBlock" style="display:none;">
+          <label>피보험자와의 관계</label>
+          <input id="sub_relation" placeholder="예: 부, 모, 자녀" />
+        </div>
+        </div>
       <div style="display:flex;align-items:center;gap:8px;margin:24px 0 12px 0">
         <label style="font-size:16px;font-weight:600;margin:0">1-3. 보험금 받는 분 (수익자)</label>
         <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin:0"><input type="checkbox" id="sameInsBen" style="width:auto" checked /> 피보험자와 동일</label>
@@ -253,10 +258,10 @@ const CARRIER_TEMPLATE_DATA = {
   "SAMSUNG_FIRE": {
     name: "삼성화재",
     logo: "../assets/logos/삼성화재.png",
-    sigPositions: [ // (★예시: 2개)
+    sigPositions: [ // (★예시: 4개)
       { page: 0, x: 235, y: 188, width: 100, height: 50 }, // 1페이지 (청구자 서명)
-      { page: 0, x: 244, y: 188, width: 100, height: 50 }  // 1페이지 (동의서 서명)
-      { page: 4, x: 141, y: 188, width: 100, height: 50 }  // 1페이지 (동의서 서명)
+      { page: 0, x: 244, y: 188, width: 100, height: 50 }, // 1페이지 (동의서 서명)
+      { page: 4, x: 141, y: 188, width: 100, height: 50 }, // 1페이지 (동의서 서명)
       { page: 4, x: 155, y: 188, width: 100, height: 50 }  // 1페이지 (동의서 서명)
     ]
   },
@@ -604,6 +609,38 @@ function navigateToStep(stepNumber) {
   }
 }
 
+/* ============== (NEW) 만 19세 미만 체크 헬퍼 함수 ============== */
+function isMinor(rrn1_str, rrn2_str) {
+  if (!rrn1_str || !rrn2_str || rrn1_str.length !== 6 || rrn2_str.length !== 7) {
+    return false; // RRN 정보 부족
+  }
+  try {
+    const rrn1 = parseInt(rrn1_str, 10);
+    const g = parseInt(rrn2_str.charAt(0), 10); // 7번째 자리
+
+    // 7번째 자리에 따른 세기 결정 (1,2: 1900년대 / 3,4: 2000년대)
+    let century = (g === 1 || g === 2 || g === 5 || g === 6) ? 1900 : 2000;
+    let birthYear = century + Math.floor(rrn1 / 10000);
+    let birthMonth = Math.floor((rrn1 % 10000) / 100) - 1; // JS 월은 0부터 시작
+    let birthDay = rrn1 % 100;
+
+    const today = new Date();
+    const birthDate = new Date(birthYear, birthMonth, birthDay);
+    
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--; // 생일이 아직 안 지났으면 -1
+    }
+    
+    return age < 19; // 만 19세 미만이면 true
+  } catch (e) {
+    console.error("isMinor RRN 파싱 오류", e);
+    return false; // 계산 실패 시 성인으로 간주
+  }
+}
+
 /* ============== 데이터 수집 (1, 2단계) ============== */
 function collectProfile(){
   const p = {};
@@ -613,7 +650,8 @@ function collectProfile(){
     'zip', 'addr', 'addr_detail', 'employer_job',
     'ben_name', 'ins_bank_name', 'ins_bank_account',
     'accident_date', 'diagnosis', 'hospital_name', 'accident_detail',
-    'claim_date_today'
+    'sub_relation' // (NEW) 관계 필드 추가
+    // 'claim_date_today'는 아래에서 별도 처리
   ];
   ids.forEach(id => { if(el(id)) p[id] = (el(id).value || "").trim(); });
   
@@ -640,10 +678,44 @@ function collectProfile(){
   p['ins_full_rrn'] = [p.ins_rrn1, p.ins_rrn2].filter(Boolean).join('-');
   p['sub_full_rrn'] = [p.sub_rrn1, p.sub_rrn2].filter(Boolean).join('-');
 
-  // --- (NEW) ---
-  // 1. 보상 안내는 '문자'로 강제 선택 (Acrobat에서 'notify_sms' 이름표 필요)
+  // --- (NEW) 날짜 분리 로직 ---
+  const todayStr = (el('claim_date_today').value || "").trim();
+  p['claim_date_today'] = todayStr; // (예: 2025-11-04)
+  
+  if (todayStr) {
+    try {
+      const parts = todayStr.split('-'); // ["2025", "11", "04"]
+      if (parts.length === 3) {
+        p['date_y_full'] = parts[0];         // "2025"
+        p['date_y_short'] = parts[0].substring(2); // "25"
+        p['date_m'] = parts[1];            // "11"
+        p['date_d'] = parts[2];            // "04"
+      }
+    } catch(e) {
+      console.error("날짜 파싱 실패", e);
+    }
+  }
+  // --- (END NEW) ---
+
+  // --- (NEW) 미성년자 처리 ---
+  if (isMinor(p.ins_rrn1, p.ins_rrn2)) {
+    console.log("피보험자가 미성년자입니다. 법정대리인 정보를 채웁니다.");
+    // 계약자 정보를 법정대리인 정보로 매핑
+    p['guardian_name'] = p.sub_name;
+    p['guardian_relation'] = p.sub_relation;
+    p['guardian_rrn1'] = p.sub_rrn1;
+    p['guardian_rrn2'] = p.sub_rrn2;
+  } else {
+    // 성인인 경우 법정대리인 필드는 비워둠
+    p['guardian_name'] = "";
+    p['guardian_relation'] = "";
+    p['guardian_rrn1'] = "";
+    p['guardian_rrn2'] = "";
+  }
+  // --- (END NEW) ---
+  
+  // --- (NEW) 자동 체크 옵션 ---
   p['notify_sms'] = true; 
-  // 2. '추가청구'는 강제 해제 (Acrobat에서 'claim_additional' 이름표가 있어도 됨)
   p['claim_additional'] = false; 
   // --- (END NEW) ---
   
@@ -666,16 +738,24 @@ function applyProfile(p){
 function fillSample(){
   applyProfile({
     sub_name:"홍길동", sub_rrn1:"900101", sub_rrn2:"1234567", sub_phone1:"010", sub_phone2:"1234", sub_phone3:"5678",
-    ins_name:"김청구", ins_rrn1:"950505", ins_rrn2:"2345678", ins_phone1:"010", sub_phone2:"5555", sub_phone3:"6666",
+    // (NEW) 미성년자 테스트를 위해 2010년생으로 변경
+    ins_name:"김청구", ins_rrn1:"100505", ins_rrn2:"3345678", ins_phone1:"010", sub_phone2:"5555", sub_phone3:"6666",
+    sub_relation: "부", // (NEW)
     zip:"04524", addr:"서울특별시 중구 세종대로 110", addr_detail:"10층 (태평로1가)",
     employer_job:"청구닷컴 / 보험상담사",
-    ben_name: "김청구", bank_name: "청구은행", bank_account: "123-456-789012",
+    ben_name: "홍길동", // (NEW) 미성년자이므로 수익자를 계약자(홍길동)로 변경
+    bank_name: "청구은행", bank_account: "123-456-789012",
     claim_type_sickness: true,
     claim_detail_outpatient: true,
     accident_date: new Date().toISOString().split('T')[0],
     diagnosis: "급성 위염",
     hospital_name: "서울병원"
   });
+  // (NEW) 샘플 시나리오에 맞게 체크박스 상태 강제 설정
+  el('sameSubIns').checked = false;
+  el('sameInsBen').checked = false;
+  syncSameSubIns(); // '관계' 필드 표시
+  syncSameInsBen(); // '수익자' 정보 표시
 }
 
 /* ============== 암호 저장/불러오기 ============== */
@@ -711,14 +791,29 @@ function openPostcode(){ $layer.style.display='block';
   new daum.Postcode({ oncomplete:(data)=>{ el("zip").value=data.zonecode||""; el("addr").value=data.roadAddress||data.address||""; el("addr_detail").focus(); closePostcode(); }, width:'100%', height:'100%' }).embed($container); }
 function closePostcode(){ $layer.style.display='none'; $container.innerHTML=''; }
 
-/* ============== '동일' 체크박스 로직 ============== */
+/* ============== '동일' 체크박스 로직 (수정) ============== */
 function syncSameSubIns() {
   const same = el('sameSubIns').checked;
   const fields = ['name', 'rrn1', 'rrn2', 'phone1', 'phone2', 'phone3'];
   fields.forEach(f => {
     const target = el(`ins_${f}`);
-    if (same) { target.value = el(`sub_${f}`).value; target.disabled = true; target.style.background = 'var(--bg)'; } else { target.disabled = false; target.style.background = '#fff'; }
+    if (same) { 
+      target.value = el(`sub_${f}`).value; 
+      target.disabled = true; 
+      target.style.background = 'var(--bg)'; 
+    } else { 
+      target.disabled = false; 
+      target.style.background = '#fff'; 
+    }
   });
+  
+  // (NEW) "관계" 필드 보이기/숨기기
+  el('relationBlock').style.display = same ? 'none' : 'block';
+  if (same) {
+    el('sub_relation').value = '본인'; // 계약자와 피보험자가 같으면 '본인'
+  } else {
+    // el('sub_relation').value = ''; // (옵션) 비워두기
+  }
 }
 function syncSameInsBen() {
   const same = el('sameInsBen').checked;
@@ -777,12 +872,11 @@ async function initializeApp() {
     };
     
     const pdfPath = linksEntry.links.pdf;
-    // (NEW) sigPositions가 있는지 확인
     if (pdfPath && templateData.sigPositions && templateData.sigPositions.length > 0) {
       GLOBAL_MERGED_DATA[key].template = {
         label: "보험금청구서",
         path: pdfPath,
-        sigPositions: templateData.sigPositions // (NEW) sigPos가 아닌 sigPositions 배열을 통째로 주입
+        sigPositions: templateData.sigPositions 
       };
     }
   }
@@ -1019,11 +1113,20 @@ async function generateSinglePdf(P, templateConfig, kFontBytes, sigImageBytes) {
     } catch (e) { /* 필드 없음 */ }
   }
   
-  if (sigImageBytes && templateConfig.sigPos) {
+  // (NEW) 서명 로직 수정 (배열 순회)
+  if (sigImageBytes && templateConfig.sigPositions && templateConfig.sigPositions.length > 0) {
     const sigImage = await pdfDoc.embedPng(sigImageBytes);
-    const page = pdfDoc.getPage(0); 
-    const { x, y, width, height } = templateConfig.sigPos;
-    page.drawImage(sigImage, { x, y, width, height });
+    
+    // (NEW) 정의된 모든 서명 위치를 순회
+    for (const pos of templateConfig.sigPositions) {
+      if (pos.page >= 0 && pos.page < pdfDoc.getPageCount()) {
+        const page = pdfDoc.getPage(pos.page); // (NEW) 해당 페이지 가져오기
+        const { x, y, width, height } = pos;
+        page.drawImage(sigImage, { x, y, width, height });
+      } else {
+        console.warn(`잘못된 페이지 번호(${pos.page})로 서명을 건너뜁니다.`);
+      }
+    }
   }
   
   form.flatten();
