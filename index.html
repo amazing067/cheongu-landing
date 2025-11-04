@@ -924,17 +924,21 @@
   </script>
 <a href="tools/claim-autofill.html?demo">청구서 자동채움 데모 열기</a>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+// site.css를 포함한 모든 리소스가 로드된 후 실행합니다.
+window.addEventListener('load', function() {
+  // 767px 이하 모바일인지 다시 확인
   if (window.innerWidth <= 767) {
     try {
+      // '청구닷컴' 로고 a 태그를 찾습니다.
       var logo = document.querySelector('body.mode-compact header > .maxw > a.text-xl[href="/"]');
       if (logo) {
+        // site.css를 이기기 위해 !important로 강제 적용합니다.
         logo.style.setProperty('writing-mode', 'horizontal-tb', 'important');
         logo.style.setProperty('transform', 'none', 'important');
         logo.style.setProperty('position', 'static', 'important');
         logo.style.setProperty('font-size', '22px', 'important');
       }
-    } catch (e) { console.error('Logo hotfix failed:', e); }
+    } catch (e) { console.error('Logo hotfix (load event) failed:', e); }
   }
 });
 </script>
