@@ -23,7 +23,7 @@
 
   <!-- Tailwind(@apply) 빌드 CSS -->
   <link rel="stylesheet" href="/assets/site.css?v=final-compact-15" />
-  <link rel="stylesheet" href="/assets/mobile.css?v=5" media="(max-width: 480px)">
+  <link rel="stylesheet" href="/assets/mobile.css?v=6" media="(max-width: 767px)">
 <script>
 (function(){
   if (location.search.indexOf('mobile=1') !== -1) {
@@ -924,14 +924,6 @@
     })();
   </script>
 <a href="tools/claim-autofill.html?demo">청구서 자동채움 데모 열기</a>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('/sw.js')
-      .catch(function (e) { console.error('SW register failed:', e); });
-  });
-}
-</script>
 <script src="/assets/mobile.js"></script>
 </body>
 </html>
