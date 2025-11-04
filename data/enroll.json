@@ -135,7 +135,7 @@
       "card_payment_detail": "계약자 카드만 가능, 설계사 직접 수납 X"
     },
     {
-      "name": "NH농협손해보험",
+      "name": "농협손해보험",
       "usage_period": "발송일 당일만 유효(설계사 미서명시 청약서 유효기간까지)",
       "usage_hours": "23:00까지",
       "call_hours": "09:00~18:00",
