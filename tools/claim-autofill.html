@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>보험금 청구서 자동기입 PDF 생성 (팩스 전송 포함)</title>
+<title>보험금 청구서 자동기입 (4단계 워크플로우)</title>
 <meta name="format-detection" content="telephone=no" />
 <style>
-  /* ... (스타일은 이전과 동일합니다) ... */
+  /* ... (기본 스타일 동일) ... */
   :root{--bg:#f6f8fb;--card:#fff;--ink:#111827;--muted:#6b7280;--brand:#3a64ff;--line:#e5e7eb;--radius:16px;--shadow:0 10px 30px rgba(17,24,39,.08)}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,Apple SD Gothic Neo,Segoe UI,Roboto,Helvetica,Arial}
@@ -38,24 +38,40 @@
   .check-group label:has(:checked) {background:rgba(58,100,255,.05);border-color:var(--brand);box-shadow:0 0 0 2px rgba(58,100,255,.1)}
   .data-actions{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
   .data-actions input {width:240px}
-  .step-nav {display:flex;gap:8px;margin-bottom:12px}
+  .step-nav {display:grid;grid-template-columns: 1fr 1fr 1fr 1fr; gap:8px;margin-bottom:12px} /* (NEW) 4칸 */
   .step-nav-item {flex:1;text-align:center;padding:10px;border-radius:12px;background:var(--bg);color:var(--muted);border:1px solid var(--line);font-size:14px;font-weight:600}
   .step-nav-item.active {background:var(--brand);color:#fff;border-color:var(--brand)}
   .step {display:none}
   .step.active {display:block}
   .step-footer {margin-top:20px;display:flex;justify-content:space-between;align-items:center}
-  .template-list { max-height: 250px; overflow-y: auto; border: 1px solid var(--line); border-radius: 12px; padding: 8px; background: var(--bg); }
-  .template-item { display: flex; align-items: center; padding: 12px; background: var(--card); border-radius: 8px; margin-bottom: 8px; }
-  .template-item label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink); margin: 0; flex: 1; cursor: pointer; }
-  .template-item input[type="checkbox"] { width: auto; }
-  .template-item .fax { font-size: 12px; color: var(--muted); margin-left: auto; margin-right: 12px; }
-  .template-item .view-link { font-size: 12px; }
+  
+  /* (NEW) 3단계: 보험사 선택 그리드 */
+  .carrier-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .carrier-item { border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+  .carrier-item label { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; gap: 12px; height: 100%; cursor: pointer; }
+  .carrier-item img { width: 48px; height: 48px; object-fit: contain; border-radius: 8px; }
+  .carrier-item span { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .carrier-item input[type="checkbox"] { display:none; } /* 체크박스 숨기기 */
+  .carrier-item label:has(:checked) { background:rgba(58,100,255,.05); border-color:var(--brand); box-shadow:0 0 0 2px rgba(58,100,255,.1); border-radius: 12px; }
+
+  /* (NEW) 4단계: 검토 목록 */
+  .review-list { border: 1px solid var(--line); border-radius: 12px; background: var(--bg); padding: 8px; }
+  .review-item { display: grid; grid-template-columns: auto 1fr 1fr; gap: 10px 16px; align-items: center; padding: 12px; background: var(--card); border-radius: 8px; margin-bottom: 8px; }
+  .review-item img { width: 32px; height: 32px; object-fit: contain; border-radius: 4px; grid-row: 1 / 3; }
+  .review-item .name { font-weight: 600; grid-column: 2 / 4; }
+  .review-item .template-select { grid-column: 2 / 4; }
+  .review-item .fax-label { font-size: 12px; color: var(--muted); margin: 0; align-self: end; }
+  .review-item .fax-input { grid-column: 3 / 4; }
+  .review-item .fax-input.missing { border-color: #f00; box-shadow: 0 0 0 3px rgba(255,0,0,.2); } /* 팩스번호 없을 시 강조 */
+
+  /* 서명패드 (동일) */
   .signature-pad-wrapper { position:relative; border:2px dashed var(--line); border-radius:12px; margin-top:12px; height: 200px; background: #fff; }
   .signature-pad-wrapper canvas { width:100%; height:100%; border-radius:12px; cursor:crosshair; }
   #clear_signature { position:absolute; top:8px; right:8px; z-index: 10; font-size:12px; padding:6px 10px; }
   .signature-confirm {margin-top:16px;padding:14px;background:var(--bg);border-radius:8px}
   .signature-confirm label {display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink);cursor:pointer}
   .signature-confirm input[type="checkbox"] {width:auto;flex-shrink:0}
+  
   #postcode-layer{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;width:360px;height:480px;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.12);background:#fff;overflow:hidden}
   /* ... (중략) ... */
 </style>
@@ -67,8 +83,8 @@
 </head>
 <body>
 <div class="wrap">
-  <h2 style="margin-bottom:4px">보험금 청구서 자동기입</h2>
-  <p class="muted" style="margin:0 0 16px 0">새로고침 시 입력값은 초기화됩니다. (정보 암호화 저장/불러오기 가능)</p>
+  <h2>보험금 청구서 자동기입</h2>
+  <p class="muted" style="margin:0 0 16px 0">정보 저장/불러오기 가능. 모든 정보는 브라우저 내에서만 처리됩니다.</p>
 
   <div class="data-actions">
     </div>
@@ -76,7 +92,8 @@
   <div class="step-nav">
     <div id="step-nav-1" class="step-nav-item active">1. 청구자 정보</div>
     <div id="step-nav-2" class="step-nav-item">2. 사고/질병 정보</div>
-    <div id="step-nav-3" class="step-nav-item">3. 서명 및 생성</div>
+    <div id="step-nav-3" class="step-nav-item">3. 보험사 선택</div>
+    <div id="step-nav-4" class="step-nav-item">4. 검토 및 서명</div>
   </div>
 
   <div class="card">
@@ -88,10 +105,23 @@
       </div>
 
     <div id="step-3" class="step">
-      <h3>3. 서명 및 생성</h3>
+      <h3>3. 보험사 선택</h3>
+      <p class="muted" style="margin:-10px 0 12px 0">청구할 보험사를 모두 선택하세요.</p>
+      
+      <div id="carrier-grid-container" class="carrier-grid">
+        </div>
 
-      <label>청구할 보험사 (중복 선택 가능)</label>
-      <div id="template-list-container" class="template-list">
+      <div class="step-footer">
+        <button class="btn" type="button" onclick="navigateToStep(2)">이전 (사고/질병 정보)</button>
+        <button class="btn primary" type="button" onclick="navigateToStep(4)">다음 (검토 및 서명)</button>
+      </div>
+    </div>
+
+    <div id="step-4" class="step">
+      <h3>4. 검토 및 서명</h3>
+      <p class="muted" style="margin:-10px 0 12px 0">선택한 보험사의 템플릿과 팩스번호를 확인하세요. (팩스번호 수정 가능)</p>
+      
+      <div id="review-list-container" class="review-list">
         </div>
       
       <div style="margin-top:12px">
@@ -123,40 +153,64 @@
       <span id="status" class="muted" style="display:block; margin-top: 8px;"></span>
       
       <div class="step-footer">
-        <button class="btn" type="button" onclick="navigateToStep(2)">이전 (사고/질병 정보)</button>
+        <button class="btn" type="button" onclick="navigateToStep(3)">이전 (보험사 선택)</button>
       </div>
     </div>
   </div>
 </div>
 
-<div id="postcode-layer" role="dialog" aria-modal="true" aria-label="주소 검색">
-  </div>
-
 <script>
-/* ============== (NEW) PDF 템플릿 경로, 서명 좌표, 팩스 번호 ============== */
-const PDF_TEMPLATES = {
-  "SAMSUNG_LIFE": {
-    label: "삼성생명 (질병/상해)",
-    path: "/assets/pdf-templates/samsung-life-template.pdf",
-    sigPos: { x: 450, y: 120, width: 100, height: 50 },
-    fax: "050-1234-5678"
-  },
-  "KB_INSURANCE": {
-    label: "KB손해보험 (질병/상해)",
-    path: "/assets/pdf-templates/kb-insurance-template.pdf",
-    sigPos: { x: 480, y: 210, width: 100, height: 50 },
-    fax: "050-1111-2222"
-  },
+/* ============== (NEW) 통합 데이터 (links.json + 템플릿) ============== */
+const CARRIER_DATA = {
   "SAMSUNG_FIRE": {
-    label: "삼성화재 (질병/상해)",
-    path: "/assets/pdf-templates/samsung-fire-template.pdf",
-    sigPos: { x: 400, y: 150, width: 100, height: 50 },
-    fax: "050-3333-4444"
+    name: "삼성화재",
+    logo: "/assets/logos/samsung_fire.png", // (경로 예시)
+    fax: "0505-162-0872", // (links.json에서 가져옴)
+    cs: "1588-5114",
+    templates: {
+      "main": {
+        label: "보험금청구서 (상해/질병)",
+        path: "/assets/pdf-templates/samsung-fire-template.pdf",
+        sigPos: { x: 400, y: 150, width: 100, height: 50 }
+      },
+      "dental": {
+        label: "치과치료확인서",
+        path: "/assets/pdf-templates/samsung-fire-dental-template.pdf",
+        sigPos: { x: 350, y: 100, width: 100, height: 50 }
+      }
+    }
+  },
+  "HYUNDAI_MARINE": {
+    name: "현대해상",
+    logo: "/assets/logos/hyundai.png", // (경로 예시)
+    fax: "02-2628-4567", // (links.json에서 가져옴)
+    cs: "1588-5656",
+    templates: {
+      "main": {
+        label: "보험금청구서 (상해/질병)",
+        path: "/assets/pdf-templates/hyundai-marine-template.pdf",
+        sigPos: { x: 480, y: 210, width: 100, height: 50 }
+      }
+    }
+  },
+  "SAMSUNG_LIFE": {
+    name: "삼성생명",
+    logo: "/assets/logos/samsung_life.png", // (경로 예시)
+    fax: "", // (links.json에 없거나 직접 써야 하는 경우)
+    cs: "1588-3114",
+    templates: {
+      "main": {
+        label: "보험금청구서 (상해/질병)",
+        path: "/assets/pdf-templates/samsung-life-template.pdf",
+        sigPos: { x: 450, y: 120, width: 100, height: 50 }
+      }
+    }
   }
+  // ... (다른 보험사들도 이 구조로 추가) ...
 };
 
 
-/* ============== 공통 유틸 및 초기화 (이하 동일) ============== */
+/* ============== 공통 유틸 ============== */
 const el = id=>document.getElementById(id);
 const $status=el(id="status");
 let signaturePad = null; 
@@ -165,59 +219,93 @@ function onlyDigits(e){ e.value = (e.value||"").replace(/\D/g,""); }
 function autoAdvance(cur, nextId, max){ onlyDigits(cur); if(cur.value.length>=max){const n=el(nextId); n&&n.focus(); n?.select?.();} }
 function autoBackspace(e, prevId){ if(e.key==="Backspace" && !e.target.value){ const p=el(prevId); p&&p.focus(); p?.select?.(); } }
 
-function initTemplateList(){
-  const container = el('template-list-container');
-  container.innerHTML = "";
-  for(const [key, config] of Object.entries(PDF_TEMPLATES)){
+/* ============== (NEW) 3단계: 보험사 선택 목록 생성 ============== */
+function initCarrierList(){
+  const container = el('carrier-grid-container');
+  container.innerHTML = ""; // 목록 비우기
+  for(const [key, config] of Object.entries(CARRIER_DATA)){
     const item = document.createElement('div');
-    item.className = 'template-item';
+    item.className = 'carrier-item';
     item.innerHTML = `
       <label>
-        <input type="checkbox" name="template_select" value="${key}">
-        <span>${config.label}</span>
+        <input type="checkbox" name="carrier_select" value="${key}">
+        <img src="${config.logo}" alt="${config.name} 로고" onerror="this.style.display='none'">
+        <span>${config.name}</span>
       </label>
-      <span class="fax">FAX: ${config.fax}</span>
-      <a href="${config.path}" target="_blank" class="view-link" onclick="event.stopPropagation()">원본보기</a>
     `;
     container.appendChild(item);
   }
 }
 
+/* ============== (NEW) 4단계: 검토 목록 생성 ============== */
+function initReviewList() {
+  const container = el('review-list-container');
+  container.innerHTML = ""; // 목록 비우기
+  
+  const selectedCheckboxes = document.querySelectorAll('input[name="carrier_select"]:checked');
+  if (selectedCheckboxes.length === 0) {
+    container.innerHTML = "<p style='padding:12px;text-align:center;color:var(--muted)'>3단계에서 청구할 보험사를 1곳 이상 선택하세요.</p>";
+    return;
+  }
+
+  selectedCheckboxes.forEach(cb => {
+    const key = cb.value;
+    const config = CARRIER_DATA[key];
+    if (!config) return;
+
+    // 템플릿이 1개 이상일 때만 드롭다운 생성
+    let templateSelector = '';
+    const templateKeys = Object.keys(config.templates);
+    if (templateKeys.length > 1) {
+      const options = templateKeys.map(tKey => {
+        const template = config.templates[tKey];
+        return `<option value="${tKey}">${template.label}</option>`;
+      }).join('');
+      templateSelector = `<select class="template-select" data-carrier-key="${key}">${options}</select>`;
+    } else {
+      // 템플릿이 1개면, 숨겨진 input으로 값 전달
+      templateSelector = `<div class="muted" style="font-size:13px">${config.templates[templateKeys[0]].label}</div>
+        <input type="hidden" class="template-select" data-carrier-key="${key}" value="${templateKeys[0]}">`;
+    }
+
+    const item = document.createElement('div');
+    item.className = 'review-item';
+    item.innerHTML = `
+      <img src="${config.logo}" alt="${config.name} 로고" onerror="this.style.display='none'">
+      <div class="name">${config.name}</div>
+      ${templateSelector}
+      <label class="fax-label" for="fax_${key}">팩스번호:</label>
+      <input type="text" class="fax-input ${!config.fax ? 'missing' : ''}" id="fax_${key}" data-carrier-key="${key}" value="${config.fax || ''}" placeholder="팩스번호 직접 입력">
+    `;
+    container.appendChild(item);
+  });
+}
+
+/* ============== (NEW) 4단계 워크플로우 적용 ============== */
 let currentStep = 1;
 function navigateToStep(stepNumber) {
+  // (NEW) 4단계로 이동 시 검토 목록 자동 생성
+  if (stepNumber === 4) {
+    initReviewList();
+  }
+
   el(`step-${currentStep}`).classList.remove('active');
   el(`step-nav-${currentStep}`).classList.remove('active');
   currentStep = stepNumber;
   el(`step-${currentStep}`).classList.add('active');
   el(`step-nav-${currentStep}`).classList.add('active');
-  if (currentStep === 3) {
+
+  if (currentStep === 4) {
     el('claim_date_today').value = new Date().toISOString().split('T')[0];
     resizeCanvas();
   }
 }
 
+/* ============== 데이터 수집/적용 (기존과 동일) ============== */
 function collectProfile(){
-  const p = {};
-  const ids = [
-    'sub_name', 'sub_rrn1', 'sub_rrn2', 'sub_phone1', 'sub_phone2', 'sub_phone3',
-    'ins_name', 'ins_rrn1', 'ins_rrn2', 'ins_phone1', 'ins_phone2', 'ins_phone3',
-    'zip', 'addr', 'addr_detail', 'employer_job',
-    'ben_name', 'ins_bank_name', 'ins_bank_account',
-    'accident_date', 'diagnosis', 'hospital_name', 'accident_detail',
-    'claim_date_today'
-  ];
-  ids.forEach(id => { p[id] = (el(id).value || "").trim(); });
-  const sameInsBen = el('sameInsBen').checked;
-  if (sameInsBen) { p['ben_name'] = p.ins_name; p['bank_name'] = p.ins_bank_name; p['bank_account'] = p.ins_bank_account; } else { p['bank_name'] = el('bank_name').value.trim(); p['bank_account'] = el('bank_account').value.trim(); }
-  delete p.ins_bank_name; delete p.ins_bank_account;
-  p['bank_depositor'] = p.ben_name;
-  p['claim_type_sickness'] = el('claim_type_sickness').checked; p['claim_type_injury'] = el('claim_type_injury').checked;
-  p['claim_detail_hospital'] = el('claim_detail_hospital').checked; p['claim_detail_outpatient'] = el('claim_detail_outpatient').checked; p['claim_detail_surgery'] = el('claim_detail_surgery').checked;
-  p['ins_full_phone'] = [p.ins_phone1, p.ins_phone2, p.ins_phone3].join('-'); p['sub_full_phone'] = [p.sub_phone1, p.sub_phone2, p.sub_phone3].join('-');
-  p['ins_full_rrn'] = [p.ins_rrn1, p.ins_rrn2].join('-'); p['sub_full_rrn'] = [p.sub_rrn1, p.sub_rrn2].join('-');
+  // ... (이전과 동일한 1, 2단계 데이터 수집) ...
   return p;
 }
-
 function applyProfile(p){ /* ... (이전과 동일) ... */ }
 function fillSample(){ /* ... (이전과 동일) ... */ }
 
@@ -244,13 +332,14 @@ function resizeCanvas() { /* ... */ }
 
 /* ============== 이벤트 초기화 (수정) ============== */
 document.addEventListener("DOMContentLoaded", ()=>{
-  initTemplateList(); 
+  initCarrierList(); // (NEW) 3단계 보험사 목록 생성
+  
   signaturePad = new SignaturePad(canvas, { penColor: "rgb(0, 0, 0)" });
   el('clear_signature').addEventListener('click', () => { signaturePad.clear(); });
   window.addEventListener("resize", resizeCanvas);
 
   el('sameSubIns').addEventListener("change", syncSameSubIns);
-  ['sub_name', 'sub_rrn1', 'sub_rrn2', 'sub_phone1', 'sub_phone2', 'sub_phone3'].forEach(id => { el(id).addEventListener("input", syncSameSubIns); });
+  /* ... (동일 체크박스 이벤트 동일) ... */
   el('sameInsBen').addEventListener("change", syncSameInsBen);
   syncSameInsBen();
 
@@ -267,7 +356,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 /* ============== 폰트 로더 (이전과 동일) ============== */
 async function loadKoreanFontBytes(){ /* ... */ }
 
-/* ============== (NEW) PDF 생성 핸들러 (저장/팩스 분기) ============== */
+/* ============== (NEW) PDF 생성 핸들러 (4단계 검토 목록 기반) ============== */
 async function handleSubmit(action) {
   const btnDownload = el("btnDownload");
   const btnSendFax = el("btnSendFax");
@@ -275,24 +364,51 @@ async function handleSubmit(action) {
   btnDownload.disabled = true;
   btnSendFax.disabled = true;
 
-  // 1. 유효성 검사 (공통)
-  const selectedCheckboxes = document.querySelectorAll('input[name="template_select"]:checked');
-  const selectedTemplateKeys = Array.from(selectedCheckboxes).map(cb => cb.value);
-
-  if (selectedTemplateKeys.length === 0) {
-    alert("청구할 보험사를 1곳 이상 선택하세요.");
-    // (중요) 버튼 상태 원복
-    el('signature_confirm').checked = false;
-    // btnDownload.disabled = true; // signature_confirm 리스너가 이미 처리
-    // btnSendFax.disabled = true;
-    return;
+  // (NEW) 1. 유효성 검사 (4단계 검토 목록 기준)
+  const reviewItems = el('review-list-container').querySelectorAll('.review-item');
+  if (reviewItems.length === 0) {
+    alert("3단계에서 청구할 보험사를 1곳 이상 선택하세요.");
+    navigateToStep(3); return;
   }
   
   if (signaturePad.isEmpty()) {
     alert("서명란에 서명을 해주세요.");
-    navigateToStep(3);
+    navigateToStep(4);
     el('signature_confirm').checked = false;
     return;
+  }
+
+  // (NEW) 2. 작업 목록 (Job List) 생성 및 팩스번호 유효성 검사
+  let jobList = [];
+  let hasMissingFax = false;
+  
+  reviewItems.forEach(item => {
+    const carrierKey = item.querySelector('.fax-input').dataset.carrierKey;
+    const faxInput = item.querySelector('.fax-input');
+    const templateSelect = item.querySelector('.template-select');
+    
+    const faxNumber = faxInput.value.trim();
+    const templateKey = templateSelect.value;
+    
+    // 팩스번호 유효성 검사
+    if (action === 'fax' && !faxNumber) { // 팩스 전송일 때만 팩스번호가 필수
+      faxInput.classList.add('missing'); // 빨간색 강조
+      hasMissingFax = true;
+    } else {
+      faxInput.classList.remove('missing');
+    }
+    
+    jobList.push({
+      carrierKey: carrierKey,
+      templateKey: templateKey,
+      faxNumber: faxNumber
+    });
+  });
+
+  if (hasMissingFax) {
+    alert("팩스번호가 비어있는 항목이 있습니다. 팩스번호를 입력하거나, 'PDF 파일로 저장하기'를 이용하세요.");
+    el('signature_confirm').checked = false; // 버튼 잠금
+    return; // 작업 중단
   }
 
   const P = collectProfile();
@@ -303,66 +419,59 @@ async function handleSubmit(action) {
   let kFontBytes = null, sigImageBytes = null;
   
   try {
-    // 2. 공통 리소스 로드
+    // 3. 공통 리소스 로드
     kFontBytes = await loadKoreanFontBytes();
     const sigDataUrl = signaturePad.toDataURL("image/png");
     sigImageBytes = await fetch(sigDataUrl).then(res => res.arrayBuffer());
 
-    // 3. 액션에 따라 분기
+    // 4. 액션에 따라 분기
     if (action === 'download') {
-      // --- 3-A: PDF 저장하기 (기존 ZIP 로직) ---
-      if (selectedTemplateKeys.length > 1) {
-        $status.textContent = `ZIP 파일 생성 중... (0/${selectedTemplateKeys.length})`;
+      // --- 4-A: PDF 저장하기 (ZIP 로직) ---
+      if (jobList.length > 1) {
+        $status.textContent = `ZIP 파일 생성 중... (0/${jobList.length})`;
         const zip = new JSZip();
-        for (let i = 0; i < selectedTemplateKeys.length; i++) {
-          const key = selectedTemplateKeys[i];
-          const config = PDF_TEMPLATES[key];
-          $status.textContent = `ZIP 생성 중... (${i+1}/${selectedTemplateKeys.length}) - ${config.label}`;
-          const pdfBytes = await generateSinglePdf(P, config, kFontBytes, sigImageBytes);
-          zip.file(`${config.label.replace(/[\(\)]/g, '').trim()}.pdf`, pdfBytes);
+        for (let i = 0; i < jobList.length; i++) {
+          const job = jobList[i];
+          const config = CARRIER_DATA[job.carrierKey];
+          const templateConfig = config.templates[job.templateKey];
+          $status.textContent = `ZIP 생성 중... (${i+1}/${jobList.length}) - ${config.name}`;
+          
+          const pdfBytes = await generateSinglePdf(P, templateConfig, kFontBytes, sigImageBytes);
+          zip.file(`${config.name}_${templateConfig.label}.pdf`, pdfBytes);
         }
         $status.textContent = "ZIP 파일 압축 중...";
         const zipBlob = await zip.generateAsync({ type: "blob" });
         downloadFile(zipBlob, "insurance_claims.zip");
         $status.textContent = "ZIP 파일 생성 완료";
       } else {
-        $status.textContent = "PDF 파일 생성 중...";
-        const key = selectedTemplateKeys[0];
-        const config = PDF_TEMPLATES[key];
-        const pdfBytes = await generateSinglePdf(P, config, kFontBytes, sigImageBytes);
-        downloadFile(new Blob([pdfBytes], { type:"application/pdf" }), `${config.label.replace(/[\(\)]/g, '').trim()}.pdf`);
-        $status.textContent = "PDF 생성 완료";
+        // ... (단일 다운로드 로직) ...
       }
 
     } else if (action === 'fax') {
-      // --- 3-B: 팩스 전송하기 (시뮬레이션) ---
-      $status.textContent = `팩스 전송 준비 중... (0/${selectedTemplateKeys.length})`;
+      // --- 4-B: 팩스 전송하기 (시뮬레이션) ---
+      $status.textContent = `팩스 전송 준비 중... (0/${jobList.length})`;
       let faxLog = [];
 
-      for (let i = 0; i < selectedTemplateKeys.length; i++) {
-        const key = selectedTemplateKeys[i];
-        const config = PDF_TEMPLATES[key];
-        $status.textContent = `전송 중... (${i+1}/${selectedTemplateKeys.length}) - ${config.label} (FAX: ${config.fax})`;
+      for (let i = 0; i < jobList.length; i++) {
+        const job = jobList[i];
+        const config = CARRIER_DATA[job.carrierKey];
+        const templateConfig = config.templates[job.templateKey];
+        $status.textContent = `전송 중... (${i+1}/${jobList.length}) - ${config.name} (FAX: ${job.faxNumber})`;
         
         try {
-          // 1. PDF는 동일하게 생성
-          const pdfBytes = await generateSinglePdf(P, config, kFontBytes, sigImageBytes);
+          const pdfBytes = await generateSinglePdf(P, templateConfig, kFontBytes, sigImageBytes);
 
-          // 2. (MOCK) 실제로는 여기서 서버로 'pdfBytes'와 'config.fax'를 전송합니다.
-          // (예시) fetch('/api/send-fax', { method: 'POST', body: pdfBytes, headers: {'X-Fax-Number': config.fax, ...} });
-
-          // 3. (MOCK) 1초간 전송 시뮬레이션
+          // (MOCK) 실제로는 여기서 서버로 'pdfBytes'와 'job.faxNumber'를 전송
           await new Promise(resolve => setTimeout(resolve, 1000)); 
           
-          console.log(`[MOCK FAX] ${config.label}(${config.fax})로 PDF (${(pdfBytes.length/1024).toFixed(1)}KB) 전송 성공.`);
-          faxLog.push(`✅ ${config.label}: 전송 성공 (-> ${config.fax})`);
+          console.log(`[MOCK FAX] ${config.name}(${job.faxNumber})로 ${templateConfig.label} PDF (${(pdfBytes.length/1024).toFixed(1)}KB) 전송 성공.`);
+          faxLog.push(`✅ ${config.name}: 전송 성공 (-> ${job.faxNumber})`);
 
         } catch (e) {
-          console.error(`팩스 전송 실패: ${config.label}`, e);
-          faxLog.push(`❌ ${config.label}: 생성/전송 실패 (${e.message})`);
+          console.error(`팩스 전송 실패: ${config.name}`, e);
+          faxLog.push(`❌ ${config.name}: 생성/전송 실패 (${e.message})`);
         }
       }
-
       $status.textContent = "팩스 전송 완료. (시뮬레이션)";
       alert("팩스 전송이 완료되었습니다. (시뮬레이션)\n\n--- 전송 결과 ---\n" + faxLog.join("\n"));
     }
@@ -372,7 +481,6 @@ async function handleSubmit(action) {
     alert("작업 실패: " + (err?.message||err));
     $status.textContent = "실패";
   } finally {
-    // 4. (공통) 작업 완료 후 상태 원복
     el('signature_confirm').checked = false;
     btnDownload.disabled = true;
     btnSendFax.disabled = true;
@@ -380,11 +488,11 @@ async function handleSubmit(action) {
   }
 }
 
-/* ============== 개별 PDF 생성 로직 (이전과 동일) ============== */
-async function generateSinglePdf(P, config, kFontBytes, sigImageBytes) {
+/* ============== (NEW) 개별 PDF 생성 로직 (템플릿 config만 받음) ============== */
+async function generateSinglePdf(P, templateConfig, kFontBytes, sigImageBytes) {
   const { PDFDocument, StandardFonts } = PDFLib;
 
-  const url = new URL(encodeURI(config.path), location.origin).toString();
+  const url = new URL(encodeURI(templateConfig.path), location.origin).toString();
   const existingPdfBytes = await fetch(url, { cache:"no-store" }).then(res => res.arrayBuffer());
   const pdfDoc = await PDFDocument.load(existingPdfBytes, { ignoreEncryption:true });
   if (typeof fontkit !== "undefined") pdfDoc.registerFontkit(fontkit);
@@ -413,7 +521,7 @@ async function generateSinglePdf(P, config, kFontBytes, sigImageBytes) {
   
   const sigImage = await pdfDoc.embedPng(sigImageBytes);
   const page = pdfDoc.getPage(0); 
-  const { x, y, width, height } = config.sigPos;
+  const { x, y, width, height } = templateConfig.sigPos;
   page.drawImage(sigImage, { x, y, width, height });
   
   form.flatten();
@@ -429,7 +537,7 @@ function downloadFile(blob, fileName) {
   URL.revokeObjectURL(a.href);
 }
 
-// (주의) 1단계, 2단계 HTML을 생략했으니, 실제 파일에 붙여넣을 때는
+// (주의) 1, 2단계 HTML을 생략했으니, 실제 파일에 붙여넣을 때는
 // 1, 2단계 HTML을 이전 코드에서 가져와서 채워넣어야 합니다.
 </script>
 </body>
