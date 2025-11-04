@@ -1,81 +1,104 @@
-/* ===== 1. 아코디언 형태로 변환 (핵심) ===== */
-/* 데스크탑의 표(grid) 레이아웃을 완전히 무시하고 
-  모바일에서는 세로로 쌓이도록 변경합니다. 
-*/
+/* ===== 1. 데스크탑 '표' 레이아웃 덮어쓰기 ===== */
 .table {
     background: none;
     border: none;
     border-radius: 0;
 }
 
+/* .row를 grid가 아닌 block으로 변경 (세로 쌓기) 
+   hotfix의 grid를 덮어쓰기 위해 !important 사용
+*/
 .row {
-    display: block; /* grid를 해제하고 세로로 쌓음 */
+    display: block !important; 
+    grid-template-columns: none !important; /* grid 설정 초기화 */
+    padding: 0 !important; /* 내부 패딩 제거 */
     border-radius: 8px;
     background: #fff;
     border: 1px solid #e2e8f0;
     margin-bottom: 12px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    overflow: hidden; /* 애니메이션을 위해 */
 }
 
-/* 데스크탑에서는 .row의 자식들이 가로로 나열되었지만(grid)
-  모바일에서는 모두 숨기고, 헤더(.carrier-name)만 보이게 합니다.
-*/
-.row > * {
-    display: none; /* 일단 모든 자식 요소를 숨김 */
-    padding: 10px 15px;
-    border-top: 1px dashed #eee;
+.row > div {
+    display: block;
 }
 
-/* ===== 2. 아코디언 헤더 (클릭 영역) ===== */
-/* 보험사 이름(.carrier-name) 부분만 보이게 하고
-  클릭할 수 있는 버튼처럼 만듭니다.
-*/
-.carrier-name {
-    display: flex !important; /* 숨김 해제 */
+/* ===== 2. 아코디언 헤더 (첫 번째 <div>) ===== */
+.row > div:first-child {
+    padding: 18px 15px;
+    cursor: pointer;
+    display: flex !important; /* 로고와 + 아이콘 정렬 */
     justify-content: space-between;
     align-items: center;
-    padding: 18px 15px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    border: none !important; /* 구분선 제거 */
+}
+
+/* 헤더 안의 <a> 태그가 레이아웃을 방해하지 않도록 */
+.row > div:first-child a {
+    display: contents; 
 }
 
 /* 헤더에 + 아이콘 추가 */
-.carrier-name::after {
+.row > div:first-child::after {
     content: '+';
     font-size: 1.5rem;
     font-weight: 300;
-    color: #007bff;
+    color: #007bff; /* 아이콘 색상 */
     transition: transform 0.2s ease;
 }
 
-/* ===== 3. 활성화 상태 (JS로 제어) ===== */
-/* JS를 통해 .row에 'active' 클래스가 추가되면
-  숨겨둔 링크(.links-wrapper)를 보여주고 + 아이콘을 x로 바꿉니다.
-*/
-.row.active .links-wrapper {
-    display: block !important; /* 숨김 해제 */
+/* ===== 3. 아코디언 콘텐츠 (두 번째 <div>, .stack) ===== */
+/* .stack (버튼 묶음)을 평소에 숨김 */
+.row .stack {
+    display: none; 
+    padding: 15px;
+    border-top: 1px dashed #eee;
+    background-color: #fcfdff; 
 }
 
-.row.active .carrier-name::after {
-    transform: rotate(45deg); /* + 아이콘을 x로 변경 */
+/* .stack 내부의 버튼들을 세로로 정렬 */
+.row .stack .grid-top,
+.row .stack .grid-bottom {
+    display: flex;
+    flex-direction: column; /* 세로로 쌓기 */
+    gap: 8px;
+    align-items: stretch; /* 버튼을 꽉 채움 */
 }
 
-/* 모바일에서는 링크들을 세로로 나열 */
-.links-wrapper {
-    display: block; /* 이 부분은 실제 구조에 따라 다를 수 있음 */
+.row .stack .grid-bottom {
+    margin-top: 8px;
 }
 
-.links-wrapper .action-btn {
+/* 모든 버튼을 꽉 찬 블록 버튼으로 */
+.row .stack .btn {
     display: block;
     width: 100%;
-    text-align: left;
-    margin-bottom: 8px;
-    padding: 10px 12px;
+    text-align: center;
 }
 
-/* 데스크탑에서만 보이던 일부 요소 숨김 (필요시) */
-.table-header {
+/* 전화 버튼은 왼쪽 정렬 */
+.row .stack .btn-call {
+    text-align: left;
+    justify-content: flex-start;
+}
+.row .stack .btn-call.center {
+    justify-content: center; /* 고객센터/인콜은 다시 중앙 정렬 */
+}
+
+
+/* ===== 4. 활성화 상태 (JS가 .row.active를 추가) ===== */
+/* .active가 되면 .stack을 보여줌 */
+.row.active .stack {
+    display: block;
+}
+
+/* + 아이콘을 x로 변경 */
+.row.active > div:first-child::after {
+    transform: rotate(45deg);
+}
+
+/* ===== 5. 모바일에서 불필요한 요소 숨기기 ===== */
+.section-head .section-sub,
+#loss-count, #life-count {
     display: none;
 }
