@@ -1,950 +1,1027 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="manifest" href="/manifest.webmanifest?v=2">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="manifest" href="/manifest.webmanifest?v=2">
 
-  <title>청구닷컴 | 보험금 청구 링크 허브</title>
-  <meta name="description" content="전산 접속 · 필요서류 · 보험금 청구서 PDF · 치과치료확인서 · 고객센터 · 인콜 모니터링 · 보험금청구 FAX " />
-  <meta name="format-detection" content="telephone=no" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="청구닷컴" />
-  <meta property="og:title" content="청구닷컴 | 보험금 청구 링크 허브" />
-  <meta property="og:description" content="전산 접속 · 필요서류 · 보험금 청구서 PDF · 치과치료확인서 · 고객센터 · 인콜 모니터링 · 보험금청구 FAX" />
-  <meta property="og:url" content="https://청구.com/" />
-  <meta property="og:image" content="https://청구.com/assets/og-image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <title>청구닷컴 | 보험금 청구 링크 허브</title>
+  <meta name="description" content="전산 접속 · 필요서류 · 보험금 청구서 PDF · 치과치료확인서 · 고객센터 · 인콜 모니터링 · 보험금청구 FAX " />
+  <meta name="format-detection" content="telephone=no" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="청구닷컴" />
+  <meta property="og:title" content="청구닷컴 | 보험금 청구 링크 허브" />
+  <meta property="og:description" content="전산 접속 · 필요서류 · 보험금 청구서 PDF · 치과치료확인서 · 고객센터 · 인콜 모니터링 · 보험금청구 FAX" />
+  <meta property="og:url" content="https://청구.com/" />
+  <meta property="og:image" content="https://청구.com/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
 
-  <!-- Pretendard -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
 
-  <!-- Tailwind(@apply) 빌드 CSS -->
-  <link rel="stylesheet" href="/assets/site.css?v=final-compact-15" />
-  <link rel="stylesheet" href="/assets/mobile.css?v=11" media="(max-width: 767px)">
+    <link rel="stylesheet" href="/assets/site.css?v=final-compact-15" />
+  <link rel="stylesheet" href="/assets/mobile.css?v=11" media="(max-width: 767px)">
 <script>
 (function(){
-  if (location.search.indexOf('mobile=1') !== -1) {
-    // 모바일 전용 CSS 강제 로드
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = '/assets/mobile.css?v=1';
-    document.head.appendChild(link);
-    // 데스크톱에서도 모바일 폭으로 고정 미리보기
-    var meta = document.querySelector('meta[name="viewport"]');
-    if (meta) meta.setAttribute('content','width=390, initial-scale=1');
-  }
+  if (location.search.indexOf('mobile=1') !== -1) {
+    // 모바일 전용 CSS 강제 로드
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/assets/mobile.css?v=1';
+    document.head.appendChild(link);
+    // 데스크톱에서도 모바일 폭으로 고정 미리보기
+    var meta = document.querySelector('meta[name="viewport"]');
+    if (meta) meta.setAttribute('content','width=390, initial-scale=1');
+  }
 })();
 </script>
 <style id="hotfix">
-  /* ===== 기본 ===== */
-  body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  /* ===== 기본 ===== */
+  body{background:#f8fafc;font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
 
-  /* ===== 히어로 검색 중앙 + 내부 버튼 ===== */
-  .hero-search{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:16px}
-  .search-card{width:100%;max-width:640px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px}
-  .search-title{font-size:13px;font-weight:700;margin-bottom:6px}
+  /* ===== 히어로 검색 중앙 + 내부 버튼 ===== */
+  .hero-search{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:16px}
+  .search-card{width:100%;max-width:640px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px}
+  .search-title{font-size:13px;font-weight:700;margin-bottom:6px}
 
-  /* 검색 카드 안의 작은 버튼 */
-  .search-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
-  .mini-btn{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:8px 12px;border-radius:999px;border:1px solid transparent;
-    font-size:13px;font-weight:800;letter-spacing:.01em;line-height:1;text-decoration:none;
-    box-shadow:0 4px 10px rgba(2,6,23,.06);
-    transition:transform .15s ease, filter .15s ease, box-shadow .15s ease;
-    color:#fff;
-  }
-  .mini-btn:hover{transform:translateY(-1px);filter:brightness(.98);box-shadow:0 8px 18px rgba(2,6,23,.10)}
-  .mini-purple{background:linear-gradient(135deg,#a855f7,#7c3aed)}
-  .mini-cyan{background:linear-gradient(135deg,#06b6d4,#0ea5e9)}
-  .mini-amber{background:linear-gradient(135deg,#f59e0b,#f97316)}
-  .mini-slate{background:linear-gradient(135deg,#64748b,#475569)}
+  /* 검색 카드 안의 작은 버튼 */
+  .search-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
+  .mini-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 12px;border-radius:999px;border:1px solid transparent;
+    font-size:13px;font-weight:800;letter-spacing:.01em;line-height:1;text-decoration:none;
+    box-shadow:0 4px 10px rgba(2,6,23,.06);
+    transition:transform .15s ease, filter .15s ease, box-shadow .15s ease;
+    color:#fff;
+  }
+  .mini-btn:hover{transform:translateY(-1px);filter:brightness(.98);box-shadow:0 8px 18px rgba(2,6,23,.10)}
+  .mini-purple{background:linear-gradient(135deg,#a855f7,#7c3aed)}
+  .mini-cyan{background:linear-gradient(135deg,#06b6d4,#0ea5e9)}
+  .mini-amber{background:linear-gradient(135deg,#f59e0b,#f97316)}
+  .mini-slate{background:linear-gradient(135deg,#64748b,#475569)}
 
-  /* 표(2단 버튼 + 콤팩트 행) */
-  .table{
-    background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;width:100%;
-    max-width:1200px;margin:0 auto;container-type:inline-size;container-name:carrierlist;
-  }
-  .row{
-    display:grid;grid-template-columns:minmax(200px,1fr) minmax(520px,2fr);
-    align-items:center;gap:4px;padding:4px 6px;border-top:1px solid rgba(100,116,139,.22);min-height:46px;
-  }
-  .row:first-child{border-top-width:0}
-  @media (min-width:1600px){ .table{ max-width:1280px; } }
+  /* 표(2단 버튼 + 콤팩트 행) */
+  .table{
+    background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;width:100%;
+    max-width:1200px;margin:0 auto;container-type:inline-size;container-name:carrierlist;
+  }
+  .row{
+    display:grid;grid-template-columns:minmax(200px,1fr) minmax(520px,2fr);
+    align-items:center;gap:4px;padding:4px 6px;border-top:1px solid rgba(100,116,139,.22);min-height:46px;
+  }
+  .row:first-child{border-top-width:0}
+  @media (min-width:1600px){ .table{ max-width:1280px; } }
 
-  /* 로고 */
-  .brand{ display:flex; align-items:center; gap:8px; min-height:30px; }
-  .logo{ display:block !important; height:auto !important; max-height:30px !important; width:auto !important; object-fit:contain !important; background:transparent !important; border:0 !important; padding:0 !important; box-shadow:none !important; }
-  @media (min-width:1280px){ .logo{ max-height:32px !important; } }
+  /* 로고 */
+  .brand{ display:flex; align-items:center; gap:8px; min-height:30px; }
+  .logo{ display:block !important; height:auto !important; max-height:30px !important; width:auto !important; object-fit:contain !important; background:transparent !important; border:0 !important; padding:0 !important; box-shadow:none !important; }
+  @media (min-width:1280px){ .logo{ max-height:32px !important; } }
 
-  .name{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;overflow:hidden !important;clip:rect(1px,1px,1px,1px) !important;white-space:nowrap !important}
+  .name{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;overflow:hidden !important;clip:rect(1px,1px,1px,1px) !important;white-space:nowrap !important}
 
-  .btn{min-height:24px;padding:3px 6px;font-size:10.5px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none;white-space:nowrap}
-  .btn:hover{background:#f1f5f9}
-  .btn-muted{opacity:.55;cursor:not-allowed}
-  .btn-ghost{border-color:#e2e8f0;background:#fff}
-  .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
-  .btn-primary:hover{background:#6d28d9}
-  .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:3px 8px}
-  .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:3px 8px}
-  .btn-call{border-color:#cbd5e1;background:#fff;display:inline-flex;align-items:center}
-  .btn-call .num{font-weight:800;margin-left:6px}
+  .btn{min-height:24px;padding:3px 6px;font-size:10.5px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none;white-space:nowrap}
+  .btn:hover{background:#f1f5f9}
+  .btn-muted{opacity:.55;cursor:not-allowed}
+  .btn-ghost{border-color:#e2e8f0;background:#fff}
+  .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
+  .btn-primary:hover{background:#6d28d9}
+  .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:3px 8px}
+  .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:3px 8px}
+  .btn-call{border-color:#cbd5e1;background:#fff;display:inline-flex;align-items:center}
+  .btn-call .num{font-weight:800;margin-left:6px}
 
-  .row .stack{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-  .row .grid-top,.row .grid-bottom{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .row .stack{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+  .row .grid-top,.row .grid-bottom{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 
-  @container carrierlist (min-width:1100px){
-    .row{ grid-template-columns:220px 1fr; min-height:46px; }
-    .row .stack{ flex-direction:row !important; align-items:center; justify-content:flex-end; gap:6px; flex-wrap:wrap; }
-    .row .grid-top,.row .grid-bottom{ display:contents !important; }
-    .logo{ max-height:32px !important; }
-  }
-  .table.cw-wide .row{ grid-template-columns:220px 1fr; min-height:46px; }
-  .table.cw-wide .row .stack{ flex-direction:row !important; align-items:center; justify-content:flex-end; gap:6px; flex-wrap:wrap; }
-  .table.cw-wide .row .grid-top,.table.cw-wide .row .grid-bottom{ display:contents !important; }
-  .table.cw-wide .logo{ max-height:32px !important; }
+  @container carrierlist (min-width:1100px){
+    .row{ grid-template-columns:220px 1fr; min-height:46px; }
+    .row .stack{ flex-direction:row !important; align-items:center; justify-content:flex-end; gap:6px; flex-wrap:wrap; }
+    .row .grid-top,.row .grid-bottom{ display:contents !important; }
+    .logo{ max-height:32px !important; }
+  }
+  .table.cw-wide .row{ grid-template-columns:220px 1fr; min-height:46px; }
+  .table.cw-wide .row .stack{ flex-direction:row !important; align-items:center; justify-content:flex-end; gap:6px; flex-wrap:wrap; }
+  .table.cw-wide .row .grid-top,.table.cw-wide .row .grid-bottom{ display:contents !important; }
+  .table.cw-wide .logo{ max-height:32px !important; }
 
-  .chip{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
+  .chip{font-size:11px;padding:2px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
 
-  .section-title{font-size:28px;font-weight:900;letter-spacing:-.01em}
-  .section-sub{font-size:12.5px;color:#475569}
-  .section-head{display:flex;flex-direction:column;align-items:center;gap:6px;margin:28px 0 12px}
+  .section-title{font-size:28px;font-weight:900;letter-spacing:-.01em}
+  .section-sub{font-size:12.5px;color:#475569}
+  .section-head{display:flex;flex-direction:column;align-items:center;gap:6px;margin:28px 0 12px}
 
-  /* ===== 계산 패널 공통(2열) ===== */
-  #calc-grid{display:grid !important;grid-template-columns:repeat(auto-fit,minmax(360px,1fr)) !important;gap:24px !important;align-items:start !important}
-  @media (min-width:1024px){
-    #calc-grid{position:relative}
-    #calc-grid::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;transform:translateX(-.5px);background:linear-gradient(180deg,rgba(148,163,184,0),rgba(148,163,184,.35),rgba(148,163,184,0))}
-  }
-  .panel{display:flex;flex-direction:column}
-  .panel-card{flex:1}
-  .panel .section-head{margin-top:0 !important;margin-bottom:8px !important}
+  /* ===== 계산 패널 공통(2열) ===== */
+  #calc-grid{display:grid !important;grid-template-columns:repeat(auto-fit,minmax(360px,1fr)) !important;gap:24px !important;align-items:start !important}
+  @media (min-width:1024px){
+    #calc-grid{position:relative}
+    #calc-grid::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;transform:translateX(-.5px);background:linear-gradient(180deg,rgba(148,163,184,0),rgba(148,163,184,.35),rgba(148,163,184,0))}
+  }
+  .panel{display:flex;flex-direction:column}
+  .panel-card{flex:1}
+  .panel .section-head{margin-top:0 !important;margin-bottom:8px !important}
 
-  /* ===== 보험나이 계산기 ===== */
-  #age .calc-card{border:1px solid #c7b7ff;border-radius:12px;background:#fff}
-  #age .display-num{font-size:28px;font-weight:900}
-  #age .card{border:1px solid #e2e8f0;border-radius:10px;padding:10px;background:#fff}
-  #age-form{display:block}
-  #age-form .dob-wrap{display:flex;gap:8px;align-items:center;margin-top:6px;justify-content:center}
-  #age-form input{height:38px;border-radius:10px;padding:0 12px;text-align:center;border:1px solid #cbd5e1;font-size:14px}
-  #dobY{width:120px} #dobM,#dobD{width:72px}
-  #age-form .age-actions{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:10px}
-  #age-form .key{min-width:104px;height:38px;line-height:38px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;text-align:center}
-  #age-form .key-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
-  #age-form .key-primary:hover{background:#6d28d9}
+  /* ===== 보험나이 계산기 ===== */
+  #age .calc-card{border:1px solid #c7b7ff;border-radius:12px;background:#fff}
+  #age .display-num{font-size:28px;font-weight:900}
+  #age .card{border:1px solid #e2e8f0;border-radius:10px;padding:10px;background:#fff}
+  #age-form{display:block}
+  #age-form .dob-wrap{display:flex;gap:8px;align-items:center;margin-top:6px;justify-content:center}
+  #age-form input{height:38px;border-radius:10px;padding:0 12px;text-align:center;border:1px solid #cbd5e1;font-size:14px}
+  #dobY{width:120px} #dobM,#dobD{width:72px}
+  #age-form .age-actions{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:10px}
+  #age-form .key{min-width:104px;height:38px;line-height:38px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;text-align:center}
+  #age-form .key-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
+  #age-form .key-primary:hover{background:#6d28d9}
 
-  /* ===== 실손 계산기 ===== */
-  .gbtn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;padding:8px 14px;font-weight:700;box-shadow:0 6px 14px rgba(15,23,42,.06);color:#fff;font-size:13px}
-  .gbtn-calc{background:linear-gradient(90deg,#0ea5e9,#2563eb)}
-  .gbtn-reset{background:linear-gradient(90deg,#10b981,#0d9488)}
-  .gbtn-ghost{background:linear-gradient(90deg,#e2e7eb,#f1f5f9);color:#0f172a}
+  /* ===== 실손 계산기 ===== */
+  .gbtn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;padding:8px 14px;font-weight:700;box-shadow:0 6px 14px rgba(15,23,42,.06);color:#fff;font-size:13px}
+  .gbtn-calc{background:linear-gradient(90deg,#0ea5e9,#2563eb)}
+  .gbtn-reset{background:linear-gradient(90deg,#10b981,#0d9488)}
+  .gbtn-ghost{background:linear-gradient(90deg,#e2e7eb,#f1f5f9);color:#0f172a}
 
-  #medcalc .mc-card{border:1px solid #e2e8f0;background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%);border-radius:12px;padding:14px}
-  .pill{display:inline-flex;align-items:center;border-radius:999px;padding:3px 9px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fff}
-  .pill-indigo{background:#4f46e5}
-  .pill-emerald{background:#059669}
+  #medcalc .mc-card{border:1px solid #e2e8f0;background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%);border-radius:12px;padding:14px}
+  .pill{display:inline-flex;align-items:center;border-radius:999px;padding:3px 9px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fff}
+  .pill-indigo{background:#4f46e5}
+  .pill-emerald{background:#059669}
 
-  #medcalc .selector-row{ display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;justify-items:center; }
-  #medcalc .selector-box{ display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px; }
-  #medcalc .selector-badge{transform:translateY(1px);padding:4px 10px;font-size:11px}
-  #medcalc .selector-heading{margin:0;font-size:16px;font-weight:800;letter-spacing:-.01em}
-  #medcalc .mc-select{ width:100%;max-width:220px;height:34px;padding:6px 10px;font-size:14px;border-radius:10px;border:1px solid #cbd5e1; }
-  @media (max-width:639px){ #medcalc .selector-row{grid-template-columns:1fr;} #medcalc .mc-select{max-width:none;width:100%} }
-  #medcalc input[type="text"], #medcalc input[type="number"]{height:36px;padding:8px 10px;font-size:14px}
-  #medcalc .mc-card .grid{gap:10px}
-  #dedSummary{margin-top:6px}
-  #ruleDetails{margin-top:6px}
-  #medcalc .mt-6{margin-top:10px !important}
-  #medcalc #boxResult{padding:12px;border-radius:12px}
-  #medcalc #txtPayout{font-size:1.75rem}
+  #medcalc .selector-row{ display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;justify-items:center; }
+  #medcalc .selector-box{ display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px; }
+  #medcalc .selector-badge{transform:translateY(1px);padding:4px 10px;font-size:11px}
+  #medcalc .selector-heading{margin:0;font-size:16px;font-weight:800;letter-spacing:-.01em}
+  #medcalc .mc-select{ width:100%;max-width:220px;height:34px;padding:6px 10px;font-size:14px;border-radius:10px;border:1px solid #cbd5e1; }
+  @media (max-width:639px){ #medcalc .selector-row{grid-template-columns:1fr;} #medcalc .mc-select{max-width:none;width:100%} }
+  #medcalc input[type="text"], #medcalc input[type="number"]{height:36px;padding:8px 10px;font-size:14px}
+  #medcalc .mc-card .grid{gap:10px}
+  #dedSummary{margin-top:6px}
+  #ruleDetails{margin-top:6px}
+  #medcalc .mt-6{margin-top:10px !important}
+  #medcalc #boxResult{padding:12px;border-radius:12px}
+  #medcalc #txtPayout{font-size:1.75rem}
 
-  /* === 레이아웃 컨테이너 중앙/폭 한도 === */
-  header > .maxw, section > .maxw, main.maxw, footer > .maxw, .maxw{ max-width: 88rem; width: 100%; margin-left: auto; margin-right: auto; padding-left: 16px; padding-right: 16px; box-sizing: border-box; }
-  @media (min-width:1600px){ header > .maxw, section > .maxw, main.maxw, footer > .maxw, .maxw{ max-width: 92rem; } }
+  /* === 레이아웃 컨테이너 중앙/폭 한도 === */
+  header > .maxw, section > .maxw, main.maxw, footer > .maxw, .maxw{ max-width: 88rem; width: 100%; margin-left: auto; margin-right: auto; padding-left: 16px; padding-right: 16px; box-sizing: border-box; }
+  @media (min-width:1600px){ header > .maxw, section > .maxw, main.maxw, footer > .maxw, .maxw{ max-width: 92rem; } }
 
-  /* ===== 전화번호 버튼 정렬(숫자 폭 고정 + 줄바꿈 방지) ===== */
-  .btn-call { white-space: nowrap; }
-  .btn-call .num{
-    display: inline-block; font-variant-numeric: tabular-nums; font-feature-settings: 'tnum';
-    min-width: 12ch; text-align: left;
-  }
-  /* ✅ 고객센터/인콜 전용: 가운데 정렬 */
-  .btn-call.center{ justify-content:center; }
-  .btn-call.center .num{ text-align:center; }
+  /* ===== 전화번호 버튼 정렬(숫자 폭 고정 + 줄바꿈 방지) ===== */
+  .btn-call { white-space: nowrap; }
+  .btn-call .num{
+    display: inline-block; font-variant-numeric: tabular-nums; font-feature-settings: 'tnum';
+    min-width: 12ch; text-align: left;
+  }
+  /* ✅ 고객센터/인콜 전용: 가운데 정렬 */
+  .btn-call.center{ justify-content:center; }
+  .btn-call.center .num{ text-align:center; }
+
+
+    <style>
+    /* ===== 💡 신규 버튼 색상 추가 ===== */
+    .mini-green{background:linear-gradient(135deg,#22c55e,#16a34a)}
+    .mini-blue{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+
+    /* ===== 💡 콤팩트 모드 덮어쓰기 ===== */
+    
+    /* 1. 계산기 2열 그리드 최소 너비/간격 축소 */
+    #calc-grid {
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)) !important;
+      gap: 16px !important;
+    }
+    
+    /* 2. 보험나이 계산기 내부 간격/패딩 축소 */
+    #age .calc-card .p-3 {
+      padding: 10px; /* 기존 p-3 (12px) */
+      gap: 10px;     /* 기존 gap-3 (12px) */
+    }
+    #age-form {
+      display: block; /* 이 폼 자체의 간격은 .p-3 gap이 제어 */
+    }
+    #age-form .dob-wrap {
+      gap: 6px;      /* 기존 8px */
+      margin-top: 4px; /* 기존 6px */
+    }
+    #age-form input {
+      height: 36px;  /* 기존 38px */
+    }
+    #age-form .age-actions {
+      margin-top: 8px; /* 기존 10px */
+      gap: 8px;        /* 기존 10px */
+    }
+    #age-form .key {
+      height: 36px;      /* 기존 38px */
+      line-height: 36px; /* 기존 38px */
+      min-width: 90px;
+    }
+    #age .card {
+      padding: 8px;    /* 기존 10px */
+    }
+    
+    /* 3. 실손 계산기 내부 간격/패딩/글꼴 축소 */
+    #medcalc .mc-card {
+      padding: 12px; /* 기존 p-5 (20px) */
+    }
+    #medcalc .selector-row {
+      gap: 10px;     /* 기존 14px */
+    }
+    #medcalc .selector-heading {
+      font-size: 15px; /* 기존 16px */
+      gap: 4px;
+    }
+    #medcalc .mc-select {
+      height: 32px;    /* 기존 34px */
+      padding: 4px 8px; /* 기존 6px 10px */
+      font-size: 13.5px;
+    }
+    #dedSummary, #ruleDetails {
+      margin-top: 4px;    /* 기존 6px */
+      font-size: 11.5px; /* 기존 12px */
+    }
+    #medcalc .mt-4 {
+      margin-top: 12px; /* Tailwind 16px */
+    }
+    #medcalc input[type="text"], 
+    #medcalc input[type="number"] {
+      height: 34px;       /* 기존 36px */
+      padding: 6px 10px; /* 기존 8px 10px */
+      font-size: 13.5px;
+    }
+    /* Tailwind 클래스 덮어쓰기 (입력창) */
+    #medcalc input.px-4.py-2\.5 {
+      padding: 6px 12px !important; /* 기존 px-4 py-2.5 (16px, 10px) */
+      font-size: 14px !important;
+    }
+    #medcalc .mt-6 {
+      margin-top: 12px !important; /* 기존 10px (CSS) / 24px (Tailwind) */
+    }
+    #medcalc .gbtn {
+      padding: 7px 12px; /* 기존 8px 14px */
+      font-size: 13px; /* 기존 13px (유지) */
+    }
+    #medcalc #boxResult {
+      padding: 10px; /* 기존 12px */
+      margin-top: 14px; /* Tailwind mt-5 (20px) */
+    }
+    #medcalc #txtPayout {
+      font-size: 1.625rem; /* 기존 1.75rem */
+    }
+    #medcalc #listExplain {
+      font-size: 14px; /* 기존 15px */
+    }
+  </style>
 </style>
 
-<!-- Anti-copy START: 전역 선택(입력/폼은 허용) — 워터마크 제거됨 -->
 <style id="antiCopy">
-  body:not(.allow-select) {
-    -webkit-user-select: none; -moz-user-select: none; user-select: none;
-  }
-  input, textarea, select, [contenteditable="true"], .allow-select * {
-    -webkit-user-select: text !important; -moz-user-select: text !important; user-select: text !important;
-  }
+  body:not(.allow-select) {
+    -webkit-user-select: none; -moz-user-select: none; user-select: none;
+  }
+  input, textarea, select, [contenteditable="true"], .allow-select * {
+    -webkit-user-select: text !important; -moz-user-select: text !important; user-select: text !important;
+  }
 </style>
-<!-- Anti-copy END -->
 </head>
 
 <body class="text-slate-900 mode-compact">
-  <!-- 헤더 -->
-  <header>
-    <div class="maxw px-5 py-4 flex items-center gap-3">
-      <a class="text-xl font-extrabold no-underline" href="/">청구닷컴</a>
-      <nav class="ml-auto flex items-center gap-2">
-        <a class="btn btn-ghost" href="#loss">손해보험사</a>
-        <a class="btn btn-ghost" href="#life">생명보험사</a>
-        <a class="btn btn-ghost" href="#calc-panels">보험나이 계산기</a>
-        <a class="btn btn-ghost" href="#medcalc">실손 계산기</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- 히어로 -->
-  <section class="maxw px-5 pt-2 pb-4">
-    <h1 class="text-3xl sm:text-4xl font-black leading-tight text-center">
-      보험금 청구 링크,
-      <span style="background:linear-gradient(90deg,#d946ef,#7c3aed,#06b6d4);-webkit-background-clip:text;background-clip:text;color:transparent;">한 곳에서 바로</span>
-    </h1>
-    <p class="mt-2 text-slate-700 text-center">
-      전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · <span class="font-semibold">치과치료확인서</span> · 고객센터 · 인콜 모니터링 · 보험금청구 FAX
-    </p>
-
-    <!-- 검색(가운데) + 내부 버튼 -->
-    <div class="hero-search">
-      <div class="search-card">
-        <div class="search-title">검색</div>
-        <div class="grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
-          <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-2.5" placeholder="회사명·키워드 (예: 삼성, 고객센터, PDF)">
-          <button id="clear" class="btn btn-ghost" type="button">지우기</button>
-          <a class="btn btn-ghost" href="#loss">손해부터 보기</a>
-        </div>
-        <div class="mt-2 text-xs text-slate-600">단축키: <span class="chip">/</span> 검색 포커스, <span class="chip">Esc</span> 지우기</div>
-
-        <!-- ✅ 검색 카드 안 버튼 묶음 -->
-        <div class="search-actions">
-          <a href="#age" class="mini-btn mini-purple" title="보험나이 계산기로 이동">보험나이 계산기</a>
-          <a href="#medcalc" class="mini-btn mini-cyan" title="실손의료비 계산기로 이동">실손의료비 계산기</a>
-          <button class="mini-btn mini-amber" type="button" onclick="openPopup('/tools/op-surgery-codes.html', 980, 720)" title="종수술분류표 팝업">종수술분류표</button>
-          <button class="mini-btn mini-slate" type="button" onclick="openPopup('/tools/tertiary-hospitals.html', 980, 720)" title="전국 상급종합병원 리스트 팝업">전국 상급종합병원 리스트</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <main class="maxw px-5 pb-20">
-    <!-- 손해보험사 -->
-    <section id="loss" class="mt-6">
-      <div class="section-head">
-        <h2 class="section-title">손해보험사</h2>
-        <p class="section-sub">콤팩트 표. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
-      </div>
-      <span id="loss-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white mx-auto mb-2">0개</span>
-      <div id="loss-list" class="table"></div>
-      <div id="loss-empty" class="hidden mt-3 text-sm text-slate-600 text-center">표시할 손해보험사가 없습니다.</div>
-    </section>
-
-    <!-- 생명보험사 -->
-    <section id="life" class="mt-12">
-      <div class="section-head">
-        <h2 class="section-title">생명보험사</h2>
-        <p class="section-sub">콤팩트 표. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
-      </div>
-      <span id="life-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white mx-auto mb-2">0개</span>
-      <div id="life-list" class="table"></div>
-      <div id="life-empty" class="hidden mt-3 text-sm text-slate-600 text-center">표시할 생명보험사가 없습니다.</div>
-    </section>
-
-    <!-- 계산 패널 -->
-    <section id="calc-panels" class="mt-14">
-      <div class="section-head">
-        <h2 class="section-title">빠른 계산 도구</h2>
-        <p class="section-sub">보험나이와 실손 예상 수령액을 한 화면에서 계산하세요.</p>
-      </div>
-
-      <div id="calc-grid">
-        <!-- 보험나이 -->
-        <section id="age" class="panel">
-          <div class="section-head">
-            <h3 class="section-title">보험나이 계산기</h3>
-            <p class="section-sub">규칙: 만나이 + (최근 생일부터 6개월 경과 시 +1) · 기준일은 <strong>오늘</strong></p>
-          </div>
-
-          <div class="panel-card">
-            <div class="calc-card h-full">
-              <div class="flex items-center justify-between p-3" style="border-bottom:1px solid #c7b7ff;">
-                <div class="text-base font-bold">청구닷컴 나이 계산기</div>
-                <div class="text-[11px] px-2 py-0.5 rounded-full border border-indigo-200 bg-white" id="age-badge">–</div>
-              </div>
-
-              <div class="p-3 grid gap-3">
-                <div class="display">
-                  <div class="text-[11px] text-slate-600 flex items-center justify-between"><span>보험나이</span><span>기준: 오늘</span></div>
-                  <div class="display-num"><span id="age-num">--</span><span class="text-xl align-top ml-1">세</span></div>
-                  <div class="text-xs text-slate-600" id="age-rule">생년월일을 입력하세요</div>
-                </div>
-
-                <!-- 입력 + 버튼(아래 중앙) -->
-                <form id="age-form">
-                  <label class="text-sm font-semibold text-center block">생년월일</label>
-                  <div class="dob-wrap">
-                    <input id="dobY" inputmode="numeric" maxlength="4" placeholder="연도(YYYY)" />
-                    <span>–</span>
-                    <input id="dobM" inputmode="numeric" maxlength="2" placeholder="MM" />
-                    <span>–</span>
-                    <input id="dobD" inputmode="numeric" maxlength="2" placeholder="DD" />
-                  </div>
-                  <div class="age-actions">
-                    <button type="submit" class="key key-primary">계산하기</button>
-                    <button type="button" id="age-reset" class="key">초기화</button>
-                  </div>
-                </form>
-
-                <div class="grid gap-2 md:grid-cols-2">
-                  <div class="card">
-                    <div class="text-[11px] text-slate-600">만나이</div>
-                    <div class="text-base font-bold mt-0.5"><span id="intl-age">–</span> 세</div>
-                  </div>
-                  <div class="card">
-                    <div class="text-[11px] text-slate-600">다음 보험 상령일까지</div>
-                    <div class="text-base font-semibold mt-0.5"><span id="halfleft">–</span></div>
-                  </div>
-                </div>
-              </div><!-- /p-3 -->
-            </div><!-- /calc-card -->
-          </div>
-        </section>
-
-        <!-- 실손 -->
-        <section id="medcalc" class="panel">
-          <div class="section-head">
-            <h3 class="section-title">실손의료비 간편 계산기</h3>
-            <p class="section-sub">환자부담총액(실제 납부액)만 입력하세요. 세대/의료기관 공제를 자동 반영합니다.</p>
-          </div>
-
-          <div class="panel-card">
-            <section class="bg-white rounded-2xl shadow p-5 h-full mc-card">
-              <!-- 세대/의료기관: 같은 줄 2열 -->
-              <div class="selector-row">
-                <div class="selector-box">
-                  <span class="selector-badge pill pill-indigo">세대 선택</span>
-                  <h4 class="selector-heading" id="currentLabel">현재 선택: <span class="text-indigo-700">4세대(현행)</span></h4>
-                  <select id="genSelect" class="mc-select">
-                    <option value="4th-basic" selected>4세대(현행)</option>
-                    <option value="3rd-standard">3세대(표준)</option>
-                    <option value="2nd-legacy">2세대</option>
-                  </select>
-                </div>
-                <div class="selector-box">
-                  <span class="selector-badge pill pill-emerald">의료기관 유형</span>
-                  <h4 class="selector-heading">급여 공제 자동 적용</h4>
-                  <select id="facilitySelect" class="mc-select">
-                    <option value="clinic" selected>의원</option>
-                    <option value="hospital">병원</option>
-                    <option value="sh">상급/종합병원</option>
-                  </select>
-                </div>
-              </div>
-
-              <div id="dedSummary" class="mt-2 text-[12px] text-slate-600"></div>
-              <div id="ruleDetails" class="mt-2 text-[12px] text-slate-600"></div>
-
-              <div class="mt-4 grid grid-cols-1 gap-4">
-                <div>
-                  <label class="block text-sm font-bold mb-1 text-slate-800">환자부담총액 - 급여(원)</label>
-                  <input id="inpCoveredCo" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-[15px]" placeholder="예: 30,000" />
-                  <p class="text-xs text-slate-500 mt-1">영수증의 “요양급여 본인부담금” 합계</p>
-                </div>
-                <div>
-                  <label class="block text-sm font-bold mb-1 text-slate-800">환자부담총액 - 비급여(원)</label>
-                  <input id="inpNonCovered" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-[15px]" placeholder="예: 70,000" />
-                  <p class="text-xs text-slate-500 mt-1">영수증의 “비급여/전액본인부담/비급여 재료대” 합계(제증명료 등 비보장 제외)</p>
-                </div>
-              </div>
-
-              <details class="mt-4">
-                <summary class="cursor-pointer text-slate-700 font-semibold text-[14px]">고급 설정(자동 입력값 확인/수정)</summary>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
-                  <div>
-                    <label class="block text-sm font-bold mb-1 text-slate-800">급여 보상(%)</label>
-                    <input id="advCoveredRate" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-bold mb-1 text-slate-800">비급여 보상(%)</label>
-                    <input id="advNonCoveredRate" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-bold mb-1 text-slate-800">1회 한도(원)</label>
-                    <input id="advPerCap" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" value="0" />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-bold mb-1 text-slate-800">급여 공제(원)</label>
-                    <input id="advDedCovered" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" value="0" />
-                    <p class="text-xs text-slate-500 mt-1">의료기관 유형/세대 규칙에 따라 자동 설정</p>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-bold mb-1 text-slate-800">비급여 공제(원)</label>
-                    <input id="advDedNonCovered" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" value="0" />
-                    <p class="text-xs text-slate-500 mt-1">2세대는 ‘최소공제 vs 20%’ 규칙(전체금액 기준)</p>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-bold mb-1 text-slate-800">도수·주사·체외(1회 한도)</label>
-                    <input id="advPhysioCap" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" value="0" />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-bold mb-1 text-slate-800">연간 한도(남은액)</label>
-                    <input id="advAnnualRemain" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" value="999,999,999" />
-                  </div>
-                </div>
-              </details>
-
-              <div class="mt-6 flex flex-wrap items-center gap-3">
-                <button id="btnCalc" class="gbtn gbtn-calc">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                  계산하기
-                </button>
-                <button id="btnReset" class="gbtn gbtn-reset">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-                  초기화
-                </button>
-                <button id="btnExample" class="gbtn gbtn-ghost">예시 입력</button>
-              </div>
-
-              <div id="boxResult" class="mt-5 bg-slate-50 border border-slate-200 rounded-2xl p-4">
-                <div class="text-slate-700 text-sm">예상 수령액</div>
-                <div class="mt-1 text-3xl font-extrabold" id="txtPayout">0원</div>
-                <ul class="mt-2 text-slate-700 text-[15px] space-y-1" id="listExplain"></ul>
-              </div>
-              <p class="mt-3 text-xs text-slate-500">※ 참고용 계산 결과입니다. 실제 지급은 약관·심사에 따라 달라질 수 있습니다.</p>
-            </section>
-          </div>
-        </section>
-      </div>
-    </section>
-  </main>
-
-  <!-- 푸터 -->
-  <footer class="border-t border-slate-200 bg-white">
-    <div class="maxw px-5 py-6 text-sm text-slate-600">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>© <span id="y"></span> 청구닷컴</div>
-        <div class="flex items-center gap-3">
-          <a class="btn btn-ghost" href="#">문의</a>
-          <a class="btn btn-ghost" href="#">개인정보처리방침</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Anti-copy: 상단 경고 토스트 -->
-  <div id="copyAlert" style="
-    position:fixed;left:50%;top:18px;transform:translateX(-50%);
-    background:#182340;color:#fff;padding:10px 14px;border-radius:10px;
-    box-shadow:0 10px 30px rgba(0,0,0,.15);font-size:14px;display:none;z-index:2147483647;">
-    무단 복제/배포 금지 · 저작권 보호 중
-  </div>
-
-  <script>
-  (function () {
-    const $ = (s, el=document) => el.querySelector(s);
-    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
-
-    // **맨 위로 고정 노출**
-    try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch(e){}
-    window.addEventListener('load', ()=> window.scrollTo(0,0));
-
-    // 팝업 오픈(종수술/상급종합)
-    window.openPopup = function(url, w=980, h=720){
-      const y = Math.max(0, (window.outerHeight - h) / 2 + (window.screenY||0));
-      const x = Math.max(0, (window.outerWidth  - w) / 2 + (window.screenX||0));
-      const opt = `popup=yes,scrollbars=yes,resizable=yes,width=${w},height=${h},left=${x},top=${y}`;
-      window.open(url, '_blank', opt);
-    };
-
-    // 검색
-    const q = $("#q"); const clearBtn = $("#clear");
-    document.addEventListener("keydown", (e) => { if (e.key === "/") { e.preventDefault(); q.focus(); } if (e.key === "Escape") { q.value = ""; filter(); } });
-    clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
-    q.addEventListener("input", filter);
-
-    // 리스트
-    const lossList = $("#loss-list"), lifeList = $("#life-list");
-    const lossEmpty = $("#loss-empty"), lifeEmpty = $("#life-empty");
-    const lossCount = $("#loss-count"), lifeCount = $("#life-count");
-
-    async function loadData() {
-      const res = await fetch("/data/links.json?ts=" + Date.now(), { cache: "no-store" });
-      if (!res.ok) throw new Error("failed to load");
-      return res.json();
-    }
-
-    function brandCell(item) {
-      const L = item.links || {};
-      const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
-      const detailUrl = `/tools/e-enroll.html?c=${encodeURIComponent(item.name)}`;
-      const inner = `
-        <div class="brand">
-          <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
-          <span class="name">${item.name}</span>
-        </div>`;
-      return `<a href="${detailUrl}" target="_blank" rel="noopener" class="block no-underline">${inner}</a>`;
-    }
-
-    // 일반 버튼
-    function btn(label, href, cls) {
-      if (!href) return `<button class="btn btn-muted" disabled>${label}</button>`;
-      const isExternal = /전산|홈페이지|필요서류/.test(label);
-      // [수정] btn-pdf 또는 btn-dental 클래스일 경우
-      const isDownload = (cls === 'btn-pdf' || cls === 'btn-dental');
-      // [수정] download="" (값 없음)으로 설정해 '원본 파일명'으로 다운로드
-      const downloadAttr = isDownload ? ' download=""' : '';
-      return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
-    }
-
-    // 전화 버튼(고객센터/인콜만 가운데 정렬)
-    function phoneBtn(label, number) {
-      if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
-      const tel = number.replace(/[^0-9]/g,'');
-      const centerClass = /고객센터|인콜/.test(label) ? ' center' : '';
-      return `<a class="btn btn-call${centerClass}" href="tel:${tel}">${label} <span class="num">${number}</span></a>`;
-    }
-
-    // 표 한 행
-    function row(item) {
-      const L = item.links || {};
-      return `
-        <div class="row" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}">
-          <div>${brandCell(item)}</div>
-          <div class="stack">
-            <div class="grid-top">
-              ${btn("전산 접속", L.system, "btn-primary")}
-              ${btn("필요서류 안내", L.guide, "btn-ghost")}
-              ${btn("치과치료확인서", L.dental, "btn-dental")}
-              ${btn("보험금 청구서 PDF 다운로드", L.pdf, "btn-pdf")}
-              ${btn("홈페이지", L.support, "btn-ghost")}
-            </div>
-            <div class="grid-bottom">
-              ${phoneBtn("고객센터", L.cs)}
-              ${phoneBtn("인콜 모니터링", L.monitor)}
-              ${phoneBtn("보험금청구 FAX", L.fax)}
-              ${btn("약관확인", L.terms, "btn-ghost")}
-            </div>
-          </div>
-        </div>`;
-    }
-
-    function render(json) {
-      const arr = json.carriers || [];
-      const loss = arr.filter(x => x.type === "손해");
-      const life = arr.filter(x => x.type === "생명");
-
-      lossList.innerHTML = loss.map(row).join("");
-      lifeList.innerHTML = life.map(row).join("");
-
-      lossEmpty.classList.toggle("hidden", loss.length > 0);
-      lifeEmpty.classList.toggle("hidden", life.length > 0);
-      if (lossCount) lossCount.textContent = `${loss.length}개`;
-      if (lifeCount) lifeCount.textContent = `${life.length}개`;
-      filter();
-      initMobileAccordion();
-      attachWideMode(document.getElementById('loss-list'));
-      attachWideMode(document.getElementById('life-list'));
-    }
-
-    function filter() {
-      const v = (q.value || "").toLowerCase().trim();
-      $$(".row[data-name]").forEach(el => {
-        const key = (el.dataset.name + " " + (el.dataset.tags || "")).toLowerCase();
-        el.style.display = key.includes(v) ? "" : "none";
-      });
-    }
-
-    loadData().then(render).catch(() => {
-      const err = '<div class="px-4 py-3 text-sm text-red-600">데이터 로드 실패: /data/links.json</div>';
-      lossList.innerHTML = err; lifeList.innerHTML = err;
-    });
-
-    /* ===== 보험나이 계산기 ===== */
-    const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    const addMonths = (d, m) => { const x = new Date(d); const day=x.getDate(); x.setMonth(x.getMonth()+m); if (x.getDate()!==day) x.setDate(0); return x; };
-    function intlAge(dob, asof){ let a = asof.getFullYear()-dob.getFullYear(); const bThis = new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()); if(asof < bThis) a -= 1; return a; }
-    function insAge(dob, asof){ const base=intlAge(dob, asof); const lastYear = asof.getFullYear() - (asof < new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()) ? 1 : 0); const last = new Date(lastYear, dob.getMonth(), dob.getDate()); const half=addMonths(last,6); const plus = asof >= half ? 1 : 0; return {base, ins: base+plus, half}; }
-
-    const yEl = document.getElementById('dobY');
-    const mEl = document.getElementById('dobM');
-    const dEl = document.getElementById('dobD');
-    const form = document.getElementById('age-form');
-    const badge = document.getElementById('age-badge');
-    const ageNum = document.getElementById('age-num');
-    const intlAgeEl = document.getElementById('intl-age');
-    const ruleText = document.getElementById('age-rule');
-    const halfLeft = document.getElementById('halfleft');
-    const resetBtn = document.getElementById('age-reset');
-
-    function onlyDigits(e){ e.target.value = e.target.value.replace(/\D/g,''); }
-    function clamp2(v, min, max){ if(!v) return ''; const n=Number(v); if(Number.isNaN(n)) return ''; return String(Math.min(max, Math.max(min, n))).padStart(2,'0'); }
-
-    yEl?.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 4) mEl.focus(); });
-    mEl?.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 2) { e.target.value = clamp2(e.target.value, 1, 12); dEl.focus(); } });
-    dEl?.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 2) { e.target.value = clamp2(e.target.value, 1, 31); } });
-    function backspacePrev(curr, prev){ curr?.addEventListener('keydown', e=>{ if(e.key==='Backspace' && !curr.value){ prev.focus(); } }); }
-    backspacePrev(mEl, yEl); backspacePrev(dEl, mEl);
-
-    function getDobString(){ const y=yEl?.value; const m=mEl?.value; const d=dEl?.value; if(y?.length===4 && m?.length===2 && d?.length===2) return `${y}-${m}-${d}`; return null; }
-    function safeDate(str){ const d=new Date(str); return Number.isNaN(d.getTime())?null:d; }
-
-    function renderAge(){
-      const dobStr = getDobString(); if(!dobStr) return;
-      const dob = safeDate(dobStr); if(!dob) return;
-      const asof = new Date();
-      const r = insAge(dob, asof);
-      ageNum.textContent = r.ins;
-      intlAgeEl.textContent = r.base;
-      ruleText.textContent = (asof >= r.half) ? '오늘 기준: 최근 생일부터 6개월 경과 → +1' : '오늘 기준: 최근 생일부터 6개월 미만';
-      const ms = r.half - asof;
-      halfLeft.textContent = (ms<=0) ? '이미 상령일 지남' : `${fmt(r.half)} (약 ${Math.floor(ms/86400000)}일 ${Math.floor((ms%86400000)/3600000)}시간 남음)`;
-      badge.textContent = `${r.ins}세`;
-    }
-
-    if (form) {
-      form.addEventListener('submit', (e)=>{ e.preventDefault(); renderAge(); });
-      resetBtn?.addEventListener('click', ()=>{
-        yEl.value=''; mEl.value=''; dEl.value='';
-        ageNum.textContent='--'; intlAgeEl.textContent='–';
-        ruleText.textContent='생년월일을 입력하세요'; halfLeft.textContent='–';
-        badge.textContent='–';
-      });
-      (function(){
-        const p=new URL(location.href).searchParams.get('dob');
-        if(p && /^\d{4}-\d{2}-\d{2}$/.test(p)){ const [yy,mm,dd]=p.split('-'); yEl.value=yy; mEl.value=mm; dEl.value=dd; renderAge(); }
-      })();
-    }
-
-    document.getElementById("y").textContent = new Date().getFullYear();
-
-    /* ===== 실손 계산기 로직 ===== */
-    const KRW = new Intl.NumberFormat('ko-KR');
-    const byId = (id)=> document.getElementById(id);
-    const inputs = {
-      coveredCo: byId('inpCoveredCo'),
-      nonCov: byId('inpNonCovered'),
-      covRate: byId('advCoveredRate'),
-      nonRate: byId('advNonCoveredRate'),
-      perCap: byId('advPerCap'),
-      dedCov: byId('advDedCovered'),
-      dedNon: byId('advDedNonCovered'),
-      physioCap: byId('advPhysioCap'),
-      annualRemain: byId('advAnnualRemain')
-    };
-
-    // ✅ 비급여도 공제 후 100% 보상(3·4세대)으로 변경
-    const presets = {
-      '4th-basic':    { label: '4세대(현행)', coveredRate: 1.0, nonCoveredRate: 1.0, perVisitCap: 0, nonCoveredDeductible: 30000, physioPerVisitCap: 0, annualRemain: 999999999 },
-      '3rd-standard': { label: '3세대(표준)',  coveredRate: 1.0, nonCoveredRate: 1.0, perVisitCap: 0, nonCoveredDeductible: 20000, physioPerVisitCap: 0, annualRemain: 999999999 },
-      '2nd-legacy':   { label: '2세대',       coveredRate: 1.0, nonCoveredRate: 1.0, perVisitCap: 0, nonCoveredDeductible: 0,     physioPerVisitCap: 0, annualRemain: 999999999 }
-    };
-
-    // 2세대 최소공제(전체금액 기준)
-    const facilityMinDed_2nd = { clinic:10000, hospital:15000, sh:20000 };
-
-    // 4세대에서만 '병원' 숨김
-    function refreshFacilityOptions(){
-      const sel = byId('facilitySelect');
-      const keep = new Set(['clinic','hospital','sh']);
-      Array.from(sel.options).forEach(o => { if(!keep.has(o.value)) sel.removeChild(o); });
-      const gen = byId('genSelect').value;
-      const hasHospital = Array.from(sel.options).some(o=>o.value==='hospital');
-      if (gen === '4th-basic' && hasHospital){
-        if (sel.value === 'hospital') sel.value = 'clinic';
-        sel.querySelector('option[value="hospital"]').remove();
-      } else if (gen !== '4th-basic' && !hasHospital){
-        const opt = document.createElement('option');
-        opt.value = 'hospital';
-        opt.textContent = '병원';
-        sel.insertBefore(opt, sel.querySelector('option[value="sh"]'));
-      }
-    }
-
-    function onlyDigits2(s){ return String(s||'').replace(/[^0-9]/g, ''); }
-    function toNumber(text){ return Number(onlyDigits2(text)||0); }
-    function fmtKRW(n){ return KRW.format(Math.max(0, Math.round(Number(n||0)))); }
-    function attachCurrencyFormatter(el){
-      if(!el) return;
-      el.addEventListener('blur', ()=>{ el.value = fmtKRW(toNumber(el.value)); });
-      el.addEventListener('focus', ()=>{ const v = onlyDigits2(el.value); el.value = v ? KRW.format(v) : ''; });
-      el.addEventListener('input', ()=>{ const raw = onlyDigits2(el.value); el.value = raw ? KRW.format(raw) : ''; el.setSelectionRange(el.value.length, el.value.length); });
-    }
-    [inputs.coveredCo, inputs.nonCov, inputs.perCap, inputs.dedCov, inputs.dedNon, inputs.physioCap, inputs.annualRemain].forEach(attachCurrencyFormatter);
-
-    const genSelect = byId('genSelect');
-    const facilitySelect = byId('facilitySelect');
-    const dedSummary = byId('dedSummary');
-    const ruleDetails = byId('ruleDetails');
-
-    function updateDedSummary(){
-      const key = genSelect.value;
-      if(key === '2nd-legacy'){
-        dedSummary.textContent = '2세대 공제(1회): 전체(급여+비급여) 금액 기준 → 최소공제(의원 10,000원 / 병원 15,000원 / 상급·종합 20,000원)와 전체의 20% 중 큰 금액을 1회 공제 후 전액 보상.';
-      } else if (key === '3rd-standard'){
-        dedSummary.textContent = '3세대 공제(1회): 급여는 (의원 1만원·병원 1.5만원·상급/종합 2만원) vs 급여의 10% 중 큰 금액 공제. 비급여는 (2만원 vs 비급여 20%) 중 큰 금액 공제 후 100% 보상.';
-      } else if (key === '4th-basic'){
-        dedSummary.textContent = '4세대 공제(1회): 급여는 (의원 1만원·상급/종합 2만원) vs 급여의 20% 중 큰 금액 공제(병원 미적용). 비급여는 (3만원 vs 비급여 30%) 중 큰 금액 공제 후 100% 보상.';
-      }
-    }
-
-    function updateRuleDetails(){
-      const gen = genSelect.value;
-      const fac = facilitySelect.value;
-      const mapKo = {clinic:'의원', hospital:'병원', sh:'상급/종합병원'};
-      let lines = [];
-
-      if (gen === '2nd-legacy') {
-        lines.push('• 전체금액(급여+비급여) 기준으로 1회 공제 후 전액 보상');
-        lines.push('• 최소공제: 의원 10,000원 / 병원 15,000원 / 상급·종합 20,000원');
-        lines.push('• “최소공제”와 “전체의 20%” 중 큰 금액 적용');
-      } else if (gen === '3rd-standard') {
-        lines.push(`• 급여(${mapKo[fac]}): (최소공제 vs 급여의 10%) 중 큰 금액 공제 후 100% 보상`);
-        if (fac==='clinic') lines.push('  - 최소공제: 10,000원');
-        else if (fac==='hospital') lines.push('  - 최소공제: 15,000원');
-        else lines.push('  - 최소공제: 20,000원');
-        lines.push('• 비급여: (20,000원 vs 비급여 20%) 중 큰 금액 공제 후 100% 보상');
-      } else { // 4th-basic
-        lines.push(`• 급여(${mapKo[fac]}): (최소공제 vs 급여의 20%) 중 큰 금액 공제 후 100% 보상`);
-        if (fac==='clinic') lines.push('  - 최소공제: 10,000원');
-        else if (fac==='hospital') lines.push('  - 4세대에서 병원은 선택 불가');
-        else lines.push('  - 최소공제: 20,000원');
-        lines.push('• 비급여: (30,000원 vs 비급여 30%) 중 큰 금액 공제 후 100% 보상');
-      }
-      ruleDetails.innerHTML = lines.map(s=>`<div>${s}</div>`).join('');
-    }
-
-    function applyGen(key){
-      const p = presets[key]; if(!p) return;
-
-      // 급여/비급여 보상률 반영(요청: 둘 다 100%)
-      inputs.covRate.value = Math.round((p.coveredRate||0)*100);
-      inputs.nonRate.value = Math.round((p.nonCoveredRate||0)*100);
-      inputs.perCap.value = fmtKRW(p.perVisitCap||0);
-      inputs.physioCap.value = fmtKRW(p.physioPerVisitCap||0);
-      inputs.annualRemain.value = fmtKRW(p.annualRemain||999999999);
-
-      // 비급여 고정 최소공제(세대별)
-      inputs.dedNon.value = fmtKRW(key==='2nd-legacy' ? 0 : (p.nonCoveredDeductible||0));
-
-      // 4세대에서 병원 숨김/그 외 복원
-      refreshFacilityOptions();
-
-      const lbl = byId('currentLabel');
-      if(lbl) lbl.innerHTML = `현재 선택: <span class="text-indigo-700">${p.label}</span>`;
-      updateDedSummary(); updateRuleDetails();
-    }
-
-    function applyFacility(){
-      updateRuleDetails();
-    }
-
-    // init
-    applyGen('4th-basic');
-    genSelect?.addEventListener('change', ()=> applyGen(genSelect.value));
-    facilitySelect?.addEventListener('change', ()=> applyFacility());
-
-    // 예시
-    document.getElementById('btnExample')?.addEventListener('click', ()=>{
-      inputs.coveredCo.value = fmtKRW(30000);
-      inputs.nonCov.value = fmtKRW(70000);
-      const box = document.getElementById('boxResult');
-      if(box){ box.classList.add('ring-2','ring-amber-300'); setTimeout(()=> box.classList.remove('ring-2','ring-amber-300'), 500); }
-    });
-
-    function calc(){
-      const coveredCo = toNumber(inputs.coveredCo.value);
-      const nonCovAmt = toNumber(inputs.nonCov.value);
-      const key = genSelect.value;
-      const fac = facilitySelect.value;
-
-      const totalAmt = coveredCo + nonCovAmt;
-      if((key==='2nd-legacy' && totalAmt===0) || (key!=='2nd-legacy' && coveredCo===0 && nonCovAmt===0)){
-        alert('금액을 입력하세요'); return;
-      }
-
-      // 보상률(요청: 급여/비급여 모두 100%)
-      const covRate = 1.0;
-      const nonRate = 1.0;
-
-      const perCap  = toNumber(inputs.perCap.value);
-      const physioCap = toNumber(inputs.physioCap.value);
-      const annualRemain = toNumber(inputs.annualRemain.value) || 999999999;
-
-      let payout = 0, explain = [];
-
-      if(key === '2nd-legacy'){
-        // 전체 기준 공제
-        const minFixed = (facilityMinDed_2nd[fac] ?? 20000);
-        const twentyPct = Math.floor(totalAmt * 0.20);
-        const appliedDed = Math.max(minFixed, twentyPct);
-
-        const base = Math.max(0, totalAmt - appliedDed);
-        payout = base;
-
-        if(physioCap>0) payout = Math.min(payout, physioCap);
-        if(perCap>0)    payout = Math.min(payout, perCap);
-        payout = Math.min(payout, annualRemain);
-
-        byId('txtPayout').textContent = fmtKRW(payout) + '원';
-        explain.push(`전체금액: ${fmtKRW(totalAmt)}원`);
-        explain.push(`공제(2세대): 최소 ${fmtKRW(minFixed)}원 vs 20% ${fmtKRW(twentyPct)}원 → 적용 ${fmtKRW(appliedDed)}원`);
-        explain.push(`보상 기준금액: ${fmtKRW(base)}원(전액 보상)`);
-        if(physioCap>0) explain.push(`도수·주사·체외 1회 한도: 최대 ${fmtKRW(physioCap)}원`);
-        if(perCap>0)    explain.push(`1회 한도: 최대 ${fmtKRW(perCap)}원`);
-        if(annualRemain>0 && annualRemain<999999999) explain.push(`연간 잔여 한도: ${fmtKRW(annualRemain)}원`);
-      } else {
-        // ===== 급여 공제: 세대/의료기관별 (최소 vs %) 중 큰 금액
-        let covPct = 0.10; // 3세대 기본
-        let covMin = 10000; // 의원 기본
-        if (key === '4th-basic') covPct = 0.20;
-
-        if (fac === 'clinic') covMin = 10000;
-        else if (fac === 'hospital') covMin = (key==='3rd-standard') ? 15000 : 0; // 4세대는 병원 선택 불가
-        else covMin = 20000; // 상급/종합
-
-        if (key==='4th-basic' && fac==='hospital') {
-          explain.push('4세대에서 “병원”은 적용되지 않습니다. 의원 또는 상급/종합병원을 선택해주세요.');
-          byId('txtPayout').textContent = '0원';
-          const ul = byId('listExplain'); ul.innerHTML = '';
-          explain.forEach(t=>{ const li=document.createElement('li'); li.textContent='• '+t; ul.appendChild(li); });
-          return;
-        }
-
-        const covPctKRW = Math.floor(coveredCo * covPct);
-        const appliedCovDed = Math.max(covMin, covPctKRW);
-        const covBase = Math.max(0, coveredCo - appliedCovDed);
-        const covPay  = covBase * covRate; // 100%
-
-        // ===== 비급여 공제: 세대 규칙(최소 vs %) → 잔액 100% 보상
-        let nonFixed = 0, nonPct = 0;
-        if (key === '3rd-standard') { nonFixed = 20000; nonPct = 0.20; }
-        else if (key === '4th-basic') { nonFixed = 30000; nonPct = 0.30; }
-
-        let appliedNonDed = 0, nonBase = 0, nonPay = 0;
-        if (key === '3rd-standard' || key === '4th-basic') {
-          const nonPctKRW = Math.floor(nonCovAmt * nonPct);
-          appliedNonDed = Math.max(nonFixed, nonPctKRW);
-          nonBase = Math.max(0, nonCovAmt - appliedNonDed);
-          nonPay  = nonBase * nonRate; // 100%
-        }
-
-        payout = covPay + nonPay;
-        if (physioCap > 0) payout = Math.min(payout, physioCap);
-        if (perCap > 0)    payout = Math.min(payout, perCap);
-        payout = Math.min(payout, annualRemain);
-
-        byId('txtPayout').textContent = fmtKRW(payout) + '원';
-        const mapKo = {clinic:'의원', hospital:'병원', sh:'상급/종합병원'};
-        explain.push(`급여 공제(${mapKo[fac]}): ${fmtKRW(covMin)}원 vs ${Math.round(covPct*100)}% ${fmtKRW(covPctKRW)}원 → 적용 ${fmtKRW(appliedCovDed)}원`);
-        explain.push(`급여 보상: ${fmtKRW(covPay)}원 (기준 ${fmtKRW(covBase)}원 × 100%)`);
-        if (key==='3rd-standard' || key==='4th-basic') {
-          const nonPctKRW2 = Math.floor(nonCovAmt * nonPct);
-          explain.push(`비급여 공제: ${fmtKRW(nonFixed)}원 vs ${Math.round(nonPct*100)}% ${fmtKRW(nonPctKRW2)}원 → 적용 ${fmtKRW(appliedNonDed)}원`);
-          explain.push(`비급여 보상: ${fmtKRW(nonPay)}원 (기준 ${fmtKRW(nonBase)}원 × 100%)`);
-        }
-        if (physioCap>0) explain.push(`도수·주사·체외 1회 한도: 최대 ${fmtKRW(physioCap)}원`);
-        if (perCap>0)    explain.push(`1회 한도: 최대 ${fmtKRW(perCap)}원`);
-        if (annualRemain>0 && annualRemain<999999999) explain.push(`연간 잔여 한도: ${fmtKRW(annualRemain)}원`);
-      }
-
-      const ul = byId('listExplain'); ul.innerHTML = '';
-      explain.forEach(t=>{ const li=document.createElement('li'); li.textContent='• '+t; ul.appendChild(li); });
-    }
-
-    document.getElementById('btnCalc')?.addEventListener('click', calc);
-    document.getElementById('btnReset')?.addEventListener('click', ()=>{
-      [inputs.coveredCo, inputs.nonCov].forEach(el=> el.value='');
-      genSelect.value='4th-basic'; facilitySelect.value='clinic';
-      applyGen('4th-basic'); updateRuleDetails();
-      document.getElementById('txtPayout').textContent='0원'; document.getElementById('listExplain').innerHTML='';
-    });
-
-    // 폭 감지 폴백
-    function attachWideMode(tableEl, threshold=1100){
-      if (!tableEl) return;
-      const ro = new ResizeObserver(entries=>{
-        for (const e of entries){
-          const w = e.contentBoxSize?.[0]?.inlineSize ?? e.contentRect.width;
-          if (w >= threshold) tableEl.classList.add('cw-wide');
-          else tableEl.classList.remove('cw-wide');
-        }
-      });
-      ro.observe(tableEl);
-    }
-  })();
-  </script>
-
-  <!-- Anti-copy: 복제 억지 스크립트(워터마크 제거 버전) -->
-  <script>
-    (function(){
-      // 이미지 드래그 방지
-      document.addEventListener('dragstart', e => e.preventDefault(), true);
-      document.querySelectorAll('img').forEach(img => { img.setAttribute('draggable','false'); });
-
-      // 우클릭/컨텍스트 메뉴 차단 + 토스트
-      const toast = document.getElementById('copyAlert');
-      let tId;
-      function showToast(msg){
-        if(!toast) return;
-        toast.textContent = msg || toast.textContent;
-        toast.style.display = 'block';
-        clearTimeout(tId);
-        tId = setTimeout(()=> toast.style.display='none', 1600);
-      }
-      document.addEventListener('contextmenu', e => { e.preventDefault(); showToast('무단 복제 금지 · 저작권 보호 중'); }, true);
-
-      // 단축키 일부 차단(F12, Ctrl+U/S/P, Ctrl+Shift+I/J/C)
-      document.addEventListener('keydown', function(e){
-        const k = (e.key || '').toLowerCase();
-        const ctrl = e.ctrlKey || e.metaKey;
-        const block =
-          k === 'f12' ||
-          (ctrl && ['u','s','p'].includes(k)) ||
-          (ctrl && e.shiftKey && ['i','j','c'].includes(k));
-        if(block){ e.preventDefault(); e.stopPropagation(); showToast('보호된 페이지 입니다'); }
-      }, true);
-
-      // 복사/잘라내기 시 경고(입력 필드는 허용)
-      ['copy','cut'].forEach(evt => {
-        document.addEventListener(evt, function(ev){
-          const tag = (ev.target && ev.target.tagName || '').toLowerCase();
-          const editable = ev.target && (ev.target.isContentEditable || ['input','textarea'].includes(tag));
-          if(!editable){ ev.preventDefault(); showToast('콘텐츠 복사 금지'); }
-        }, true);
-      });
-
-      // 카나리아 토큰(보이지 않는 식별자)
-      const CANARY = 'claimhub-' + (new Date()).toISOString().slice(0,10).replace(/-/g,'') + '-K1';
-      document.body.appendChild(document.createComment('canary:'+CANARY));
-    })();
-  </script>
+    <header>
+    <div class="maxw px-5 py-4 flex items-center gap-3">
+      <a class="text-xl font-extrabold no-underline" href="/">청구닷컴</a>
+      <nav class="ml-auto flex items-center gap-2">
+        <a class="btn btn-ghost" href="#loss">손해보험사</a>
+        <a class="btn btn-ghost" href="#life">생명보험사</a>
+        <a class="btn btn-ghost" href="#calc-panels">보험나이 계산기</a>
+        <a class="btn btn-ghost" href="#medcalc">실손 계산기</a>
+      </nav>
+    </div>
+  </header>
+
+    <section class="maxw px-5 pt-2 pb-4">
+    <h1 class="text-3xl sm:text-4xl font-black leading-tight text-center">
+      보험금 청구 링크,
+      <span style="background:linear-gradient(90deg,#d946ef,#7c3aed,#06b6d4);-webkit-background-clip:text;background-clip:text;color:transparent;">한 곳에서 바로</span>
+    </h1>
+    <p class="mt-2 text-slate-700 text-center">
+      전산 접속 · 필요서류 · <span class="font-semibold">보험금 청구서 PDF</span> · <span class="font-semibold">치과치료확인서</span> · 고객센터 · 인콜 모니터링 · 보험금청구 FAX
+    </p>
+
+        <div class="hero-search">
+      <div class="search-card">
+        <div class="search-title">검색</div>
+        <div class="grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
+          <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-2.5" placeholder="회사명·키워드 (예: 삼성, 고객센터, PDF)">
+          <button id="clear" class="btn btn-ghost" type="button">지우기</button>
+          <a class="btn btn-ghost" href="#loss">손해부터 보기</a>
+        </div>
+        <div class="mt-2 text-xs text-slate-600">단축키: <span class="chip">/</span> 검색 포커스, <span class="chip">Esc</span> 지우기</div>
+
+                <div class="search-actions">
+          <a href="#age" class="mini-btn mini-purple" title="보험나이 계산기로 이동">보험나이 계산기</a>
+          <a href="#medcalc" class="mini-btn mini-cyan" title="실손의료비 계산기로 이동">실손의료비 계산기</a>
+          <button class="mini-btn mini-amber" type="button" onclick="openPopup('/tools/op-surgery-codes.html', 980, 720)" title="종수술분류표 팝업">종수술분류표</button>
+          <button class="mini-btn mini-slate" type="button" onclick="openPopup('/tools/tertiary-hospitals.html', 980, 720)" title="전국 상급종합병원 리스트 팝업">전국 상급종합병원 리스트</button>
+                    <button class="mini-btn mini-green" type="button" onclick="alert('준비 중입니다.')" title="실손의료비 변천사 (준비 중)">실손의료비 변천사</button>
+          <button class="mini-btn mini-blue" type="button" onclick="alert('준비 중입니다.')" title="간호간병 통합서비스 병원 (준비 중)">간호간병 통합서비스 병원</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="maxw px-5 pb-20">
+        <section id="loss" class="mt-6">
+      <div class="section-head">
+        <h2 class="section-title">손해보험사</h2>
+        <p class="section-sub">콤팩트 표. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
+      </div>
+      <span id="loss-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white mx-auto mb-2">0개</span>
+      <div id="loss-list" class="table"></div>
+      <div id="loss-empty" class="hidden mt-3 text-sm text-slate-600 text-center">표시할 손해보험사가 없습니다.</div>
+    </section>
+
+        <section id="life" class="mt-12">
+      <div class="section-head">
+        <h2 class="section-title">생명보험사</h2>
+        <p class="section-sub">콤팩트 표. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
+      </div>
+      <span id="life-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white mx-auto mb-2">0개</span>
+      <div id="life-list" class="table"></div>
+      <div id="life-empty" class="hidden mt-3 text-sm text-slate-600 text-center">표시할 생명보험사가 없습니다.</div>
+    </section>
+
+        <section id="calc-panels" class="mt-14">
+      <div class="section-head">
+        <h2 class="section-title">빠른 계산 도구</h2>
+        <p class="section-sub">보험나이와 실손 예상 수령액을 한 화면에서 계산하세요.</p>
+      </div>
+
+      <div id="calc-grid">
+                <section id="age" class="panel">
+          <div class="section-head">
+            <h3 class="section-title">보험나이 계산기</h3>
+            <p class="section-sub">규칙: 만나이 + (최근 생일부터 6개월 경과 시 +1) · 기준일은 <strong>오늘</strong></p>
+          </div>
+
+          <div class="panel-card">
+            <div class="calc-card h-full">
+              <div class="flex items-center justify-between p-3" style="border-bottom:1px solid #c7b7ff;">
+                <div class="text-base font-bold">청구닷컴 나이 계산기</div>
+                <div class="text-[11px] px-2 py-0.5 rounded-full border border-indigo-200 bg-white" id="age-badge">–</div>
+              </div>
+
+              <div class="p-3 grid gap-3">
+                <div class="display">
+                  <div class="text-[11px] text-slate-600 flex items-center justify-between"><span>보험나이</span><span>기준: 오늘</span></div>
+                  <div class="display-num"><span id="age-num">--</span><span class="text-xl align-top ml-1">세</span></div>
+                  <div class="text-xs text-slate-600" id="age-rule">생년월일을 입력하세요</div>
+                </div>
+
+                                <form id="age-form">
+                  <label class="text-sm font-semibold text-center block">생년월일</label>
+                  <div class="dob-wrap">
+                    <input id="dobY" inputmode="numeric" maxlength="4" placeholder="연도(YYYY)" />
+                    <span>–</span>
+                    <input id="dobM" inputmode="numeric" maxlength="2" placeholder="MM" />
+                    <span>–</span>
+                    <input id="dobD" inputmode="numeric" maxlength="2" placeholder="DD" />
+                  </div>
+                  <div class="age-actions">
+                    <button type="submit" class="key key-primary">계산하기</button>
+                    <button type="button" id="age-reset" class="key">초기화</button>
+                  </div>
+                </form>
+
+                <div class="grid gap-2 md:grid-cols-2">
+                  <div class="card">
+                    <div class="text-[11px] text-slate-600">만나이</div>
+                    <div class="text-base font-bold mt-0.5"><span id="intl-age">–</span> 세</div>
+                  </div>
+                  <div class="card">
+                    <div class="text-[11px] text-slate-600">다음 보험 상령일까지</div>
+                    <div class="text-base font-semibold mt-0.5"><span id="halfleft">–</span></div>
+                  </div>
+                </div>
+              </div>            </div>          </div>
+        </section>
+
+                <section id="medcalc" class="panel">
+          <div class="section-head">
+            <h3 class="section-title">실손의료비 간편 계산기</h3>
+            <p class="section-sub">환자부담총액(실제 납부액)만 입력하세요. 세대/의료기관 공제를 자동 반영합니다.</p>
+          </div>
+
+          <div class="panel-card">
+            <section class="bg-white rounded-2xl shadow p-5 h-full mc-card">
+                            <div class="selector-row">
+                <div class="selector-box">
+                  <span class="selector-badge pill pill-indigo">세대 선택</span>
+                  <h4 class="selector-heading" id="currentLabel">현재 선택: <span class="text-indigo-700">4세대(현행)</span></h4>
+                  <select id="genSelect" class="mc-select">
+                    <option value="4th-basic" selected>4세대(현행)</option>
+                    <option value="3rd-standard">3세대(표준)</option>
+                    <option value="2nd-legacy">2세대</option>
+                  </select>
+                </div>
+                <div class="selector-box">
+                  <span class="selector-badge pill pill-emerald">의료기관 유형</span>
+                  <h4 class="selector-heading">급여 공제 자동 적용</h4>
+                  <select id="facilitySelect" class="mc-select">
+                    <option value="clinic" selected>의원</option>
+                    <option value="hospital">병원</option>
+                    <option value="sh">상급/종합병원</option>
+                  </select>
+                </div>
+              </div>
+
+              <div id="dedSummary" class="mt-2 text-[12px] text-slate-600"></div>
+              <div id="ruleDetails" class="mt-2 text-[12px] text-slate-600"></div>
+
+              <div class="mt-4 grid grid-cols-1 gap-4">
+                <div>
+                  <label class="block text-sm font-bold mb-1 text-slate-800">환자부담총액 - 급여(원)</label>
+                  <input id="inpCoveredCo" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-[15px]" placeholder="예: 30,000" />
+                  <p class="text-xs text-slate-500 mt-1">영수증의 “요양급여 본인부담금” 합계</p>
+                </div>
+                <div>
+                  <label class="block text-sm font-bold mb-1 text-slate-800">환자부담총액 - 비급여(원)</label>
+                  <input id="inpNonCovered" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-[15px]" placeholder="예: 70,000" />
+                  <p class="text-xs text-slate-500 mt-1">영수증의 “비급여/전액본인부담/비급여 재료대” 합계(제증명료 등 비보장 제외)</p>
+                </div>
+              </div>
+
+              <details class="mt-4">
+                <summary class="cursor-pointer text-slate-700 font-semibold text-[14px]">고급 설정(자동 입력값 확인/수정)</summary>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                  <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-800">급여 보상(%)</label>
+                    <input id="advCoveredRate" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-800">비급여 보상(%)</label>
+                    <input id="advNonCoveredRate" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-800">1회 한도(원)</label>
+                    <input id="advPerCap" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" value="0" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-800">급여 공제(원)</label>
+                    <input id="advDedCovered" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" value="0" />
+                    <p class="text-xs text-slate-500 mt-1">의료기관 유형/세대 규칙에 따라 자동 설정</p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-800">비급여 공제(원)</label>
+                    <input id="advDedNonCovered" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" value="0" />
+                    <p class="text-xs text-slate-500 mt-1">2세대는 ‘최소공제 vs 20%’ 규칙(전체금액 기준)</p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-800">도수·주사·체외(1회 한도)</label>
+                    <input id="advPhysioCap" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" value="0" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-800">연간 한도(남은액)</label>
+                    <input id="advAnnualRemain" type="text" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px]" value="999,999,999" />
+                  </div>
+                </div>
+              </details>
+
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <button id="btnCalc" class="gbtn gbtn-calc">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  계산하기
+                </button>
+                <button id="btnReset" class="gbtn gbtn-reset">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                  초기화
+                </button>
+                <button id="btnExample" class="gbtn gbtn-ghost">예시 입력</button>
+              </div>
+
+              <div id="boxResult" class="mt-5 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                <div class="text-slate-700 text-sm">예상 수령액</div>
+                <div class="mt-1 text-3xl font-extrabold" id="txtPayout">0원</div>
+                <ul class="mt-2 text-slate-700 text-[15px] space-y-1" id="listExplain"></ul>
+              </div>
+              <p class="mt-3 text-xs text-slate-500">※ 참고용 계산 결과입니다. 실제 지급은 약관·심사에 따라 달라질 수 있습니다.</p>
+            </section>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+    <footer class="border-t border-slate-200 bg-white">
+    <div class="maxw px-5 py-6 text-sm text-slate-600">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>© <span id="y"></span> 청구닷컴</div>
+        <div class="flex items-center gap-3">
+          <a class="btn btn-ghost" href="#">문의</a>
+          <a class="btn btn-ghost" href="#">개인정보처리방침</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+    <div id="copyAlert" style="
+    position:fixed;left:50%;top:18px;transform:translateX(-50%);
+    background:#182340;color:#fff;padding:10px 14px;border-radius:10px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);font-size:14px;display:none;z-index:2147483647;">
+    무단 복제/배포 금지 · 저작권 보호 중
+  </div>
+
+  <script>
+  (function () {
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    // **맨 위로 고정 노출**
+    try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch(e){}
+    window.addEventListener('load', ()=> window.scrollTo(0,0));
+
+    // 팝업 오픈(종수술/상급종합)
+    window.openPopup = function(url, w=980, h=720){
+      const y = Math.max(0, (window.outerHeight - h) / 2 + (window.screenY||0));
+      const x = Math.max(0, (window.outerWidth  - w) / 2 + (window.screenX||0));
+      const opt = `popup=yes,scrollbars=yes,resizable=yes,width=${w},height=${h},left=${x},top=${y}`;
+      window.open(url, '_blank', opt);
+    };
+
+    // 검색
+    const q = $("#q"); const clearBtn = $("#clear");
+    document.addEventListener("keydown", (e) => { if (e.key === "/") { e.preventDefault(); q.focus(); } if (e.key === "Escape") { q.value = ""; filter(); } });
+    clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
+    q.addEventListener("input", filter);
+
+    // 리스트
+    const lossList = $("#loss-list"), lifeList = $("#life-list");
+    const lossEmpty = $("#loss-empty"), lifeEmpty = $("#life-empty");
+    const lossCount = $("#loss-count"), lifeCount = $("#life-count");
+
+    async function loadData() {
+      const res = await fetch("/data/links.json?ts=" + Date.now(), { cache: "no-store" });
+      if (!res.ok) throw new Error("failed to load");
+      return res.json();
+    }
+
+    function brandCell(item) {
+      const L = item.links || {};
+      const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
+      const detailUrl = `/tools/e-enroll.html?c=${encodeURIComponent(item.name)}`;
+      const inner = `
+        <div class="brand">
+          <img src="${logoSrc}" alt="${item.name} 로고" class="logo" onerror="this.style.display='none'"/>
+          <span class="name">${item.name}</span>
+        </div>`;
+      return `<a href="${detailUrl}" target="_blank" rel="noopener" class="block no-underline">${inner}</a>`;
+    }
+
+    // 일반 버튼
+    function btn(label, href, cls) {
+      if (!href) return `<button class="btn btn-muted" disabled>${label}</button>`;
+      const isExternal = /전산|홈페이지|필요서류/.test(label);
+      // [수정] btn-pdf 또는 btn-dental 클래스일 경우
+      const isDownload = (cls === 'btn-pdf' || cls === 'btn-dental');
+      // [수정] download="" (값 없음)으로 설정해 '원본 파일명'으로 다운로드
+      const downloadAttr = isDownload ? ' download=""' : '';
+      return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
+    }
+
+    // 전화 버튼(고객센터/인콜만 가운데 정렬)
+    function phoneBtn(label, number) {
+      if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
+      const tel = number.replace(/[^0-9]/g,'');
+      const centerClass = /고객센터|인콜/.test(label) ? ' center' : '';
+      return `<a class="btn btn-call${centerClass}" href="tel:${tel}">${label} <span class="num">${number}</span></a>`;
+    }
+
+    // 표 한 행
+    function row(item) {
+      const L = item.links || {};
+      return `
+        <div class="row" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}">
+          <div>${brandCell(item)}</div>
+          <div class="stack">
+            <div class="grid-top">
+              ${btn("전산 접속", L.system, "btn-primary")}
+              ${btn("필요서류 안내", L.guide, "btn-ghost")}
+              ${btn("치과치료확인서", L.dental, "btn-dental")}
+              ${btn("보험금 청구서 PDF 다운로드", L.pdf, "btn-pdf")}
+              ${btn("홈페이지", L.support, "btn-ghost")}
+            </div>
+            <div class="grid-bottom">
+              ${phoneBtn("고객센터", L.cs)}
+              ${phoneBtn("인콜 모니터링", L.monitor)}
+              ${phoneBtn("보험금청구 FAX", L.fax)}
+              ${btn("약관확인", L.terms, "btn-ghost")}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function render(json) {
+      const arr = json.carriers || [];
+      const loss = arr.filter(x => x.type === "손해");
+      const life = arr.filter(x => x.type === "생명");
+
+      lossList.innerHTML = loss.map(row).join("");
+      lifeList.innerHTML = life.map(row).join("");
+
+      lossEmpty.classList.toggle("hidden", loss.length > 0);
+      lifeEmpty.classList.toggle("hidden", life.length > 0);
+      if (lossCount) lossCount.textContent = `${loss.length}개`;
+      if (lifeCount) lifeCount.textContent = `${life.length}개`;
+      filter();
+      initMobileAccordion();
+      attachWideMode(document.getElementById('loss-list'));
+      attachWideMode(document.getElementById('life-list'));
+    }
+
+    function filter() {
+      const v = (q.value || "").toLowerCase().trim();
+      $$(".row[data-name]").forEach(el => {
+        const key = (el.dataset.name + " " + (el.dataset.tags || "")).toLowerCase();
+        el.style.display = key.includes(v) ? "" : "none";
+      });
+    }
+
+    loadData().then(render).catch(() => {
+      const err = '<div class="px-4 py-3 text-sm text-red-600">데이터 로드 실패: /data/links.json</div>';
+      lossList.innerHTML = err; lifeList.innerHTML = err;
+    });
+
+    /* ===== 보험나이 계산기 ===== */
+    const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const addMonths = (d, m) => { const x = new Date(d); const day=x.getDate(); x.setMonth(x.getMonth()+m); if (x.getDate()!==day) x.setDate(0); return x; };
+    function intlAge(dob, asof){ let a = asof.getFullYear()-dob.getFullYear(); const bThis = new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()); if(asof < bThis) a -= 1; return a; }
+    function insAge(dob, asof){ const base=intlAge(dob, asof); const lastYear = asof.getFullYear() - (asof < new Date(asof.getFullYear(), dob.getMonth(), dob.getDate()) ? 1 : 0); const last = new Date(lastYear, dob.getMonth(), dob.getDate()); const half=addMonths(last,6); const plus = asof >= half ? 1 : 0; return {base, ins: base+plus, half}; }
+
+    const yEl = document.getElementById('dobY');
+    const mEl = document.getElementById('dobM');
+    const dEl = document.getElementById('dobD');
+    const form = document.getElementById('age-form');
+    const badge = document.getElementById('age-badge');
+    const ageNum = document.getElementById('age-num');
+    const intlAgeEl = document.getElementById('intl-age');
+    const ruleText = document.getElementById('age-rule');
+    const halfLeft = document.getElementById('halfleft');
+    const resetBtn = document.getElementById('age-reset');
+
+    function onlyDigits(e){ e.target.value = e.target.value.replace(/\D/g,''); }
+    function clamp2(v, min, max){ if(!v) return ''; const n=Number(v); if(Number.isNaN(n)) return ''; return String(Math.min(max, Math.max(min, n))).padStart(2,'0'); }
+
+    yEl?.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 4) mEl.focus(); });
+    mEl?.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 2) { e.target.value = clamp2(e.target.value, 1, 12); dEl.focus(); } });
+    dEl?.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 2) { e.target.value = clamp2(e.target.value, 1, 31); } });
+    function backspacePrev(curr, prev){ curr?.addEventListener('keydown', e=>{ if(e.key==='Backspace' && !curr.value){ prev.focus(); } }); }
+    backspacePrev(mEl, yEl); backspacePrev(dEl, mEl);
+
+    function getDobString(){ const y=yEl?.value; const m=mEl?.value; const d=dEl?.value; if(y?.length===4 && m?.length===2 && d?.length===2) return `${y}-${m}-${d}`; return null; }
+    function safeDate(str){ const d=new Date(str); return Number.isNaN(d.getTime())?null:d; }
+
+    function renderAge(){
+      const dobStr = getDobString(); if(!dobStr) return;
+      const dob = safeDate(dobStr); if(!dob) return;
+      const asof = new Date();
+      const r = insAge(dob, asof);
+      ageNum.textContent = r.ins;
+      intlAgeEl.textContent = r.base;
+      ruleText.textContent = (asof >= r.half) ? '오늘 기준: 최근 생일부터 6개월 경과 → +1' : '오늘 기준: 최근 생일부터 6개월 미만';
+      const ms = r.half - asof;
+      halfLeft.textContent = (ms<=0) ? '이미 상령일 지남' : `${fmt(r.half)} (약 ${Math.floor(ms/86400000)}일 ${Math.floor((ms%86400000)/3600000)}시간 남음)`;
+      badge.textContent = `${r.ins}세`;
+    }
+
+    if (form) {
+      form.addEventListener('submit', (e)=>{ e.preventDefault(); renderAge(); });
+      resetBtn?.addEventListener('click', ()=>{
+        yEl.value=''; mEl.value=''; dEl.value='';
+        ageNum.textContent='--'; intlAgeEl.textContent='–';
+        ruleText.textContent='생년월일을 입력하세요'; halfLeft.textContent='–';
+        badge.textContent='–';
+      });
+      (function(){
+        const p=new URL(location.href).searchParams.get('dob');
+        if(p && /^\d{4}-\d{2}-\d{2}$/.test(p)){ const [yy,mm,dd]=p.split('-'); yEl.value=yy; mEl.value=mm; dEl.value=dd; renderAge(); }
+      })();
+    }
+
+    document.getElementById("y").textContent = new Date().getFullYear();
+
+    /* ===== 실손 계산기 로직 ===== */
+    const KRW = new Intl.NumberFormat('ko-KR');
+    const byId = (id)=> document.getElementById(id);
+    const inputs = {
+      coveredCo: byId('inpCoveredCo'),
+      nonCov: byId('inpNonCovered'),
+      covRate: byId('advCoveredRate'),
+      nonRate: byId('advNonCoveredRate'),
+      perCap: byId('advPerCap'),
+      dedCov: byId('advDedCovered'),
+      dedNon: byId('advDedNonCovered'),
+      physioCap: byId('advPhysioCap'),
+      annualRemain: byId('advAnnualRemain')
+    };
+
+    // ✅ 비급여도 공제 후 100% 보상(3·4세대)으로 변경
+    const presets = {
+      '4th-basic':    { label: '4세대(현행)', coveredRate: 1.0, nonCoveredRate: 1.0, perVisitCap: 0, nonCoveredDeductible: 30000, physioPerVisitCap: 0, annualRemain: 999999999 },
+      '3rd-standard': { label: '3세대(표준)',  coveredRate: 1.0, nonCoveredRate: 1.0, perVisitCap: 0, nonCoveredDeductible: 20000, physioPerVisitCap: 0, annualRemain: 999999999 },
+      '2nd-legacy':   { label: '2세대',       coveredRate: 1.0, nonCoveredRate: 1.0, perVisitCap: 0, nonCoveredDeductible: 0,     physioPerVisitCap: 0, annualRemain: 999999999 }
+    };
+
+    // 2세대 최소공제(전체금액 기준)
+    const facilityMinDed_2nd = { clinic:10000, hospital:15000, sh:20000 };
+
+    // 4세대에서만 '병원' 숨김
+    function refreshFacilityOptions(){
+      const sel = byId('facilitySelect');
+      const keep = new Set(['clinic','hospital','sh']);
+      Array.from(sel.options).forEach(o => { if(!keep.has(o.value)) sel.removeChild(o); });
+      const gen = byId('genSelect').value;
+      const hasHospital = Array.from(sel.options).some(o=>o.value==='hospital');
+      if (gen === '4th-basic' && hasHospital){
+        if (sel.value === 'hospital') sel.value = 'clinic';
+        sel.querySelector('option[value="hospital"]').remove();
+      } else if (gen !== '4th-basic' && !hasHospital){
+        const opt = document.createElement('option');
+        opt.value = 'hospital';
+        opt.textContent = '병원';
+        sel.insertBefore(opt, sel.querySelector('option[value="sh"]'));
+      }
+    }
+
+    function onlyDigits2(s){ return String(s||'').replace(/[^0-9]/g, ''); }
+    function toNumber(text){ return Number(onlyDigits2(text)||0); }
+    function fmtKRW(n){ return KRW.format(Math.max(0, Math.round(Number(n||0)))); }
+    function attachCurrencyFormatter(el){
+      if(!el) return;
+      el.addEventListener('blur', ()=>{ el.value = fmtKRW(toNumber(el.value)); });
+      el.addEventListener('focus', ()=>{ const v = onlyDigits2(el.value); el.value = v ? KRW.format(v) : ''; });
+      el.addEventListener('input', ()=>{ const raw = onlyDigits2(el.value); el.value = raw ? KRW.format(raw) : ''; el.setSelectionRange(el.value.length, el.value.length); });
+all   }
+    [inputs.coveredCo, inputs.nonCov, inputs.perCap, inputs.dedCov, inputs.dedNon, inputs.physioCap, inputs.annualRemain].forEach(attachCurrencyFormatter);
+
+    const genSelect = byId('genSelect');
+    const facilitySelect = byId('facilitySelect');
+    const dedSummary = byId('dedSummary');
+    const ruleDetails = byId('ruleDetails');
+
+    function updateDedSummary(){
+      const key = genSelect.value;
+      if(key === '2nd-legacy'){
+        dedSummary.textContent = '2세대 공제(1회): 전체(급여+비급여) 금액 기준 → 최소공제(의원 10,000원 / 병원 15,000원 / 상급·종합 20,000원)와 전체의 20% 중 큰 금액을 1회 공제 후 전액 보상.';
+      } else if (key === '3rd-standard'){
+        dedSummary.textContent = '3세대 공제(1회): 급여는 (의원 1만원·병원 1.5만원·상급/종합 2만원) vs 급여의 10% 중 큰 금액 공제. 비급여는 (2만원 vs 비급여 20%) 중 큰 금액 공제 후 100% 보상.';
+      } else if (key === '4th-basic'){
+        dedSummary.textContent = '4세대 공제(1회): 급여는 (의원 1만원·상급/종합 2만원) vs 급여의 20% 중 큰 금액 공제(병원 미적용). 비급여는 (3만원 vs 비급여 30%) 중 큰 금액 공제 후 100% 보상.';
+      }
+    }
+
+    function updateRuleDetails(){
+      const gen = genSelect.value;
+      const fac = facilitySelect.value;
+      const mapKo = {clinic:'의원', hospital:'병원', sh:'상급/종합병원'};
+      let lines = [];
+
+      if (gen === '2nd-legacy') {
+        lines.push('• 전체금액(급여+비급여) 기준으로 1회 공제 후 전액 보상');
+        lines.push('• 최소공제: 의원 10,000원 / 병원 15,000원 / 상급·종합 20,000원');
+        lines.push('• “최소공제”와 “전체의 20%” 중 큰 금액 적용');
+      } else if (gen === '3rd-standard') {
+        lines.push(`• 급여(${mapKo[fac]}): (최소공제 vs 급여의 10%) 중 큰 금액 공제 후 100% 보상`);
+        if (fac==='clinic') lines.push('  - 최소공제: 10,000원');
+        else if (fac==='hospital') lines.push('  - 최소공제: 15,000원');
+        else lines.push('  - 최소공제: 20,000원');
+        lines.push('• 비급여: (20,000원 vs 비급여 20%) 중 큰 금액 공제 후 100% 보상');
+      } else { // 4th-basic
+        lines.push(`• 급여(${mapKo[fac]}): (최소공제 vs 급여의 20%) 중 큰 금액 공제 후 100% 보상`);
+        if (fac==='clinic') lines.push('  - 최소공제: 10,000원');
+        else if (fac==='hospital') lines.push('  - 4세대에서 병원은 선택 불가');
+        else lines.push('  - 최소공제: 20,000원');
+        lines.push('• 비급여: (30,000원 vs 비급여 30%) 중 큰 금액 공제 후 100% 보상');
+      }
+      ruleDetails.innerHTML = lines.map(s=>`<div>${s}</div>`).join('');
+    }
+
+    function applyGen(key){
+      const p = presets[key]; if(!p) return;
+
+      // 급여/비급여 보상률 반영(요청: 둘 다 100%)
+      inputs.covRate.value = Math.round((p.coveredRate||0)*100);
+      inputs.nonRate.value = Math.round((p.nonCoveredRate||0)*100);
+      inputs.perCap.value = fmtKRW(p.perVisitCap||0);
+      inputs.physioCap.value = fmtKRW(p.physioPerVisitCap||0);
+      inputs.annualRemain.value = fmtKRW(p.annualRemain||999999999);
+
+      // 비급여 고정 최소공제(세대별)
+      inputs.dedNon.value = fmtKRW(key==='2nd-legacy' ? 0 : (p.nonCoveredDeductible||0));
+
+      // 4세대에서 병원 숨김/그 외 복원
+      refreshFacilityOptions();
+
+      const lbl = byId('currentLabel');
+      if(lbl) lbl.innerHTML = `현재 선택: <span class="text-indigo-700">${p.label}</span>`;
+      updateDedSummary(); updateRuleDetails();
+    }
+
+    function applyFacility(){
+      updateRuleDetails();
+    }
+
+    // init
+    applyGen('4th-basic');
+    genSelect?.addEventListener('change', ()=> applyGen(genSelect.value));
+    facilitySelect?.addEventListener('change', ()=> applyFacility());
+
+    // 예시
+    document.getElementById('btnExample')?.addEventListener('click', ()=>{
+      inputs.coveredCo.value = fmtKRW(30000);
+      inputs.nonCov.value = fmtKRW(70000);
+      const box = document.getElementById('boxResult');
+      if(box){ box.classList.add('ring-2','ring-amber-300'); setTimeout(()=> box.classList.remove('ring-2','ring-amber-300'), 500); }
+    });
+
+    function calc(){
+      const coveredCo = toNumber(inputs.coveredCo.value);
+      const nonCovAmt = toNumber(inputs.nonCov.value);
+      const key = genSelect.value;
+      const fac = facilitySelect.value;
+
+      const totalAmt = coveredCo + nonCovAmt;
+      if((key==='2nd-legacy' && totalAmt===0) || (key!=='2nd-legacy' && coveredCo===0 && nonCovAmt===0)){
+        alert('금액을 입력하세요'); return;
+      }
+
+      // 보상률(요청: 급여/비급여 모두 100%)
+      const covRate = 1.0;
+      const nonRate = 1.0;
+
+      const perCap  = toNumber(inputs.perCap.value);
+      const physioCap = toNumber(inputs.physioCap.value);
+      const annualRemain = toNumber(inputs.annualRemain.value) || 999999999;
+
+      let payout = 0, explain = [];
+
+      if(key === '2nd-legacy'){
+        // 전체 기준 공제
+        const minFixed = (facilityMinDed_2nd[fac] ?? 20000);
+        const twentyPct = Math.floor(totalAmt * 0.20);
+        const appliedDed = Math.max(minFixed, twentyPct);
+
+        const base = Math.max(0, totalAmt - appliedDed);
+        payout = base;
+
+        if(physioCap>0) payout = Math.min(payout, physioCap);
+        if(perCap>0)    payout = Math.min(payout, perCap);
+        payout = Math.min(payout, annualRemain);
+
+        byId('txtPayout').textContent = fmtKRW(payout) + '원';
+        explain.push(`전체금액: ${fmtKRW(totalAmt)}원`);
+        explain.push(`공제(2세대): 최소 ${fmtKRW(minFixed)}원 vs 20% ${fmtKRW(twentyPct)}원 → 적용 ${fmtKRW(appliedDed)}원`);
+*       explain.push(`보상 기준금액: ${fmtKRW(base)}원(전액 보상)`);
+        if(physioCap>0) explain.push(`도수·주사·체외 1회 한도: 최대 ${fmtKRW(physioCap)}원`);
+        if(perCap>0)    explain.push(`1회 한도: 최대 ${fmtKRW(perCap)}원`);
+        if(annualRemain>0 && annualRemain<999999999) explain.push(`연간 잔여 한도: ${fmtKRW(annualRemain)}원`);
+      } else {
+        // ===== 급여 공제: 세대/의료기관별 (최소 vs %) 중 큰 금액
+        let covPct = 0.10; // 3세대 기본
+        let covMin = 10000; // 의원 기본
+        if (key === '4th-basic') covPct = 0.20;
+
+        if (fac === 'clinic') covMin = 10000;
+        else if (fac === 'hospital') covMin = (key==='3rd-standard') ? 15000 : 0; // 4세대는 병원 선택 불가
+        else covMin = 20000; // 상급/종합
+
+        if (key==='4th-basic' && fac==='hospital') {
+          explain.push('4세대에서 “병원”은 적용되지 않습니다. 의원 또는 상급/종합병원을 선택해주세요.');
+          byId('txtPayout').textContent = '0원';
+          const ul = byId('listExplain'); ul.innerHTML = '';
+          explain.forEach(t=>{ const li=document.createElement('li'); li.textContent='• '+t; ul.appendChild(li); });
+          return;
+        }
+
+        const covPctKRW = Math.floor(coveredCo * covPct);
+        const appliedCovDed = Math.max(covMin, covPctKRW);
+        const covBase = Math.max(0, coveredCo - appliedCovDed);
+        const covPay  = covBase * covRate; // 100%
+
+        // ===== 비급여 공제: 세대 규칙(최소 vs %) → 잔액 100% 보상
+        let nonFixed = 0, nonPct = 0;
+        if (key === '3rd-standard') { nonFixed = 20000; nonPct = 0.20; }
+        else if (key === '4th-basic') { nonFixed = 30000; nonPct = 0.30; }
+
+        let appliedNonDed = 0, nonBase = 0, nonPay = 0;
+        if (key === '3rd-standard' || key === '4th-basic') {
+          const nonPctKRW = Math.floor(nonCovAmt * nonPct);
+          appliedNonDed = Math.max(nonFixed, nonPctKRW);
+          nonBase = Math.max(0, nonCovAmt - appliedNonDed);
+          nonPay  = nonBase * nonRate; // 100%
+        }
+
+        payout = covPay + nonPay;
+        if (physioCap > 0) payout = Math.min(payout, physioCap);
+        if (perCap > 0)    payout = Math.min(payout, perCap);
+        payout = Math.min(payout, annualRemain);
+
+        byId('txtPayout').textContent = fmtKRW(payout) + '원';
+        const mapKo = {clinic:'의원', hospital:'병원', sh:'상급/종합병원'};
+        explain.push(`급여 공제(${mapKo[fac]}): ${fmtKRW(covMin)}원 vs ${Math.round(covPct*100)}% ${fmtKRW(covPctKRW)}원 → 적용 ${fmtKRW(appliedCovDed)}원`);
+M       explain.push(`급여 보상: ${fmtKRW(covPay)}원 (기준 ${fmtKRW(covBase)}원 × 100%)`);
+        if (key==='3rd-standard' || key==='4th-basic') {
+          const nonPctKRW2 = Math.floor(nonCovAmt * nonPct);
+A         explain.push(`비급여 공제: ${fmtKRW(nonFixed)}원 vs ${Math.round(nonPct*100)}% ${fmtKRW(nonPctKRW2)}원 → 적용 ${fmtKRW(appliedNonDed)}원`);
+          explain.push(`비급여 보상: ${fmtKRW(nonPay)}원 (기준 ${fmtKRW(nonBase)}원 × 100%)`);
+        }
+        if (physioCap>0) explain.push(`도수·주사·체외 1회 한도: 최대 ${fmtKRW(physioCap)}원`);
+        if (perCap>0)    explain.push(`1회 한도: 최대 ${fmtKRW(perCap)}원`);
+        if (annualRemain>0 && annualRemain<999999999) explain.push(`연간 잔여 한도: ${fmtKRW(annualRemain)}원`);
+      }
+
+      const ul = byId('listExplain'); ul.innerHTML = '';
+      explain.forEach(t=>{ const li=document.createElement('li'); li.textContent='• '+t; ul.appendChild(li); });
+all   }
+
+    document.getElementById('btnCalc')?.addEventListener('click', calc);
+    document.getElementById('btnReset')?.addEventListener('click', ()=>{
+      [inputs.coveredCo, inputs.nonCov].forEach(el=> el.value='');
+      genSelect.value='4th-basic'; facilitySelect.value='clinic';
+      applyGen('4th-basic'); updateRuleDetails();
+      document.getElementById('txtPayout').textContent='0원'; document.getElementById('listExplain').innerHTML='';
+    });
+
+    // 폭 감지 폴백
+    function attachWideMode(tableEl, threshold=1100){
+      if (!tableEl) return;
+      const ro = new ResizeObserver(entries=>{
+        for (const e of entries){
+          const w = e.contentBoxSize?.[0]?.inlineSize ?? e.contentRect.width;
+          if (w >= threshold) tableEl.classList.add('cw-wide');
+          else tableEl.classList.remove('cw-wide');
+        }
+      });
+      ro.observe(tableEl);
+    }
+  })();
+  </script>
+
+    <script>
+    (function(){
+      // 이미지 드래그 방지
+      document.addEventListener('dragstart', e => e.preventDefault(), true);
+      document.querySelectorAll('img').forEach(img => { img.setAttribute('draggable','false'); });
+
+      // 우클릭/컨텍스트 메뉴 차단 + 토스트
+      const toast = document.getElementById('copyAlert');
+      let tId;
+      function showToast(msg){
+        if(!toast) return;
+        toast.textContent = msg || toast.textContent;
+        toast.style.display = 'block';
+        clearTimeout(tId);
+        tId = setTimeout(()=> toast.style.display='none', 1600);
+      }
+      document.addEventListener('contextmenu', e => { e.preventDefault(); showToast('무단 복제 금지 · 저작권 보호 중'); }, true);
+
+      // 단축키 일부 차단(F12, Ctrl+U/S/P, Ctrl+Shift+I/J/C)
+      document.addEventListener('keydown', function(e){
+        const k = (e.key || '').toLowerCase();
+        const ctrl = e.ctrlKey || e.metaKey;
+        const block =
+          k === 'f12' ||
+          (ctrl && ['u','s','p'].includes(k)) ||
+          (ctrl && e.shiftKey && ['i','j','c'].includes(k));
+        if(block){ e.preventDefault(); e.stopPropagation(); showToast('보호된 페이지 입니다'); }
+      }, true);
+
+      // 복사/잘라내기 시 경고(입력 필드는 허용)
+      ['copy','cut'].forEach(evt => {
+        document.addEventListener(evt, function(ev){
+          const tag = (ev.target && ev.target.tagName || '').toLowerCase();
+          const editable = ev.target && (ev.target.isContentEditable || ['input','textarea'].includes(tag));
+          if(!editable){ ev.preventDefault(); showToast('콘텐츠 복사 금지'); }
+        }, true);
+      });
+
+      // 카나리아 토큰(보이지 않는 식별자)
+      const CANARY = 'claimhub-' + (new Date()).toISOString().slice(0,10).replace(/-/g,'') + '-K1';
+      document.body.appendChild(document.createComment('canary:'+CANARY));
+    })();
+  </script>
 <a href="tools/claim-autofill.html?demo">청구서 자동채움 데모 열기</a>
 <script id="logo-hotfix-final">
 function forceLogoHorizontal() {
-  // 767px 이하 모바일일 때만 실행
-  if (window.innerWidth > 767) return;
+  // 767px 이하 모바일일 때만 실행
+  if (window.innerWidth > 767) return;
 
-  try {
-    // '청구닷컴' 로고 a 태그를 가장 구체적인 선택자로 찾습니다
-    var logo = document.querySelector('body.mode-compact header > .maxw > a.text-xl.font-extrabold.no-underline[href="/"]');
-    
-    if (logo) {
-      // site.css의 모든 !important를 이기기 위해 JS로 강제 적용
-      logo.style.setProperty('writing-mode', 'horizontal-tb', 'important');
-      logo.style.setProperty('transform', 'none', 'important');
-      logo.style.setProperty('position', 'static', 'important');
-      logo.style.setProperty('font-size', '22px', 'important');
-    }
-  } catch (e) { 
-    console.error('Logo hotfix attempt failed:', e); 
-  }
+  try {
+    // '청구닷컴' 로고 a 태그를 가장 구체적인 선택자로 찾습니다
+    var logo = document.querySelector('body.mode-compact header > .maxw > a.text-xl.font-extrabold.no-underline[href="/"]');
+    
+    if (logo) {
+      // site.css의 모든 !important를 이기기 위해 JS로 강제 적용
+      logo.style.setProperty('writing-mode', 'horizontal-tb', 'important');
+      logo.style.setProperty('transform', 'none', 'important');
+      logo.style.setProperty('position', 'static', 'important');
+      logo.style.setProperty('font-size', '22px', 'important');
+    }
+  } catch (e) { 
+    console.error('Logo hotfix attempt failed:', e); 
+  }
 }
 
 // 시도 1: HTML 파싱 직후
@@ -954,10 +1031,10 @@ document.addEventListener('DOMContentLoaded', forceLogoHorizontal);
 window.addEventListener('load', forceLogoHorizontal);
 
 // 시도 3: (최후의 수단) 모든 로드가 끝나고 0.5초, 1.5초 뒤에
-//          다른 JS가 스타일을 덮어쓰는 것까지 이기기 위해
+//          다른 JS가 스타일을 덮어쓰는 것까지 이기기 위해
 window.addEventListener('load', function() {
-  setTimeout(forceLogoHorizontal, 500);  // 0.5초 후
-  setTimeout(forceLogoHorizontal, 1500); // 1.5초 후
+  setTimeout(forceLogoHorizontal, 500);  // 0.5초 후
+  setTimeout(forceLogoHorizontal, 1500); // 1.5초 후
 });
 </script>
 
