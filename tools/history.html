@@ -276,6 +276,12 @@
         /* ===== 모바일 전용: 세대 탭 선택형 뷰 ===== */
         .mobile-controls { display: none; }
         @media (max-width: 640px) {
+            /* 컨테이너 여백 축소 */
+            .container { padding: 12px 10px; }
+            h1 { font-size: 22px; }
+            h2 { font-size: 18px; }
+            .subtitle { font-size: 12px; }
+
             .mobile-controls { 
                 display: flex; gap: 8px; align-items: center; justify-content: center; 
                 margin-top: 12px; flex-wrap: wrap;
@@ -283,17 +289,43 @@
             .mobile-controls .seg { 
                 padding: 6px 10px; border: 1px solid #e5e7eb; border-radius: 999px; 
                 background: #fff; color:#111827; font-weight:800; font-size: 13px; cursor: pointer;
+                transition: filter .15s ease, box-shadow .15s ease;
             }
-            .mobile-controls .seg.active { background: #111827; color:#fff; border-color:#111827; }
+            .mobile-controls .seg:hover{ filter: brightness(.98); box-shadow: 0 2px 6px rgba(2,6,23,.06); }
+            /* 색상 매핑: 1세대=초록, 2세대=주황, 3세대=빨강, 4세대=파랑 */
+            .mobile-controls .seg[data-gen="g1"]{ border-color:#bbf7d0; background:#f0fdf4; color:#065f46; }
+            .mobile-controls .seg[data-gen="g2"],
+            .mobile-controls .seg[data-gen="g3"],
+            .mobile-controls .seg[data-gen="g4"]{ border-color:#fde68a; background:#fffbeb; color:#92400e; }
+            .mobile-controls .seg[data-gen="g5"]{ border-color:#fecaca; background:#fef2f2; color:#991b1b; }
+            .mobile-controls .seg[data-gen="g6"]{ border-color:#bfdbfe; background:#eff6ff; color:#1e40af; }
+            .mobile-controls .seg[data-gen="g1"].active{ background:#16a34a; color:#fff; border-color:#16a34a; }
+            .mobile-controls .seg[data-gen="g2"].active,
+            .mobile-controls .seg[data-gen="g3"].active,
+            .mobile-controls .seg[data-gen="g4"].active{ background:#f59e0b; color:#111827; border-color:#f59e0b; }
+            .mobile-controls .seg[data-gen="g5"].active{ background:#ef4444; color:#fff; border-color:#ef4444; }
+            .mobile-controls .seg[data-gen="g6"].active{ background:#3b82f6; color:#fff; border-color:#3b82f6; }
             /* 표 자체를 한 열만 보이도록 간소화 */
             [data-gen] .comparison-table { min-width: 0; }
             [data-gen] .comparison-table th, [data-gen] .comparison-table td { white-space: normal; padding: 10px 8px; font-size: 13px; }
+            /* 데스크탑 전용 sticky 해제: 모바일에서 겹침/깨짐 방지 */
+            .comparison-table thead th, .comparison-table tbody th { position: static; top: auto; left: auto; z-index: auto; }
+            .comparison-table thead th:first-child { width: auto; }
+            /* 긴 텍스트 줄바꿈 허용 */
+            .table-main td { white-space: normal; }
+            .table-main .align-left { text-align: center; white-space: normal; }
+            /* 세대 뱃지 크기 축소 */
+            .gen-bar { font-size: 15px; padding: 8px 10px; }
+            .gen-subtitle { font-size: 12px; }
             /* 헤더: 첫 번째 열 제외하고 기본 숨김 */
             [data-gen] .comparison-table thead th:nth-child(n+2) { display: none; }
             /* 본문: 데이터 셀은 기본 숨김 */
             [data-gen] .comparison-table tbody td { display: none; }
             /* 첫 번째 열(th)은 유지 */
             [data-gen] .comparison-table tbody th { display: table-cell; position: static; padding-left: 10px; }
+            /* 2) 표의 구분 항목 헤더 높이 축소 */
+            #exTable .comparison-table thead th { padding: 8px 6px; font-size: 14px; }
+            #exTable .comparison-table tbody th { font-size: 14px; }
             /* 선택된 세대 열만 표시 (2~7번째 열) */
             [data-gen="g1"] .comparison-table thead th:nth-child(2),
             [data-gen="g1"] .comparison-table tbody td:nth-child(2) { display: table-cell; }
@@ -329,6 +361,7 @@
 
         <h2>1) 주요 내용 비교</h2>
         <div class="mobile-controls" aria-label="세대 선택 (모바일)">
+            <button class="seg" data-target="mainTable" data-gen="g1">1세대</button>
             <button class="seg active" data-target="mainTable" data-gen="g2">2세대(I)</button>
             <button class="seg" data-target="mainTable" data-gen="g3">2세대(II)</button>
             <button class="seg" data-target="mainTable" data-gen="g4">2세대(III)</button>
@@ -476,6 +509,7 @@
              1세대는 회사별 약관이 상이합니다. <strong>회사별 상이</strong> 배지를 클릭하면 상세 보상/면책 내역을 확인할 수 있습니다.
          </p>
         <div class="mobile-controls" aria-label="세대 선택 (모바일)">
+            <button class="seg" data-target="exTable" data-gen="g1">1세대</button>
             <button class="seg active" data-target="exTable" data-gen="g2">2세대(I)</button>
             <button class="seg" data-target="exTable" data-gen="g3">2세대(II)</button>
             <button class="seg" data-target="exTable" data-gen="g4">2세대(III)</button>
