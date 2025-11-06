@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실손의료비 변천사 - 청구닷컴</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 페이지 기본 스타일 */
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            padding: 10px; /* 모바일 여백 */
+            line-height: 1.6;
+        }
+
+        /* 메인 컨테이너 */
+        .container {
+            max-width: 1400px; /* 표를 위해 너비 확장 */
+            margin: 20px auto;
+            padding: 16px 24px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 페이지 제목 */
+        h1 {
+            text-align: center;
+            color: #0f172a;
+            font-weight: 900;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 16px;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            text-align: center; 
+            color: #475569; 
+            margin-top: 0;
+            font-size: 14px;
+        }
+        
+        /* 2) 섹션 제목 */
+        h2 {
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 40px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #cbd5e1;
+        }
+
+        /* ✅ 모바일 가로 스크롤을 위한 래퍼 */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto; /* 모바일에서 가로 스크롤 */
+            margin-top: 24px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        /* ✅ 비교 테이블 스타일 */
+        .comparison-table {
+            width: 100%;
+            min-width: 1400px; /* 가로 스크롤 유도 (6열 + 항목) */
+            border-collapse: collapse; /* 테두리 한 줄로 */
+            font-size: 14px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid #e2e8f0;
+            padding: 12px 14px;
+            text-align: center;
+            vertical-align: top;
+            white-space: nowrap; /* 기본적으로 줄바꿈 방지 */
+        }
+
+        /* 테이블 헤더 (세대별 제목 줄) */
+        .comparison-table thead th {
+            font-weight: 800;
+            padding: 14px;
+            position: sticky; /* 스크롤 시 상단 고정 */
+            top: 0;
+            background-color: #fff; /* 고정 시 배경 */
+            border-top: 0; /* 스티키 헤더의 위쪽 테두리 제거 */
+        }
+        .comparison-table thead th:first-child {
+            width: 12%; /* 항목명 칸 너비 */
+            background-color: #f1f5f9;
+            font-size: 15px;
+            z-index: 10;
+        }
+        
+        /* ✅ "바" 형식의 세대 구분 (님이 첨부한 이미지 색상 기준) */
+        .gen-bar {
+            padding: 8px 12px;
+            font-weight: 900;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .bar-gen1 { background-color: #16a34a; } /* 1세대(초록) */
+        .bar-gen2 { background-color: #f59e0b; } /* 2세대(주황) */
+        .bar-gen3 { background-color: #ef4444; } /* 3세대(빨강) */
+        .bar-gen4 { background-color: #3b82f6; } /* 4세대(파랑) */
+        
+        .gen-subtitle {
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 6px;
+            color: #475569;
+        }
+
+        /* 테이블 본문 (항목명) */
+        .comparison-table tbody th {
+            background-color: #f8fafc;
+            font-weight: 700;
+            text-align: left;
+            padding-left: 20px;
+            position: sticky; /* 첫 번째 열 고정 */
+            left: 0;
+            z-index: 1; /* 헤더(10)보다 낮게 */
+        }
+        
+        /* ✅ 항목명 열 고정 시, 배경색이 다른 셀을 덮도록 설정 */
+        .table-wrapper:not(:has(.comparison-table[style*="min-width: 920px"])) .comparison-table tbody th {
+            background-color: #f8fafc;
+        }
+        .table-wrapper:has(.comparison-table[style*="min-width: 920px"]) .comparison-table tbody th {
+            background-color: #f8fafc;
+        }
+
+        /* 테이블 내 텍스트 기본 가운데 정렬 (요청 반영) */
+        .comparison-table td {
+            text-align: center;
+            white-space: normal; /* 내용은 줄바꿈 허용 */
+        }
+        
+        /* 1) 주요내용 테이블의 통원/입원 항목은 가운데 정렬 */
+        .table-main td {
+            text-align: center;
+            white-space: nowrap;
+        }
+        .table-main .align-left {
+            text-align: center; /* 요청에 따라 중앙 정렬로 변경 */
+            white-space: normal;
+        }
+
+        /* ✅ X, O 표시자 (가독성 강화: 면책은 빨간색 강조) */
+        .text-x  { color: #ef4444; font-weight: 900; font-size: 1.1em; } /* 면책(빨강 강조) */
+        .text-o { color: #16a34a; font-weight: 700; font-size: 1.1em; } /* O (초록) */
+        .text-o-small { color: #16a34a; font-weight: 700; font-size: 0.9em; } /* O (급여) */
+        /* 작은 주석/보조 설명 */
+        .note { color: #6b7280; font-size: 12px; font-weight: 600; }
+        
+        /* 텍스트 강조 (보라색) */
+        strong {
+            color: #9333ea;
+            font-weight: 800;
+        }
+        
+        /* 뒤로가기 버튼 */
+        .btn-back {
+            display: inline-block;
+            margin: 24px 0 10px;
+            padding: 10px 18px;
+            background: linear-gradient(135deg,#64748b,#475569);
+            color: #ffffff;
+            font-weight: 800;
+            text-decoration: none;
+            border-radius: 999px;
+            box-shadow: 0 4px 10px rgba(2,6,23,.1);
+            transition: all .15s ease;
+        }
+        .btn-back:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(2,6,23,.15);
+        }
+
+        /* 세대 색상 범례 */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 10px 0 0;
+        }
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f1f5f9;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 13px;
+            color: #0f172a;
+        }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-gen1 { background: #16a34a; }
+        .dot-gen2 { background: #f59e0b; }
+        .dot-gen3 { background: #ef4444; }
+        .dot-gen4 { background: #3b82f6; }
+
+        /* ✅ 버튼 툴바 (1세대 상세 보기 버튼용) */
+        .toolbar { 
+            display:flex; 
+            justify-content:center; 
+            gap:10px; 
+            margin-top:20px; 
+        }
+        .badge-link { cursor: pointer; }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1;
+            white-space: nowrap;
+        }
+        .badge-variant { background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; }
+        
+        /* ✅ 1세대 상세 모달(팝업) 스타일 */
+        .modal-backdrop {
+            position: fixed; inset: 0; background: rgba(2,6,23,.55);
+            display: none; align-items: center; justify-content: center; z-index: 50;
+            padding: 20px;
+        }
+        .modal {
+            width: min(1200px, 95vw);
+            background: #ffffff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.25);
+            padding: 18px 18px 12px;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal header { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 6px 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .modal h3 { margin: 0; font-size: 18px; }
+        .modal .muted { color: #6b7280; font-size: 13px; margin: 4px 0 0; }
+        .modal .modal-body { 
+            margin-top: 12px; 
+            max-height: 75vh; /* 모달 높이 제한 */
+            overflow: auto; 
+        }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+            padding: 10px 16px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc;
+            font-weight: 800; color: #0f172a; box-shadow: 0 2px 6px rgba(2,6,23,.06);
+            text-decoration: none;
+        }
+        .btn:hover { background: #f1f5f9; box-shadow: 0 4px 12px rgba(2,6,23,.10); }
+        .btn-primary { background: linear-gradient(135deg,#2563eb,#1d4ed8); color: #fff; border-color: transparent; }
+        .btn-primary:hover { filter: brightness(1.05); }
+        
+        /* 모달 안의 1세대 표 스타일 */
+        .modal .comparison-table {
+            min-width: 1200px;
+        }
+        .modal .comparison-table tbody th {
+            background-color: #f8fafc;
+        }
+        .modal .gen1-head {
+             background: #f0fdf4; color: #14532d; font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>실손의료비 세대별 한눈에 비교</h1>
+        <p class="subtitle">
+            가입 시기별로 보장 내용이 다르므로, 정확한 내용은 가입하신 상품의 약관을 반드시 확인하셔야 합니다.
+        </p>
+        <div class="legend" aria-label="세대별 색상 범례">
+            <span class="legend-item"><span class="legend-dot dot-gen1"></span>1세대</span>
+            <span class="legend-item"><span class="legend-dot dot-gen2"></span>2세대</span>
+            <span class="legend-item"><span class="legend-dot dot-gen3"></span>3세대</span>
+            <span class="legend-item"><span class="legend-dot dot-gen4"></span>4세대</span>
+        </div>
+        
+        
+
+
+        <h2>1) 주요 내용 비교</h2>
+        <div class="table-wrapper">
+            <table class="comparison-table table-main">
+                <thead>
+                    <tr>
+                        <th>구분 항목</th>
+                        <th>
+                            <div class="gen-bar bar-gen1">1세대</div>
+                            <div class="gen-subtitle">'03.10월 ~ '09.9월</div>
+                        </th>
+                        <th>
+                            <div class="gen-bar bar-gen2">2세대 (표준화 I)</div>
+                            <div class="gen-subtitle">'09.10월 ~ '13.3월</div>
+                        </th>
+                        <th>
+                            <div class="gen-bar bar-gen2">2세대 (표준화 II)</div>
+                            <div class="gen-subtitle">'13.4월 ~ '15.8월</div>
+                        </th>
+                        <th>
+                            <div class="gen-bar bar-gen2">2세대 (표준화 III)</div>
+                            <div class="gen-subtitle">'15.9월 ~ '17.3월</div>
+                        </th>
+                        <th>
+                            <div class="gen-bar bar-gen3">3세대 (착한 실손)</div>
+                            <div class="gen-subtitle">'17.4월 ~ '21.6월</div>
+                        </th>
+                        <th>
+                            <div class="gen-bar bar-gen4">4세대 (신 실손)</div>
+                            <div class="gen-subtitle">'21.7월 ~ 현재</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>재가입 주기</th>
+                        <td><strong>재가입 주기 없음</strong><br>(최초 가입 만기까지 유지)</td>
+                        <td><strong>15년마다 재가입</strong></td>
+                        <td>15년마다 재가입</td>
+                        <td>15년마다 재가입</td>
+                        <td>15년마다 재가입</td>
+                        <td><strong>5년마다 재가입</strong></td>
+                    </tr>
+                    <tr>
+                        <th>갱신 주기</th>
+                        <td>3년, 5년 등</td>
+                        <td>3년</td>
+                        <td><strong>1년</strong></td>
+                        <td>1년</td>
+                        <td>1년</td>
+                        <td>1년</td>
+                    </tr>
+                    <tr>
+                        <th>담보 구성</th>
+                        <td class="align-left">상해의료비<br>상해/질병 입-통원</td>
+                        <td class="align-left">상해/질병 입-통원</td>
+                        <td class="align-left">동일</td>
+                        <td class="align-left">동일</td>
+                        <td class="align-left"><strong>기본형 (급여/비급여)</strong><br>+ <strong>3대 비급여 특약</strong></td>
+                        <td class="align-left"><strong>주계약 (급여)</strong><br>+ <strong>특약 (비급여/3대)</strong></td>
+                    </tr>
+                    <tr>
+                        <th>가입 금액 (입원)</th>
+                        <td>1억 / 3천 / 1천 등</td>
+                        <td>5천만원</td>
+                        <td>5천만원</td>
+                        <td>5천만원</td>
+                        <td>5천만원</td>
+                        <td><strong>1억</strong> (급여 5천 + 비급여 5천)</td>
+                    </tr>
+                    <tr>
+                        <th>가입 금액 (통원)</th>
+                        <td>최대 100만원</td>
+                        <td>30만원 (외래 25 + 약제 5)</td>
+                        <td>30만원 (외래 25 + 약제 5)</td>
+                        <td>30만원 (외래 25 + 약제 5)</td>
+                        <td>30만원 (외래 25 + 약제 5)</td>
+                        <td><strong>20만원 (회당)</strong></td>
+                    </tr>
+                    <tr>
+                        <th>자기부담금 (입원)</th>
+                        <td class="align-left"><strong>0% (100% 보장)</strong><br>(또는 약제 5천원)</td>
+                        <td class="align-left"><strong>10%</strong> (연 200만 한도)</td>
+                        <td class="align-left"><strong>선택: 10% or 20%</strong><br>(연 200만 한도)</td>
+                        <td class="align-left"><strong>급여 10% / 비급여 20%</strong><br>(연 200만 한도)</td>
+                        <td class="align-left"><strong>급여 10% / 비급여 20%</strong><br>(연 200만 한도)</td>
+                        <td class="align-left"><strong>급여 20% / 비급여 30%</strong><br>(급여는 건보 상한제 적용)</td>
+                    </tr>
+                    <tr>
+                        <th>자기부담금 (통원)</th>
+                        <td><strong>약 5,000원</strong></td>
+                        <td class="align-left">외래 1~2만, 약제 8천원<br>(10%와 큰 금액)</td>
+                        <td class="align-left">외래 1~2만, 약제 8천원<br>(선택: 10% or 20%와 큰 금액)</td>
+                        <td class="align-left">외래 1~2만, 약제 8천원<br>(급여 10% / 비급여 20%와 큰 금액)</td>
+                        <td class="align-left">외래 1~2만, 약제 8천원<br><strong>[특약] 30%</strong> (최소 2만)</td>
+                        <td class="align-left"><strong>급여 1~2만 / 비급여 3만</strong><br>(급여 20% / 비급여 30%와 큰 금액)</td>
+                    </tr>
+                    <tr>
+                        <th>보장 비율</th>
+                        <td>손보 100% / 생보 80%</td>
+                        <td>90%</td>
+                        <td>선택 90% or 80%</td>
+                        <td>선택 90% or 80%</td>
+                        <td><strong>급여 90% / 비급여 80%</strong><br><strong>[특약] 70%</strong></td>
+                        <td><strong>급여 80% / 비급여 70%</strong></td>
+                    </tr>
+                    <tr>
+                        <th>면책 기간 (입원)</th>
+                        <td>180일 (질병당)</td>
+                        <td>180일 (90일 면책)</td>
+                        <td>90일 (같은 질병 180일)</td>
+                        <td>275일 (365일 한도)</td>
+                        <td>최장 365일 한도</td>
+                        <td>보험료차등제 적용</td>
+                    </tr>
+                    <tr>
+                        <th>상급 병실</th>
+                        <td>상급병실 차액 50%</td>
+                        <td>상급병실 차액 50%<br>(1일 10만원 한도)</td>
+                        <td>동일</td>
+                        <td>동일</td>
+                        <td>동일</td>
+                        <td><strong>급여 병실(2-3인실) 해당</strong></td>
+                    </tr>
+                    <tr>
+                        <th>3대 비급여 특약</th>
+                        <td class="align-left">기본 담보에 포함</td>
+                        <td class="align-left">기본 담보에 포함</td>
+                        <td class="align-left">기본 담보에 포함</td>
+                        <td class="align-left">기본 담보에 포함</td>
+                        <td class="align-left"><strong>[특약 분리]</strong><br>• 도수/체외/증식: 350만(50회)<br>• 비급여 주사: 250만(50회)<br>• 비급여 MRI: 300만</td>
+                        <td class="align-left"><strong>[비급여 특약에 통합]</strong><br>• 도수/체외/증식: 350만(50회)<br>• 비급여 주사: 250만(50회)<br>• 비급여 MRI: 300만</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        
+         <h2>2) 보상하지 않는 주요 손해 (시기별 변화)</h2>
+         <p class="subtitle" style="margin-top:6px;color:#64748b;">
+             1세대는 회사별 약관이 상이합니다. <strong>회사별 상이</strong> 배지를 클릭하면 상세 보상/면책 내역을 확인할 수 있습니다.
+         </p>
+        <div class="table-wrapper">
+            <table class="comparison-table" style="min-width: 1000px;">
+                <thead>
+                    <tr>
+                        <th>구분 항목</th>
+                        <th>
+                            <div class="gen-bar bar-gen1">1세대</div>
+                            <div class="gen-subtitle">'03.10월 ~ '09.9월</div>
+                        </th>
+                        <th>
+                            <div class="gen-bar bar-gen2">2세대</div>
+                            <div class="gen-subtitle">'09.10월 ~ '13.3월</div>
+                        </th>
+                        <th>
+                            <div class="gen-bar bar-gen2">2세대</div>
+                            <div class="gen-subtitle">'13.4월 ~ '15.12월</div>
+                        </th>
+                        <th>
+                            <div class="gen-bar bar-gen2">2세대</div>
+                            <div class="gen-subtitle">'16.1월 ~ '17.3월</div>
+                        </th>
+                        <th>
+                            <div class="gen-bar bar-gen3">3세대</div>
+                            <div class="gen-subtitle">'17.4월 ~ '21.6월</div>
+                        </th>
+                        <th>
+                            <div class="gen-bar bar-gen4">4세대</div>
+                            <div class="gen-subtitle">'21.7월 ~ 현재</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>치매 (F00-F03)</th>
+                        <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
+                        <td class="text-x">❌</td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                    </tr>
+                    <tr>
+                        <th>치질 (I84, K60-K62)</th>
+                        <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                    </tr>
+                    <tr>
+                        <th>한방병원</th>
+                        <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                    </tr>
+                    <tr>
+                        <th>치과 (K00-K08)</th>
+                        <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                    </tr>
+                    <tr>
+                        <th>정신과 (F04-F99)</th>
+                        <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
+                        <td class="text-x">❌</td>
+                        <td class="text-x">❌</td>
+                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span><br><span class="note">(우울증 등)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                    </tr>
+                    <tr>
+                        <th>해외 치료</th>
+                        <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
+                        <td>국내치료 시 40%</td>
+                        <td>국내치료 시 40%</td>
+                        <td class="text-x">❌</td>
+                        <td class="text-x">❌</td>
+                        <td class="text-x">❌</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <a href="javascript:history.back()" class="btn-back">뒤로가기</a>
+        
+        <div id="modal-gen1" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-gen1-title">
+            <div class="modal">
+                <header>
+                    <div>
+                        <h3 id="modal-gen1-title">1세대 실손 (표준화 이전) 회사별 면책/보상</h3>
+                        <p class="muted">가입 시기/상품별 약관이 모두 다르므로, 참고용으로만 활용하세요.</p>
+                    </div>
+                    <button id="btn-modal-gen1-close" class="btn" aria-label="닫기">닫기</button>
+                </header>
+                <div class="modal-body">
+                    <div class="table-wrapper" style="margin-top:0;">
+                        <table class="comparison-table" style="min-width: 1200px;">
+                            <thead>
+                                <tr>
+                                    <th>구분</th>
+                                    <th class="gen1-head">삼성화재</th>
+                                    <th class="gen1-head">흥국화재</th>
+                                    <th class="gen1-head">현대해상</th>
+                                    <th class="gen1-head">KB손보</th>
+                                    <th class="gen1-head">DB손보</th>
+                                    <th class="gen1-head">메리츠화재</th>
+                                    <th class="gen1-head">한화손보</th>
+                                    <th class="gen1-head">MG손보</th>
+                                    <th class="gen1-head">롯데손보</th>
+                                    <th class="gen1-head">ACE손보</th>
+                                    <th class="gen1-head">제일화재<br>(한화)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>성형외과 질환<br>(A50-A84)</th>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-o">보상</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-o">보상</td>
+                                    <td class="text-o">보상</td>
+                                </tr>
+                                <tr>
+                                    <th>치매 (F00-F03)</th>
+                                    <td>2009.08~<br>보상</td>
+                                    <td>상해/특약<br>상이</td>
+                                    <td class="text-o">보상</td>
+                                    <td class="text-o">보상</td>
+                                    <td class="text-o">보상</td>
+                                    <td class="text-o">보상</td>
+                                    <td class="text-o">보상</td>
+                                    <td class="text-o">보상</td>
+                                    <td class="text-o">보상</td>
+                                    <td class="text-o">보상</td>
+                                    <td class="text-o">보상</td>
+                                </tr>
+                                <tr>
+                                    <th>정신과질환 (F04-F99)</th>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                </tr>
+                                <tr>
+                                    <th>치질, 직장 및<br>항문관련질환</th>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                </tr>
+                                <tr>
+                                    <th>치아우식증, 치아 및<br>치주질환 등 치과질환</th>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                </tr>
+                                <tr>
+                                    <th>여성생식기<br>비염증성장애</th>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                </tr>
+                                <tr>
+                                    <th>임신, 출산(제왕절개 포함)<br>및 산후기</th>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                </tr>
+                                <tr>
+                                    <th>선천성 뇌질환</th>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                </tr>
+                                <tr>
+                                    <th>뇌질환 외 선천성 질환</th>
+                                    <td class="text-x">면책</td>
+                                    <td>상해/특약<br>상이</td>
+                                    <td class="text-o">보상</td>
+                                    <td>2008.04~<br>보상</td>
+                                    <td>2009.04~<br>보상</td>
+                                    <td>2009.04~<br>보상</td>
+                                    <td>2009.04~<br>보상</td>
+                                    <td>2009.04~<br>보상</td>
+                                    <td>2009.06~<br>보상</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                </tr>
+                                <tr>
+                                    <th>외부요인 상해</th>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                    <td class="text-x">면책</td>
+                                </tr>
+                                <tr>
+                                    <th>디스크 / 신경계질환<br>보상시점</th>
+                                    <td class="text-o">보상</td>
+                                    <td class="text-o">보상</td>
+                                    <td>2005.05~<br>보상</td>
+                                    <td>2006.02.17~<br>보상</td>
+                                    <td>2005.09~<br>보상</td>
+                                    <td>2006.09~<br>보상</td>
+                                    <td>2006.11~<br>보상</td>
+                                    <td>2007.04~<br>보상</td>
+                                    <td>2007.04~<br>보상</td>
+                                    <td>2007.04~<br>보상</td>
+                                    <td>2007.04~<br>보상</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            // --- 1세대 모달(팝업) 관련 스크립트 ---
+            var open = document.getElementById('btn-modal-gen1');
+            var openTop = document.getElementById('btn-modal-gen1-top');
+            var close = document.getElementById('btn-modal-gen1-close');
+            var modal = document.getElementById('modal-gen1');
+            
+            function openModal(e){ 
+                e.preventDefault(); // 링크 이동 방지
+                modal.style.display = 'flex'; 
+            }
+            function closeModal(){ modal.style.display = 'none'; }
+            
+            // 버튼 2개에 클릭 이벤트 할당
+            if (open) open.addEventListener('click', openModal);
+            if (openTop) openTop.addEventListener('click', openModal);
+            if (close) close.addEventListener('click', closeModal);
+            
+            // 모달 바깥쪽 어두운 영역 클릭 시 닫기
+            if (modal) modal.addEventListener('click', function(e){ 
+                if (e.target === modal) closeModal(); 
+            });
+
+            // 표 안의 '회사별 상이' 배지 클릭 시 팝업 열기
+            var badgeLinks = document.querySelectorAll('[data-open="gen1"]');
+            badgeLinks.forEach(function(el){ 
+                el.addEventListener('click', openModal); 
+            });
+
+            // URL 해시(#gen1)로 직접 접근 시 팝업 열기 (나중을 위해)
+            if (location.hash === '#gen1') { 
+                openModal(new Event('click')); 
+            }
+        })();
+    </script>
+</body>
+</html>
