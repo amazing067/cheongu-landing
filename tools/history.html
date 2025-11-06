@@ -272,6 +272,42 @@
         .modal .gen1-head {
              background: #f0fdf4; color: #14532d; font-weight: 800;
         }
+
+        /* ===== 모바일 전용: 세대 탭 선택형 뷰 ===== */
+        .mobile-controls { display: none; }
+        @media (max-width: 640px) {
+            .mobile-controls { 
+                display: flex; gap: 8px; align-items: center; justify-content: center; 
+                margin-top: 12px; flex-wrap: wrap;
+            }
+            .mobile-controls .seg { 
+                padding: 6px 10px; border: 1px solid #e5e7eb; border-radius: 999px; 
+                background: #fff; color:#111827; font-weight:800; font-size: 13px; cursor: pointer;
+            }
+            .mobile-controls .seg.active { background: #111827; color:#fff; border-color:#111827; }
+            /* 표 자체를 한 열만 보이도록 간소화 */
+            [data-gen] .comparison-table { min-width: 0; }
+            [data-gen] .comparison-table th, [data-gen] .comparison-table td { white-space: normal; padding: 10px 8px; font-size: 13px; }
+            /* 헤더: 첫 번째 열 제외하고 기본 숨김 */
+            [data-gen] .comparison-table thead th:nth-child(n+2) { display: none; }
+            /* 본문: 데이터 셀은 기본 숨김 */
+            [data-gen] .comparison-table tbody td { display: none; }
+            /* 첫 번째 열(th)은 유지 */
+            [data-gen] .comparison-table tbody th { display: table-cell; position: static; padding-left: 10px; }
+            /* 선택된 세대 열만 표시 (2~7번째 열) */
+            [data-gen="g1"] .comparison-table thead th:nth-child(2),
+            [data-gen="g1"] .comparison-table tbody td:nth-child(2) { display: table-cell; }
+            [data-gen="g2"] .comparison-table thead th:nth-child(3),
+            [data-gen="g2"] .comparison-table tbody td:nth-child(3) { display: table-cell; }
+            [data-gen="g3"] .comparison-table thead th:nth-child(4),
+            [data-gen="g3"] .comparison-table tbody td:nth-child(4) { display: table-cell; }
+            [data-gen="g4"] .comparison-table thead th:nth-child(5),
+            [data-gen="g4"] .comparison-table tbody td:nth-child(5) { display: table-cell; }
+            [data-gen="g5"] .comparison-table thead th:nth-child(6),
+            [data-gen="g5"] .comparison-table tbody td:nth-child(6) { display: table-cell; }
+            [data-gen="g6"] .comparison-table thead th:nth-child(7),
+            [data-gen="g6"] .comparison-table tbody td:nth-child(7) { display: table-cell; }
+        }
     </style>
 </head>
 <body>
@@ -292,7 +328,14 @@
 
 
         <h2>1) 주요 내용 비교</h2>
-        <div class="table-wrapper">
+        <div class="mobile-controls" aria-label="세대 선택 (모바일)">
+            <button class="seg active" data-target="mainTable" data-gen="g2">2세대(I)</button>
+            <button class="seg" data-target="mainTable" data-gen="g3">2세대(II)</button>
+            <button class="seg" data-target="mainTable" data-gen="g4">2세대(III)</button>
+            <button class="seg" data-target="mainTable" data-gen="g5">3세대</button>
+            <button class="seg" data-target="mainTable" data-gen="g6">4세대</button>
+        </div>
+        <div id="mainTable" class="table-wrapper" data-gen="g6">
             <table class="comparison-table table-main">
                 <thead>
                     <tr>
@@ -432,7 +475,14 @@
          <p class="subtitle" style="margin-top:6px;color:#64748b;">
              1세대는 회사별 약관이 상이합니다. <strong>회사별 상이</strong> 배지를 클릭하면 상세 보상/면책 내역을 확인할 수 있습니다.
          </p>
-        <div class="table-wrapper">
+        <div class="mobile-controls" aria-label="세대 선택 (모바일)">
+            <button class="seg active" data-target="exTable" data-gen="g2">2세대(I)</button>
+            <button class="seg" data-target="exTable" data-gen="g3">2세대(II)</button>
+            <button class="seg" data-target="exTable" data-gen="g4">2세대(III)</button>
+            <button class="seg" data-target="exTable" data-gen="g5">3세대</button>
+            <button class="seg" data-target="exTable" data-gen="g6">4세대</button>
+        </div>
+        <div id="exTable" class="table-wrapper" data-gen="g6">
             <table class="comparison-table" style="min-width: 1000px;">
                 <thead>
                     <tr>
@@ -749,6 +799,23 @@
             if (location.hash === '#gen1') { 
                 openModal(new Event('click')); 
             }
+            
+            // --- 모바일: 세대 탭 스위치 ---
+            function setActiveSeg(container, targetId, gen) {
+                var wrapper = document.getElementById(targetId);
+                if (!wrapper) return;
+                wrapper.setAttribute('data-gen', gen);
+                // 버튼 active 상태
+                var btns = container.querySelectorAll('.seg');
+                btns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-gen') === gen); });
+            }
+            document.querySelectorAll('.mobile-controls').forEach(function(ctrl){
+                ctrl.addEventListener('click', function(e){
+                    var btn = e.target.closest('.seg');
+                    if (!btn) return;
+                    setActiveSeg(ctrl, btn.getAttribute('data-target'), btn.getAttribute('data-gen'));
+                });
+            });
         })();
     </script>
 </body>
