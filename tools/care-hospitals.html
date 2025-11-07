@@ -455,8 +455,11 @@
         
         // 거리 계산 및 정렬 (동기적으로 처리)
         function calculateDistancesAndSort() {
+            console.log('🔍 거리 계산 시작');
+            console.log('📍 내 위치:', userLocation);
+            
             // 모든 병원의 거리를 즉시 계산
-            filteredHospitals.forEach(hospital => {
+            filteredHospitals.forEach((hospital, index) => {
                 const coords = estimateCoordinates(hospital.region);
                 if (coords && userLocation) {
                     const dist = calculateDistance(
@@ -466,7 +469,20 @@
                         coords.lng
                     );
                     hospital.calculatedDistance = dist;
-                    hospital.distanceValue = parseFloat(dist.replace('km', '').replace('m', '')) * (dist.includes('km') ? 1 : 0.001);
+                    
+                    // 거리 파싱 수정
+                    if (dist.includes('km')) {
+                        hospital.distanceValue = parseFloat(dist.replace('km', ''));
+                    } else if (dist.includes('m')) {
+                        hospital.distanceValue = parseFloat(dist.replace('m', '')) / 1000;
+                    } else {
+                        hospital.distanceValue = 999999;
+                    }
+                    
+                    // 처음 5개만 로그
+                    if (index < 5) {
+                        console.log(`🏥 ${hospital.name} (${hospital.region}): ${dist} (${hospital.distanceValue}km)`);
+                    }
                 } else {
                     hospital.calculatedDistance = '거리 알 수 없음';
                     hospital.distanceValue = 999999;
@@ -477,6 +493,8 @@
             filteredHospitals.sort((a, b) => {
                 return a.distanceValue - b.distanceValue;
             });
+            
+            console.log('✅ 가장 가까운 병원:', filteredHospitals[0]?.name, filteredHospitals[0]?.calculatedDistance);
             
             // 한 번에 렌더링
             renderHospitals();
