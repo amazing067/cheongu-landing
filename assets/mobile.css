@@ -126,27 +126,266 @@
 
 
 /* ===== 5. index.html 모바일 요소 숨기기 ===== */
-.section-head .section-sub,
+/* 가로 스크롤 방지 */
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+}
+
+/* 주요 컨테이너 요소들 box-sizing */
+main, section, div, form, input, select, button {
+    box-sizing: border-box !important;
+}
+
+/* 모바일에서 숨길 요소들 */
 #loss-count, #life-count,
 header nav {
-    /* '청구닷컴' 로고 수정 실패로 인해 이 부분은 일단 비워둡니다 */
+    display: none !important;
 }
+
 .hero-search .text-xs {
     display: none;
 }
+
 .section-head {
     margin: 20px 0 10px;
+    text-align: center !important;
 }
+
 .section-title {
     font-size: 24px;
+    text-align: center !important;
+}
+
+/* 히어로 섹션 최적화 */
+section.maxw h1 {
+    font-size: 24px !important;
+    line-height: 1.4 !important;
+    padding: 0 10px;
+    margin-bottom: 8px;
+    text-align: center !important;
+}
+
+section.maxw h1 + p {
+    font-size: 13px !important;
+    padding: 0 10px;
+    margin-bottom: 12px;
+    text-align: center !important;
+}
+
+/* 검색 카드 모바일 최적화 */
+.hero-search {
+    width: 100% !important;
+    padding: 0 !important;
+}
+
+.search-card {
+    padding: 12px !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+}
+
+.search-title {
+    font-size: 13px !important;
+}
+
+.search-card input {
+    font-size: 14px !important;
+    padding: 10px 12px !important;
+}
+
+.search-card .btn {
+    font-size: 12px !important;
+    padding: 8px 12px !important;
+}
+
+/* 검색 카드 안의 작은 버튼들 모바일 최적화 */
+.search-actions {
+    gap: 8px !important;
+    margin-top: 10px !important;
+}
+
+.mini-btn {
+    font-size: 12px !important;
+    padding: 8px 12px !important;
+    white-space: nowrap;
+}
+
+/* 계산기 섹션 모바일 최적화 */
+#calc-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+#calc-grid::before {
+    display: none !important;
+}
+
+/* 계산기 카드 - 잘림 방지 */
+#age .calc-card,
+#medcalc .mc-card {
+    padding: 10px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+}
+
+#age-form input {
+    font-size: 14px !important;
+    height: 38px !important;
+}
+
+#medcalc input[type="text"],
+#medcalc input[type="number"] {
+    font-size: 14px !important;
+    height: 38px !important;
+}
+
+.gbtn {
+    font-size: 13px !important;
+    padding: 10px 14px !important;
+}
+
+/* 여백 최소화 및 가운데 정렬 */
+.maxw {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+section {
+    margin-top: 20px !important;
+}
+
+/* 계산 패널 섹션 가운데 정렬 */
+#calc-panels {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+#calc-panels .section-head {
+    width: 100% !important;
+    text-align: center !important;
+}
+
+#calc-panels #calc-grid {
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+}
+
+.panel {
+    width: 100% !important;
+}
+
+.panel-card {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* 실손 계산기 selector 박스 */
+#medcalc .selector-row {
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 12px !important;
+}
+
+#medcalc .selector-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 12px !important;
+}
+
+#medcalc .mc-select {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* 실손 계산기 입력 필드 */
+#medcalc input[type="text"],
+#medcalc input[type="number"] {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* 실손 계산기 버튼들 */
+#medcalc .gbtn {
+    white-space: nowrap !important;
+    font-size: 12px !important;
+    padding: 8px 12px !important;
+}
+
+/* 실손 계산기 고급 설정 */
+#medcalc details {
+    width: 100% !important;
+}
+
+#medcalc details .grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+}
+
+#medcalc details input {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* 보험나이 계산기 입력 필드 */
+#age-form .dob-wrap {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+}
+
+#age-form input {
+    box-sizing: border-box !important;
+    max-width: 100px !important;
+}
+
+#dobY {
+    width: 100px !important;
+    max-width: 100px !important;
+}
+
+#dobM, #dobD {
+    width: 60px !important;
+    max-width: 60px !important;
+}
+
+/* 보험나이 계산기 버튼 */
+#age-form .age-actions {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+}
+
+#age-form .key {
+    min-width: 80px !important;
+    flex: 1 !important;
+    max-width: 120px !important;
+}
+
+/* 계산 결과 카드들 */
+#age .card {
+    padding: 8px !important;
+    font-size: 12px !important;
 }
 
 /* ===== 6. index.html '청구닷컴' 로고 가로 정렬 (실패한 코드) ===== */
 /* (이전 JS 수정으로 대체되었으므로, CSS는 남겨두거나 지워도 무방합니다) */
 header > .maxw {
     justify-content: center !important;
-    padding-top: 16px;
-    padding-bottom: 16px;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
 }
 header > .maxw > a[href="/"] {
     writing-mode: horizontal-tb !important;
@@ -154,7 +393,7 @@ header > .maxw > a[href="/"] {
     position: static !important;
     width: auto !important;
     height: auto !important;
-    font-size: 22px; 
+    font-size: 20px !important;
 }
 
 
