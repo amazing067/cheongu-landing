@@ -144,10 +144,12 @@ header nav {
 
 .section-head {
     margin: 20px 0 10px;
+    text-align: center !important;
 }
 
 .section-title {
     font-size: 24px;
+    text-align: center !important;
 }
 
 /* 히어로 섹션 최적화 */
@@ -156,19 +158,27 @@ section.maxw h1 {
     line-height: 1.4 !important;
     padding: 0 10px;
     margin-bottom: 8px;
+    text-align: center !important;
 }
 
 section.maxw h1 + p {
     font-size: 13px !important;
     padding: 0 10px;
     margin-bottom: 12px;
+    text-align: center !important;
 }
 
 /* 검색 카드 모바일 최적화 */
+.hero-search {
+    width: 100% !important;
+    padding: 0 !important;
+}
+
 .search-card {
     padding: 12px !important;
     max-width: 100% !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
 }
 
 .search-title {
@@ -208,9 +218,13 @@ section.maxw h1 + p {
     display: none !important;
 }
 
+/* 계산기 카드 - 잘림 방지 */
 #age .calc-card,
 #medcalc .mc-card {
-    padding: 14px !important;
+    padding: 12px !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
 }
 
 #age-form input {
@@ -229,14 +243,70 @@ section.maxw h1 + p {
     padding: 10px 14px !important;
 }
 
-/* 여백 최소화 */
+/* 여백 최소화 및 가운데 정렬 */
 .maxw {
     padding-left: 12px !important;
     padding-right: 12px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 section {
     margin-top: 20px !important;
+}
+
+/* 계산 패널 섹션 가운데 정렬 */
+#calc-panels {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+#calc-panels .section-head {
+    width: 100% !important;
+    text-align: center !important;
+}
+
+#calc-panels #calc-grid {
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+}
+
+.panel {
+    width: 100% !important;
+}
+
+.panel-card {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* 실손 계산기 selector 박스 */
+#medcalc .selector-row {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+#medcalc .selector-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#medcalc .mc-select {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* 보험나이 계산기 입력 필드 */
+#age-form .dob-wrap {
+    justify-content: center !important;
+}
+
+#age-form input {
+    box-sizing: border-box !important;
 }
 
 /* ===== 6. index.html '청구닷컴' 로고 가로 정렬 (실패한 코드) ===== */
