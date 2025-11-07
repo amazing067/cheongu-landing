@@ -69,6 +69,10 @@
             border-collapse: collapse; /* 테두리 한 줄로 */
             font-size: 14px;
         }
+        
+        .exTable-wrapper .comparison-table {
+            min-width: 1000px;
+        }
 
         .comparison-table th,
         .comparison-table td {
@@ -95,7 +99,7 @@
             z-index: 10;
         }
         
-        /* ✅ "바" 형식의 세대 구분 (님이 첨부한 이미지 색상 기준) */
+        /* ✅ "바" 형식의 세대 구분 */
         .gen-bar {
             padding: 8px 12px;
             font-weight: 900;
@@ -273,8 +277,134 @@
              background: #f0fdf4; color: #14532d; font-weight: 800;
         }
 
+        /* ===== 💡 도움말 팝업 스타일 ===== */
+        .comparison-table .help-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            font-weight: 900;
+            color: #3b82f6;
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-left: 6px;
+            padding: 0;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .comparison-table .help-trigger:hover {
+            background-color: #e0e7ff;
+        }
+
+        .info-popover-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(2,6,23,.55);
+            display: none; /* JS로 제어 */
+            align-items: center;
+            justify-content: center;
+            z-index: 100; /* 모달보다 위 */
+            padding: 20px;
+        }
+        .info-popover {
+            width: min(500px, 90vw);
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.25);
+            border-top: 5px solid #3b82f6;
+        }
+        .info-popover header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .info-popover h4 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 800;
+            color: #1e3a8a;
+        }
+        .info-popover .btn-close-popover {
+            font-family: sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #64748b;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0 5px;
+            line-height: 1;
+        }
+        
+        .info-popover .info-popover-body {
+            padding: 0; 
+            font-size: 14px;
+            color: #334155;
+        }
+        .info-popover .popover-subtitle {
+            padding: 16px 20px;
+            background-color: #f8fafc;
+            border-bottom: 1px solid #e2e8f0; 
+            font-size: 15px;
+            text-align: center;
+            margin: 0;
+        }
+        .info-popover .popover-subtitle strong {
+            color: #3b82f6;
+            font-weight: 800;
+        }
+        .info-popover .popover-definitions {
+            margin: 0;
+            padding: 16px 20px 20px;
+        }
+        
+        .info-popover .def-item {
+            display: flex;
+            align-items: flex-start; 
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #cbd5e1; 
+        }
+        .info-popover .def-item:first-child {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: 0;
+        }
+        .info-popover .popover-definitions dt {
+            flex-basis: 90px; 
+            flex-shrink: 0;   
+            font-weight: 800;
+            font-size: 15px;
+            color: #1e3a8a; 
+            margin-bottom: 0;
+            padding-right: 12px;
+            text-align: right;
+        }
+        .info-popover .popover-definitions dd {
+            margin-left: 0;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+        .info-popover .popover-definitions dd strong {
+            font-weight: 800;
+            color: #3b82f6;
+        }
+        /* ===== [끝] 도움말 팝업 스타일 ===== */
+
+
         /* ===== 모바일 전용: 세대 탭 선택형 뷰 ===== */
-        .mobile-controls { display: none; }
+        
+        /* 💡 [수정] .mobile-controls를 데스크톱에서 숨김 */
+        .mobile-controls { 
+            display: none; 
+        }
+
         @media (max-width: 640px) {
             /* 컨테이너 여백 축소 */
             .container { padding: 12px 10px; }
@@ -282,6 +412,7 @@
             h2 { font-size: 18px; }
             .subtitle { font-size: 12px; }
 
+            /* 💡 [수정] 모바일에서만 .mobile-controls를 flex로 보이게 함 */
             .mobile-controls { 
                 display: flex; gap: 8px; align-items: center; justify-content: center; 
                 margin-top: 12px; flex-wrap: wrap;
@@ -292,7 +423,8 @@
                 transition: filter .15s ease, box-shadow .15s ease;
             }
             .mobile-controls .seg:hover{ filter: brightness(.98); box-shadow: 0 2px 6px rgba(2,6,23,.06); }
-            /* 색상 매핑: 1세대=초록, 2세대=주황, 3세대=빨강, 4세대=파랑 */
+            
+            /* 💡 모바일 버튼 색상 (원본 유지) */
             .mobile-controls .seg[data-gen="g1"]{ border-color:#bbf7d0; background:#f0fdf4; color:#065f46; }
             .mobile-controls .seg[data-gen="g2"],
             .mobile-controls .seg[data-gen="g3"],
@@ -305,40 +437,78 @@
             .mobile-controls .seg[data-gen="g4"].active{ background:#f59e0b; color:#111827; border-color:#f59e0b; }
             .mobile-controls .seg[data-gen="g5"].active{ background:#ef4444; color:#fff; border-color:#ef4444; }
             .mobile-controls .seg[data-gen="g6"].active{ background:#3b82f6; color:#fff; border-color:#3b82f6; }
-            /* 표 자체를 한 열만 보이도록 간소화 */
-            [data-gen] .comparison-table { min-width: 0; }
-            [data-gen] .comparison-table th, [data-gen] .comparison-table td { white-space: normal; padding: 10px 8px; font-size: 13px; }
-            /* 데스크탑 전용 sticky 해제: 모바일에서 겹침/깨짐 방지 */
-            .comparison-table thead th, .comparison-table tbody th { position: static; top: auto; left: auto; z-index: auto; }
-            .comparison-table thead th:first-child { width: auto; }
-            /* 긴 텍스트 줄바꿈 허용 */
+            
+            .table-wrapper[data-gen] .comparison-table { 
+                min-width: 0; 
+                table-layout: fixed; 
+                width: 100%;
+            }
+            .table-wrapper[data-gen] .comparison-table th, 
+            .table-wrapper[data-gen] .comparison-table td { 
+                white-space: normal; 
+                padding: 8px 6px; 
+                font-size: 12px; 
+            }
+            /* 💡 [수정] 모바일에서 sticky 해제 (기본) */
+            .comparison-table thead th, .comparison-table tbody th { 
+                position: static; 
+                top: auto; 
+                left: auto; 
+                z-index: auto; 
+            }
+            .comparison-table thead th:first-child { width: 35%; }
             .table-main td { white-space: normal; }
             .table-main .align-left { text-align: center; white-space: normal; }
-            /* 세대 뱃지 크기 축소 */
             .gen-bar { font-size: 15px; padding: 8px 10px; }
             .gen-subtitle { font-size: 12px; }
-            /* 헤더: 첫 번째 열 제외하고 기본 숨김 */
-            [data-gen] .comparison-table thead th:nth-child(n+2) { display: none; }
-            /* 본문: 데이터 셀은 기본 숨김 */
-            [data-gen] .comparison-table tbody td { display: none; }
-            /* 첫 번째 열(th)은 유지 */
-            [data-gen] .comparison-table tbody th { display: table-cell; position: static; padding-left: 10px; }
-            /* 2) 표의 구분 항목 헤더 높이 축소 */
-            #exTable .comparison-table thead th { padding: 8px 6px; font-size: 14px; }
-            #exTable .comparison-table tbody th { font-size: 14px; }
-            /* 선택된 세대 열만 표시 (2~7번째 열) */
-            [data-gen="g1"] .comparison-table thead th:nth-child(2),
-            [data-gen="g1"] .comparison-table tbody td:nth-child(2) { display: table-cell; }
-            [data-gen="g2"] .comparison-table thead th:nth-child(3),
-            [data-gen="g2"] .comparison-table tbody td:nth-child(3) { display: table-cell; }
-            [data-gen="g3"] .comparison-table thead th:nth-child(4),
-            [data-gen="g3"] .comparison-table tbody td:nth-child(4) { display: table-cell; }
-            [data-gen="g4"] .comparison-table thead th:nth-child(5),
-            [data-gen="g4"] .comparison-table tbody td:nth-child(5) { display: table-cell; }
-            [data-gen="g5"] .comparison-table thead th:nth-child(6),
-            [data-gen="g5"] .comparison-table tbody td:nth-child(6) { display: table-cell; }
-            [data-gen="g6"] .comparison-table thead th:nth-child(7),
-            [data-gen="g6"] .comparison-table tbody td:nth-child(7) { display: table-cell; }
+            
+            .table-wrapper[data-gen] .comparison-table thead th:nth-child(n+2) { display: none; }
+            .table-wrapper[data-gen] .comparison-table tbody td { display: none; }
+            .table-wrapper[data-gen] .comparison-table tbody th { 
+                display: table-cell; 
+                position: static; 
+                padding-left: 8px;
+                width: 35%;
+            }
+            
+            .exTable-wrapper .comparison-table thead th { padding: 8px 6px; font-size: 14px; }
+            .exTable-wrapper .comparison-table tbody th { font-size: 14px; }
+            
+            .table-wrapper[data-gen="g1"] .comparison-table thead th:nth-child(2),
+            .table-wrapper[data-gen="g1"] .comparison-table tbody td:nth-child(2) { display: table-cell; width: 65%; }
+            .table-wrapper[data-gen="g2"] .comparison-table thead th:nth-child(3),
+            .table-wrapper[data-gen="g2"] .comparison-table tbody td:nth-child(3) { display: table-cell; width: 65%; }
+            .table-wrapper[data-gen="g3"] .comparison-table thead th:nth-child(4),
+            .table-wrapper[data-gen="g3"] .comparison-table tbody td:nth-child(4) { display: table-cell; width: 65%; }
+            .table-wrapper[data-gen="g4"] .comparison-table thead th:nth-child(5),
+            .table-wrapper[data-gen="g4"] .comparison-table tbody td:nth-child(5) { display: table-cell; width: 65%; }
+            .table-wrapper[data-gen="g5"] .comparison-table thead th:nth-child(6),
+            .table-wrapper[data-gen="g5"] .comparison-table tbody td:nth-child(6) { display: table-cell; width: 65%; }
+            .table-wrapper[data-gen="g6"] .comparison-table thead th:nth-child(7),
+            .table-wrapper[data-gen="g6"] .comparison-table tbody td:nth-child(7) { display: table-cell; width: 65%; }
+
+
+            /* 💡 [신규] 모달창 내부에서는 모바일이라도 첫 번째 열 고정(sticky)을 복원 */
+            .modal .comparison-table tbody th {
+                position: sticky;
+                left: 0;
+                z-index: 1;
+            }
+            /* 💡 [신규] 모달창 내부의 a-sticky 헤더도 복원 (모든 th) */
+            .modal .comparison-table thead th {
+                 position: sticky;
+                 top: 0;
+                 z-index: 10;
+                 background-color: #f0fdf4; /* 1세대 헤더 배경색 */
+            }
+            /* 💡 [신규] 모달창 첫 열, 첫 행의 겹치는 부분 z-index 처리 */
+            .modal .comparison-table thead th:first-child {
+                position: sticky; /* 덮어쓰기 */
+                top: 0;
+                left: 0;
+                z-index: 20; 
+                background-color: #f1f5f9; /* 기본 th 배경색 */
+            }
         }
     </style>
 </head>
@@ -443,7 +613,7 @@
                         <td>30만원 (외래 25 + 약제 5)</td>
                         <td>30만원 (외래 25 + 약제 5)</td>
                         <td>30만원 (외래 25 + 약제 5)</td>
-                        <td><strong>20만원 (회당)</strong></td>
+                        <td><strong>급여 20만 / 비급여 20만</strong><br><span class="note">(회당)</span></td>
                     </tr>
                     <tr>
                         <th>자기부담금 (입원)</th>
@@ -473,13 +643,46 @@
                         <td><strong>급여 80% / 비급여 70%</strong></td>
                     </tr>
                     <tr>
-                        <th>면책 기간 (입원)</th>
-                        <td>180일 (질병당)</td>
-                        <td>180일 (90일 면책)</td>
-                        <td>90일 (같은 질병 180일)</td>
-                        <td>275일 (365일 한도)</td>
-                        <td>최장 365일 한도</td>
-                        <td>보험료차등제 적용</td>
+                        <th>보장 기준</th>
+                        <td>사고일</td>
+                        <td>사고일</td>
+                        <td>입원일</td>
+                        <td>입원일</td>
+                        <td class="align-left">사고당 보장금액<br>도달시까지</td>
+                        <td>진료일</td>
+                    </tr>
+                    <tr>
+                        <th>
+                            보장 기간 (입원)
+                            <button class="help-trigger" id="help-trigger-inpatient" aria-label="입원 보장 기간 상세 설명">?</button>
+                        </th>
+                        <td>180일<br><span class="note">(질병당)</span></td>
+                        <td>365일<br><span class="note">(동일 질병당)</span></td>
+                        <td>365일<br><span class="note">(동일 질병당)</span></td>
+                        <td>365일<br><span class="note">(동일 질병당)</span></td>
+                        <td class="align-left">사고당 한도 도달시<br>(기간 무관)</td>
+                        <td>5,000만원<br><span class="note">한도 내 보상</span></td>
+                    </tr>
+                    <tr>
+                        <th>
+                            보장 기간 (통원)
+                            <button class="help-trigger" id="help-trigger-outpatient" aria-label="통원 보장 기간 상세 설명">?</button>
+                        </th>
+                        <td>365일</td>
+                        <td>연간 180회</td>
+                        <td>연간 180회</td>
+                        <td>연간 180회</td>
+                        <td>연간 180회</td>
+                        <td>급여: 무제한<br>비급여: 연 100회</td>
+                    </tr>
+                    <tr>
+                        <th>면책 기간</th>
+                        <td>180일</td>
+                        <td>180일</td>
+                        <td>90일</td>
+                        <td>90일</td>
+                        <td>90일</td>
+                        <td class="text-o">없음</td>
                     </tr>
                     <tr>
                         <th>상급 병실</th>
@@ -499,6 +702,15 @@
                         <td class="align-left"><strong>[특약 분리]</strong><br>• 도수/체외/증식: 350만(50회)<br>• 비급여 주사: 250만(50회)<br>• 비급여 MRI: 300만</td>
                         <td class="align-left"><strong>[비급여 특약에 통합]</strong><br>• 도수/체외/증식: 350만(50회)<br>• 비급여 주사: 250만(50회)<br>• 비급여 MRI: 300만</td>
                     </tr>
+                    <tr>
+                        <th>보험료 차등 (비급여)</th>
+                        <td>없음</td>
+                        <td>없음</td>
+                        <td>없음</td>
+                        <td>없음</td>
+                        <td>없음</td>
+                        <td class="text-o">⭕<br><span class="note">(비급여 이용량 연계)</span></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -516,8 +728,9 @@
             <button class="seg" data-target="exTable" data-gen="g5">3세대</button>
             <button class="seg" data-target="exTable" data-gen="g6">4세대</button>
         </div>
-        <div id="exTable" class="table-wrapper" data-gen="g6">
-            <table class="comparison-table" style="min-width: 1000px;">
+        
+        <div id="exTable" class="table-wrapper exTable-wrapper" data-gen="g6">
+            <table class="comparison-table">
                 <thead>
                     <tr>
                         <th>구분 항목</th>
@@ -560,7 +773,7 @@
                     <tr>
                         <th>치질 (I84, K60-K62)</th>
                         <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
-                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-x">❌</td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
@@ -569,8 +782,8 @@
                     <tr>
                         <th>한방병원</th>
                         <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
-                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
-                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td><span class="text-o">⭕</span><br><span class="note">(급/비급여)</span></td>
+                        <td class="text-x">❌</td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
@@ -578,8 +791,8 @@
                     <tr>
                         <th>치과 (K00-K08)</th>
                         <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
-                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
-                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td><span class="text-o">⭕</span><br><span class="note">(급/비급여)</span></td>
+                        <td class="text-x">❌</td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
@@ -598,9 +811,36 @@
                         <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
                         <td>국내치료 시 40%</td>
                         <td>국내치료 시 40%</td>
+                        <td>국내치료 시 40%</td>
                         <td class="text-x">❌</td>
                         <td class="text-x">❌</td>
-                        <td class="text-x">❌</td>
+                    </tr>
+                    <tr>
+                        <th>산재/자동차 사고<br><span class="note">(본인부담금)</span></th>
+                        <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
+                        <td>40%</td>
+                        <td>40%</td>
+                        <td>40%</td>
+                        <td class="align-left">급여 90%<br>비급여 80%</td>
+                        <td class="align-left">급여 80%<br>비급여 70%</td>
+                    </tr>
+                    <tr>
+                        <th>국민건강보험 미적용시</th>
+                        <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
+                        <td>40%</td>
+                        <td>40%</td>
+                        <td>40%</td>
+                        <td>40%</td>
+                        <td>비급여와 동일<br>(70%)</td>
+                    </tr>
+                    <tr>
+                        <th>응급실 (비응급)</th>
+                        <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
+                        <td class="text-o">⭕</td>
+                        <td class="text-o">⭕</td>
+                        <td class="text-o">⭕</td>
+                        <td class="text-x">상급종합병원<br>면책</td>
+                        <td class="text-x">상급종합병원<br>면책</td>
                     </tr>
                 </tbody>
             </table>
@@ -619,7 +859,7 @@
                 </header>
                 <div class="modal-body">
                     <div class="table-wrapper" style="margin-top:0;">
-                        <table class="comparison-table" style="min-width: 1200px;">
+                        <table class="comparison-table">
                             <thead>
                                 <tr>
                                     <th>구분</th>
@@ -788,7 +1028,7 @@
                                     <td>2006.11~<br>보상</td>
                                     <td>2007.04~<br>보상</td>
                                     <td>2007.04~<br>보상</td>
-                                    <td>2007.04~<br>보상</td>
+                                    <td>2007.04~<B>보상</td>
                                     <td>2007.04~<br>보상</td>
                                 </tr>
                             </tbody>
@@ -798,6 +1038,65 @@
             </div>
         </div>
     </div>
+
+    <div id="info-popover-backdrop-inpatient" class="info-popover-backdrop">
+        <div id="info-popover-inpatient" class="info-popover" role="dialog" aria-modal="true" aria-labelledby="info-popover-title-inpatient">
+            <header>
+                <h4 id="info-popover-title-inpatient">💡 '365일 보장'이란? (입원 기준)</h4>
+                <button id="info-popover-close-inpatient" class="btn-close-popover" aria-label="닫기">×</button>
+            </header>
+            <div class="info-popover-body">
+                <p class="popover-subtitle">
+                    <strong>'하나의 동일한 질병/상해'</strong>를 기준으로 합니다.
+                </p>
+                <dl class="popover-definitions">
+                    <div class="def-item">
+                        <dt>의미</dt>
+                        <dd>특정 질병(예: 'A' 질병)으로 치료를 받기 시작하면, 그날로부터 <strong>365일간</strong> 발생한 입원의료비를 보장 한도 내에서 지급합니다.</dd>
+                    </div>
+                    <div class="def-item">
+                        <dt>면책 기간</dt>
+                        <dd>365일의 보장 기간이 끝나면, 'A' 질병에 대해서는 <strong>90일(또는 180일)</strong>의 면책 기간이 발생합니다. 이 기간에는 'A' 질병으로 입원해도 보상받지 못합니다.</dd>
+                    </div>
+                    <div class="def-item">
+                        <dt>한도 복원</dt>
+                        <dd>90일(또는 180일)의 면책 기간이 지나면, 'A' 질병에 대한 365일 한도가 <strong>새롭게 복원</strong>되어 다시 보상받을 수 있습니다.</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div id="info-popover-backdrop-outpatient" class="info-popover-backdrop">
+        <div id="info-popover-outpatient" class="info-popover" role="dialog" aria-modal="true" aria-labelledby="info-popover-title-outpatient">
+            <header>
+                <h4 id="info-popover-title-outpatient">💡 '연간 180회'란? (통원 기준)</h4>
+                <button id="info-popover-close-outpatient" class="btn-close-popover" aria-label="닫기">×</button>
+            </header>
+            <div class="info-popover-body">
+                <p class="popover-subtitle">
+                    <strong>'1년(갱신 주기)'</strong>을 기준으로 합니다.
+                </p>
+                <dl class="popover-definitions">
+                    <div class="def-item">
+                        <dt>의미</dt>
+                        <dd>보험 가입일(또는 갱신일)로부터 1년 동안 통원 치료를 받을 수 있는 <strong>최대 횟수</strong>를 의미합니다. (2~3세대 기준)</dd>
+                    </div>
+                    <div class="def-item">
+                        <dt>횟수 기준</dt>
+                        <dd>질병/상해 구분 없이, **외래 방문 1회, 처방 조제 1건**을 각각 1회로 계산합니다. (약관별 상이)
+                        <br><span class="note" style="color:#64748b;">(예: 2세대 통원은 '외래+약제'를 합산 180회로 제한)</span>
+                        </dd>
+                    </div>
+                    <div class="def-item">
+                        <dt>4세대 기준</dt>
+                        <dd><strong>급여</strong> 통원은 횟수 제한이 <strong>무제한</strong>이며, <strong>비급여</strong> 통원은 <strong>연간 100회</strong>로 한도가 변경되었습니다.</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         (function(){
@@ -813,23 +1112,19 @@
             }
             function closeModal(){ modal.style.display = 'none'; }
             
-            // 버튼 2개에 클릭 이벤트 할당
             if (open) open.addEventListener('click', openModal);
             if (openTop) openTop.addEventListener('click', openModal);
             if (close) close.addEventListener('click', closeModal);
             
-            // 모달 바깥쪽 어두운 영역 클릭 시 닫기
             if (modal) modal.addEventListener('click', function(e){ 
                 if (e.target === modal) closeModal(); 
             });
 
-            // 표 안의 '회사별 상이' 배지 클릭 시 팝업 열기
             var badgeLinks = document.querySelectorAll('[data-open="gen1"]');
             badgeLinks.forEach(function(el){ 
                 el.addEventListener('click', openModal); 
             });
 
-            // URL 해시(#gen1)로 직접 접근 시 팝업 열기 (나중을 위해)
             if (location.hash === '#gen1') { 
                 openModal(new Event('click')); 
             }
@@ -839,7 +1134,6 @@
                 var wrapper = document.getElementById(targetId);
                 if (!wrapper) return;
                 wrapper.setAttribute('data-gen', gen);
-                // 버튼 active 상태
                 var btns = container.querySelectorAll('.seg');
                 btns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-gen') === gen); });
             }
@@ -850,6 +1144,51 @@
                     setActiveSeg(ctrl, btn.getAttribute('data-target'), btn.getAttribute('data-gen'));
                 });
             });
+
+            // --- 💡 '보장 기간' 도움말 팝업 스크립트 (2개) ---
+
+            // 팝업 1: 입원 (Inpatient)
+            var helpTriggerInpatient = document.getElementById('help-trigger-inpatient');
+            var helpPopoverBackdropInpatient = document.getElementById('info-popover-backdrop-inpatient');
+            var helpPopoverCloseInpatient = document.getElementById('info-popover-close-inpatient');
+
+            function openHelpPopoverInpatient(e) {
+                e.preventDefault();
+                helpPopoverBackdropInpatient.style.display = 'flex';
+            }
+            function closeHelpPopoverInpatient() {
+                helpPopoverBackdropInpatient.style.display = 'none';
+            }
+
+            if (helpTriggerInpatient) helpTriggerInpatient.addEventListener('click', openHelpPopoverInpatient);
+            if (helpPopoverCloseInpatient) helpPopoverCloseInpatient.addEventListener('click', closeHelpPopoverInpatient);
+            if (helpPopoverBackdropInpatient) helpPopoverBackdropInpatient.addEventListener('click', function(e) {
+                if (e.target === helpPopoverBackdropInpatient) {
+                    closeHelpPopoverInpatient();
+                }
+            });
+
+            // 팝업 2: 통원 (Outpatient)
+            var helpTriggerOutpatient = document.getElementById('help-trigger-outpatient');
+            var helpPopoverBackdropOutpatient = document.getElementById('info-popover-backdrop-outpatient');
+            var helpPopoverCloseOutpatient = document.getElementById('info-popover-close-outpatient');
+
+            function openHelpPopoverOutpatient(e) {
+                e.preventDefault();
+                helpPopoverBackdropOutpatient.style.display = 'flex';
+            }
+            function closeHelpPopoverOutpatient() {
+                helpPopoverBackdropOutpatient.style.display = 'none';
+            }
+
+            if (helpTriggerOutpatient) helpTriggerOutpatient.addEventListener('click', openHelpPopoverOutpatient);
+            if (helpPopoverCloseOutpatient) helpPopoverCloseOutpatient.addEventListener('click', closeHelpPopoverOutpatient);
+            if (helpPopoverBackdropOutpatient) helpPopoverBackdropOutpatient.addEventListener('click', function(e) {
+                if (e.target === helpPopoverBackdropOutpatient) {
+                    closeHelpPopoverOutpatient();
+                }
+            });
+
         })();
     </script>
 </body>
