@@ -23,14 +23,14 @@
 
   <!-- Tailwind(@apply) 빌드 CSS -->
   <link rel="stylesheet" href="/assets/site.css?v=final-compact-15" />
-  <link rel="stylesheet" href="/assets/mobile.css?v=13" media="(max-width: 767px)">
+  <link rel="stylesheet" href="/assets/mobile.css?v=14" media="(max-width: 767px)">
 <script>
 (function(){
   if (location.search.indexOf('mobile=1') !== -1) {
     // 모바일 전용 CSS 강제 로드
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/assets/mobile.css?v=13';
+    link.href = '/assets/mobile.css?v=14';
     document.head.appendChild(link);
     // 데스크톱에서도 모바일 폭으로 고정 미리보기
     var meta = document.querySelector('meta[name="viewport"]');
@@ -116,7 +116,7 @@
   .section-head{display:flex;flex-direction:column;align-items:center;gap:6px;margin:28px 0 12px}
 
   /* ===== 계산 패널 공통(2열) ===== */
-  #calc-grid{display:grid !important;grid-template-columns:repeat(auto-fit,minmax(400px,1fr)) !important;gap:24px !important;align-items:start !important}
+  #calc-grid{display:grid !important;grid-template-columns:repeat(auto-fit,minmax(320px,1fr)) !important;gap:24px !important;align-items:start !important}
   @media (min-width:1024px){
     #calc-grid{position:relative}
     #calc-grid::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;transform:translateX(-.5px);background:linear-gradient(180deg,rgba(148,163,184,0),rgba(148,163,184,.35),rgba(148,163,184,0))}
