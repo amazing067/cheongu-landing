@@ -505,13 +505,22 @@
         
         // 거리 계산 및 정렬 (비동기 처리 + 로딩 UI)
         async function calculateAndSortByDistance() {
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('🔍 거리 계산 시작!!!');
+            console.log('📍 내 위치:', userLocation);
+            console.log('📊 대상 병원:', filteredHospitals.length);
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            
             // 로딩 오버레이 표시
             const loadingOverlay = document.getElementById('loadingOverlay');
             const loadingProgress = document.getElementById('loadingProgress');
-            loadingOverlay.classList.remove('hidden');
             
-            console.log('🔍 거리 계산 시작');
-            console.log('📍 내 위치:', userLocation);
+            if (!loadingOverlay) {
+                console.error('❌ loadingOverlay 엘리먼트를 찾을 수 없습니다!');
+                return;
+            }
+            
+            loadingOverlay.classList.remove('hidden');
             
             let calculated = 0;  // 정확한 좌표로 계산
             let estimated = 0;   // 추정 좌표로 계산
@@ -1385,8 +1394,33 @@
                     window.sortBy = sortBy;
                 }
                 
-                // 필터링 (내부에서 거리 계산 호출)
-                filterHospitals();
+                // 먼저 필터링 (검색어/지역 필터 적용)
+                let result = [...hospitals];
+                
+                if (searchQuery) {
+                    const query = searchQuery.toLowerCase();
+                    result = result.filter(h => 
+                        h.name.toLowerCase().includes(query) ||
+                        h.address.toLowerCase().includes(query) ||
+                        h.region.includes(searchQuery)
+                    );
+                }
+                
+                if (selectedType !== '전체') {
+                    result = result.filter(h => h.type === selectedType);
+                }
+                
+                if (selectedRegion !== '전체') {
+                    result = result.filter(h => h.region.startsWith(selectedRegion));
+                }
+                
+                filteredHospitals = result;
+                
+                console.log(`📊 필터링 완료: ${filteredHospitals.length}개 병원`);
+                
+                // 직접 거리 계산 실행
+                console.log('🚀 거리 계산 직접 실행...');
+                await calculateAndSortByDistance();
                 
                 // 스크롤
                 setTimeout(() => {
