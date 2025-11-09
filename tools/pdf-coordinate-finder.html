@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF 좌표 측정 도구 - 청구닷컴</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Pretendard', -apple-system, sans-serif; background: #f6f8fb; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h1 { font-size: 24px; color: #111827; margin-bottom: 8px; }
+        .subtitle { color: #6b7280; font-size: 14px; }
+        
+        .tools { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+        .tools input[type="file"] { display: none; }
+        .tools label, .tools button, .tools select { padding: 10px 16px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s; }
+        .tools label:hover, .tools button:hover { background: #f9fafb; border-color: #3a64ff; }
+        .tools button.primary { background: #3a64ff; color: white; border-color: #3a64ff; }
+        .tools button.primary:hover { background: #2d50cc; }
+        .tools select { cursor: pointer; }
+        
+        .workspace { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
+        
+        .canvas-wrapper { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: relative; overflow: auto; max-height: 80vh; }
+        .canvas-container { position: relative; display: inline-block; }
+        #pdf-canvas { border: 2px solid #e5e7eb; cursor: crosshair; display: block; }
+        .crosshair { position: absolute; pointer-events: none; z-index: 10; }
+        .crosshair-h { width: 100%; height: 1px; background: #3a64ff; opacity: 0.5; }
+        .crosshair-v { height: 100%; width: 1px; background: #3a64ff; opacity: 0.5; }
+        
+        .marker { position: absolute; width: 10px; height: 10px; background: #ef4444; border: 2px solid white; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 20; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        
+        .coord-display { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 8px 12px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 12px; pointer-events: none; z-index: 30; }
+        
+        .panel { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-height: 80vh; overflow-y: auto; }
+        .panel h2 { font-size: 18px; margin-bottom: 16px; color: #111827; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb; }
+        
+        .field-list { display: flex; flex-direction: column; gap: 8px; }
+        .field-item { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 8px; background: #f9fafb; border-radius: 6px; font-size: 13px; }
+        .field-item .name { font-weight: 600; color: #111827; }
+        .field-item .coords { color: #6b7280; font-family: 'Courier New', monospace; }
+        .field-item button { padding: 4px 8px; border-radius: 4px; border: 1px solid #e5e7eb; background: white; cursor: pointer; font-size: 11px; }
+        .field-item button:hover { background: #fee; border-color: #ef4444; color: #ef4444; }
+        
+        .add-field { margin-bottom: 16px; }
+        .add-field input { width: 100%; padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 14px; margin-bottom: 8px; }
+        .add-field button { width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .add-field button:hover { background: #059669; }
+        .add-field button:disabled { background: #d1d5db; cursor: not-allowed; }
+        
+        .export-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb; }
+        .export-section textarea { width: 100%; height: 200px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 12px; resize: vertical; }
+        .export-section button { width: 100%; padding: 10px; background: #3a64ff; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        .export-section button:hover { background: #2d50cc; }
+        
+        .instructions { background: #fffbeb; border: 1px solid #fde68a; padding: 16px; border-radius: 8px; margin-bottom: 20px; }
+        .instructions h3 { font-size: 16px; color: #92400e; margin-bottom: 8px; }
+        .instructions ol { margin-left: 20px; color: #78350f; }
+        .instructions ol li { margin: 4px 0; font-size: 14px; }
+        
+        @media (max-width: 1200px) {
+            .workspace { grid-template-columns: 1fr; }
+            .panel { max-height: 400px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📐 PDF 좌표 측정 도구</h1>
+            <p class="subtitle">보험금 청구서 자동기입을 위한 좌표 매핑 도구 (클릭하여 필드 위치 저장)</p>
+        </div>
+        
+        <div class="instructions">
+            <h3>📌 사용 방법</h3>
+            <ol>
+                <li><strong>PDF 업로드:</strong> 보험사 청구서 PDF 파일을 업로드하세요.</li>
+                <li><strong>페이지 선택:</strong> 여러 페이지가 있다면 해당 페이지를 선택하세요.</li>
+                <li><strong>필드 추가:</strong> 우측 패널에서 필드명을 입력하고 "대기 중" 버튼을 클릭하세요.</li>
+                <li><strong>좌표 클릭:</strong> PDF의 입력란을 클릭하면 좌표가 자동으로 저장됩니다.</li>
+                <li><strong>코드 복사:</strong> 모든 필드를 저장한 후 "코드 복사" 버튼으로 설정을 복사하세요.</li>
+            </ol>
+        </div>
+        
+        <div class="tools">
+            <label for="pdf-upload" style="background: #3a64ff; color: white; border-color: #3a64ff;">
+                📄 PDF 업로드
+                <input type="file" id="pdf-upload" accept="application/pdf">
+            </label>
+            <select id="page-select" disabled>
+                <option>페이지 선택...</option>
+            </select>
+            <select id="scale-select">
+                <option value="1">100%</option>
+                <option value="1.5" selected>150%</option>
+                <option value="2">200%</option>
+                <option value="2.5">250%</option>
+            </select>
+            <button id="clear-all" disabled>🗑️ 초기화</button>
+            <span style="margin-left: auto; color: #6b7280; font-size: 13px;" id="file-name">파일을 업로드하세요</span>
+        </div>
+        
+        <div class="workspace">
+            <div class="canvas-wrapper">
+                <div class="canvas-container">
+                    <canvas id="pdf-canvas"></canvas>
+                    <div class="crosshair crosshair-h" id="crosshair-h" style="display: none;"></div>
+                    <div class="crosshair crosshair-v" id="crosshair-v" style="display: none;"></div>
+                    <div class="coord-display" id="coord-display" style="display: none;">X: 0, Y: 0</div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h2>필드 목록</h2>
+                
+                <div class="add-field">
+                    <input type="text" id="field-name" placeholder="필드명 (예: ins_name, sub_rrn1)" />
+                    <input type="text" id="field-label" placeholder="설명 (예: 피보험자 이름)" />
+                    <button id="add-field-btn" disabled>➕ 필드 추가 (클릭 대기 중)</button>
+                </div>
+                
+                <div class="field-list" id="field-list">
+                    <p style="text-align: center; color: #6b7280; padding: 20px;">필드를 추가하세요</p>
+                </div>
+                
+                <div class="export-section">
+                    <h3 style="font-size: 14px; margin-bottom: 8px; color: #111827;">📋 생성된 코드</h3>
+                    <textarea id="export-code" readonly placeholder="필드를 추가하면 자동으로 코드가 생성됩니다..."></textarea>
+                    <button id="copy-code-btn">📋 코드 복사</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        let pdfDoc = null;
+        let currentPage = 1;
+        let scale = 1.5;
+        let waitingForClick = false;
+        let fields = [];
+        let currentFieldIndex = -1;
+
+        const canvas = document.getElementById('pdf-canvas');
+        const ctx = canvas.getContext('2d');
+        const pageSelect = document.getElementById('page-select');
+        const scaleSelect = document.getElementById('scale-select');
+        const fieldNameInput = document.getElementById('field-name');
+        const fieldLabelInput = document.getElementById('field-label');
+        const addFieldBtn = document.getElementById('add-field-btn');
+        const fieldList = document.getElementById('field-list');
+        const exportCode = document.getElementById('export-code');
+        const copyCodeBtn = document.getElementById('copy-code-btn');
+        const clearAllBtn = document.getElementById('clear-all');
+        const crosshairH = document.getElementById('crosshair-h');
+        const crosshairV = document.getElementById('crosshair-v');
+        const coordDisplay = document.getElementById('coord-display');
+        const fileNameSpan = document.getElementById('file-name');
+
+        // PDF 업로드
+        document.getElementById('pdf-upload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            fileNameSpan.textContent = file.name;
+            const fileReader = new FileReader();
+            
+            fileReader.onload = async (event) => {
+                const typedArray = new Uint8Array(event.target.result);
+                pdfDoc = await pdfjsLib.getDocument(typedArray).promise;
+                
+                // 페이지 선택 활성화
+                pageSelect.disabled = false;
+                pageSelect.innerHTML = '';
+                for (let i = 1; i <= pdfDoc.numPages; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `페이지 ${i} / ${pdfDoc.numPages}`;
+                    pageSelect.appendChild(option);
+                }
+                
+                clearAllBtn.disabled = false;
+                addFieldBtn.disabled = false;
+                
+                renderPage(currentPage);
+            };
+            
+            fileReader.readAsArrayBuffer(file);
+        });
+
+        // 페이지 변경
+        pageSelect.addEventListener('change', (e) => {
+            currentPage = parseInt(e.target.value);
+            renderPage(currentPage);
+        });
+
+        // 스케일 변경
+        scaleSelect.addEventListener('change', (e) => {
+            scale = parseFloat(e.target.value);
+            renderPage(currentPage);
+        });
+
+        // PDF 렌더링
+        async function renderPage(pageNum) {
+            const page = await pdfDoc.getPage(pageNum);
+            const viewport = page.getViewport({ scale });
+            
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+            
+            await page.render(renderContext).promise;
+            
+            // 저장된 마커 다시 그리기
+            drawMarkers();
+        }
+
+        // 마커 그리기
+        function drawMarkers() {
+            document.querySelectorAll('.marker').forEach(m => m.remove());
+            
+            fields.forEach((field, idx) => {
+                if (field.x !== null && field.y !== null && field.page === currentPage) {
+                    const marker = document.createElement('div');
+                    marker.className = 'marker';
+                    marker.style.left = field.x + 'px';
+                    marker.style.top = field.y + 'px';
+                    marker.title = field.label || field.name;
+                    document.querySelector('.canvas-container').appendChild(marker);
+                }
+            });
+        }
+
+        // 캔버스 마우스 이동
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            crosshairH.style.top = y + 'px';
+            crosshairH.style.display = 'block';
+            crosshairV.style.left = x + 'px';
+            crosshairV.style.display = 'block';
+            
+            coordDisplay.textContent = `X: ${Math.round(x)}, Y: ${Math.round(canvas.height - y)}`;
+            coordDisplay.style.display = 'block';
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            crosshairH.style.display = 'none';
+            crosshairV.style.display = 'none';
+            coordDisplay.style.display = 'none';
+        });
+
+        // 캔버스 클릭
+        canvas.addEventListener('click', (e) => {
+            if (!waitingForClick || currentFieldIndex === -1) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // PDF 좌표계로 변환 (좌하단 기준)
+            const pdfX = Math.round(x / scale);
+            const pdfY = Math.round((canvas.height - y) / scale);
+            
+            fields[currentFieldIndex].x = x;
+            fields[currentFieldIndex].y = y;
+            fields[currentFieldIndex].pdfX = pdfX;
+            fields[currentFieldIndex].pdfY = pdfY;
+            fields[currentFieldIndex].page = currentPage;
+            
+            waitingForClick = false;
+            currentFieldIndex = -1;
+            addFieldBtn.textContent = '➕ 필드 추가 (클릭 대기 중)';
+            addFieldBtn.style.background = '#10b981';
+            
+            updateFieldList();
+            updateExportCode();
+            drawMarkers();
+        });
+
+        // 필드 추가
+        addFieldBtn.addEventListener('click', () => {
+            const name = fieldNameInput.value.trim();
+            const label = fieldLabelInput.value.trim();
+            
+            if (!name) {
+                alert('필드명을 입력하세요.');
+                return;
+            }
+            
+            if (waitingForClick) {
+                // 대기 취소
+                fields.pop();
+                waitingForClick = false;
+                currentFieldIndex = -1;
+                addFieldBtn.textContent = '➕ 필드 추가 (클릭 대기 중)';
+                addFieldBtn.style.background = '#10b981';
+                updateFieldList();
+                return;
+            }
+            
+            fields.push({
+                name: name,
+                label: label || name,
+                x: null,
+                y: null,
+                pdfX: null,
+                pdfY: null,
+                page: null,
+                width: 100,
+                height: 20
+            });
+            
+            currentFieldIndex = fields.length - 1;
+            waitingForClick = true;
+            addFieldBtn.textContent = '❌ 취소 (클릭 대기 중...)';
+            addFieldBtn.style.background = '#ef4444';
+            
+            fieldNameInput.value = '';
+            fieldLabelInput.value = '';
+            updateFieldList();
+        });
+
+        // 필드 목록 업데이트
+        function updateFieldList() {
+            if (fields.length === 0) {
+                fieldList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">필드를 추가하세요</p>';
+                return;
+            }
+            
+            fieldList.innerHTML = '';
+            fields.forEach((field, idx) => {
+                const item = document.createElement('div');
+                item.className = 'field-item';
+                
+                const status = field.pdfX !== null ? 
+                    `✅ P${field.page} (${field.pdfX}, ${field.pdfY})` : 
+                    '⏳ 대기 중';
+                
+                item.innerHTML = `
+                    <div>
+                        <div class="name">${field.label}</div>
+                        <div class="coords">${status}</div>
+                    </div>
+                    <button onclick="deleteField(${idx})">삭제</button>
+                `;
+                
+                fieldList.appendChild(item);
+            });
+        }
+
+        // 필드 삭제
+        window.deleteField = function(idx) {
+            fields.splice(idx, 1);
+            updateFieldList();
+            updateExportCode();
+            drawMarkers();
+        };
+
+        // 코드 생성
+        function updateExportCode() {
+            const config = fields
+                .filter(f => f.pdfX !== null)
+                .map(f => `  { field: '${f.name}', page: ${f.page - 1}, x: ${f.pdfX}, y: ${f.pdfY}, width: ${f.width}, height: ${f.height} } // ${f.label}`)
+                .join(',\n');
+            
+            exportCode.value = `// ${fileNameSpan.textContent}\nconst fieldPositions = [\n${config}\n];`;
+        }
+
+        // 코드 복사
+        copyCodeBtn.addEventListener('click', () => {
+            exportCode.select();
+            document.execCommand('copy');
+            
+            const originalText = copyCodeBtn.textContent;
+            copyCodeBtn.textContent = '✅ 복사 완료!';
+            setTimeout(() => {
+                copyCodeBtn.textContent = originalText;
+            }, 2000);
+        });
+
+        // 초기화
+        clearAllBtn.addEventListener('click', () => {
+            if (!confirm('모든 필드를 삭제하시겠습니까?')) return;
+            
+            fields = [];
+            waitingForClick = false;
+            currentFieldIndex = -1;
+            addFieldBtn.textContent = '➕ 필드 추가 (클릭 대기 중)';
+            addFieldBtn.style.background = '#10b981';
+            
+            updateFieldList();
+            updateExportCode();
+            drawMarkers();
+        });
+    </script>
+</body>
+</html>
+
