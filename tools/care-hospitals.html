@@ -40,9 +40,32 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #64748b;
         }
+        
+        /* 로딩 스피너 */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <!-- 로딩 오버레이 -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 shadow-2xl text-center">
+            <div class="spinner mx-auto mb-4"></div>
+            <p class="text-lg font-bold text-gray-900 mb-2">거리 계산 중...</p>
+            <p id="loadingProgress" class="text-sm text-gray-600">병원 데이터 준비 중</p>
+        </div>
+    </div>
     <!-- 헤더 -->
     <div class="bg-white shadow-lg sticky top-0 z-40 border-b-4 border-blue-500">
         <div class="max-w-7xl mx-auto px-4 py-5">
@@ -461,88 +484,181 @@
                 console.log(`📊 필터링 완료: ${filteredHospitals.length}개 병원`);
             }
             
-            renderHospitals();
             updateFilterStatus();
             
-            // 거리 계산
+            // 거리 계산 체크
             console.log('🔎 거리 계산 조건 체크:');
             console.log('  - sortBy:', sortBy);
             console.log('  - userLocation:', userLocation);
             console.log('  - 조건 만족?:', sortBy === 'distance' && userLocation);
             
             if (sortBy === 'distance' && userLocation) {
-                console.log('✅ 조건 만족! calculateDistancesAndSort() 호출');
-                calculateDistancesAndSort();
+                console.log('✅ 조건 만족! calculateAndSortByDistance() 호출');
+                // 거리 계산 함수가 알아서 렌더링함 (2번 렌더링 방지)
+                calculateAndSortByDistance();
             } else {
-                console.log('❌ 조건 불만족. 거리 계산 건너뜀');
+                console.log('❌ 조건 불만족. 일반 렌더링');
+                // 거리 계산이 필요 없으면 바로 렌더링
+                renderHospitals();
             }
         }
         
-        // 거리 계산 및 정렬 (동기적으로 처리)
-        function calculateDistancesAndSort() {
+        // 거리 계산 및 정렬 (비동기 처리 + 로딩 UI)
+        async function calculateAndSortByDistance() {
+            // 로딩 오버레이 표시
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingProgress = document.getElementById('loadingProgress');
+            loadingOverlay.classList.remove('hidden');
+            
             console.log('🔍 거리 계산 시작');
             console.log('📍 내 위치:', userLocation);
             
-            // 모든 병원의 거리를 즉시 계산
-            filteredHospitals.forEach((hospital, index) => {
-                // 실제 좌표 데이터 사용 (JSON에서 제공)
-                if (hospital.lat && hospital.lng && userLocation) {
-                    const dist = calculateDistance(
-                        userLocation.lat, 
-                        userLocation.lng, 
-                        hospital.lat, 
-                        hospital.lng
-                    );
-                    hospital.calculatedDistance = dist;
+            let calculated = 0;  // 정확한 좌표로 계산
+            let estimated = 0;   // 추정 좌표로 계산
+            let failed = 0;      // 계산 실패
+            
+            try {
+                // 캐시 키 생성
+                const cacheKey = `hospital_distances_${userLocation.lat.toFixed(4)}_${userLocation.lng.toFixed(4)}`;
+                
+                // 캐시 확인 (10분 유효)
+                const cached = localStorage.getItem(cacheKey);
+                const cacheTime = localStorage.getItem(`${cacheKey}_time`);
+                const now = Date.now();
+                
+                if (cached && cacheTime && (now - parseInt(cacheTime)) < 600000) {
+                    console.log('📦 캐시된 거리 데이터 사용');
+                    const cachedData = JSON.parse(cached);
                     
-                    // 거리 파싱 수정
-                    if (dist.includes('km')) {
-                        hospital.distanceValue = parseFloat(dist.replace('km', ''));
-                    } else if (dist.includes('m')) {
-                        hospital.distanceValue = parseFloat(dist.replace('m', '')) / 1000;
-                    } else {
-                        hospital.distanceValue = 999999;
-                    }
-                    
-                    // 처음 5개만 로그
-                    if (index < 5) {
-                        console.log(`🏥 ${hospital.name} (${hospital.region}): ${dist} (${hospital.distanceValue}km)`);
-                    }
-                } else {
-                    // 좌표 정보가 없는 경우 추정값 사용
-                    const coords = estimateCoordinates(hospital.region);
-                    if (coords && userLocation) {
-                        const dist = calculateDistance(
-                            userLocation.lat, 
-                            userLocation.lng, 
-                            coords.lat, 
-                            coords.lng
-                        );
-                        hospital.calculatedDistance = dist + ' (추정)';
-                        
-                        if (dist.includes('km')) {
-                            hospital.distanceValue = parseFloat(dist.replace('km', ''));
-                        } else if (dist.includes('m')) {
-                            hospital.distanceValue = parseFloat(dist.replace('m', '')) / 1000;
-                        } else {
-                            hospital.distanceValue = 999999;
+                    // 캐시 적용
+                    filteredHospitals.forEach(hospital => {
+                        const cachedHospital = cachedData.find(h => h.id === hospital.id);
+                        if (cachedHospital) {
+                            hospital.calculatedDistance = cachedHospital.calculatedDistance;
+                            hospital.distanceValue = cachedHospital.distanceValue;
+                            hospital.isEstimated = cachedHospital.isEstimated;
                         }
-                    } else {
-                        hospital.calculatedDistance = '거리 알 수 없음';
-                        hospital.distanceValue = 999999;
+                    });
+                } else {
+                    // 새로 계산
+                    loadingProgress.textContent = `${filteredHospitals.length}개 병원 거리 계산 중...`;
+                    
+                    // 배치 단위로 처리 (UI 블로킹 방지)
+                    const batchSize = 100;
+                    for (let i = 0; i < filteredHospitals.length; i += batchSize) {
+                        const batch = filteredHospitals.slice(i, i + batchSize);
+                        
+                        batch.forEach((hospital) => {
+                            try {
+                                // 실제 좌표 데이터 사용 (우선순위 1)
+                                if (hospital.lat && hospital.lng && userLocation) {
+                                    const dist = calculateDistance(
+                                        userLocation.lat, 
+                                        userLocation.lng, 
+                                        hospital.lat, 
+                                        hospital.lng
+                                    );
+                                    hospital.calculatedDistance = dist;
+                                    hospital.isEstimated = false;
+                                    calculated++;
+                                    
+                                    // 거리 파싱
+                                    if (dist.includes('km')) {
+                                        hospital.distanceValue = parseFloat(dist.replace('km', ''));
+                                    } else if (dist.includes('m')) {
+                                        hospital.distanceValue = parseFloat(dist.replace('m', '')) / 1000;
+                                    } else {
+                                        hospital.distanceValue = 999999;
+                                    }
+                                } else {
+                                    // 좌표 없으면 지역 기반 추정 (우선순위 2)
+                                    const coords = estimateCoordinates(hospital.region);
+                                    if (coords && userLocation) {
+                                        const dist = calculateDistance(
+                                            userLocation.lat, 
+                                            userLocation.lng, 
+                                            coords.lat, 
+                                            coords.lng
+                                        );
+                                        hospital.calculatedDistance = dist + ' (추정)';
+                                        hospital.isEstimated = true;
+                                        estimated++;
+                                        
+                                        if (dist.includes('km')) {
+                                            hospital.distanceValue = parseFloat(dist.replace('km', ''));
+                                        } else if (dist.includes('m')) {
+                                            hospital.distanceValue = parseFloat(dist.replace('m', '')) / 1000;
+                                        } else {
+                                            hospital.distanceValue = 999999;
+                                        }
+                                    } else {
+                                        hospital.calculatedDistance = '거리 알 수 없음';
+                                        hospital.distanceValue = 999999;
+                                        hospital.isEstimated = null;
+                                        failed++;
+                                    }
+                                }
+                            } catch (err) {
+                                console.error('거리 계산 실패:', hospital.name, err);
+                                hospital.calculatedDistance = '계산 오류';
+                                hospital.distanceValue = 999999;
+                                hospital.isEstimated = null;
+                                failed++;
+                            }
+                        });
+                        
+                        // 진행률 업데이트
+                        const progress = Math.min(i + batchSize, filteredHospitals.length);
+                        loadingProgress.textContent = `${progress}/${filteredHospitals.length} 계산 완료...`;
+                        
+                        // UI 업데이트를 위한 짧은 대기
+                        await new Promise(resolve => setTimeout(resolve, 10));
                     }
+                    
+                    // 캐시 저장
+                    const cacheData = filteredHospitals.map(h => ({
+                        id: h.id,
+                        calculatedDistance: h.calculatedDistance,
+                        distanceValue: h.distanceValue,
+                        isEstimated: h.isEstimated
+                    }));
+                    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+                    localStorage.setItem(`${cacheKey}_time`, now.toString());
                 }
-            });
-            
-            // 거리순 정렬
-            filteredHospitals.sort((a, b) => {
-                return a.distanceValue - b.distanceValue;
-            });
-            
-            console.log('✅ 가장 가까운 병원:', filteredHospitals[0]?.name, filteredHospitals[0]?.calculatedDistance);
-            
-            // 한 번에 렌더링
-            renderHospitals();
+                
+                // 거리순 정렬
+                loadingProgress.textContent = '정렬 중...';
+                filteredHospitals.sort((a, b) => a.distanceValue - b.distanceValue);
+                
+                // 결과 로그
+                console.log('✅ 거리 계산 완료:', {
+                    정확: calculated,
+                    추정: estimated,
+                    실패: failed,
+                    가장가까운: filteredHospitals[0]?.name,
+                    거리: filteredHospitals[0]?.calculatedDistance
+                });
+                
+                // 렌더링
+                renderHospitals();
+                
+                // 성공 피드백
+                if (calculated + estimated > 0) {
+                    const nearest = filteredHospitals[0];
+                    setTimeout(() => {
+                        alert(`✅ 거리 계산 완료!\n\n가장 가까운 병원:\n${nearest.name}\n📏 ${nearest.calculatedDistance}\n\n정확: ${calculated}개 | 추정: ${estimated}개`);
+                    }, 500);
+                }
+                
+            } catch (error) {
+                console.error('❌ 거리 계산 중 오류:', error);
+                alert('거리 계산 중 오류가 발생했습니다.\n다시 시도해주세요.');
+            } finally {
+                // 로딩 오버레이 숨김
+                setTimeout(() => {
+                    loadingOverlay.classList.add('hidden');
+                }, 500);
+            }
         }
         
         // 지역별 좌표 추정 (시/구 단위로 세밀화)
@@ -720,12 +836,19 @@
             hospitalGrid.classList.remove('hidden');
             emptyState.classList.add('hidden');
 
-            hospitalGrid.innerHTML = filteredHospitals.map(hospital => `
-                <div class="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-blue-300 transform hover:-translate-y-1 card-fade-in">
+            hospitalGrid.innerHTML = filteredHospitals.map((hospital, index) => `
+                <div class="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-blue-300 transform hover:-translate-y-1 card-fade-in relative">
+                    ${sortBy === 'distance' && userLocation && index < 10 ? `
+                        <!-- TOP 10 배지 -->
+                        <div class="absolute top-3 left-3 z-10 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-black shadow-lg">
+                            TOP ${index + 1}
+                        </div>
+                    ` : ''}
+                    
                     <!-- 카드 헤더 -->
                     <div class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 px-5 py-4">
                         <div class="flex items-start justify-between gap-2 mb-2">
-                            <h3 class="text-white font-bold text-lg leading-tight flex-1">
+                            <h3 class="text-white font-bold text-lg leading-tight flex-1 ${sortBy === 'distance' && index < 10 ? 'pl-16' : ''}">
                                 ${hospital.name}
                             </h3>
                             <span class="text-xs px-3 py-1.5 rounded-full border-2 font-bold whitespace-nowrap ${getTypeColor(hospital.type)}">
@@ -738,6 +861,11 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                                 </svg>
                                 <span>약 ${hospital.calculatedDistance}</span>
+                                ${hospital.isEstimated === true ? `
+                                    <span class="text-xs bg-white bg-opacity-20 px-2 py-0.5 rounded">추정</span>
+                                ` : hospital.isEstimated === false ? `
+                                    <span class="text-xs bg-green-500 bg-opacity-30 px-2 py-0.5 rounded">정확</span>
+                                ` : ''}
                             </div>
                         ` : ''}
                     </div>
