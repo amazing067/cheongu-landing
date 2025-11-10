@@ -112,7 +112,7 @@
   .chip{font-size:12px;padding:3px 10px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}
 
   .section-title{font-size:clamp(28px, 3vw, 36px);font-weight:900;letter-spacing:-.01em}
-  .section-sub{font-size:13.5px;color:#475569}
+  .section-sub{font-size:13.5px;color:#475569;text-align:center}
   .section-head{display:flex;flex-direction:column;align-items:center;gap:6px;margin:28px 0 12px}
 
   /* ===== 계산 패널 공통(2열) ===== */
@@ -375,7 +375,7 @@ if(window.wcs) {
     <section id="loss" class="mt-6">
       <div class="section-head">
         <h2 class="section-title">손해보험사</h2>
-        <p class="section-sub">콤팩트 표. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
+        <p class="section-sub">비어있는 항목은 비활성 버튼으로 표시됩니다.<br>💡 각 보험사 로고를 클릭하면 전자청구 등 상세 정보를 확인하실 수 있습니다.</p>
       </div>
       <span id="loss-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white mx-auto mb-2">0개</span>
       <div id="loss-list" class="table"></div>
@@ -386,7 +386,7 @@ if(window.wcs) {
     <section id="life" class="mt-12">
       <div class="section-head">
         <h2 class="section-title">생명보험사</h2>
-        <p class="section-sub">콤팩트 표. 비어있는 항목은 비활성 버튼으로 표시됩니다.</p>
+        <p class="section-sub">비어있는 항목은 비활성 버튼으로 표시됩니다.<br>💡 각 보험사 로고를 클릭하면 전자청구 등 상세 정보를 확인하실 수 있습니다.</p>
       </div>
       <span id="life-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white mx-auto mb-2">0개</span>
       <div id="life-list" class="table"></div>
