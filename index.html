@@ -22,8 +22,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
 
   <!-- Tailwind(@apply) 빌드 CSS -->
-  <link rel="stylesheet" href="/assets/site.css?v=final-compact-15" />
-  <link rel="stylesheet" href="/assets/mobile.css?v=14" media="(max-width: 767px)">
+  <link rel="stylesheet" href="/assets/site.css?v=final-compact-17" />
+  <link rel="stylesheet" href="/assets/mobile.css?v=16" media="(max-width: 767px)">
 <script>
 (function(){
   if (location.search.indexOf('mobile=1') !== -1) {
@@ -84,16 +84,16 @@
 
   .name{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;overflow:hidden !important;clip:rect(1px,1px,1px,1px) !important;white-space:nowrap !important}
 
-  .btn{min-height:32px;padding:6px 12px;font-size:13px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none;white-space:nowrap}
+  .btn{min-height:32px!important;max-height:32px!important;padding:6px 12px!important;font-size:13px!important;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:#0f172a;text-decoration:none;white-space:nowrap;line-height:1.2!important;width:auto!important;flex-shrink:0!important;flex-grow:0!important}
   .btn:hover{background:#f1f5f9}
   .btn-muted{opacity:.55;cursor:not-allowed}
   .btn-ghost{border-color:#e2e8f0;background:#fff}
-  .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
+  .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff;padding:6px 12px!important}
   .btn-primary:hover{background:#6d28d9}
-  .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:6px 14px}
-  .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:6px 14px}
+  .btn-pdf{background:#0ea5e9;border-color:#0ea5e9;color:#fff;padding:6px 14px!important}
+  .btn-dental{background:#10b981;border-color:#10b981;color:#fff;padding:6px 14px!important}
   .btn-call{border-color:#cbd5e1;background:#fff;display:inline-flex;align-items:center}
-  .btn-call .num{font-weight:800;margin-left:8px;font-size:14px}
+  .btn-call .num{font-weight:800;font-size:14px}
 
   .row .stack{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
   .row .grid-top,.row .grid-bottom{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
@@ -249,7 +249,7 @@
   .btn-call { white-space: nowrap; }
   .btn-call .num{
     display: inline-block; font-variant-numeric: tabular-nums; font-feature-settings: 'tnum';
-    min-width: 13ch; text-align: left;
+    width: 13ch; text-align: left; margin-left: 6px; overflow: hidden; text-overflow: ellipsis;
   }
   /* ✅ 고객센터/인콜 전용: 가운데 정렬 */
   .btn-call.center{ justify-content:center; }
@@ -1336,13 +1336,20 @@ if(window.wcs) {
 
     // 일반 버튼
     function btn(label, href, cls) {
-      if (!href) return `<button class="btn btn-muted" disabled>${label}</button>`;
+      // 버튼 이름 짧게 변경 (활성/비활성 모두 적용)
+      let shortLabel = label
+        .replace(/필요서류\s*안내/gi, '필요서류')
+        .replace(/치과\s*치료\s*확인서/gi, '치과확인서')
+        .replace(/보험금\s*청구서\s*pdf\s*다운로드/gi, '보험금 청구서 PDF')
+        .replace(/보험금청구서\s*pdf\s*다운로드/gi, '보험금 청구서 PDF');
+      
+      if (!href) return `<button class="btn btn-muted" disabled>${shortLabel}</button>`;
+      
       const isExternal = /전산|홈페이지|필요서류|약관확인/.test(label);
-      // [수정] btn-pdf 또는 btn-dental 클래스일 경우
       const isDownload = (cls === 'btn-pdf' || cls === 'btn-dental');
-      // [수정] download="" (값 없음)으로 설정해 '원본 파일명'으로 다운로드
       const downloadAttr = isDownload ? ' download=""' : '';
-      return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${label}</a>`;
+      
+      return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${shortLabel}</a>`;
     }
 
     // 전화 버튼(고객센터/인콜만 가운데 정렬)
