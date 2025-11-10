@@ -305,19 +305,17 @@ if(window.wcs) {
           #mini-visitor-badge::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); animation: mini-shimmer 3s infinite; }
           @keyframes mini-shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
           #mini-visitor-badge .mini-icon { font-size: 14px; line-height: 1; }
-          #mini-visitor-badge .mini-count { color: #fff; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-          #mini-visitor-badge .mini-loading { animation: mini-pulse 1.5s ease-in-out infinite; }
-          @keyframes mini-pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+          #mini-visitor-badge img { height: 16px; margin: 0; }
           
-          /* 모바일: 숫자만 표시 */
+          /* 모바일 */
           @media (max-width: 640px) {
             #mini-visitor-badge { padding: 4px 8px; gap: 4px; }
             #mini-visitor-badge .mini-icon { font-size: 12px; }
-            #mini-visitor-badge .mini-count { font-size: 12px; }
+            #mini-visitor-badge img { height: 14px; }
           }
         </style>
         <span class="mini-icon">👥</span>
-        <span id="mini-visit-count" class="mini-count mini-loading">-</span>
+        <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fxn--2e0br60d.com&count_bg=%23FFFFFF&title_bg=%23FFFFFF&icon=&icon_color=%23E7E7E7&title=&edge_flat=true&title_bg=%236366f1" alt="방문자수" style="display:block;" />
       </div>
       
       <nav class="ml-auto flex items-center gap-2">
@@ -343,12 +341,19 @@ if(window.wcs) {
     <div class="hero-search">
       <div class="search-card">
         <div class="search-title">검색</div>
-        <div class="grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center">
-          <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-2.5" placeholder="회사명·키워드 (예: 삼성, 고객센터, PDF)">
+        <div class="grid sm:grid-cols-[1fr_auto_auto] gap-2 items-center" style="position: relative;">
+          <div style="position: relative;">
+            <input id="q" type="search" class="w-full border border-slate-300 rounded-xl px-4 py-2.5" placeholder="회사명·키워드 (예: 삼성, 고객센터, PDF)" autocomplete="off">
+            
+            <!-- 검색 제안 드롭다운 -->
+            <div id="searchSuggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid #3b82f6; border-radius: 12px; margin-top: 4px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); z-index: 1000; max-height: 400px; overflow-y: auto;">
+              <!-- 동적으로 생성됨 -->
+            </div>
+          </div>
           <button id="clear" class="btn btn-ghost" type="button">지우기</button>
           <a class="btn btn-ghost" href="#loss">손해부터 보기</a>
         </div>
-        <div class="mt-2 text-xs text-slate-600">단축키: <span class="chip">/</span> 검색 포커스, <span class="chip">Esc</span> 지우기</div>
+        <div class="mt-2 text-xs text-slate-600">단축키: <span class="chip">/</span> 검색 포커스, <span class="chip">Esc</span> 지우기 · <span class="chip">Enter</span> 첫 번째 결과로 이동</div>
 
         <!-- ✅ 검색 카드 안 버튼 묶음 -->
         <div class="search-actions">
@@ -1141,11 +1146,168 @@ if(window.wcs) {
       window.open(url, '_blank', opt);
     };
 
-    // 검색
-    const q = $("#q"); const clearBtn = $("#clear");
-    document.addEventListener("keydown", (e) => { if (e.key === "/") { e.preventDefault(); q.focus(); } if (e.key === "Escape") { q.value = ""; filter(); } });
-    clearBtn.addEventListener("click", () => { q.value = ""; filter(); q.focus(); });
-    q.addEventListener("input", filter);
+    // 검색 + 도구 페이지 제안
+    const q = $("#q"); 
+    const clearBtn = $("#clear");
+    const suggestionsBox = $("#searchSuggestions");
+    
+    // 도구 페이지 데이터
+    const toolPages = [
+      {
+        title: "간호간병 통합서비스 병원 찾기",
+        description: "전국 간호간병통합서비스 운영병원 검색",
+        url: "/tools/care-hospitals.html",
+        keywords: ["간호", "간병", "병원", "병원찾기", "간호간병", "통합서비스"],
+        icon: "🏥"
+      },
+      {
+        title: "전국 상급종합병원 지도",
+        description: "보건복지부 지정 상급종합병원 리스트",
+        url: "/tools/tertiary-hospitals.html",
+        keywords: ["상급", "종합병원", "지도", "상급종합병원", "대학병원"],
+        icon: "🗺️"
+      },
+      {
+        title: "종수술분류표",
+        description: "수술코드 및 분류 검색",
+        url: "/tools/op-surgery-codes.html",
+        keywords: ["종수술", "수술", "코드", "분류표", "수술코드"],
+        icon: "🔬"
+      },
+      {
+        title: "실손의료비 변천사",
+        description: "실손보험 세대별 비교",
+        url: "/tools/history.html",
+        keywords: ["실손", "변천사", "역사", "세대", "비교"],
+        icon: "📊"
+      }
+    ];
+    
+    let selectedIndex = -1;
+    let currentSuggestions = [];
+    
+    // 검색 제안 표시
+    function showSuggestions(searchTerm) {
+      if (!searchTerm || searchTerm.length < 2) {
+        suggestionsBox.style.display = 'none';
+        return;
+      }
+      
+      const term = searchTerm.toLowerCase();
+      const matches = toolPages.filter(tool => 
+        tool.title.toLowerCase().includes(term) ||
+        tool.description.toLowerCase().includes(term) ||
+        tool.keywords.some(k => k.includes(term))
+      );
+      
+      if (matches.length === 0) {
+        suggestionsBox.style.display = 'none';
+        return;
+      }
+      
+      currentSuggestions = matches;
+      selectedIndex = -1;
+      
+      suggestionsBox.innerHTML = matches.map((tool, idx) => `
+        <div class="search-suggestion-item" data-index="${idx}" data-url="${tool.url}" style="padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #e5e7eb; transition: background 0.2s;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="font-size: 24px;">${tool.icon}</div>
+            <div style="flex: 1;">
+              <div style="font-weight: 700; color: #1e293b; font-size: 14px;">${tool.title}</div>
+              <div style="font-size: 12px; color: #64748b; margin-top: 2px;">${tool.description}</div>
+            </div>
+            <div style="color: #3b82f6; font-size: 12px; font-weight: 600;">이동 →</div>
+          </div>
+        </div>
+      `).join('');
+      
+      suggestionsBox.style.display = 'block';
+      
+      // 클릭 이벤트
+      $$('.search-suggestion-item', suggestionsBox).forEach(item => {
+        item.addEventListener('click', () => {
+          window.open(item.dataset.url, '_blank');
+          q.value = '';
+          suggestionsBox.style.display = 'none';
+        });
+        
+        item.addEventListener('mouseenter', () => {
+          $$('.search-suggestion-item', suggestionsBox).forEach(i => i.style.background = 'white');
+          item.style.background = '#eff6ff';
+        });
+        
+        item.addEventListener('mouseleave', () => {
+          item.style.background = 'white';
+        });
+      });
+    }
+    
+    // 키보드 네비게이션
+    function updateSelectedSuggestion() {
+      const items = $$('.search-suggestion-item', suggestionsBox);
+      items.forEach((item, idx) => {
+        item.style.background = idx === selectedIndex ? '#eff6ff' : 'white';
+      });
+    }
+    
+    // 검색창 이벤트
+    document.addEventListener("keydown", (e) => { 
+      if (e.key === "/") { 
+        e.preventDefault(); 
+        q.focus(); 
+      } 
+      
+      if (e.key === "Escape") { 
+        q.value = ""; 
+        filter(); 
+        suggestionsBox.style.display = 'none';
+        selectedIndex = -1;
+      }
+      
+      // 엔터: 첫 번째 제안으로 이동
+      if (e.key === "Enter" && q === document.activeElement) {
+        if (currentSuggestions.length > 0) {
+          const targetIndex = selectedIndex >= 0 ? selectedIndex : 0;
+          window.open(currentSuggestions[targetIndex].url, '_blank');
+          q.value = '';
+          suggestionsBox.style.display = 'none';
+          selectedIndex = -1;
+          e.preventDefault();
+        }
+      }
+      
+      // 화살표 키: 제안 네비게이션
+      if (e.key === "ArrowDown" && q === document.activeElement && currentSuggestions.length > 0) {
+        e.preventDefault();
+        selectedIndex = Math.min(selectedIndex + 1, currentSuggestions.length - 1);
+        updateSelectedSuggestion();
+      }
+      
+      if (e.key === "ArrowUp" && q === document.activeElement && currentSuggestions.length > 0) {
+        e.preventDefault();
+        selectedIndex = Math.max(selectedIndex - 1, -1);
+        updateSelectedSuggestion();
+      }
+    });
+    
+    clearBtn.addEventListener("click", () => { 
+      q.value = ""; 
+      filter(); 
+      q.focus(); 
+      suggestionsBox.style.display = 'none';
+    });
+    
+    q.addEventListener("input", (e) => {
+      filter();
+      showSuggestions(e.target.value);
+    });
+    
+    // 외부 클릭 시 제안 닫기
+    document.addEventListener("click", (e) => {
+      if (!q.contains(e.target) && !suggestionsBox.contains(e.target)) {
+        suggestionsBox.style.display = 'none';
+      }
+    });
 
     // 리스트
     const lossList = $("#loss-list"), lifeList = $("#life-list");
@@ -1857,57 +2019,8 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<!-- 방문자 카운터 스크립트 (실시간 집계) -->
-<script>
-(function() {
-  const countEl = document.getElementById('mini-visit-count');
-  if (!countEl) return;
-  
-  // 매일 자정에 자동 리셋되는 오늘 방문자 카운터
-  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-  const namespace = 'cheongu-com'; // 고유 네임스페이스
-  const key = `visits-${today}`;
-  
-  // CountAPI로 카운트 증가 + 조회
-  fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-    .then(res => {
-      if (!res.ok) throw new Error('API 오류');
-      return res.json();
-    })
-    .then(data => {
-      // 숫자 애니메이션 효과
-      const targetValue = data.value || 0;
-      let currentValue = 0;
-      const duration = 800; // 0.8초 (미니 버전은 더 빠르게)
-      const startTime = Date.now();
-      
-      function animate() {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        // easeOut 효과
-        const easeProgress = 1 - Math.pow(1 - progress, 3);
-        currentValue = Math.floor(targetValue * easeProgress);
-        
-        countEl.textContent = currentValue.toLocaleString('ko-KR');
-        countEl.classList.remove('mini-loading');
-        
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        } else {
-          countEl.textContent = targetValue.toLocaleString('ko-KR');
-        }
-      }
-      
-      animate();
-    })
-    .catch(err => {
-      console.warn('방문자 카운터 로드 실패:', err);
-      countEl.textContent = '?';
-      countEl.classList.remove('mini-loading');
-    });
-})();
-</script>
+<!-- 방문자 카운터: hits.seeyoufarm.com 사용 (이미지 배지) -->
+<!-- JavaScript 불필요 - 이미지 배지로 자동 카운팅 -->
 
 <script src="/assets/mobile.js"></script>
 </body>
