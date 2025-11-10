@@ -1191,5 +1191,28 @@
 
         })();
     </script>
+
+<!-- Anti-copy: 복제 방지 스크립트 -->
+<script>
+(function(){
+  document.addEventListener('dragstart', e => e.preventDefault(), true);
+  document.addEventListener('contextmenu', e => { e.preventDefault(); alert('🔒 무단 복제 금지\n저작권 보호 중입니다.'); }, true);
+  document.addEventListener('keydown', function(e){
+    const k = (e.key || '').toLowerCase();
+    const ctrl = e.ctrlKey || e.metaKey;
+    if(k === 'f12' || (ctrl && ['u','s','p'].includes(k)) || (ctrl && e.shiftKey && ['i','j','c'].includes(k))){ 
+      e.preventDefault(); e.stopPropagation(); alert('🔒 보호된 페이지입니다');
+    }
+  }, true);
+  ['copy','cut'].forEach(evt => {
+    document.addEventListener(evt, function(ev){
+      const tag = (ev.target && ev.target.tagName || '').toLowerCase();
+      if(!ev.target || (!ev.target.isContentEditable && !['input','textarea'].includes(tag))){ 
+        ev.preventDefault(); alert('콘텐츠 복사 금지');
+      }
+    }, true);
+  });
+})();
+</script>
 </body>
 </html>

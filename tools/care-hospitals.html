@@ -128,6 +128,15 @@
                     />
                 </div>
                 <button
+                    id="searchButton"
+                    class="px-6 py-3.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl font-bold text-base flex items-center gap-2 whitespace-nowrap"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <span>검색</span>
+                </button>
+                <button
                     id="filterToggle"
                     class="px-5 py-3.5 rounded-xl border-2 transition-all flex items-center gap-2 font-bold shadow-sm bg-white border-gray-200 hover:border-blue-500 text-gray-700"
                 >
@@ -404,10 +413,36 @@
 
         // 이벤트 리스너
         function attachEventListeners() {
+            // 검색 입력 실시간 필터링
             searchInput.addEventListener('input', (e) => {
                 searchQuery = e.target.value;
                 filterHospitals();
             });
+            
+            // 엔터키로 검색
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    performSearch();
+                }
+            });
+            
+            // 검색 버튼 클릭
+            document.getElementById('searchButton').addEventListener('click', () => {
+                performSearch();
+            });
+            
+            // 검색 실행 함수
+            function performSearch() {
+                searchQuery = searchInput.value.trim();
+                filterHospitals();
+                
+                // 검색 피드백 (선택사항)
+                if (searchQuery) {
+                    const resultCount = document.getElementById('resultCount').textContent;
+                    console.log(`🔍 검색 실행: "${searchQuery}" → ${resultCount}개 결과`);
+                }
+            }
 
             typeFilter.addEventListener('change', (e) => {
                 selectedType = e.target.value;
@@ -1470,6 +1505,106 @@
         });
     })();
     </script>
+
+<!-- Anti-copy: 복제 방지 스크립트 -->
+<script>
+(function(){
+  // 이미지 드래그 방지
+  document.addEventListener('dragstart', e => e.preventDefault(), true);
+  document.querySelectorAll('img').forEach(img => { img.setAttribute('draggable','false'); });
+
+  // 우클릭 차단
+  document.addEventListener('contextmenu', e => { 
+    e.preventDefault(); 
+    alert('🔒 무단 복제 금지\n저작권 보호 중입니다.');
+  }, true);
+
+  // F12, Ctrl+U/S/P, Ctrl+Shift+I/J/C 차단
+  document.addEventListener('keydown', function(e){
+    const k = (e.key || '').toLowerCase();
+    const ctrl = e.ctrlKey || e.metaKey;
+    const block =
+      k === 'f12' ||
+      (ctrl && ['u','s','p'].includes(k)) ||
+      (ctrl && e.shiftKey && ['i','j','c'].includes(k));
+    if(block){ 
+      e.preventDefault(); 
+      e.stopPropagation(); 
+      alert('🔒 보호된 페이지입니다');
+    }
+  }, true);
+
+  // 복사/잘라내기 차단 (입력 필드 제외)
+  ['copy','cut'].forEach(evt => {
+    document.addEventListener(evt, function(ev){
+      const tag = (ev.target && ev.target.tagName || '').toLowerCase();
+      const editable = ev.target && (ev.target.isContentEditable || ['input','textarea'].includes(tag));
+      if(!editable){ 
+        ev.preventDefault(); 
+        alert('콘텐츠 복사 금지');
+      }
+    }, true);
+  });
+
+  // 개발자 도구 감지
+  let devtoolsOpen = false;
+  const threshold = 160;
+  
+  function detectDevTools() {
+    const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+    const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+    
+    if (!(heightThreshold && widthThreshold) && 
+        ((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) || 
+         widthThreshold || heightThreshold)) {
+      if (!devtoolsOpen) {
+        devtoolsOpen = true;
+        onDevToolsOpen();
+      }
+    } else {
+      devtoolsOpen = false;
+    }
+  }
+  
+  function onDevToolsOpen() {
+    if (!document.getElementById('devtools-overlay')) {
+      const overlay = document.createElement('div');
+      overlay.id = 'devtools-overlay';
+      overlay.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px);
+        z-index: 999999; display: flex; align-items: center; justify-content: center;
+        flex-direction: column; gap: 20px;
+      `;
+      
+      overlay.innerHTML = `
+        <div style="color: #fff; font-size: 28px; font-weight: 900; text-align: center;">
+          🔒 무단 복제 방지 시스템
+        </div>
+        <div style="color: #f87171; font-size: 18px; font-weight: 600; text-align: center; max-width: 600px; line-height: 1.6;">
+          개발자 도구 사용이 감지되었습니다.<br>
+          무단 복제는 저작권법에 의해 보호됩니다.<br><br>
+          정상 이용을 원하시면 개발자 도구를 닫아주세요.
+        </div>
+        <div style="color: #94a3b8; font-size: 13px; margin-top: 20px;">
+          Developed by 프라임에셋 광진2지점 · 김성민
+        </div>
+      `;
+      
+      document.body.appendChild(overlay);
+      
+      setTimeout(() => {
+        if (!devtoolsOpen) {
+          overlay.remove();
+        }
+      }, 5000);
+    }
+  }
+  
+  setInterval(detectDevTools, 500);
+  window.addEventListener('resize', detectDevTools);
+})();
+</script>
 </body>
 </html>
 
