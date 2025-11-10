@@ -269,6 +269,27 @@
   }
 </style>
 <!-- Anti-copy END -->
+
+<!-- 네이버 애널리틱스 -->
+<script type="text/javascript" src="//wcs.pstatic.net/wcslog.js"></script>
+
+<script type="text/javascript">
+if(!wcs_add) var wcs_add = {};
+wcs_add["wa"] = "50dae0338b1fc8";
+if(window.wcs) {
+  wcs_do();
+}
+</script>
+
+<!-- Google Analytics 4 (관리자 분석용) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JF95T231N6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JF95T231N6');
+</script>
+
 </head>
 
 <body class="text-slate-900 mode-compact">
@@ -276,6 +297,29 @@
   <header>
     <div class="maxw px-5 py-4 flex items-center gap-3">
       <a class="text-xl font-extrabold no-underline" href="/">청구닷컴</a>
+      
+      <!-- 🆕 미니 방문자 카운터 (로고 옆) -->
+      <div id="mini-visitor-badge" style="display:inline-flex;align-items:center;gap:6px;padding:5px 10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:12px;box-shadow:0 2px 8px rgba(99,102,241,0.25);">
+        <style>
+          #mini-visitor-badge { position: relative; overflow: hidden; }
+          #mini-visitor-badge::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); animation: mini-shimmer 3s infinite; }
+          @keyframes mini-shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+          #mini-visitor-badge .mini-icon { font-size: 14px; line-height: 1; }
+          #mini-visitor-badge .mini-count { color: #fff; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+          #mini-visitor-badge .mini-loading { animation: mini-pulse 1.5s ease-in-out infinite; }
+          @keyframes mini-pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+          
+          /* 모바일: 숫자만 표시 */
+          @media (max-width: 640px) {
+            #mini-visitor-badge { padding: 4px 8px; gap: 4px; }
+            #mini-visitor-badge .mini-icon { font-size: 12px; }
+            #mini-visitor-badge .mini-count { font-size: 12px; }
+          }
+        </style>
+        <span class="mini-icon">👥</span>
+        <span id="mini-visit-count" class="mini-count mini-loading">-</span>
+      </div>
+      
       <nav class="ml-auto flex items-center gap-2">
         <a class="btn btn-ghost" href="#loss">손해보험사</a>
         <a class="btn btn-ghost" href="#life">생명보험사</a>
@@ -520,12 +564,557 @@
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>© <span id="y"></span> 청구닷컴</div>
         <div class="flex items-center gap-3">
-          <a class="btn btn-ghost" href="#">문의</a>
-          <a class="btn btn-ghost" href="#">개인정보처리방침</a>
+          <button id="open-contact" class="btn btn-ghost">문의</button>
+          <button id="open-privacy" class="btn btn-ghost">개인정보처리방침</button>
         </div>
       </div>
+      
+      <!-- 개발자 크레딧 -->
+      <div class="developer-credit">
+        <p class="credit-text">
+          <span class="credit-label">Developed by</span>
+          <span class="credit-company">프라임에셋 광진2지점</span>
+          <span class="credit-separator">·</span>
+          <span class="credit-name">김성민</span>
+        </p>
+      </div>
     </div>
+    
+    <style>
+      .developer-credit {
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid #e2e8f0;
+      }
+      
+      .credit-text {
+        text-align: center;
+        font-size: 11px;
+        color: #64748b;
+        font-weight: 500;
+        letter-spacing: 0.03em;
+        margin: 0;
+        line-height: 1.6;
+      }
+      
+      .credit-label {
+        color: #94a3b8;
+        font-weight: 400;
+        margin-right: 6px;
+      }
+      
+      .credit-company {
+        color: #475569;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      
+      .credit-separator {
+        margin: 0 6px;
+        color: #cbd5e1;
+        font-weight: 300;
+      }
+      
+      .credit-name {
+        color: #64748b;
+        font-weight: 600;
+      }
+      
+      .credit-text:hover .credit-company {
+        color: #7c3aed;
+        transition: color 0.3s ease;
+      }
+      
+      .credit-text:hover .credit-name {
+        color: #0f172a;
+        transition: color 0.3s ease;
+      }
+      
+      /* 모바일 */
+      @media (max-width: 640px) {
+        .developer-credit {
+          margin-top: 16px;
+          padding-top: 14px;
+        }
+        
+        .credit-text {
+          font-size: 10px;
+          line-height: 1.5;
+        }
+        
+        .credit-label {
+          display: block;
+          margin-bottom: 4px;
+        }
+      }
+    </style>
   </footer>
+
+  <!-- 문의 모달 -->
+  <div id="contact-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">문의하기</h3>
+        <button id="close-contact" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-intro">궁금한 점이나 건의사항을 남겨주세요. 빠르게 답변드리겠습니다.</p>
+        
+        <!-- 카카오톡 빠른 문의 -->
+        <div class="quick-contact">
+          <a href="http://pf.kakao.com/_JxmxaJn" target="_blank" rel="noopener noreferrer" class="kakao-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 3C6.477 3 2 6.477 2 10.5c0 2.442 1.443 4.615 3.685 6.065-.203.748-.86 3.168-1.026 3.677-.03.09-.015.186.045.256.045.06.12.09.195.09.045 0 .09-.015.135-.03.345-.105 4.47-2.973 5.865-3.933.36.045.735.075 1.11.075 5.523 0 10-3.477 10-7.5S17.523 3 12 3z"/>
+            </svg>
+            <span>카카오톡으로 빠른 문의</span>
+            <span class="badge">실시간 응답</span>
+          </a>
+        </div>
+        
+        <div class="divider">
+          <span>또는</span>
+        </div>
+        
+        <form id="contact-form" class="contact-form">
+          <div class="form-group">
+            <label for="contact-name">이름 <span class="required">*</span></label>
+            <input type="text" id="contact-name" name="name" required placeholder="홍길동" />
+          </div>
+          
+          <div class="form-group">
+            <label for="contact-email">이메일 <span class="required">*</span></label>
+            <input type="email" id="contact-email" name="email" required placeholder="example@email.com" />
+          </div>
+          
+          <div class="form-group">
+            <label for="contact-subject">제목</label>
+            <input type="text" id="contact-subject" name="subject" placeholder="문의 제목" />
+          </div>
+          
+          <div class="form-group">
+            <label for="contact-message">내용 <span class="required">*</span></label>
+            <textarea id="contact-message" name="message" rows="5" required placeholder="문의 내용을 입력해주세요"></textarea>
+          </div>
+          
+          <!-- Web3Forms 무료 서비스 -->
+          <input type="hidden" name="access_key" value="d0ea8a3e-3a6a-4f34-ac64-7d29d84117db">
+          <input type="hidden" name="subject" value="청구닷컴 문의">
+          <input type="hidden" name="redirect" value="https://청구.com?success=true">
+          <input type="hidden" name="from_name" value="청구닷컴">
+          
+          <div class="form-actions">
+            <button type="button" id="cancel-contact" class="btn-secondary">취소</button>
+            <button type="submit" class="btn-primary">전송하기</button>
+          </div>
+          
+          <p class="form-note">* 표시는 필수 입력 항목입니다.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 개인정보처리방침 모달 -->
+  <div id="privacy-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-container modal-large">
+      <div class="modal-header">
+        <h3 class="modal-title">개인정보처리방침</h3>
+        <button id="close-privacy" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body privacy-content">
+        <p class="updated-date">최종 수정일: <span id="privacy-date"></span></p>
+        
+        <section class="privacy-section">
+          <h4>1. 개인정보의 처리 목적</h4>
+          <p>청구닷컴(이하 '본 사이트')은 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.</p>
+          <ul>
+            <li>웹사이트 방문 통계 및 분석</li>
+            <li>서비스 개선 및 최적화</li>
+            <li>문의 사항 응대 및 고객 지원</li>
+          </ul>
+        </section>
+
+        <section class="privacy-section">
+          <h4>2. 수집하는 개인정보의 항목</h4>
+          <p>본 사이트는 기본적으로 개인정보를 수집하지 않습니다. 다만, 다음의 정보가 자동으로 생성되어 수집될 수 있습니다:</p>
+          <ul>
+            <li><strong>방문 분석 도구(Google Analytics, 네이버 애널리틱스):</strong> IP주소, 쿠키, 방문 일시, 서비스 이용 기록, 접속 로그, 기기 정보, 브라우저 정보</li>
+            <li><strong>문의 접수 시:</strong> 이름, 이메일 주소, 문의 내용 (사용자가 직접 입력한 경우에 한함)</li>
+          </ul>
+        </section>
+
+        <section class="privacy-section">
+          <h4>3. 개인정보의 처리 및 보유 기간</h4>
+          <ul>
+            <li><strong>방문 분석 정보:</strong> 수집일로부터 최대 26개월 (Google Analytics 기본 설정)</li>
+            <li><strong>문의 내용:</strong> 문의 처리 완료 후 1년</li>
+          </ul>
+        </section>
+
+        <section class="privacy-section">
+          <h4>4. 개인정보의 제3자 제공</h4>
+          <p>본 사이트는 원칙적으로 이용자의 개인정보를 외부에 제공하지 않습니다. 다만, 아래의 경우는 예외로 합니다:</p>
+          <ul>
+            <li>이용자가 사전에 동의한 경우</li>
+            <li>법령의 규정에 의거하거나, 수사 목적으로 법령에 정해진 절차와 방법에 따라 수사기관의 요구가 있는 경우</li>
+          </ul>
+        </section>
+
+        <section class="privacy-section">
+          <h4>5. 개인정보처리의 위탁</h4>
+          <p>본 사이트는 서비스 제공을 위해 다음과 같이 개인정보 처리 업무를 위탁하고 있습니다:</p>
+          <ul>
+            <li><strong>Google LLC:</strong> 웹사이트 방문 분석 (Google Analytics)</li>
+            <li><strong>네이버(주):</strong> 웹사이트 방문 분석 (네이버 애널리틱스)</li>
+          </ul>
+        </section>
+
+        <section class="privacy-section">
+          <h4>6. 이용자 및 법정대리인의 권리와 행사 방법</h4>
+          <p>이용자는 언제든지 등록되어 있는 자신의 개인정보를 조회하거나 수정할 수 있으며, 처리 정지를 요구할 수 있습니다.</p>
+        </section>
+
+        <section class="privacy-section">
+          <h4>7. 개인정보 보호책임자</h4>
+          <p>본 사이트는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제를 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
+          <ul>
+            <li><strong>책임자:</strong> 청구닷컴 운영팀</li>
+            <li><strong>문의:</strong> 본 사이트 문의 양식 이용</li>
+          </ul>
+        </section>
+
+        <section class="privacy-section">
+          <h4>8. 개인정보처리방침의 변경</h4>
+          <p>이 개인정보처리방침은 법령, 정책 또는 보안기술의 변경에 따라 내용의 추가, 삭제 및 수정이 있을 시에는 변경사항의 시행일로부터 최소 7일 전에 사이트를 통해 공지할 것입니다.</p>
+        </section>
+
+        <section class="privacy-section">
+          <h4>9. 쿠키(Cookie)의 운용</h4>
+          <p>본 사이트는 서비스 개선을 위해 쿠키를 사용할 수 있습니다. 이용자는 웹 브라우저 설정을 통해 쿠키 저장을 거부할 수 있으나, 이 경우 일부 서비스 이용이 제한될 수 있습니다.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* 모달 공통 스타일 */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal-container {
+      background: white;
+      border-radius: 16px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.3s ease;
+    }
+    
+    .modal-large {
+      max-width: 700px;
+    }
+    
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .modal-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: #64748b;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    
+    .modal-close:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      max-height: calc(90vh - 80px);
+    }
+    
+    .modal-intro {
+      color: #475569;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    /* 카카오톡 빠른 문의 버튼 */
+    .quick-contact {
+      margin-bottom: 20px;
+    }
+    
+    .kakao-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px 20px;
+      background: #FEE500;
+      color: #3C1E1E;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(254, 229, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .kakao-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(254, 229, 0, 0.5);
+      background: #FDD835;
+    }
+    
+    .kakao-btn svg {
+      flex-shrink: 0;
+    }
+    
+    .kakao-btn .badge {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: #3C1E1E;
+      color: #FEE500;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+    }
+    
+    /* 구분선 */
+    .divider {
+      position: relative;
+      text-align: center;
+      margin: 24px 0;
+    }
+    
+    .divider::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1px;
+      background: #e2e8f0;
+    }
+    
+    .divider span {
+      position: relative;
+      background: white;
+      padding: 0 12px;
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    
+    /* 문의 폼 스타일 */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .form-group label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+    }
+    
+    .required {
+      color: #ef4444;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+      flex: 1;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+    }
+    
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+    
+    .form-note {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    
+    /* 개인정보처리방침 스타일 */
+    .privacy-content {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #334155;
+    }
+    
+    .updated-date {
+      color: #64748b;
+      font-size: 13px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .privacy-section {
+      margin-bottom: 28px;
+    }
+    
+    .privacy-section h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+    
+    .privacy-section p {
+      margin-bottom: 10px;
+    }
+    
+    .privacy-section ul {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+    
+    .privacy-section li {
+      margin: 6px 0;
+    }
+    
+    /* 모바일 반응형 */
+    @media (max-width: 640px) {
+      .modal-container {
+        max-width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 95vh;
+      }
+      
+      .modal-header {
+        padding: 16px 20px;
+      }
+      
+      .modal-title {
+        font-size: 18px;
+      }
+      
+      .modal-body {
+        padding: 20px;
+      }
+    }
+  </style>
 
   <!-- Anti-copy: 상단 경고 토스트 -->
   <div id="copyAlert" style="
@@ -712,6 +1301,100 @@
     }
 
     document.getElementById("y").textContent = new Date().getFullYear();
+
+    /* ===== 모달 기능 ===== */
+    // 개인정보처리방침 날짜 설정
+    const privacyDate = document.getElementById('privacy-date');
+    if (privacyDate) privacyDate.textContent = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    // 모달 열기/닫기
+    const contactModal = document.getElementById('contact-modal');
+    const privacyModal = document.getElementById('privacy-modal');
+    
+    const openContact = document.getElementById('open-contact');
+    const closeContact = document.getElementById('close-contact');
+    const cancelContact = document.getElementById('cancel-contact');
+    
+    const openPrivacy = document.getElementById('open-privacy');
+    const closePrivacy = document.getElementById('close-privacy');
+    
+    // 문의 모달 열기
+    openContact?.addEventListener('click', () => {
+      contactModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
+    
+    // 문의 모달 닫기
+    function closeContactModal() {
+      contactModal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    closeContact?.addEventListener('click', closeContactModal);
+    cancelContact?.addEventListener('click', closeContactModal);
+    
+    // 개인정보 모달 열기
+    openPrivacy?.addEventListener('click', () => {
+      privacyModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
+    
+    // 개인정보 모달 닫기
+    function closePrivacyModal() {
+      privacyModal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    closePrivacy?.addEventListener('click', closePrivacyModal);
+    
+    // 배경 클릭 시 닫기
+    contactModal?.addEventListener('click', (e) => {
+      if (e.target === contactModal) closeContactModal();
+    });
+    privacyModal?.addEventListener('click', (e) => {
+      if (e.target === privacyModal) closePrivacyModal();
+    });
+    
+    // ESC 키로 닫기
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeContactModal();
+        closePrivacyModal();
+      }
+    });
+
+    // 문의 폼 제출 (Web3Forms)
+    const contactForm = document.getElementById('contact-form');
+    contactForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = '전송 중...';
+      submitBtn.disabled = true;
+      
+      try {
+        const formData = new FormData(contactForm);
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          alert('✅ 문의가 성공적으로 전송되었습니다.\n빠른 시일 내에 답변드리겠습니다.');
+          contactForm.reset();
+          closeContactModal();
+        } else {
+          throw new Error(data.message || '전송 실패');
+        }
+      } catch (error) {
+        alert('❌ 문의 전송에 실패했습니다.\n잠시 후 다시 시도해주세요.');
+        console.error('Form submission error:', error);
+      } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
+    });
 
     /* ===== 실손 계산기 로직 ===== */
     const KRW = new Intl.NumberFormat('ko-KR');
@@ -1048,6 +1731,58 @@ window.addEventListener('load', function() {
   setTimeout(forceLogoHorizontal, 500);  // 0.5초 후
   setTimeout(forceLogoHorizontal, 1500); // 1.5초 후
 });
+</script>
+
+<!-- 방문자 카운터 스크립트 (실시간 집계) -->
+<script>
+(function() {
+  const countEl = document.getElementById('mini-visit-count');
+  if (!countEl) return;
+  
+  // 매일 자정에 자동 리셋되는 오늘 방문자 카운터
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  const namespace = 'cheongu-com'; // 고유 네임스페이스
+  const key = `visits-${today}`;
+  
+  // CountAPI로 카운트 증가 + 조회
+  fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+    .then(res => {
+      if (!res.ok) throw new Error('API 오류');
+      return res.json();
+    })
+    .then(data => {
+      // 숫자 애니메이션 효과
+      const targetValue = data.value || 0;
+      let currentValue = 0;
+      const duration = 800; // 0.8초 (미니 버전은 더 빠르게)
+      const startTime = Date.now();
+      
+      function animate() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // easeOut 효과
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+        currentValue = Math.floor(targetValue * easeProgress);
+        
+        countEl.textContent = currentValue.toLocaleString('ko-KR');
+        countEl.classList.remove('mini-loading');
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          countEl.textContent = targetValue.toLocaleString('ko-KR');
+        }
+      }
+      
+      animate();
+    })
+    .catch(err => {
+      console.warn('방문자 카운터 로드 실패:', err);
+      countEl.textContent = '?';
+      countEl.classList.remove('mini-loading');
+    });
+})();
 </script>
 
 <script src="/assets/mobile.js"></script>
