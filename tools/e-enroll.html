@@ -429,6 +429,141 @@ if (!specials.length) {
       buildMini('#senior_kvs', ['가입나이','단독가입여부','진단여부','기본계약1','기본계약2','선택계약1','선택계약2','재가입주기','보험기간','3대비급여/약제비','알릴의무'], snData);
     }
 
+    // ===== 공제회사 전용 렌더링 함수 =====
+    function renderMutualAid(base, L, companyName) {
+      // 로고 및 헤더
+      $('#company').textContent = companyName;
+      const logoSrc = base.logo || `/assets/logos/${companyName}.png`;
+      const img = $('#logo');
+      img.src = logoSrc;
+      img.alt = companyName + ' 로고';
+
+      // 퀵 네비게이션 숨기기
+      document.querySelector('.quick-nav').style.display = 'none';
+      
+      // 배지 영역 제거
+      $('#badges').style.display = 'none';
+
+      // 메인 컨텐츠 영역 교체
+      const main = document.querySelector('main.maxw');
+      main.innerHTML = `
+        <section class="hero" style="grid-column:1/-1;max-width:1400px;margin:0 auto">
+          <div class="heading">${companyName} 정보</div>
+          <div class="actions" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px">
+            <a href="${L.support || '#'}" ${L.support ? 'target="_blank" rel="noopener"' : ''} class="btn ${L.support ? '' : 'muted'}" style="justify-content:center;${L.support ? '' : 'pointer-events:none'}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              홈페이지
+            </a>
+            <a href="${L.cs ? 'tel:' + L.cs.replace(/\D/g,'') : '#'}" class="btn ${L.cs ? '' : 'muted'}" style="justify-content:center;${L.cs ? '' : 'pointer-events:none'}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              고객센터: ${L.cs || '–'}
+            </a>
+            <a href="${L.terms || '#'}" ${L.terms ? 'target="_blank" rel="noopener"' : ''} class="btn ${L.terms ? '' : 'muted'}" style="justify-content:center;${L.terms ? '' : 'pointer-events:none'}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              약관확인
+            </a>
+            <a href="${L.pdf || '#'}" ${L.pdf ? 'download=""' : ''} class="btn ${L.pdf ? '' : 'muted'}" style="justify-content:center;${L.pdf ? '' : 'pointer-events:none'}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><polyline points="9 15 12 18 15 15"></polyline></svg>
+              보험금 청구서 PDF
+            </a>
+          </div>
+          <style>
+            .actions {
+              grid-template-columns: repeat(4, 1fr) !important;
+            }
+            @media (max-width: 1023px) {
+              .actions {
+                grid-template-columns: repeat(2, 1fr) !important;
+              }
+            }
+            @media (max-width: 767px) {
+              .actions {
+                grid-template-columns: 1fr !important;
+              }
+            }
+          </style>
+        </section>
+
+        <section class="card" style="grid-column:1/-1;max-width:1400px;margin:16px auto 0">
+          <h2 class="section-title st-blue" style="margin-bottom:16px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:8px"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            보험금 청구 FAX
+          </h2>
+          <div class="fax-grid">
+            ${parseFaxNumbers(L.fax || '').map(item => {
+              const hasNumber = /\d/.test(item.number);
+              return `
+                <div class="kv">
+                  <div class="k" style="text-align:center">${item.region}</div>
+                  <div class="v" style="text-align:center">
+                    ${hasNumber ? `<a href="tel:${item.number.replace(/\D/g,'')}" style="color:#0ea5e9;text-decoration:none;font-weight:800">${item.number}</a>` : `<span style="color:#64748b;font-weight:600">${item.number}</span>`}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+          <style>
+            .fax-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+              gap: 12px;
+            }
+            .fax-grid .kv .k {
+              text-align: center !important;
+            }
+            .fax-grid .kv .v {
+              text-align: center !important;
+            }
+            @media (min-width: 1200px) {
+              .fax-grid {
+                grid-template-columns: repeat(5, 1fr);
+              }
+            }
+            @media (min-width: 768px) and (max-width: 1199px) {
+              .fax-grid {
+                grid-template-columns: repeat(3, 1fr);
+              }
+            }
+          </style>
+        </section>
+
+        <section class="card" style="grid-column:1/-1;max-width:1400px;margin:16px auto 0">
+          <p class="subtitle" style="text-align:center">${companyName}은(는) 공제회사로, 전자청약 정보는 별도로 제공되지 않습니다.</p>
+          <p class="subtitle" style="text-align:center;margin-top:8px;color:#64748b">문의사항은 고객센터(${L.cs || '고객센터'})로 연락주시기 바랍니다.</p>
+        </section>
+      `;
+    }
+
+    // FAX 번호 파싱 함수
+    function parseFaxNumbers(faxString) {
+      if (!faxString) return [];
+      
+      // 특수 케이스: "콜센터 가상번호 부여" 등
+      if (!/\d/.test(faxString)) {
+        return [{ region: '안내', number: faxString }];
+      }
+      
+      // "0505-005-1224(서울) | 0505-005-1427(경인동부) ..." 형식 파싱
+      const matches = faxString.match(/(\d{2,4}-\d{3,4}-\d{4})\s*\(([^)]+)\)/g);
+      if (matches && matches.length > 0) {
+        return matches.map(match => {
+          const parts = match.match(/(\d{2,4}-\d{3,4}-\d{4})\s*\(([^)]+)\)/);
+          return {
+            number: parts[1],
+            region: parts[2]
+          };
+        });
+      }
+      
+      // 단일 번호 형식: "02-3278-9696"
+      const singleMatch = faxString.match(/(\d{2,4}-\d{3,4}-\d{4})/);
+      if (singleMatch) {
+        return [{ region: 'FAX', number: singleMatch[1] }];
+      }
+      
+      return [];
+    }
+
     // 스무스 스크롤
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click', (e)=>{
@@ -450,6 +585,12 @@ if (!specials.length) {
         const base = carriers.find(x => x.name === company) || {};
         const enr  = (Array.isArray(enrollData?.items) ? enrollData.items : []).find(x => x.name === company) || {};
         const L = base.links || {};
+
+        // ===== 공제회사 전용 렌더링 =====
+        if (base.type === '공제회사') {
+          renderMutualAid(base, L, company);
+          return;
+        }
 
         // 헤더
         $('#company').textContent = company || '전자청약정보';
