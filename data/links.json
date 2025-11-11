@@ -593,6 +593,91 @@
         "fax": "02-3289-4516",
         "terms": "https://pbano.myangel.co.kr/paging/WE_AC_WEPAAP020100L"
       }
+    },
+    {
+      "name": "우체국보험",
+      "type": "공제회",
+      "tags": ["국영", "우체국", "공제"],
+      "links": {
+        "system": "https://www.epostbank.go.kr",
+        "guide": "https://www.epostbank.go.kr",
+        "pdf": "",
+        "dental": "",
+        "support": "https://www.epostbank.go.kr",
+        "cs": "1599-0100",
+        "monitor": "0505-005-번호 | 1224(서울) 1427(경인동부) 1428(경인서부) 2271(강원) 1788(충청) 2163(전북) 1921(전남) 1623(부산) 2070(경북) 7116(서귀포) 2296(제주)",
+        "helpdesk": "",
+        "fax": "0505-005-1224(서울) | 0505-005-1427(경인동부) | 0505-005-1428(경인서부) | 0505-005-2271(강원) | 0505-005-1788(충청) | 0505-005-2163(전북) | 0505-005-1921(전남) | 0505-005-1623(부산) | 0505-005-2070(경북) | 0505-005-7116(서귀포) | 0505-005-2296(제주)",
+        "terms": "https://www.epostbank.go.kr"
+      }
+    },
+    {
+      "name": "The·K",
+      "type": "공제회",
+      "tags": ["교직원공제회", "공제"],
+      "links": {
+        "system": "https://www.ktcu.or.kr",
+        "guide": "https://www.ktcu.or.kr",
+        "pdf": "",
+        "dental": "",
+        "support": "https://www.ktcu.or.kr",
+        "cs": "1577-3993",
+        "monitor": "",
+        "helpdesk": "",
+        "fax": "02-3278-9696",
+        "terms": "https://www.ktcu.or.kr"
+      }
+    },
+    {
+      "name": "MG새마을금고",
+      "type": "공제회",
+      "tags": ["새마을금고", "공제", "MG"],
+      "links": {
+        "system": "https://www.kfcc.co.kr",
+        "guide": "https://www.kfcc.co.kr",
+        "pdf": "",
+        "dental": "",
+        "support": "https://www.kfcc.co.kr",
+        "cs": "1599-9010",
+        "monitor": "",
+        "helpdesk": "",
+        "fax": "02-3016-7674",
+        "terms": "https://www.kfcc.co.kr"
+      }
+    },
+    {
+      "name": "수협",
+      "type": "공제회",
+      "tags": ["수협", "공제", "수산업협동조합"],
+      "links": {
+        "system": "https://www.suhyup.co.kr",
+        "guide": "https://www.suhyup.co.kr",
+        "pdf": "",
+        "dental": "",
+        "support": "https://www.suhyup.co.kr",
+        "cs": "1588-4119",
+        "monitor": "",
+        "helpdesk": "",
+        "fax": "콜센터 가상번호 부여",
+        "terms": "https://www.suhyup.co.kr"
+      }
+    },
+    {
+      "name": "신협",
+      "type": "공제회",
+      "tags": ["신협", "공제", "신용협동조합"],
+      "links": {
+        "system": "https://www.cu.co.kr",
+        "guide": "https://www.cu.co.kr",
+        "pdf": "",
+        "dental": "",
+        "support": "https://www.cu.co.kr",
+        "cs": "1544-3030",
+        "monitor": "",
+        "helpdesk": "",
+        "fax": "콜센터 가상번호 부여",
+        "terms": "https://www.cu.co.kr"
+      }
     }
   ],
   "top_pdfs": [
