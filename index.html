@@ -2066,72 +2066,56 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<!-- 방문자 카운터: countapi.xyz 사용 -->
+<!-- 방문자 카운터: localStorage 기반 -->
 <script>
 (function() {
   const countEl = document.getElementById('mini-visit-count');
   if (!countEl) return;
   
-  // countapi.xyz - 무료 카운터 API (CORS 지원)
-  const namespace = 'cheongu-com';
-  const key = 'visits';
-  const apiUrl = `https://api.countapi.xyz/hit/${namespace}/${key}`;
+  // 오늘 날짜 가져오기
+  const today = new Date().toISOString().split('T')[0];
   
-  fetch(apiUrl)
-    .then(res => res.json())
-    .then(data => {
-      const totalCount = data.value || 1;
-      
-      // 오늘 방문자 수는 localStorage에 저장하여 관리
-      const today = new Date().toISOString().split('T')[0];
-      const stored = JSON.parse(localStorage.getItem('visitStats') || '{}');
-      
-      if (stored.date !== today) {
-        // 날짜가 바뀌면 오늘 카운트 초기화
-        stored.date = today;
-        stored.todayCount = 1;
-        stored.lastTotal = totalCount;
-      } else {
-        // 같은 날이면 증가분 계산
-        const increment = totalCount - (stored.lastTotal || totalCount);
-        stored.todayCount = (stored.todayCount || 0) + Math.max(increment, 1);
-        stored.lastTotal = totalCount;
-      }
-      
-      localStorage.setItem('visitStats', JSON.stringify(stored));
-      const todayCount = stored.todayCount;
-      
-      // 숫자 애니메이션
-      let currentValue = 0;
-      const duration = 800;
-      const startTime = Date.now();
-      
-      function animate() {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easeProgress = 1 - Math.pow(1 - progress, 3);
-        currentValue = Math.floor(todayCount * easeProgress);
-        
-        countEl.textContent = currentValue.toLocaleString('ko-KR');
-        countEl.classList.remove('mini-loading');
-        
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        } else {
-          countEl.textContent = todayCount.toLocaleString('ko-KR');
-        }
-      }
-      
-      animate();
-    })
-    .catch(err => {
-      console.warn('방문자 카운터 로드 실패:', err);
-      // 실패해도 localStorage에서 읽어오기
-      const stored = JSON.parse(localStorage.getItem('visitStats') || '{}');
-      const count = stored.todayCount || 1;
-      countEl.textContent = count.toLocaleString('ko-KR');
-      countEl.classList.remove('mini-loading');
-    });
+  // localStorage에서 방문 통계 가져오기
+  let visitStats = JSON.parse(localStorage.getItem('visitStats') || '{}');
+  
+  // 날짜가 바뀌면 카운트 초기화
+  if (visitStats.date !== today) {
+    visitStats = {
+      date: today,
+      count: 0
+    };
+  }
+  
+  // 카운트 증가
+  visitStats.count = (visitStats.count || 0) + 1;
+  
+  // localStorage에 저장
+  localStorage.setItem('visitStats', JSON.stringify(visitStats));
+  
+  const todayCount = visitStats.count;
+  
+  // 숫자 애니메이션
+  let currentValue = 0;
+  const duration = 800;
+  const startTime = Date.now();
+  
+  function animate() {
+    const elapsed = Date.now() - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const easeProgress = 1 - Math.pow(1 - progress, 3);
+    currentValue = Math.floor(todayCount * easeProgress);
+    
+    countEl.textContent = currentValue.toLocaleString('ko-KR');
+    countEl.classList.remove('mini-loading');
+    
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      countEl.textContent = todayCount.toLocaleString('ko-KR');
+    }
+  }
+  
+  animate();
 })();
 </script>
 
