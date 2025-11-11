@@ -323,7 +323,7 @@ if(window.wcs) {
       <nav class="ml-auto flex items-center gap-2">
         <a class="btn btn-ghost" href="#loss">손해보험사</a>
         <a class="btn btn-ghost" href="#life">생명보험사</a>
-        <a class="btn btn-ghost" href="#mutual">공제회</a>
+        <a class="btn btn-ghost" href="#mutual">공제회사</a>
         <a class="btn btn-ghost" href="#calc-panels">보험나이 계산기</a>
         <a class="btn btn-ghost" href="#medcalc">실손 계산기</a>
       </nav>
@@ -394,15 +394,15 @@ if(window.wcs) {
       <div id="life-empty" class="hidden mt-3 text-sm text-slate-600 text-center">표시할 생명보험사가 없습니다.</div>
     </section>
 
-    <!-- 공제회 -->
+    <!-- 공제회사 -->
     <section id="mutual" class="mt-12">
       <div class="section-head">
-        <h2 class="section-title">공제회</h2>
-        <p class="section-sub">상호부조 방식의 보험 서비스를 제공하는 공제회입니다.<br>💡 각 공제회 로고를 클릭하면 전자청구 등 상세 정보를 확인하실 수 있습니다.</p>
+        <h2 class="section-title">공제회사</h2>
+        <p class="section-sub">상호부조 방식의 보험 서비스를 제공하는 공제회사입니다.<br>💡 각 공제회사 로고를 클릭하면 전자청구 등 상세 정보를 확인하실 수 있습니다.</p>
       </div>
       <span id="mutual-count" class="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-[12px] border border-slate-200 bg-white mx-auto mb-2">0개</span>
       <div id="mutual-list" class="table"></div>
-      <div id="mutual-empty" class="hidden mt-3 text-sm text-slate-600 text-center">표시할 공제회가 없습니다.</div>
+      <div id="mutual-empty" class="hidden mt-3 text-sm text-slate-600 text-center">표시할 공제회사가 없습니다.</div>
     </section>
 
     <!-- 계산 패널 -->
@@ -1375,6 +1375,27 @@ if(window.wcs) {
     // 표 한 행
     function row(item) {
       const L = item.links || {};
+      
+      // 공제회사 전용 레이아웃 (우체국보험, The·K, MG새마을금고, 수협, 신협)
+      if (item.type === "공제회사") {
+        return `
+          <div class="row" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}">
+            <div>${brandCell(item)}</div>
+            <div class="stack">
+              <div class="grid-top">
+                ${btn("홈페이지", L.support, "btn-ghost")}
+                ${phoneBtn("고객센터", L.cs)}
+                ${btn("약관확인", L.terms, "btn-ghost")}
+              </div>
+              <div class="grid-bottom">
+                ${btn("보험금 청구서 PDF 다운로드", L.pdf, "btn-pdf")}
+                ${phoneBtn("보험금청구 FAX", L.fax)}
+              </div>
+            </div>
+          </div>`;
+      }
+      
+      // 기본 보험사 레이아웃
       return `
         <div class="row" data-name="${item.name}" data-tags="${(item.tags||[]).join(' ').toLowerCase()}">
           <div>${brandCell(item)}</div>
@@ -1400,7 +1421,7 @@ if(window.wcs) {
       const arr = json.carriers || [];
       const loss = arr.filter(x => x.type === "손해");
       const life = arr.filter(x => x.type === "생명");
-      const mutual = arr.filter(x => x.type === "공제회");
+      const mutual = arr.filter(x => x.type === "공제회사");
 
       lossList.innerHTML = loss.map(row).join("");
       lifeList.innerHTML = life.map(row).join("");
