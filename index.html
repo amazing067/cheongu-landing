@@ -2066,56 +2066,60 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<!-- 방문자 카운터: localStorage 기반 -->
+<!-- 방문자 카운터: hits.seeyoufarm.com (실제 전체 방문자 수) -->
 <script>
 (function() {
   const countEl = document.getElementById('mini-visit-count');
   if (!countEl) return;
   
-  // 오늘 날짜 가져오기
-  const today = new Date().toISOString().split('T')[0];
+  // hits.seeyoufarm.com을 CORS 프록시를 통해 가져오기
+  const pageUrl = 'https://xn--2e0br60d.com';
+  const badgeUrl = `https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=${encodeURIComponent(pageUrl)}&count_bg=%235555FF&title_bg=%235555FF&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false`;
   
-  // localStorage에서 방문 통계 가져오기
-  let visitStats = JSON.parse(localStorage.getItem('visitStats') || '{}');
-  
-  // 날짜가 바뀌면 카운트 초기화
-  if (visitStats.date !== today) {
-    visitStats = {
-      date: today,
-      count: 0
-    };
-  }
-  
-  // 카운트 증가
-  visitStats.count = (visitStats.count || 0) + 1;
-  
-  // localStorage에 저장
-  localStorage.setItem('visitStats', JSON.stringify(visitStats));
-  
-  const todayCount = visitStats.count;
-  
-  // 숫자 애니메이션
-  let currentValue = 0;
-  const duration = 800;
-  const startTime = Date.now();
-  
-  function animate() {
-    const elapsed = Date.now() - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const easeProgress = 1 - Math.pow(1 - progress, 3);
-    currentValue = Math.floor(todayCount * easeProgress);
-    
-    countEl.textContent = currentValue.toLocaleString('ko-KR');
-    countEl.classList.remove('mini-loading');
-    
-    if (progress < 1) {
-      requestAnimationFrame(animate);
-    } else {
-      countEl.textContent = todayCount.toLocaleString('ko-KR');
-    }
-  }
-  
-  animate();
+  // CORS 우회 프록시를 사용하여 SVG 가져오기
+  fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(badgeUrl)}`)
+    .then(res => res.text())
+    .then(svgText => {
+      // SVG에서 Today 카운트 추출
+      // <text ... >123</text> 형식에서 숫자 추출
+      const match = svgText.match(/<text[^>]*x="135[^"]*"[^>]*>(\d+)<\/text>/);
+      
+      if (match && match[1]) {
+        const todayCount = parseInt(match[1], 10);
+        
+        // 숫자 애니메이션
+        let currentValue = 0;
+        const duration = 800;
+        const startTime = Date.now();
+        
+        function animate() {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeProgress = 1 - Math.pow(1 - progress, 3);
+          currentValue = Math.floor(todayCount * easeProgress);
+          
+          countEl.textContent = currentValue.toLocaleString('ko-KR');
+          countEl.classList.remove('mini-loading');
+          
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          } else {
+            countEl.textContent = todayCount.toLocaleString('ko-KR');
+          }
+        }
+        
+        animate();
+      } else {
+        // 파싱 실패시 기본값
+        countEl.textContent = '1';
+        countEl.classList.remove('mini-loading');
+      }
+    })
+    .catch(err => {
+      console.warn('방문자 카운터 로드 실패:', err);
+      countEl.textContent = '1';
+      countEl.classList.remove('mini-loading');
+    });
 })();
 </script>
 
