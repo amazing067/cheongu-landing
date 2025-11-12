@@ -652,60 +652,6 @@
       "links": {
         "system": "",
         "guide": "",
-        "pdf": "/assets/pdf/MG새마을금고(예별보험회사)-보험금청구서.pdf",
-        "system": "",
-        "guide": "",
-        "pdf": "/assets/pdf/우체국보험-보험금청구서.pdf",
-        "dental": "",
-        "support": "https://www.epostbank.go.kr",
-        "cs": "1599-0100",
-        "monitor": "",
-        "helpdesk": "",
-        "fax": "0505-005-1224(서울) | 0505-005-1427(경인동부) | 0505-005-1428(경인서부) | 0505-005-2271(강원) | 0505-005-1788(충청) | 0505-005-2163(전북) | 0505-005-1921(전남) | 0505-005-1623(부산) | 0505-005-2070(경북) | 0505-005-7116(서귀포) | 0505-005-2296(제주)",
-        "terms": "https://www.epostbank.go.kr"
-      }
-    },
-    {
-      "name": "The·K",
-      "type": "공제회사",
-      "tags": ["교직원공제회", "공제"],
-      "links": {
-        "system": "",
-        "guide": "",
-        "pdf": "/assets/pdf/The·K-보험금청구서.pdf",
-        "dental": "",
-        "support": "https://www.ktcu.or.kr",
-        "cs": "1577-3993",
-        "monitor": "",
-        "helpdesk": "",
-        "fax": "02-3278-9696",
-        "terms": "https://www.ktcu.or.kr"
-      }
-    },
-    {
-      "name": "MG새마을금고",
-      "type": "공제회사",
-      "tags": ["새마을금고", "공제", "MG"],
-      "links": {
-        "system": "",
-        "guide": "",
-        "pdf": "/assets/pdf/MG새마을금고(예별보험회사)-보험금청구서.pdf",
-        "dental": "",
-        "support": "https://www.kfcc.co.kr",
-        "cs": "1599-9010",
-        "monitor": "",
-        "helpdesk": "",
-        "fax": "02-3016-7674",
-        "terms": "https://www.kfcc.co.kr"
-      }
-    },
-    {
-      "name": "MG손해보험",
-      "type": "공제회사",
-      "tags": ["예별보험", "공제", "MG"],
-      "links": {
-        "system": "",
-        "guide": "",
         "pdf": "/assets/pdf/MG손해보험(예별보험회사)-보험금청구서.pdf",
         "dental": "",
         "support": "https://www.yebyeol.co.kr/HO011010DM.scp",
