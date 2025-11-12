@@ -601,7 +601,7 @@
       "links": {
         "system": "",
         "guide": "",
-        "pdf": "",
+        "pdf": "/assets/pdf/우체국보험험-보험금청구서.pdf",
         "dental": "",
         "support": "https://www.epostbank.go.kr",
         "cs": "1599-0100",
@@ -618,7 +618,7 @@
       "links": {
         "system": "",
         "guide": "",
-        "pdf": "",
+        "pdf": "/assets/pdf/The·K-보험금청구서.pdf",
         "dental": "",
         "support": "https://www.ktcu.or.kr",
         "cs": "1577-3993",
@@ -635,7 +635,7 @@
       "links": {
         "system": "",
         "guide": "",
-        "pdf": "",
+        "pdf": "/assets/pdf/MG새마을금고(예별보험회사)-보험금청구서.pdf",
         "dental": "",
         "support": "https://www.kfcc.co.kr",
         "cs": "1599-9010",
@@ -652,7 +652,7 @@
       "links": {
         "system": "",
         "guide": "",
-        "pdf": "",
+        "pdf": "/assets/pdf/수협-보험금청구서.pdf",
         "dental": "",
         "support": "https://www.suhyup.co.kr",
         "cs": "1588-4119",
@@ -669,8 +669,9 @@
       "links": {
         "system": "",
         "guide": "",
-        "pdf": "",
-        "dental": "",
+        "pdf": "/assets/pdf/신협-보험금청구서.pdf",
+        "dental": "/assets/pdf/신협-치과치료확인서
+        .pdf",
         "support": "https://www.cu.co.kr",
         "cs": "1544-3030",
         "monitor": "",
