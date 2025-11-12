@@ -127,7 +127,7 @@
       "call_hours": "09:00~18:00",
       "gye_pi_sang_available": false,
       "mobile_enroll_age": "만19세~만75세",
-      "mobile_enroll_age_text": "",
+      "mobile_enroll_age_text": "만19세~만75세",
       "minor_mobile": "미성년자 : 15세 미만은 계약자가 법정대리인이면 가능 ,15~19세 불가능",
       "incall_monitoring_phone": "1600-4600",
       "monitoring_criteria": "피보험자 바이오 인증(지문)만 가능",
@@ -315,7 +315,7 @@
       "card_payment_detail": "계약자 카드만 가능, 설계사 직접 수납 X"
     },
     {
-      "name": "미래에셋",
+      "name": "미래에셋생명",
       "usage_period": "발송일+6일,링크 접속 당일 24:00까지",
       "usage_hours": "오후 11:30까지",
       "call_hours": "09:00~18:00",
