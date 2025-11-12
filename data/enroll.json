@@ -46,6 +46,36 @@
       "card_payment_detail": "계약자 카드만 가능,설계사 직접 수납"
     },
     {
+      "name": "흥국화재",
+      "usage_period": "발송일 +2일",
+      "usage_hours": "오후 10:00까지",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": ture,
+      "mobile_enroll_age": { "min": 19 },
+      "mobile_enroll_age_text": "만19세 이상",
+      "minor_mobile": "전 연령가능 미성년자- 사망담보 없으면 모바일청약가능 단 계약자가 법정대리인일시",
+      "incall_monitoring_phone": "1600-5182",
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "monitoring_criteria": "피보험자 바이오 인증(지문)만 가능",
+      "card_payment_available": true,
+      "card_payment_detail": "계약자 카드만 가능,설계사 직접 수납"
+    },
+    {
+      "name": "하나손해보험",
+      "usage_period": "발송일 +2일",
+      "usage_hours": "오후 11:00까지",
+      "call_hours": "09:00~18:00",
+      "gye_pi_sang_available": ture,
+      "mobile_enroll_age": { "min": 19 },
+      "mobile_enroll_age_text": "만19세 이상",
+      "minor_mobile": "14세미만 계피동일시 가능(계피상이시불가), 계피상이시 14~19세미만은 친권 계약자만 가능",
+      "incall_monitoring_phone": "1600-5182",
+      "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
+      "monitoring_criteria": "피보험자 바이오 인증(지문)만 가능",
+      "card_payment_available": true,
+      "card_payment_detail": "계약자 카드만 가능,설계사 직접 수납"
+    },
+    {
       "name": "메리츠화재",
       "usage_period": "발송 당일만 사용",
       "usage_hours": "자정전까지 사용 가능",
