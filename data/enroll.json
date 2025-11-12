@@ -195,7 +195,7 @@
       "card_payment_detail": "계약자 카드만 가능, 설계사가 직접 수납 X"
     },
     {
-      "name": "iM라이프",
+      "name": "iM라이프생명",
       "usage_period": "발송일 +2일",
       "usage_hours": "오후 11:00",
       "call_hours": "09:00~18:00\n09:00~20:00 (수: 아웃콜)",
@@ -435,7 +435,7 @@
       "card_payment_detail": ""
     },
     {
-      "name": "푸본현대",
+      "name": "푸본현대생명",
       "usage_period": "",
       "usage_hours": "-",
       "call_hours": "09:00~18:00",
