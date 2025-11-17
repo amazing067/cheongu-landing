@@ -38,6 +38,8 @@
         .marker-dot { width: 12px; height: 12px; background: #ef4444; border: 3px solid white; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
         .marker-label { position: absolute; top: -25px; left: 10px; background: rgba(0,0,0,0.85); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; white-space: nowrap; }
         
+        .drag-rect { position: absolute; border: 3px dashed #3a64ff; background: rgba(58, 100, 255, 0.1); pointer-events: none; z-index: 15; }
+        
         .coord-display { position: sticky; top: 10px; right: 10px; float: right; background: rgba(0,0,0,0.85); color: white; padding: 10px 14px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 13px; z-index: 30; margin-bottom: 10px; }
         
         .panel { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-height: calc(100vh - 300px); overflow-y: auto; }
@@ -50,16 +52,19 @@
         .quick-btn:hover { background: #0ea5e9; color: white; }
         
         .field-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-        .field-item { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; padding: 10px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb; align-items: center; }
+        .field-item { display: grid; grid-template-columns: auto 1fr auto auto auto; gap: 6px; padding: 10px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb; align-items: center; transition: all 0.2s; }
+        .field-item:hover { border-color: #3b82f6; box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15); }
         .field-item.waiting { background: #fef3c7; border-color: #fbbf24; }
+        .field-item.waiting:hover { border-color: #f59e0b; box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25); }
         .field-item.complete { background: #d1fae5; border-color: #10b981; }
+        .field-item.complete:hover { border-color: #059669; }
         .field-item .index { width: 24px; height: 24px; background: #6b7280; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
         .field-item.waiting .index { background: #f59e0b; }
         .field-item.complete .index { background: #10b981; }
         .field-item .info { display: flex; flex-direction: column; gap: 2px; }
         .field-item .name { font-weight: 700; color: #111827; font-size: 13px; }
         .field-item .coords { color: #6b7280; font-family: 'Courier New', monospace; font-size: 11px; }
-        .field-item button { padding: 6px 10px; border-radius: 6px; border: 1px solid #e5e7eb; background: white; cursor: pointer; font-size: 11px; font-weight: 600; transition: all 0.15s; }
+        .field-item button { padding: 6px 8px; border-radius: 6px; border: 1px solid #e5e7eb; background: white; cursor: pointer; font-size: 10px; font-weight: 600; transition: all 0.15s; white-space: nowrap; }
         .field-item button.edit { color: #3b82f6; border-color: #3b82f6; }
         .field-item button.edit:hover { background: #3b82f6; color: white; }
         .field-item button.delete { color: #ef4444; border-color: #ef4444; }
@@ -103,10 +108,12 @@
             <ol>
                 <li><strong>PDF 업로드:</strong> 보험사 청구서 PDF 파일을 선택하세요.</li>
                 <li><strong>보험사 키 입력:</strong> 영문 보험사 코드를 입력하세요 (예: HYUNDAI_MARINE, DB_INSURANCE).</li>
-                <li><strong>빠른 필드 추가:</strong> 우측 "빠른 추가" 버튼으로 자주 사용하는 필드를 한번에 추가하세요.</li>
-                <li><strong>좌표 클릭:</strong> 노란색으로 표시된 "대기 중" 필드를 클릭하고, PDF의 입력란 위치를 클릭하세요.</li>
+                <li><strong>빠른 필드 추가:</strong> 우측 "📦 전체" 버튼으로 모든 필드를 한번에 추가하세요! 자동으로 첫 필드가 노란색(대기 상태)이 됩니다.</li>
+                <li><strong>드래그로 영역 선택:</strong> <strong style="color: #f59e0b;">노란색 필드</strong>에 바로 <strong style="color: #dc2626;">PDF 입력란을 드래그</strong>하세요! 완료되면 자동으로 다음 필드가 노란색이 됩니다.</li>
+                <li><strong>필드 선택:</strong> 필드 이름을 클릭하거나 "📍 설정" 버튼을 누르면 해당 필드가 노란색(대기)이 됩니다.</li>
+                <li><strong>중복 필드 추가:</strong> "📋 복제" 버튼을 누르면 자동으로 복제되고 노란색이 됩니다!</li>
+                <li><strong>주민번호 등 여러 칸:</strong> ㅁㅁㅁㅁㅁㅁ 같이 칸이 여러 개인 경우, <strong style="color: #dc2626;">모든 칸을 포함해서 드래그</strong>하세요!</li>
                 <li><strong>코드 생성:</strong> 모든 필드를 설정하면 자동으로 JavaScript 코드가 생성됩니다.</li>
-                <li><strong>스크립트 실행:</strong> "스크립트 파일 저장" 버튼으로 실행 가능한 JS 파일을 다운로드하세요.</li>
             </ol>
         </div>
         
@@ -142,6 +149,8 @@
                 <option value="1.5" selected>150%</option>
                 <option value="2">200%</option>
             </select>
+            
+            <button id="undo-btn" disabled style="background: #f59e0b; color: white; border-color: #f59e0b;">⬅️ 이전 단계로</button>
             
             <button id="clear-all" disabled>🗑️ 전체 초기화</button>
         </div>
@@ -201,6 +210,15 @@
         let waitingFieldIndex = -1;
         let fields = [];
         let fileName = '';
+        let lastSetFieldIndex = -1; // Undo용: 가장 최근에 설정한 필드
+        
+        // 드래그 관련 변수
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        
+        // PDF 페이지 원본 높이 (좌표 변환용)
+        let pdfPageHeight = 0;
 
         const canvas = document.getElementById('pdf-canvas');
         const ctx = canvas.getContext('2d');
@@ -257,11 +275,41 @@
             ...QUICK_FIELD_SETS.accident,
             ...QUICK_FIELD_SETS.date,
             { name: 'employer_job', label: '직장/직무', type: 'text', width: 250, height: 30, fontSize: 11 },
-            { name: 'claim_type_sickness', label: '질병 체크', type: 'checkbox', width: 15, height: 15 },
-            { name: 'claim_type_injury', label: '상해 체크', type: 'checkbox', width: 15, height: 15 },
-            { name: 'claim_detail_hospital', label: '입원 체크', type: 'checkbox', width: 15, height: 15 },
-            { name: 'claim_detail_outpatient', label: '통원 체크', type: 'checkbox', width: 15, height: 15 },
-            { name: 'claim_detail_surgery', label: '수술 체크', type: 'checkbox', width: 15, height: 15 },
+            
+            // 보험금 처리안내 - 안내대상
+            { name: 'guide_target_insured', label: '안내대상: 피보험자', type: 'checkbox', width: 15, height: 15 },
+            { name: 'guide_target_subscriber', label: '안내대상: 계약자', type: 'checkbox', width: 15, height: 15 },
+            { name: 'guide_target_other', label: '안내대상: 기타', type: 'checkbox', width: 15, height: 15 },
+            
+            // 보험금 처리안내 - 안내방법
+            { name: 'guide_method_sms', label: '안내방법: 문자 (기본)', type: 'checkbox', width: 15, height: 15 },
+            { name: 'guide_method_phone', label: '안내방법: 전화', type: 'checkbox', width: 15, height: 15 },
+            { name: 'guide_method_mail', label: '안내방법: 우편', type: 'checkbox', width: 15, height: 15 },
+            { name: 'guide_method_email', label: '안내방법: E-MAIL', type: 'checkbox', width: 15, height: 15 },
+            { name: 'guide_method_refuse', label: '안내방법: 거부', type: 'checkbox', width: 15, height: 15 },
+            
+            // 플래너 문자안내
+            { name: 'planner_sms_yes', label: '플래너 문자안내: 예', type: 'checkbox', width: 15, height: 15 },
+            { name: 'planner_sms_no', label: '플래너 문자안내: 아니오', type: 'checkbox', width: 15, height: 15 },
+            
+            // 청구사항
+            { name: 'claim_type_sickness', label: '청구: 질병', type: 'checkbox', width: 15, height: 15 },
+            { name: 'claim_type_injury', label: '청구: 상해', type: 'checkbox', width: 15, height: 15 },
+            { name: 'claim_detail_hospital', label: '치료형태: 입원', type: 'checkbox', width: 15, height: 15 },
+            { name: 'claim_detail_outpatient', label: '치료형태: 통원', type: 'checkbox', width: 15, height: 15 },
+            
+            // 청구항목 (청구 담보) - 중복 체크 가능
+            { name: 'claim_item_actual_medical', label: '청구항목: 실손의료비', type: 'checkbox', width: 15, height: 15 },
+            { name: 'claim_item_daily_allowance', label: '청구항목: 입원일당', type: 'checkbox', width: 15, height: 15 },
+            { name: 'claim_item_diagnosis', label: '청구항목: 진단비', type: 'checkbox', width: 15, height: 15 },
+            { name: 'claim_item_surgery', label: '청구항목: 수술비', type: 'checkbox', width: 15, height: 15 },
+            { name: 'claim_item_disability', label: '청구항목: 후유장해', type: 'checkbox', width: 15, height: 15 },
+            { name: 'claim_item_death', label: '청구항목: 사망', type: 'checkbox', width: 15, height: 15 },
+            { name: 'claim_item_other', label: '청구항목: 기타', type: 'checkbox', width: 15, height: 15 },
+            
+            // 서명 (이미지 배치용 좌표)
+            { name: 'signature_beneficiary', label: '서명: 보험금 수령인', type: 'signature', width: 80, height: 40 },
+            { name: 'signature_claimant', label: '서명: 청구인', type: 'signature', width: 80, height: 40 },
         ];
 
         // ============== 빠른 필드 추가 ==============
@@ -289,10 +337,18 @@
                 });
             });
             
+            // 첫 번째 미완료 필드를 자동으로 대기 상태로
+            if (waitingFieldIndex === -1) {
+                const firstWaiting = fields.findIndex(f => f.pdfX === null);
+                if (firstWaiting !== -1) {
+                    waitingFieldIndex = firstWaiting;
+                }
+            }
+            
             updateFieldList();
             updateStats();
             
-            alert(`✅ ${newFields.length}개 필드가 추가되었습니다.\n노란색 필드를 클릭하고 PDF에서 위치를 클릭하세요.`);
+            alert(`✅ ${newFields.length}개 필드가 추가되었습니다.\n노란색 필드에 바로 PDF에서 드래그하세요!`);
         };
 
         // ============== PDF 업로드 ==============
@@ -344,6 +400,10 @@
             const page = await pdfDoc.getPage(pageNum);
             const viewport = page.getViewport({ scale });
             
+            // PDF 원본 페이지 높이 저장 (scale=1.0 기준)
+            const originalViewport = page.getViewport({ scale: 1.0 });
+            pdfPageHeight = originalViewport.height;
+            
             canvas.width = viewport.width;
             canvas.height = viewport.height;
             
@@ -359,9 +419,26 @@
         // ============== 마커 그리기 ==============
         function drawMarkers() {
             document.querySelectorAll('.marker').forEach(m => m.remove());
+            document.querySelectorAll('.field-rect').forEach(r => r.remove());
             
             fields.forEach((field, idx) => {
                 if (field.x !== null && field.y !== null && field.page === currentPage) {
+                    // 필드 사각형 표시
+                    const fieldRect = document.createElement('div');
+                    fieldRect.className = 'field-rect';
+                    fieldRect.style.position = 'absolute';
+                    fieldRect.style.left = field.x + 'px';
+                    fieldRect.style.top = field.y + 'px';
+                    fieldRect.style.width = (field.width * scale) + 'px';
+                    fieldRect.style.height = (field.height * scale) + 'px';
+                    fieldRect.style.border = '2px solid #10b981';
+                    fieldRect.style.background = 'rgba(16, 185, 129, 0.1)';
+                    fieldRect.style.pointerEvents = 'none';
+                    fieldRect.style.zIndex = '15';
+                    
+                    document.querySelector('.canvas-container').appendChild(fieldRect);
+                    
+                    // 마커 점 (왼쪽 상단)
                     const marker = document.createElement('div');
                     marker.className = 'marker';
                     marker.style.left = field.x + 'px';
@@ -377,7 +454,37 @@
             });
         }
 
-        // ============== 마우스 이동 ==============
+        canvas.addEventListener('mouseleave', () => {
+            document.getElementById('crosshair-h').style.display = 'none';
+            document.getElementById('crosshair-v').style.display = 'none';
+            document.getElementById('coord-display').style.display = 'none';
+            
+            // 드래그 중단
+            if (isDragging) {
+                isDragging = false;
+                const oldRect = document.querySelector('.drag-rect');
+                if (oldRect) oldRect.remove();
+            }
+        });
+
+        // ============== 캔버스 드래그 (시작) ==============
+        canvas.addEventListener('mousedown', (e) => {
+            if (waitingFieldIndex === -1) {
+                alert('먼저 필드 목록에서 노란색 필드를 클릭하세요!');
+                return;
+            }
+            
+            isDragging = true;
+            const rect = canvas.getBoundingClientRect();
+            dragStartX = e.clientX - rect.left;
+            dragStartY = e.clientY - rect.top;
+            
+            // 기존 드래그 사각형 제거
+            const oldRect = document.querySelector('.drag-rect');
+            if (oldRect) oldRect.remove();
+        });
+        
+        // ============== 캔버스 드래그 (진행 중) ==============
         canvas.addEventListener('mousemove', (e) => {
             if (!pdfDoc) return;
             
@@ -385,8 +492,9 @@
             const canvasX = Math.round(e.clientX - rect.left);
             const canvasY = Math.round(e.clientY - rect.top);
             const pdfX = Math.round(canvasX / scale);
-            const pdfY = Math.round((canvas.height - canvasY) / scale);
+            const pdfY = Math.round(pdfPageHeight - (canvasY / scale));
             
+            // 좌표 표시
             document.getElementById('crosshair-h').style.top = canvasY + 'px';
             document.getElementById('crosshair-h').style.display = 'block';
             document.getElementById('crosshair-v').style.left = canvasX + 'px';
@@ -395,34 +503,78 @@
             document.getElementById('coord-canvas').textContent = `X: ${canvasX}, Y: ${canvasY}`;
             document.getElementById('coord-pdf').textContent = `X: ${pdfX}, Y: ${pdfY}`;
             document.getElementById('coord-display').style.display = 'block';
+            
+            // 드래그 중이면 사각형 표시
+            if (isDragging) {
+                const oldRect = document.querySelector('.drag-rect');
+                if (oldRect) oldRect.remove();
+                
+                const x = Math.min(dragStartX, canvasX);
+                const y = Math.min(dragStartY, canvasY);
+                const width = Math.abs(canvasX - dragStartX);
+                const height = Math.abs(canvasY - dragStartY);
+                
+                const dragRect = document.createElement('div');
+                dragRect.className = 'drag-rect';
+                dragRect.style.left = x + 'px';
+                dragRect.style.top = y + 'px';
+                dragRect.style.width = width + 'px';
+                dragRect.style.height = height + 'px';
+                
+                document.querySelector('.canvas-container').appendChild(dragRect);
+            }
         });
-
-        canvas.addEventListener('mouseleave', () => {
-            document.getElementById('crosshair-h').style.display = 'none';
-            document.getElementById('crosshair-v').style.display = 'none';
-            document.getElementById('coord-display').style.display = 'none';
-        });
-
-        // ============== 캔버스 클릭 ==============
-        canvas.addEventListener('click', (e) => {
-            if (waitingFieldIndex === -1) {
-                alert('먼저 필드 목록에서 노란색 필드를 클릭하세요!');
+        
+        // ============== 캔버스 드래그 (종료) ==============
+        canvas.addEventListener('mouseup', (e) => {
+            if (!isDragging || waitingFieldIndex === -1) {
+                isDragging = false;
                 return;
             }
             
             const rect = canvas.getBoundingClientRect();
-            const canvasX = e.clientX - rect.left;
-            const canvasY = e.clientY - rect.top;
-            const pdfX = Math.round(canvasX / scale);
-            const pdfY = Math.round((canvas.height - canvasY) / scale);
+            const endX = e.clientX - rect.left;
+            const endY = e.clientY - rect.top;
             
-            fields[waitingFieldIndex].x = canvasX;
-            fields[waitingFieldIndex].y = canvasY;
+            // 최소 크기 체크 (실수로 클릭만 한 경우)
+            const width = Math.abs(endX - dragStartX);
+            const height = Math.abs(endY - dragStartY);
+            
+            if (width < 10 || height < 10) {
+                alert('영역이 너무 작습니다. 입력란 전체를 드래그해주세요!');
+                isDragging = false;
+                const oldRect = document.querySelector('.drag-rect');
+                if (oldRect) oldRect.remove();
+                return;
+            }
+            
+            // 좌표 계산 (항상 왼쪽 상단이 시작점)
+            const x = Math.min(dragStartX, endX);
+            const y = Math.min(dragStartY, endY);
+            const pdfX = Math.round(x / scale);
+            const pdfY = Math.round(pdfPageHeight - (y / scale));
+            const pdfWidth = Math.round(width / scale);
+            const pdfHeight = Math.round(height / scale);
+            
+            // 필드에 저장
+            fields[waitingFieldIndex].x = x;
+            fields[waitingFieldIndex].y = y;
             fields[waitingFieldIndex].pdfX = pdfX;
             fields[waitingFieldIndex].pdfY = pdfY;
+            fields[waitingFieldIndex].width = pdfWidth;
+            fields[waitingFieldIndex].height = pdfHeight;
             fields[waitingFieldIndex].page = currentPage;
             
+            // Undo용: 가장 최근에 설정한 필드 저장
+            lastSetFieldIndex = waitingFieldIndex;
+            document.getElementById('undo-btn').disabled = false;
+            
+            // 드래그 사각형 제거
+            const oldRect = document.querySelector('.drag-rect');
+            if (oldRect) oldRect.remove();
+            
             // 다음 대기 필드 자동 선택
+            isDragging = false;
             waitingFieldIndex = -1;
             const nextWaitingIdx = fields.findIndex(f => f.pdfX === null);
             if (nextWaitingIdx !== -1) {
@@ -455,16 +607,18 @@
                 if (isComplete) item.classList.add('complete');
                 
                 const status = isComplete ? 
-                    `P${field.page} (${field.pdfX}, ${field.pdfY})` : 
-                    isWaiting ? '👆 클릭 대기 중...' : '대기';
+                    `P${field.page} (${field.pdfX}, ${field.pdfY}) ${field.width}×${field.height}` : 
+                    isWaiting ? '🖱️ 드래그로 영역 선택...' : '대기';
                 
+                const btnText = isComplete ? '📍 재설정' : '📍 설정';
                 item.innerHTML = `
                     <div class="index">${idx + 1}</div>
-                    <div class="info">
+                    <div class="info" style="cursor: pointer;" onclick="setWaitingField(${idx})">
                         <div class="name">${field.label} [${field.type}]</div>
                         <div class="coords">${status}</div>
                     </div>
-                    <button class="edit" onclick="setWaitingField(${idx})">📍 설정</button>
+                    <button class="edit" onclick="setWaitingField(${idx})">${btnText}</button>
+                    <button class="edit" onclick="duplicateField(${idx})" style="background: #6366f1; border-color: #6366f1;">📋 복제</button>
                     <button class="delete" onclick="deleteField(${idx})">🗑️</button>
                 `;
                 
@@ -475,6 +629,63 @@
         window.setWaitingField = function(idx) {
             waitingFieldIndex = idx;
             updateFieldList();
+        };
+
+        window.duplicateField = function(idx) {
+            const originalField = fields[idx];
+            if (!originalField) return;
+            
+            // 같은 이름의 필드가 몇 개나 있는지 확인
+            const sameName = fields.filter(f => f.name.startsWith(originalField.name.split('_').slice(0, -1).join('_') || originalField.name));
+            const count = sameName.length + 1;
+            
+            // 새 필드명 생성
+            let newName = originalField.name;
+            let newLabel = originalField.label;
+            
+            // _숫자가 이미 있으면 증가, 없으면 _2 추가
+            if (/_\d+$/.test(originalField.name)) {
+                const baseName = originalField.name.replace(/_\d+$/, '');
+                const baseLabel = originalField.label.replace(/\s*\(\d+\)$/, '').replace(/\s*\d+$/, '');
+                const existingNumbers = fields
+                    .filter(f => f.name.startsWith(baseName))
+                    .map(f => {
+                        const match = f.name.match(/_(\d+)$/);
+                        return match ? parseInt(match[1]) : 1;
+                    });
+                const nextNumber = Math.max(...existingNumbers, 1) + 1;
+                newName = `${baseName}_${nextNumber}`;
+                newLabel = `${baseLabel} (${nextNumber})`;
+            } else {
+                newName = `${originalField.name}_2`;
+                newLabel = `${originalField.label} (2)`;
+            }
+            
+            // 필드 복제
+            const newField = {
+                name: newName,
+                label: newLabel,
+                type: originalField.type,
+                width: originalField.width,
+                height: originalField.height,
+                fontSize: originalField.fontSize,
+                x: null,
+                y: null,
+                pdfX: null,
+                pdfY: null,
+                page: null
+            };
+            
+            fields.push(newField);
+            
+            // 🎯 복제된 필드를 자동으로 대기 상태로!
+            waitingFieldIndex = fields.length - 1;
+            
+            updateFieldList();
+            updateStats();
+            updateExportCode();
+            
+            alert(`✅ "${newLabel}" 필드가 추가되었습니다!\n노란색으로 바로 대기 중입니다. PDF에서 드래그하세요!`);
         };
 
         window.deleteField = function(idx) {
@@ -557,17 +768,52 @@ ${fieldLines}
             alert(`✅ ${carrierKey}-fields.js 파일이 다운로드되었습니다!`);
         };
 
+        // ============== Undo (이전 단계로) ==============
+        document.getElementById('undo-btn').addEventListener('click', () => {
+            if (lastSetFieldIndex === -1 || !fields[lastSetFieldIndex]) {
+                alert('되돌릴 필드가 없습니다.');
+                return;
+            }
+            
+            // 가장 최근에 설정한 필드를 미설정 상태로 되돌림
+            fields[lastSetFieldIndex].x = null;
+            fields[lastSetFieldIndex].y = null;
+            fields[lastSetFieldIndex].pdfX = null;
+            fields[lastSetFieldIndex].pdfY = null;
+            fields[lastSetFieldIndex].page = null;
+            
+            // 🎯 해당 필드를 자동으로 대기 상태로!
+            waitingFieldIndex = lastSetFieldIndex;
+            lastSetFieldIndex = -1;
+            document.getElementById('undo-btn').disabled = true;
+            
+            updateFieldList();
+            updateStats();
+            updateExportCode();
+            drawMarkers();
+            
+            // alert 제거 - 자동으로 대기 중이므로 바로 드래그 가능
+        });
+
         // ============== 초기화 ==============
         document.getElementById('clear-all').addEventListener('click', () => {
             if (!confirm('모든 필드를 삭제하시겠습니까?')) return;
             
             fields = [];
             waitingFieldIndex = -1;
+            lastSetFieldIndex = -1;
+            document.getElementById('undo-btn').disabled = true;
+            
+            // localStorage도 삭제 (완전 초기화)
+            localStorage.removeItem('pdf-field-mapper-fields');
+            localStorage.removeItem('pdf-field-mapper-carrierKey');
             
             updateFieldList();
             updateStats();
             updateExportCode();
             drawMarkers();
+            
+            alert('✅ 완전히 초기화되었습니다!');
         });
 
         // ============== 초기 상태 ==============

@@ -196,6 +196,7 @@
     <div id="step-2" class="step">
       <h3>2. 사고/질병 정보 (무엇을?)</h3>
       <div class="row2"><div><label>청구 유형</label><div class="check-group"><label><input type="radio" name="claim_type" id="claim_type_sickness" value="질병" /> 질병</label><label><input type="radio" name="claim_type" id="claim_type_injury" value="상해 (사고)" /> 상해 (사고)</label></div></div><div><label>청구 내용 (중복 가능)</label><div class="check-group"><label><input type="checkbox" name="claim_detail" id="claim_detail_hospital" value="입원" /> 입원</label><label><input type="checkbox" name="claim_detail" id="claim_detail_outpatient" value="통원" /> 통원</label><label><input type="checkbox" name="claim_detail" id="claim_detail_surgery" value="수술" /> 수술</label></div></div></div>
+      <div style="margin-top:16px"><label>청구 담보 (항목) - 중복 선택 가능</label><div class="check-group"><label><input type="checkbox" id="claim_item_actual_medical" /> 실손의료비</label><label><input type="checkbox" id="claim_item_daily_allowance" /> 입원일당</label><label><input type="checkbox" id="claim_item_diagnosis" /> 진단비</label><label><input type="checkbox" id="claim_item_surgery" /> 수술비</label><label><input type="checkbox" id="claim_item_disability" /> 후유장해</label><label><input type="checkbox" id="claim_item_death" /> 사망</label><label><input type="checkbox" id="claim_item_other" /> 기타</label></div></div>
       <div class="row2" style="margin-top:16px"><div><label>발병 또는 사고일</label><input type="date" id="accident_date" /></div><div><label>진단명 (병명)</label><input type="text" id="diagnosis" placeholder="예: 급성 위염, 발목 염좌" /></div></div>
       <div class="row2" style="margin-top:16px"><div><label>병원명</label><input type="text" id="hospital_name" placeholder="예: 서울병원" /></div><div><label>사고 경위 (상해/사고일 경우)</label><input type="text" id="accident_detail" placeholder="예: 25년 11월 2일 집 계단에서 넘어짐" /></div></div>
       <div class="step-footer"><button class="btn" type="button" onclick="navigateToStep(1)">이전 (청구자 정보)</button><button class="btn primary" type="button" onclick="navigateToStep(3)">다음 (보험사 선택)</button></div>
@@ -307,9 +308,10 @@ const CARRIER_TEMPLATE_DATA = {
   "HYUNDAI_MARINE": {
     name: "현대해상",
     logo: "../assets/logos/현대해상.png",
-    templatePath: "../assets/pdf-templates/HYUNDAI_MARINE-template.pdf", // (★경로 예시)
+    templatePath: "../assets/pdf-templates/HYUNDAI_MARINE-template.pdf",
     sigPositions: [
-      { type: 'BENEFICIARY', page: 0, x: 480, y: 210, width: 100, height: 50 }
+      { type: 'BENEFICIARY', page: 0, x: 475, y: 146, width: 93, height: 19 }, // 1페이지 청구인 서명
+      { type: 'BENEFICIARY', page: 3, x: 433, y: 223, width: 107, height: 41 }  // 4페이지 청구인 서명
     ]
   },
   "DB_INSURANCE": {
@@ -792,6 +794,15 @@ function collectProfile(){
   p['claim_detail_outpatient'] = el('claim_detail_outpatient').checked;
   p['claim_detail_surgery'] = el('claim_detail_surgery').checked;
   
+  // 청구 담보 (항목)
+  p['claim_item_actual_medical'] = el('claim_item_actual_medical').checked;
+  p['claim_item_daily_allowance'] = el('claim_item_daily_allowance').checked;
+  p['claim_item_diagnosis'] = el('claim_item_diagnosis').checked;
+  p['claim_item_surgery'] = el('claim_item_surgery').checked;
+  p['claim_item_disability'] = el('claim_item_disability').checked;
+  p['claim_item_death'] = el('claim_item_death').checked;
+  p['claim_item_other'] = el('claim_item_other').checked;
+  
   p['ins_full_phone'] = [p.ins_phone1, p.ins_phone2, p.ins_phone3].filter(Boolean).join('-');
   p['sub_full_phone'] = [p.sub_phone1, p.sub_phone2, p.sub_phone3].filter(Boolean).join('-');
   p['ins_full_rrn'] = [p.ins_rrn1, p.ins_rrn2].filter(Boolean).join('-');
@@ -809,11 +820,20 @@ function collectProfile(){
         p['date_y_short'] = parts[0].substring(2); // "25"
         p['date_m'] = parts[1];            // "11"
         p['date_d'] = parts[2];            // "04"
+        
+        // 복제된 날짜 필드들도 같은 값으로
+        p['date_m_2'] = parts[1];
+        p['date_d_2'] = parts[2];
       }
     } catch(e) {
       console.error("날짜 파싱 실패", e);
     }
   }
+  // --- (END NEW) ---
+  
+  // --- (NEW) 복제된 이름 필드들 ---
+  p['beneficiary_name'] = p.ben_name;  // 예금주 이름
+  p['beneficiary_name_2'] = p.ben_name; // 예금주 이름 (복제)
   // --- (END NEW) ---
 
   // --- (NEW) 미성년자 처리 ---
@@ -836,7 +856,9 @@ function collectProfile(){
   
   // --- (NEW) 자동 체크 옵션 ---
   p['notify_sms'] = true; 
-  p['claim_additional'] = false; 
+  p['claim_additional'] = false;
+  p['guide_target_insured'] = true; // 안내대상: 피보험자
+  p['guide_method_sms'] = true;     // 안내방법: 문자 (기본)
   // --- (END NEW) ---
   
   return p;
@@ -885,6 +907,8 @@ function fillSample(){
     bank_name: "청구은행", bank_account: "123-456-789012",
     claim_type_sickness: true,
     claim_detail_outpatient: true,
+    claim_item_actual_medical: true, // 청구항목: 실손의료비
+    claim_item_diagnosis: true,      // 청구항목: 진단비
     accident_date: new Date().toISOString().split('T')[0],
     diagnosis: "급성 위염",
     hospital_name: "서울병원"
@@ -1257,6 +1281,27 @@ async function generateSinglePdf(P, templateConfig, kFontBytes, sigImageBytes) {
   else { fontToUse = await pdfDoc.embedFont(StandardFonts.Helvetica); }
   
   const form = pdfDoc.getForm();
+  const allFields = form.getFields();
+  
+  // 모든 필드에서 테두리 제거
+  for (const field of allFields) {
+    try {
+      const widgets = field.acroField.getWidgets();
+      for (const widget of widgets) {
+        // 테두리 색상을 투명하게 설정
+        const widgetDict = widget.dict;
+        widgetDict.set(PDFLib.PDFName.of('BorderStyle'), pdfDoc.context.obj({
+          Type: 'Border',
+          W: 0, // 테두리 너비 0
+          S: PDFLib.PDFName.of('S') // Solid
+        }));
+        // 배경색을 투명하게
+        widgetDict.delete(PDFLib.PDFName.of('BG'));
+        widgetDict.delete(PDFLib.PDFName.of('BC')); // Border Color 제거
+      }
+    } catch (e) { /* 위젯 접근 실패 */ }
+  }
+  
   for (const [fieldName, text] of Object.entries(P)) {
     if (text === "" || text === false || text === undefined) continue;
     try {

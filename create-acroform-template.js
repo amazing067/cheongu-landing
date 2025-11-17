@@ -11,7 +11,7 @@
  */
 
 const fs = require('fs').promises;
-const { PDFDocument, PDFTextField, PDFCheckBox, PDFRadioGroup, rgb } = require('pdf-lib');
+const { PDFDocument, PDFTextField, PDFCheckBox, PDFRadioGroup, rgb, PDFName, PDFString, PDFDict } = require('pdf-lib');
 
 // ============== 필드 정의 ==============
 // pdf-coordinate-finder.html에서 측정한 좌표를 여기에 입력
@@ -33,12 +33,46 @@ const FIELD_DEFINITIONS = {
     fields: [] // 이미 AcroForm이 있으므로 추가 작업 불필요
   },
   
-  // 현대해상: pdf-field-mapper.html에서 좌표 측정 후 여기에 붙여넣기
+  // 현대해상: pdf-field-mapper.html에서 좌표 측정 완료!
   HYUNDAI_MARINE: {
     inputFile: 'assets/pdf-templates/HYUNDAI_MARINE-template.pdf',
     outputFile: 'assets/pdf-templates/HYUNDAI_MARINE-template.pdf',
     fields: [
-      // TODO: pdf-field-mapper.html에서 생성된 코드를 여기에 붙여넣으세요
+      { name: 'ins_name', type: 'text', page: 0, x: 128, y: 618, width: 78, height: 24, fontSize: 12 },
+      { name: 'ins_rrn1', type: 'text', page: 0, x: 258, y: 616, width: 138, height: 21, fontSize: 12 },
+      { name: 'ins_rrn2', type: 'text', page: 0, x: 404, y: 616, width: 163, height: 21, fontSize: 12 },
+      { name: 'ins_full_phone', type: 'text', page: 0, x: 256, y: 536, width: 271, height: 21, fontSize: 11 },
+      { name: 'sub_name', type: 'text', page: 0, x: 128, y: 562, width: 77, height: 23, fontSize: 12 },
+      { name: 'sub_rrn1', type: 'text', page: 0, x: 258, y: 560, width: 137, height: 23, fontSize: 12 },
+      { name: 'sub_rrn2', type: 'text', page: 0, x: 404, y: 560, width: 162, height: 23, fontSize: 12 },
+      { name: 'bank_name', type: 'text', page: 0, x: 85, y: 226, width: 102, height: 19, fontSize: 11 },
+      { name: 'bank_account', type: 'text', page: 0, x: 238, y: 228, width: 165, height: 23, fontSize: 11 },
+      { name: 'bank_depositor', type: 'text', page: 0, x: 450, y: 227, width: 113, height: 21, fontSize: 11 },
+      { name: 'accident_date', type: 'text', page: 0, x: 116, y: 440, width: 131, height: 22, fontSize: 11 },
+      { name: 'hospital_name', type: 'text', page: 0, x: 385, y: 396, width: 183, height: 25, fontSize: 11 },
+      { name: 'accident_detail', type: 'text', page: 0, x: 82, y: 396, width: 255, height: 25, fontSize: 10 },
+      { name: 'date_y_short', type: 'text', page: 0, x: 118, y: 140, width: 27, height: 12, fontSize: 11 },
+      { name: 'date_m', type: 'text', page: 0, x: 160, y: 141, width: 25, height: 13, fontSize: 11 },
+      { name: 'date_d', type: 'text', page: 0, x: 202, y: 142, width: 24, height: 13, fontSize: 11 },
+      { name: 'employer_job', type: 'text', page: 0, x: 128, y: 596, width: 77, height: 23, fontSize: 11 },
+      { name: 'guide_target_insured', type: 'checkbox', page: 0, x: 138, y: 510, width: 9, height: 9 },
+      { name: 'guide_method_sms', type: 'checkbox', page: 0, x: 138, y: 487, width: 8, height: 7 },
+      { name: 'claim_type_sickness', type: 'checkbox', page: 0, x: 92, y: 410, width: 10, height: 9 },
+      { name: 'claim_type_injury', type: 'checkbox', page: 0, x: 162, y: 412, width: 8, height: 10 },
+      { name: 'claim_detail_hospital', type: 'checkbox', page: 0, x: 391, y: 413, width: 13, height: 13 },
+      { name: 'claim_detail_outpatient', type: 'checkbox', page: 0, x: 448, y: 412, width: 11, height: 11 },
+      { name: 'claim_item_actual_medical', type: 'checkbox', page: 0, x: 85, y: 322, width: 9, height: 12 },
+      { name: 'claim_item_daily_allowance', type: 'checkbox', page: 0, x: 139, y: 321, width: 7, height: 11 },
+      { name: 'claim_item_diagnosis', type: 'checkbox', page: 0, x: 182, y: 321, width: 11, height: 11 },
+      { name: 'claim_item_surgery', type: 'checkbox', page: 0, x: 220, y: 320, width: 9, height: 10 },
+      { name: 'claim_item_disability', type: 'checkbox', page: 0, x: 255, y: 320, width: 13, height: 10 },
+      { name: 'claim_item_death', type: 'checkbox', page: 0, x: 305, y: 321, width: 13, height: 11 },
+      { name: 'claim_item_other', type: 'checkbox', page: 0, x: 333, y: 320, width: 13, height: 11 },
+      { name: 'beneficiary_name', type: 'text', page: 0, x: 378, y: 146, width: 81, height: 21, fontSize: 12 },
+      { name: 'date_y_full', type: 'text', page: 3, x: 111, y: 263, width: 151, height: 35, fontSize: 11 },
+      { name: 'date_m_2', type: 'text', page: 3, x: 295, y: 262, width: 75, height: 34, fontSize: 11 },
+      { name: 'date_d_2', type: 'text', page: 3, x: 402, y: 263, width: 76, height: 37, fontSize: 11 },
+      { name: 'beneficiary_name_2', type: 'text', page: 3, x: 239, y: 226, width: 131, height: 43, fontSize: 12 }
     ]
   }
 };
@@ -70,6 +104,10 @@ async function createTextField(form, page, fieldDef) {
   // 테두리 제거 (더 깔끔하게)
   field.disableRichFormatting();
   
+  // 테두리 완전히 제거
+  field.enableReadOnly();
+  field.disableReadOnly();
+  
   console.log(`  ✅ TextField 추가: ${fieldDef.name}`);
   return field;
 }
@@ -83,6 +121,27 @@ async function createCheckBox(form, page, fieldDef) {
     width: fieldDef.width,
     height: fieldDef.height,
   });
+  
+  // 체크박스 스타일 설정 (테두리 제거)
+  try {
+    const widgets = field.acroField.getWidgets();
+    for (const widget of widgets) {
+      const widgetDict = widget.dict;
+      
+      // 테두리 제거
+      widgetDict.set(PDFName.of('BS'), widgetDict.context.obj({
+        W: 0
+      }));
+      
+      // 배경색 제거
+      widgetDict.delete(PDFName.of('BG'));
+      
+      // 체크마크 스타일 (ZapfDingbats 폰트 사용)
+      widgetDict.set(PDFName.of('DA'), PDFString.of('/ZaDb 0 Tf 0 g'));
+    }
+  } catch (e) {
+    console.warn(`  ⚠️  체크박스 스타일 설정 실패: ${fieldDef.name}`);
+  }
   
   console.log(`  ✅ CheckBox 추가: ${fieldDef.name}`);
   return field;
