@@ -447,7 +447,7 @@
       "type": "생명",
       "tags": ["pdf", "고객센터"],
       "links": {
-        "system": "https://e-life.heungkuklife.co.kr",
+        "system": "https://sales.heungkuklife.co.kr",
         "guide": "https://www.heungkuklife.co.kr/cyber/accident/Accident_File_Info.do#none/",
         "pdf": "/assets/pdf/흥국생명-보험금청구서.pdf",
         "dental": "/assets/pdf/흥국생명 치과치료확인서.pdf",
