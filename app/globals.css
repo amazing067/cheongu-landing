@@ -125,8 +125,23 @@
 .btn-dental {
   @apply bg-emerald-500 border-emerald-500 text-white py-1.5 px-3.5;
 }
+/* 전산접속·필요서류·치과확인서: 글자 크기 유지, 가로 패딩만 축소 */
+.btn-compact {
+  @apply px-2;
+}
+/* 인콜 모니터링: 더 축소된 가로 패딩 + 전체 너비 축소 */
+.btn-call.incall-monitor.btn-compact {
+  @apply px-1.5;
+}
 .btn-call {
   @apply border-slate-300 bg-white inline-flex items-center;
+}
+/* 보험금청구 FAX: 연한 배경으로 눈에 띄게 */
+.btn-call.fax-claim {
+  @apply bg-sky-50 border-sky-200;
+}
+.btn-call.fax-claim:hover {
+  @apply bg-sky-100;
 }
 .btn-call .num {
   @apply font-extrabold text-sm;
@@ -356,26 +371,26 @@
     white-space: nowrap;
     vertical-align: middle;
   }
-  /* 인콜 모니터링: 전체 회사 동일 너비(250px) */
+  /* 인콜 모니터링: 전체 회사 동일 너비(210px) */
   .table .row .stack .btn-call.incall-monitor {
     overflow: visible;
     justify-content: center;
-    min-width: 250px !important;
-    width: 250px !important;
-    max-width: 250px !important;
+    min-width: 210px !important;
+    width: 210px !important;
+    max-width: 210px !important;
   }
   .table .row .stack .btn-call.incall-monitor .num {
     overflow: visible;
     text-overflow: clip;
     max-width: none;
   }
-  /* 보험금청구 FAX: 전체 회사 동일 너비(250px), 인콜 모니터링과 동일 */
+  /* 보험금청구 FAX: 전체 회사 동일 너비(210px), 인콜 모니터링과 동일 */
   .table .row .stack .btn-call.fax-claim {
     overflow: visible;
     justify-content: center;
-    min-width: 250px !important;
-    width: 250px !important;
-    max-width: 250px !important;
+    min-width: 210px !important;
+    width: 210px !important;
+    max-width: 210px !important;
   }
   .table .row .stack .btn-call.fax-claim .num {
     overflow: visible;
@@ -476,19 +491,19 @@
   .row {
     @apply grid-cols-[240px_1fr] min-h-[52px];
   }
-  /* 손해/생명: 9칸 그리드, 인콜 모니터링만 250px 고정 */
+  /* 손해/생명: 9칸 그리드, 인콜 모니터링만 210px 고정 */
   #loss .table .row .stack,
   #life .table .row .stack {
     display: grid !important;
     flex-wrap: unset !important;
-    grid-template-columns: minmax(78px, auto) 84px 100px minmax(110px, auto) 84px 158px 250px 260px 84px !important;
+    grid-template-columns: minmax(78px, auto) 84px 100px minmax(110px, auto) 84px 158px 210px 220px 84px !important;
     justify-content: center !important;
   }
   /* 공제회사: 5칸 그리드 원래대로 */
   #mutual .table .row .stack {
     display: grid !important;
     flex-wrap: unset !important;
-    grid-template-columns: auto minmax(170px, max-content) 84px auto minmax(260px, 420px) !important;
+    grid-template-columns: auto minmax(170px, max-content) 84px auto minmax(220px, 420px) !important;
     justify-content: center !important;
   }
   .row .grid-top,
