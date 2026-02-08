@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>전국 상급종합병원 지도</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      position: relative;
+    }
+    
+    /* 검색창 */
+    .search-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      z-index: 1000;
+      padding: 15px 20px;
+    }
+    
+    .search-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 12px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 30px;
+      font-size: 16px;
+      transition: all 0.3s;
+      background: white;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .region-select {
+      padding: 12px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 30px;
+      font-size: 16px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      min-width: 150px;
+    }
+    
+    .region-select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .search-count {
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 30px;
+      font-weight: bold;
+      min-width: 100px;
+      text-align: center;
+    }
+    
+    /* 메인 컨테이너 */
+    .main-container {
+      display: flex;
+      gap: 20px;
+      padding: 90px 20px 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+      height: 100vh;
+    }
+    
+    /* 지도 영역 (축소) */
+    .map-section {
+      flex: 0.6;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    
+    .map-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    
+    .map-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    /* SVG 지도 스타일 */
+    #korea-map {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+    }
+    
+    .region-path {
+      fill: #f0f0f0;
+      stroke: #fff;
+      stroke-width: 2;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .region-path:hover {
+      fill: #667eea;
+      fill-opacity: 0.3;
+    }
+    
+    .region-path.active {
+      fill: #667eea;
+      fill-opacity: 0.5;
+    }
+    
+    .region-label {
+      pointer-events: none;
+      user-select: none;
+    }
+    
+    .region-name {
+      fill: #333;
+      font-size: 14px;
+      font-weight: 600;
+      text-anchor: middle;
+    }
+    
+    .region-count {
+      fill: white;
+      font-size: 20px;
+      font-weight: bold;
+      text-anchor: middle;
+    }
+    
+    .region-circle {
+      cursor: pointer;
+    }
+    
+    /* 병원 목록 */
+    /* 목록 영역 (확대) */
+    .list-section {
+      flex: 1.4;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .list-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    
+    .hospital-list {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+    
+    .hospital-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .hospital-list::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .hospital-list::-webkit-scrollbar-thumb {
+      background: #667eea;
+      border-radius: 10px;
+    }
+    
+    .hospital-item {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 8px;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    
+    .hospital-item:hover {
+      border-color: #667eea;
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    }
+    
+    .hospital-name {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    
+    .hospital-info {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .hospital-region {
+      display: inline-block;
+      padding: 2px 8px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 5px;
+    }
+    
+    .hospital-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    
+    .action-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      text-align: center;
+      display: inline-block;
+    }
+    
+    .btn-call {
+      background: #4CAF50;
+      color: white;
+    }
+    
+    .btn-call:hover {
+      background: #45a049;
+    }
+    
+    .btn-map {
+      background: #2196F3;
+      color: white;
+    }
+    
+    .btn-map:hover {
+      background: #0b7dda;
+    }
+    
+    .btn-copy {
+      background: #ff9800;
+      color: white;
+    }
+    
+    .btn-copy:hover {
+      background: #e68900;
+    }
+    
+    .btn-web {
+      background: #9c27b0;
+      color: white;
+    }
+    
+    .btn-web:hover {
+      background: #7b1fa2;
+    }
+    
+    /* 반응형 */
+    @media (max-width: 1024px) {
+      .main-container {
+        flex-direction: column;
+        height: auto;
+      }
+      
+      .list-section {
+        max-height: 500px;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .search-wrapper {
+        flex-direction: column;
+      }
+      
+      .search-input,
+      .region-select,
+      .search-count {
+        width: 100%;
+      }
+      
+      .hospital-actions {
+        flex-wrap: wrap;
+      }
+    }
+    
+    /* 지역 통계 카드 (콤팩트 버전) */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 6px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 2px solid #f0f0f0;
+    }
+    
+    .stat-card {
+      text-align: center;
+      padding: 6px 8px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .stat-card:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .stat-region {
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    
+    .stat-count {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    /* === 지도에 '사진형태' 배경 적용 === */
+.map-container{
+  background: #eef3ff url('../assets/tertiary-areas.jpg') center/contain no-repeat;
+  border-radius: 12px;
+}
+  </style>
+</head>
+<body>
+  <!-- 검색창 -->
+  <div class="search-container">
+    <div class="search-wrapper">
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍 병원명, 지역, 주소 검색...">
+      <select class="region-select" id="regionSelect">
+        <option value="">전체 지역</option>
+      </select>
+      <div class="search-count">
+        <span id="hospitalCount">47</span>개 병원
+      </div>
+    </div>
+  </div>
+
+  <!-- 메인 컨테이너 -->
+  <div class="main-container">
+    <!-- 지도 섹션 -->
+    <div class="map-section">
+      <h2 class="map-title">🗺️ 전국 상급종합병원 분포</h2>
+      <!-- 지역별 통계 -->
+      <div class="stats-container" id="statsContainer">
+        <!-- 동적으로 생성됨 -->
+      </div>
+    </div>
+
+    <!-- 병원 목록 섹션 -->
+    <div class="list-section">
+      <h2 class="list-title">🏥 상급종합병원 목록</h2>
+      <div class="hospital-list" id="hospitalList">
+        <!-- 동적으로 생성됨 -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 전체 병원 데이터 (47개) - 2024. 11. 12. 제공된 이미지 기준
+    const hospitals = [
+      // == 서울권 (14개) ==
+      { id: 1, name: "강북삼성병원", tel: "1599-8114", region: "서울특별시", city: "종로구", address: "서울 종로구 새문안로 29", homepage: "https://www.kbsmc.co.kr", beds: 700 },
+      { id: 2, name: "건국대학교병원", tel: "1588-1533", region: "서울특별시", city: "광진구", address: "서울 광진구 능동로 120-1", homepage: "https://www.kuh.ac.kr", beds: 870 },
+      { id: 3, name: "경희대학교병원", tel: "1958-8114", region: "서울특별시", city: "동대문구", address: "서울 동대문구 경희대로 23", homepage: "https://www.khuh.or.kr", beds: 836 },
+      { id: 4, name: "고려대학교의과대학부속구로병원", tel: "1577-9966", region: "서울특별시", city: "구로구", address: "서울 구로구 구로동로 148", homepage: "https://guro.kumc.or.kr", beds: 1048 },
+      { id: 5, name: "삼성서울병원", tel: "1599-3114", region: "서울특별시", city: "강남구", address: "서울 강남구 일원로 81", homepage: "https://www.samsunghospital.com", beds: 2000 },
+      { id: 6, name: "서울대학교병원", tel: "1588-5700", region: "서울특별시", city: "종로구", address: "서울 종로구 대학로 101", homepage: "https://www.snuh.org", beds: 1786 },
+      { id: 7, name: "연세대학교의과대학강남세브란스병원", tel: "1599-6114", region: "서울특별시", city: "강남구", address: "서울 강남구 언주로 211", homepage: "https://gs.iseverance.com", beds: 824 },
+      { id: 8, name: "연세대학교의과대학세브란스병원", tel: "1599-1004", region: "서울특별시", city: "서대문구", address: "서울 서대문구 연세로 50", homepage: "https://sev.iseverance.com", beds: 2437 },
+      { id: 9, name: "이화여자대학교의과대학부속목동병원", tel: "1666-5000", region: "서울특별시", city: "양천구", address: "서울 양천구 안양천로 1071", homepage: "https://mokdong.eumc.ac.kr", beds: 795 },
+      { id: 10, name: "재단법인아산사회복지재단서울아산병원", tel: "1688-7575", region: "서울특별시", city: "송파구", address: "서울 송파구 올림픽로 43길 88", homepage: "https://www.amc.seoul.kr", beds: 2743 },
+      { id: 11, name: "중앙대학교병원", tel: "1800-1114", region: "서울특별시", city: "동작구", address: "서울 동작구 흑석로 102", homepage: "https://ch.cauhs.or.kr", beds: 850 },
+      { id: 12, name: "학교법인고려중앙학원고려대학교의과대학부속병원(안암병원)", tel: "1577-0083", region: "서울특별시", city: "성북구", address: "서울 성북구 고려대로 73", homepage: "https://anam.kumc.or.kr", beds: 1048 },
+      { id: 13, name: "학교법인가톨릭학원가톨릭대학교서울성모병원", tel: "1588-1511", region: "서울특별시", city: "서초구", address: "서울 서초구 반포대로 222", homepage: "https://www.cmcseoul.or.kr", beds: 1355 },
+      { id: 14, name: "한양대학교병원", tel: "02-2290-8114", region: "서울특별시", city: "성동구", address: "서울 성동구 왕십리로 222-1", homepage: "https://www.hyuh.org", beds: 835 },
+
+      // == 경기 서북부권 (4개) ==
+      { id: 15, name: "가톨릭대학교인천성모병원", tel: "1544-9004", region: "인천광역시", city: "부평구", address: "인천 부평구 동수로 56", homepage: "https://www.cmcism.or.kr", beds: 950 },
+      { id: 16, name: "순천향대학교부속부천병원", tel: "1899-5700", region: "경기도", city: "부천시", address: "경기 부천시 조마루로 170", homepage: "https://www.schmc.ac.kr", beds: 947 },
+      { id: 17, name: "의료법인길의료재단길병원", tel: "1577-2299", region: "인천광역시", city: "남동구", address: "인천 남동구 남동대로 774번길 21", homepage: "https://www.gilhospital.com", beds: 1600 },
+      { id: 18, name: "인하대학교의과대학부속병원", tel: "032-890-2114", region: "인천광역시", city: "중구", address: "인천 중구 인항로 27", homepage: "https://www.inha.com", beds: 925 },
+
+      // == 경기 남부권 (5개) ==
+      { id: 19, name: "가톨릭대학교성빈센트병원", tel: "1577-8588", region: "경기도", city: "수원시", address: "경기 수원시 팔달구 중부대로 93", homepage: "https://www.cmcvincent.or.kr", beds: 917 },
+      { id: 20, name: "고려대학교의과대학부속안산병원", tel: "1577-7516", region: "경기도", city: "안산시", address: "경기 안산시 단원구 적금로 123", homepage: "https://ansan.kumc.or.kr", beds: 830 },
+      { id: 21, name: "분당서울대학교병원", tel: "1588-3369", region: "경기도", city: "성남시", address: "경기 성남시 분당구 구미로 173번길 82", homepage: "https://www.snubh.org", beds: 1334 },
+      { id: 22, name: "아주대학교병원", tel: "1688-6114", region: "경기도", city: "수원시", address: "경기 수원시 영통구 월드컵로 164", homepage: "https://www.ajoumc.or.kr", beds: 1108 },
+      { id: 23, name: "한림대학교성심병원", tel: "1577-0175", region: "경기도", city: "안양시", address: "경기 안양시 동안구 관평로 170번길 22", homepage: "https://hallym.hallym.or.kr", beds: 850 },
+
+      // == 강원권 (2개) ==
+      { id: 24, name: "강릉아산병원", tel: "033-610-3114", region: "강원도", city: "강릉시", address: "강원 강릉시 사천면 방동길 38", homepage: "https://www.gnah.co.kr", beds: 696 },
+      { id: 25, name: "연세대학교원주세브란스기독병원", tel: "033-741-0114", region: "강원도", city: "원주시", address: "강원 원주시 일산로 20", homepage: "https://www.ywmc.or.kr", beds: 950 },
+
+      // == 충북권 (1개) ==
+      { id: 26, name: "충북대학교병원", tel: "043-269-6114", region: "충청북도", city: "청주시", address: "충북 청주시 서원구 1순환로 776", homepage: "https://www.cbnuh.or.kr", beds: 992 },
+
+      // == 충남권 (3개) ==
+      { id: 27, name: "단국대학교의과대학부속병원", tel: "1588-0063", region: "충청남도", city: "천안시", address: "충남 천안시 동남구 망향로 201", homepage: "https://www.dkuh.co.kr", beds: 850 },
+      { id: 28, name: "충남대학교병원", tel: "1599-7123", region: "대전광역시", city: "중구", address: "대전 중구 문화로 282", homepage: "https://www.cnuh.co.kr", beds: 1469 },
+      { id: 29, name: "학교법인건양교육재단건양대학교병원", tel: "1577-3330", region: "대전광역시", city: "서구", address: "대전 서구 관저동로 158", homepage: "https://www.kyuh.ac.kr", beds: 850 },
+
+      // == 전북권 (2개) ==
+      { id: 30, name: "원광대학교병원", tel: "1577-3773", region: "전라북도", city: "익산시", address: "전북 익산시 무왕로 895", homepage: "https://www.wkuh.ac.kr", beds: 806 },
+      { id: 31, name: "전북대학교병원", tel: "1577-7877", region: "전라북도", city: "전주시", address: "전북 전주시 덕진구 건지로 20", homepage: "https://www.cuh.co.kr", beds: 1050 },
+
+      // == 전남권 (3개) ==
+      { id: 32, name: "전남대학교병원", tel: "1899-0000", region: "광주광역시", city: "동구", address: "광주 동구 제봉로 42", homepage: "https://www.cnuh.com", beds: 1040 },
+      { id: 33, name: "조선대학교병원", tel: "062-220-3114", region: "광주광역시", city: "동구", address: "광주 동구 필문대로 365", homepage: "https://www.chosun.ac.kr", beds: 849 },
+      { id: 34, name: "화순전남대학교병원", tel: "1899-0000", region: "전라남도", city: "화순군", address: "전남 화순군 화순읍 서양로 322", homepage: "https://www.cnuhh.com", beds: 700 },
+
+      // == 경북권 (5개) ==
+      { id: 35, name: "경북대학교병원", tel: "053-200-5114", region: "대구광역시", city: "중구", address: "대구 중구 동덕로 130", homepage: "https://www.knuh.kr", beds: 1035 },
+      { id: 36, name: "계명대학교동산병원", tel: "1577-6622", region: "대구광역시", city: "달서구", address: "대구 달서구 달구벌대로 1035", homepage: "https://www.dsmc.or.kr", beds: 900 },
+      { id: 37, name: "대구가톨릭대학교병원", tel: "053-650-4000", region: "대구광역시", city: "남구", address: "대구 남구 두류공원로 17길 33", homepage: "https://www.dcmc.co.kr", beds: 705 },
+      { id: 38, name: "영남대학교병원", tel: "053-620-3114", region: "대구광역시", city: "남구", address: "대구 남구 현충로 170", homepage: "https://www.yumc.ac.kr", beds: 930 },
+      { id: 39, name: "칠곡경북대학교병원", tel: "053-200-2114", region: "대구광역시", city: "북구", address: "대구 북구 호국로 807", homepage: "https://www.knuch.kr", beds: 655 },
+
+      // == 경남동부권 (6개) ==
+      { id: 40, name: "고신대학교복음병원", tel: "051-990-6114", region: "부산광역시", city: "서구", address: "부산 서구 감천로 262", homepage: "https://www.kosinmed.or.kr", beds: 957 },
+      { id: 41, name: "동아대학교병원", tel: "051-240-2000", region: "부산광역시", city: "서구", address: "부산 서구 대신공원로 26", homepage: "https://www.damc.or.kr", beds: 1029 },
+      { id: 42, name: "부산대학교병원", tel: "051-240-7000", region: "부산광역시", city: "서구", address: "부산 서구 구덕로 179", homepage: "https://www.pnuh.or.kr", beds: 1289 },
+      { id: 43, name: "양산부산대학교병원", tel: "055-360-1000", region: "경상남도", city: "양산시", address: "경남 양산시 물금읍 금오로 20", homepage: "https://www.pnuyh.or.kr", beds: 1200 },
+      { id: 44, name: "인제대학교부산백병원", tel: "051-890-6114", region: "부산광역시", city: "부산진구", address: "부산 부산진구 복지로 75", homepage: "https://www.paik.ac.kr/busan", beds: 850 },
+      { id: 45, name: "학교법인울산공업학원울산대학교병원", tel: "052-250-7000", region: "울산광역시", city: "동구", address: "울산 동구 방어진순환도로 877", homepage: "https://www.uuh.ulsan.kr", beds: 1042 },
+
+      // == 경남서부권 (2개) ==
+      { id: 46, name: "경상국립대학교병원", tel: "055-750-8000", region: "경상남도", city: "진주시", address: "경남 진주시 강남로 79", homepage: "https://www.gnuh.co.kr", beds: 1001 },
+      { id: 47, name: "학교법인성균관대학삼성창원병원", tel: "055-233-5000", region: "경상남도", city: "창원시", address: "경남 창원시 마산회원구 팔용로 158", homepage: "https://www.samsungchangwon.com", beds: 740 }
+    ];
+
+    // 전역 변수
+    let filteredHospitals = [...hospitals];
+    let selectedRegion = '';
+
+    // DOM 요소
+    const searchInput = document.getElementById('searchInput');
+    const regionSelect = document.getElementById('regionSelect');
+    const hospitalCount = document.getElementById('hospitalCount');
+    const hospitalList = document.getElementById('hospitalList');
+    const statsContainer = document.getElementById('statsContainer');
+
+    // 초기화
+    function init() {
+      populateRegionSelect();
+      renderHospitalList(hospitals);
+      renderStats();
+      attachEventListeners();
+    }
+
+    // 지역 선택 옵션 생성
+    function populateRegionSelect() {
+      const regions = [...new Set(hospitals.map(h => h.region))].sort();
+      regions.forEach(region => {
+        const option = document.createElement('option');
+        option.value = region;
+        option.textContent = region;
+        regionSelect.appendChild(option);
+      });
+    }
+
+    // 병원 목록 렌더링
+    function renderHospitalList(hospitalData) {
+      hospitalList.innerHTML = '';
+      hospitalData.forEach(hospital => {
+        const item = document.createElement('div');
+        item.className = 'hospital-item';
+        item.innerHTML = `
+          <div class="hospital-name">${hospital.name}</div>
+          <div class="hospital-info">
+            <div>
+              <span class="hospital-region">${hospital.region}</span>
+              <span>${hospital.city}</span>
+            </div>
+            <div>📍 ${hospital.address}</div>
+            <div>📞 ${hospital.tel}</div>
+            ${hospital.beds ? `<div>🏥 병상수: ${hospital.beds}개</div>` : ''}
+          </div>
+          <div class="hospital-actions">
+            <a href="tel:${hospital.tel.replace(/[^0-9]/g, '')}" class="action-btn btn-call">📞 전화</a>
+            <a href="https://map.naver.com/p/search/${encodeURIComponent(hospital.name + ' ' + hospital.address)}" 
+               target="_blank" class="action-btn btn-map">🗺️ 지도</a>
+            <button onclick="copyAddress('${hospital.address}')" class="action-btn btn-copy">📋 주소복사</button>
+            ${hospital.homepage ? 
+              `<a href="${hospital.homepage}" target="_blank" class="action-btn btn-web">🌐 홈페이지</a>` : ''}
+          </div>
+        `;
+        hospitalList.appendChild(item);
+      });
+      hospitalCount.textContent = hospitalData.length;
+    }
+
+    // 지역별 통계 렌더링
+    function renderStats() {
+      const stats = {};
+      hospitals.forEach(h => {
+        if (!stats[h.region]) {
+          stats[h.region] = 0;
+        }
+        stats[h.region]++;
+      });
+
+      statsContainer.innerHTML = '';
+      Object.entries(stats).sort((a, b) => b[1] - a[1]).forEach(([region, count]) => {
+        const card = document.createElement('div');
+        card.className = 'stat-card';
+        card.dataset.region = region;
+        card.innerHTML = `
+          <div class="stat-region">${region}</div>
+          <div class="stat-count">${count}</div>
+        `;
+        card.addEventListener('click', () => filterByRegion(region));
+        statsContainer.appendChild(card);
+      });
+    }
+
+    // 필터링 함수
+    function filterHospitals() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const selectedRegion = regionSelect.value;
+
+      filteredHospitals = hospitals.filter(h => {
+        const matchSearch = !searchTerm || 
+          h.name.toLowerCase().includes(searchTerm) ||
+          h.address.toLowerCase().includes(searchTerm) ||
+          h.city.toLowerCase().includes(searchTerm);
+        
+        const matchRegion = !selectedRegion || h.region === selectedRegion;
+        
+        return matchSearch && matchRegion;
+      });
+
+      renderHospitalList(filteredHospitals);
+    }
+
+    // 지역 필터링
+    function filterByRegion(region) {
+      if (regionSelect.value === region) {
+        regionSelect.value = '';
+      } else {
+        regionSelect.value = region;
+      }
+      filterHospitals();
+      
+      // 지도 하이라이트
+      document.querySelectorAll('.region-group').forEach(g => {
+        if (g.dataset.region === region && regionSelect.value === region) {
+          g.querySelector('circle').style.strokeWidth = '5';
+          g.querySelector('circle').style.stroke = '#333';
+        } else {
+          g.querySelector('circle').style.strokeWidth = '0';
+        }
+      });
+    }
+
+    // 주소 복사
+    function copyAddress(address) {
+      navigator.clipboard.writeText(address).then(() => {
+        alert('주소가 클립보드에 복사되었습니다.');
+      }).catch(() => {
+        alert('주소 복사에 실패했습니다.');
+      });
+    }
+
+    // 이벤트 리스너 연결
+    function attachEventListeners() {
+      searchInput.addEventListener('input', filterHospitals);
+      regionSelect.addEventListener('change', filterHospitals);
+      
+      // 지도 클릭 이벤트
+      document.querySelectorAll('.region-group').forEach(group => {
+        group.addEventListener('click', () => {
+          filterByRegion(group.dataset.region);
+        });
+      });
+    }
+
+    // 페이지 로드 시 초기화
+    init();
+  </script>
+
+  <!-- 푸터 (데이터 출처) -->
+  <div style="background: white; border-top: 4px solid #667eea; margin-top: 30px; padding: 20px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <!-- 데이터 출처 정보 (한 줄) -->
+      <div style="text-align: center; padding: 12px 16px; background: #f8f9fa; border-radius: 10px; border: 2px solid #667eea; margin-bottom: 20px;">
+        <p style="font-size: 14px; color: #333; margin: 0;">
+          🏥 <strong style="color: #667eea;">데이터 출처:</strong> 보건복지부 지정 상급종합병원 (2025년 기준)
+        </p>
+      </div>
+      
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;">
+        <p style="font-size: 16px; font-weight: 700; color: #333; margin: 0;">
+          🗺️ 전국 상급종합병원 지도
+        </p>
+        <p style="font-size: 12px; color: #999; margin: 0;">
+          Developed by 프라임에셋 광진2지점 · 김성민
+        </p>
+        <a href="javascript:history.back()" style="display: inline-block; margin-top: 8px; padding: 10px 24px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 24px; text-decoration: none; font-weight: 700; font-size: 14px; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); transition: all 0.3s;">
+          뒤로가기
+        </a>
+      </div>
+    </div>
+  </div>
+
+<!-- Anti-copy: 복제 방지 스크립트 -->
+<script>
+(function(){
+  document.addEventListener('dragstart', e => e.preventDefault(), true);
+  document.addEventListener('contextmenu', e => { e.preventDefault(); alert('🔒 무단 복제 금지\n저작권 보호 중입니다.'); }, true);
+  document.addEventListener('keydown', function(e){
+    const k = (e.key || '').toLowerCase();
+    const ctrl = e.ctrlKey || e.metaKey;
+    if(k === 'f12' || (ctrl && ['u','s','p'].includes(k)) || (ctrl && e.shiftKey && ['i','j','c'].includes(k))){ 
+      e.preventDefault(); e.stopPropagation(); alert('🔒 보호된 페이지입니다');
+    }
+  }, true);
+  ['copy','cut'].forEach(evt => {
+    document.addEventListener(evt, function(ev){
+      const tag = (ev.target && ev.target.tagName || '').toLowerCase();
+      if(!ev.target || (!ev.target.isContentEditable && !['input','textarea'].includes(tag))){ 
+        ev.preventDefault(); alert('콘텐츠 복사 금지');
+      }
+    }, true);
+  });
+})();
+</script>
+</body>
+</html>
