@@ -81,7 +81,7 @@ function FaxPopupBtn({ number }: { number: string }) {
     <div className="fax-popup-wrap" ref={ref}>
       <button
         type="button"
-        className="btn btn-call center fax-claim fax-popup-trigger"
+        className="btn btn-call center fax-claim fax-popup-trigger btn-compact"
         onClick={(e) => {
           e.stopPropagation();
           setOpen((v) => !v);
@@ -131,8 +131,8 @@ function PhoneBtn({ label, number }: { label: string; number?: string }) {
     );
   const tel = number.replace(/[^0-9]/g, "");
   const centerClass = /고객센터|인콜/.test(label) ? " center" : "";
-  const incallClass = label === "인콜 모니터링" ? " incall-monitor" : "";
-  const faxClaimClass = label === "보험금청구 FAX" ? " fax-claim" : "";
+  const incallClass = label === "인콜 모니터링" ? " incall-monitor btn-compact" : "";
+  const faxClaimClass = label === "보험금청구 FAX" ? " fax-claim btn-compact" : "";
   const fullText = `${label} ${number}`;
   const isFax = label === "보험금청구 FAX";
   const hasLongFax = isFax && /\s\|\s/.test(number);
@@ -258,11 +258,11 @@ function CarrierRow({ item }: { item: Carrier }) {
       />
       <div className="stack">
         <div className="grid-top">
-          <Btn label="전산 접속" href={L.system} cls="btn-primary" />
-          <Btn label="필요서류 안내" href={L.guide} cls="btn-ghost" />
-          <Btn label="치과치료확인서" href={L.dental} cls="btn-dental" />
+          <Btn label="전산 접속" href={L.system} cls="btn-primary btn-compact" />
+          <Btn label="필요서류 안내" href={L.guide} cls="btn-ghost btn-compact" />
+          <Btn label="치과치료확인서" href={L.dental} cls="btn-dental btn-compact" />
           <Btn label="보험금 청구서 PDF 다운로드" href={L.pdf} cls="btn-pdf" />
-          <Btn label="홈페이지" href={L.support} cls="btn-ghost" />
+          <Btn label="홈페이지" href={L.support} cls="btn-ghost btn-compact" />
         </div>
         <div className="grid-bottom">
           <PhoneBtn label="고객센터" number={L.cs} />
