@@ -255,6 +255,33 @@
   .btn-call.center{ justify-content:center; }
   .btn-call.center .num{ text-align:center; }
 
+  /* 인콜 모니터링·보험금청구 FAX: 전체 회사 동일 너비(250px) */
+  .table .row .stack .btn-call.incall-monitor{ overflow:visible; justify-content:center; min-width:250px!important; width:250px!important; max-width:250px!important; }
+  .table .row .stack .btn-call.incall-monitor .num{ overflow:visible; text-overflow:clip; max-width:none; }
+  .table .row .stack .btn-call.fax-claim{ overflow:visible; justify-content:center; min-width:250px!important; width:250px!important; max-width:250px!important; }
+  .table .row .stack .btn-call.fax-claim .num{ overflow:visible; text-overflow:clip; max-width:none; }
+
+  /* 우체국보험 등 긴 FAX: 클릭 시 이미지처럼 라이트블루 헤더 + 그리드 카드 팝업 */
+  .fax-popup-wrap{ position:relative; display:inline-flex; }
+  .fax-popup-trigger{ cursor:pointer; }
+  .fax-popup{ position:absolute; top:100%; left:50%; transform:translateX(-50%); margin-top:6px; min-width:320px; max-width:480px; background:#fff; border:1px solid #e2e8f0; border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,.15); z-index:1000; overflow:hidden; }
+  .fax-popup-header{ display:flex; align-items:center; justify-content:center; gap:8px; padding:14px 16px; background:linear-gradient(135deg,#e0f2fe 0%,#bae6fd 100%); font-size:16px; font-weight:800; color:#0f172a; border-bottom:1px solid #bae6fd; }
+  .fax-popup-header-icon{ font-size:18px; opacity:.9; }
+  .fax-popup-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; padding:16px; }
+  .fax-popup-card{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; padding:12px 8px; background:#fff; border:1px solid #e2e8f0; border-radius:10px; text-decoration:none; transition:all .15s; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+  .fax-popup-card:hover{ border-color:#7dd3fc; background:#f0f9ff; box-shadow:0 2px 8px rgba(14,165,233,.15); }
+  .fax-popup-card-region{ font-size:13px; font-weight:700; color:#0f172a; line-height:1.2; }
+  .fax-popup-card-num{ font-size:14px; font-weight:800; color:#0284c7; line-height:1.2; }
+  @media (max-width:400px){ .fax-popup-grid{ grid-template-columns:repeat(3,1fr); } }
+
+  /* 모바일: position:fixed로 overflow 부모 탈출, 화면 중앙 모달 */
+  .fax-popup-backdrop{ display:none; }
+  @media (max-width:767px){
+    .fax-popup-backdrop{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:99998; cursor:pointer; }
+    .fax-popup-wrap .fax-popup{ position:fixed!important; top:50%!important; left:50%!important; transform:translate(-50%,-50%)!important; margin-top:0!important; max-height:85vh; overflow-y:auto; z-index:99999; width:calc(100vw - 32px); max-width:400px; }
+    .fax-popup-wrap .fax-popup-grid{ grid-template-columns:repeat(3,1fr); }
+  }
+
   /* "손해부터 보기" 버튼 숨김 */
   .search-card a[href="#loss"] { display: none !important; }
 </style>
@@ -1343,12 +1370,36 @@ if(window.wcs) {
       return `<a class="btn ${cls}" href="${href}" ${isExternal ? 'target="_blank" rel="noopener"' : ''}${downloadAttr}>${shortLabel}</a>`;
     }
 
-    // 전화 버튼(고객센터/인콜만 가운데 정렬)
+    // 전화 버튼(고객센터/인콜만 가운데 정렬, 인콜·FAX 250px 고정)
+    // 우체국보험 등 긴 FAX: 클릭 시 이미지처럼 라이트블루 헤더 + 그리드 카드 팝업
+    function faxPopupBtn(number) {
+      const parts = number.split(/\s*\|\s*/).filter(Boolean).map(function(p) {
+        var m = p.trim().match(/^([\d\-]+)\(([^)]+)\)$/);
+        var numberStr = m ? m[1].trim() : p.trim();
+        var region = m ? m[2].trim() : p.trim();
+        var tel = p.replace(/[^0-9]/g,'');
+        return { region: region, number: numberStr, tel: tel };
+      });
+      var cards = parts.map(function(p) {
+        return '<a href="tel:' + p.tel + '" class="fax-popup-card">' +
+          '<span class="fax-popup-card-region">' + p.region + '</span>' +
+          '<span class="fax-popup-card-num">' + p.number + '</span></a>';
+      }).join('');
+      return '<div class="fax-popup-wrap">' +
+        '<button type="button" class="btn btn-call center fax-claim fax-popup-trigger">보험금청구 FAX <span class="num">(' + parts.length + '개 지역) 클릭</span></button>' +
+        '<div class="fax-popup-backdrop" style="display:none"></div>' +
+        '<div class="fax-popup fax-popup-modal" style="display:none">' +
+        '<div class="fax-popup-header"><span class="fax-popup-header-icon">📠</span>보험금 청구 FAX</div>' +
+        '<div class="fax-popup-grid">' + cards + '</div></div></div>';
+    }
     function phoneBtn(label, number) {
       if (!number) return `<button class="btn btn-muted" disabled>${label}</button>`;
+      if (label === '보험금청구 FAX' && /\s\|\s/.test(number)) return faxPopupBtn(number);
       const tel = number.replace(/[^0-9]/g,'');
       const centerClass = /고객센터|인콜/.test(label) ? ' center' : '';
-      return `<a class="btn btn-call${centerClass}" href="tel:${tel}">${label} <span class="num">${number}</span></a>`;
+      const incallClass = label === '인콜 모니터링' ? ' incall-monitor' : '';
+      const faxClaimClass = label === '보험금청구 FAX' ? ' fax-claim' : '';
+      return `<a class="btn btn-call${centerClass}${incallClass}${faxClaimClass}" href="tel:${tel}">${label} <span class="num">${number}</span></a>`;
     }
 
     // 표 한 행
@@ -1414,6 +1465,7 @@ if(window.wcs) {
       if (mutualCount) mutualCount.textContent = `${mutual.length}개`;
       filter();
       initMobileAccordion();
+      initFaxPopups();
       attachWideMode(document.getElementById('loss-list'));
       attachWideMode(document.getElementById('life-list'));
       attachWideMode(document.getElementById('mutual-list'));
@@ -1825,6 +1877,48 @@ if(window.wcs) {
       applyGen('4th-basic'); updateRuleDetails();
       document.getElementById('txtPayout').textContent='0원'; document.getElementById('listExplain').innerHTML='';
     });
+
+    var faxPopupsInited = false;
+    function initFaxPopups(){
+      if (faxPopupsInited) return;
+      faxPopupsInited = true;
+      document.addEventListener('click', function(e){
+        var trigger = e.target.closest('.fax-popup-trigger');
+        var wrap = e.target.closest('.fax-popup-wrap');
+        var card = e.target.closest('.fax-popup-card');
+        if (trigger) {
+          e.preventDefault();
+          e.stopPropagation();
+          var wrap = trigger.closest('.fax-popup-wrap');
+          var popup = wrap ? wrap.querySelector('.fax-popup') : null;
+          var backdrop = wrap ? wrap.querySelector('.fax-popup-backdrop') : null;
+          if (popup) {
+            var open = popup.style.display === 'block';
+            $$('.fax-popup').forEach(function(p){ p.style.display = 'none'; });
+            $$('.fax-popup-backdrop').forEach(function(b){ b.style.display = 'none'; });
+            if (!open) {
+              popup.style.display = 'block';
+              if (backdrop) backdrop.style.display = 'block';
+            }
+          }
+          return;
+        }
+        if (card) {
+          $$('.fax-popup').forEach(function(p){ p.style.display = 'none'; });
+          $$('.fax-popup-backdrop').forEach(function(b){ b.style.display = 'none'; });
+          return;
+        }
+        if (e.target.classList.contains('fax-popup-backdrop')) {
+          $$('.fax-popup').forEach(function(p){ p.style.display = 'none'; });
+          $$('.fax-popup-backdrop').forEach(function(b){ b.style.display = 'none'; });
+          return;
+        }
+        if (!wrap) {
+          $$('.fax-popup').forEach(function(p){ p.style.display = 'none'; });
+          $$('.fax-popup-backdrop').forEach(function(b){ b.style.display = 'none'; });
+        }
+      });
+    }
 
     // 폭 감지 폴백
     function attachWideMode(tableEl, threshold=1100){

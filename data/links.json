@@ -646,9 +646,11 @@
       }
     },
     {
-      "name": "MG손해보험",
+      "name": "예별손해보험",
+      "nameFormer": "MG손해보험",
+      "logo": "/assets/logos/예별손해보험.png",
       "type": "공제회사",
-      "tags": ["예별보험", "공제", "MG"],
+      "tags": ["예별", "공제", "MG"],
       "links": {
         "system": "",
         "guide": "",

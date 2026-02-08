@@ -1,0 +1,708 @@
+{
+  "carriers": [
+    {
+      "name": "삼성화재",
+      "type": "손해",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://erp.samsungfire.com/irj/servlet/prt/portal/prtroot/logon.LogonPage",
+        "guide": "https://www.samsungfire.com/v2/html/claim/01/C_010_030_001.html?_v=202510231242",
+        "pdf": "/assets/pdf/삼성화재-보험금청구서.pdf",
+        "dental": "/assets/pdf/삼성화재 치과치료확인서.pdf",
+        "support": "https://www.samsungfire.com/claim/P_P03_01_02_011.html",
+        "cs": "1588-5114",
+        "monitor": "1566-0553",
+        "helpdesk": "1899-5005",
+        "fax": "0505-162-0872",
+        "terms": "https://www.samsungfire.com/vh/page/VH.HPIF0103.do"
+      }
+    },
+    {
+      "name": "현대해상",
+      "type": "손해",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://sp.hi.co.kr/websquare/websquare.html?w2xPath=/common/xml/Login.xml",
+        "guide": "https://www.hi.co.kr/serviceAction.do?menuId=100631",
+        "pdf": "/assets/pdf/현대해상-보험금청구서.pdf",
+        "dental": "/assets/pdf/현대해상 치과치료확인서.pdf",
+        "support": "https://www.hi.co.kr/serviceAction.do",
+        "cs": "1588-5656",
+        "monitor": "1577-3223",
+        "helpdesk": "02-2628-4567",
+        "fax": "0507-774-6060",
+        "terms": "https://www.hi.co.kr/serviceAction.do"
+      }
+    },
+    {
+      "name": "DB손해보험",
+      "type": "손해",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://www.mdbins.com/chrome.html?ver=202510231252",
+        "guide": "https://www.idbins.com/pc/bizxpress/ct/dc/FWCUSV1301.shtm",
+        "pdf": "/assets/pdf/DB손해보험-보험금청구서.pdf",
+        "dental": "/assets/pdf/DB손해보험 치과치료확인서.pdf",
+        "support": "https://www.idbins.com/FWMAIV0001.do",
+        "cs": "1588-0100",
+        "monitor": "1566-0757",
+        "helpdesk": "02-2262-1241",
+        "fax": "0505-181-4862",
+        "terms": "https://www.idbins.com/FWMAIV1534.do"
+      }
+    },
+    {
+      "name": "KB손해보험",
+      "type": "손해",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "http://sales.kbinsure.co.kr",
+        "guide": "https://www.kbinsure.co.kr/CG205010001.ec",
+        "pdf": "/assets/pdf/KB손해보험-보험금청구서.pdf",
+        "dental": "/assets/pdf/KB손해보험 치과치료확인서.pdf",
+        "support": "https://www.kbinsure.co.kr/main.ec?mdmn=0101",
+        "cs": "1544-0114",
+        "monitor": "1544-0019",
+        "helpdesk": "1544-8119",
+        "fax": "0505-136-6500",
+        "terms": "https://www.kbinsure.co.kr/CG802030001.ec"
+      }
+    },
+    {
+      "name": "메리츠화재",
+      "type": "손해",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "http://sales.meritzfire.com/salesportal/Layout/MeritzSales.jsp",
+        "guide": "https://www.meritzfire.com",
+        "pdf": "/assets/pdf/메리츠화재-보험금청구서.pdf",
+        "dental": "/assets/pdf/메리츠화재 치과치료확인서.pdf",
+        "support": "https://www.meritzfire.com/compensation.do#!/",
+        "cs": "1566-7711",
+        "monitor": "1577-7711",
+        "helpdesk": "02-3786-2777",
+        "fax": "0505-021-3400",
+        "terms": "https://www.meritzfire.com/disclosure/product-announcement/product-list.do#!"
+      }
+    },
+    {
+      "name": "롯데손해보험",
+      "type": "손해",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://lottero.lotteins.co.kr/ncrmwebroot/webfw/html/nawlogon.jsp",
+        "guide": "https://www.lotteins.co.kr/web/C/D/C/cdc_claim_0502.jsp#tab-1",
+        "pdf": "/assets/pdf/롯데손해보험-보험금청구서.pdf",
+        "dental": "/assets/pdf/롯데손해보험 치과치료확인서.pdf",
+        "support": "https://www.lotteins.co.kr/index2.jsp",
+        "cs": "1588-3344",
+        "monitor": "1600-5182",
+        "helpdesk": "02-3455-3984",
+        "fax": "0507-333-9999",
+        "terms": "https://www.lotteins.co.kr/web/C/D/H/cdh190.jsp#!"
+      }
+    },
+    {
+      "name": "흥국화재",
+      "type": "손해",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://sales.heungkukfire.co.kr/#/login",
+        "guide": "https://www.heungkukfire.co.kr/FRW/compensation/accidentDocInfo.do",
+        "pdf": "/assets/pdf/흥국화재-보험금청구서.pdf",
+        "dental": "/assets/pdf/흥국화재 치과치료확인서.pdf",
+        "support": "https://www.heungkukfire.co.kr/MAW/main1.do",
+        "cs": "1688-1688",
+        "monitor": "1688-6997",
+        "helpdesk": "1688-3550",
+        "fax": "고객센터 전화",
+        "terms": "https://www.heungkukfire.co.kr/FRW/announce/insGoodsGongsiSale.do"
+      }
+    },
+    {
+      "name": "하나손해보험",
+      "type": "손해",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://sfa.saleshana.com/wq/login",
+        "guide": "https://www.hanainsure.co.kr/w/claim/healthReward/rewardDocCarGuide",
+        "pdf": "/assets/pdf/하나손해보험-보험금청구서.pdf",
+        "dental": "/assets/pdf/하나손해보험 치과치료확인서.pdf",
+        "support": "https://www.hanainsure.co.kr/",
+        "cs": "1566-3000",
+        "monitor": "02-6299-6821",
+        "helpdesk": "02-6670-8110",
+        "fax": "0505-170-0765",
+        "terms": "https://www.hanainsure.co.kr/w/disclosure/product/saleProduct"
+      }
+    },
+    {
+      "name": "농협손해보험",
+      "type": "손해",
+      "tags": ["NH", "pdf"],
+      "links": {
+        "system": "https://www.nhfire.co.kr/fc/fd.nhfire",
+        "guide": "https://www.nhfire.co.kr/customer/guide/insuranceClaimGuide.nhfire",
+        "pdf": "/assets/pdf/NH농협손해보험-보험금청구서.pdf",
+        "dental": "/assets/pdf/NH농협손해보험 치과치료확인서.pdf",
+        "support": "https://www.nhfire.co.kr/index.nhfire",
+        "cs": "1544-0110",
+        "monitor": "1644-9000",
+        "helpdesk": "1644-0090",
+        "fax": "0505-060-7000",
+        "terms": "https://www.nhfire.co.kr/announce/productAnnounce/retrieveInsuranceProductsAnnounce.nhfire"
+      }
+    },
+    {
+      "name": "카카오페이손해보험",
+      "type": "손해",
+      "tags": ["디지털", "pdf"],
+      "links": {
+        "system": "",
+        "guide": "https://kakaopayinscorp.co.kr/customer-center/claim-info",
+        "pdf": "/assets/pdf/카카오페이손해보험-보험금청구서.pdf",
+        "dental": "/assets/pdf/카카오페이손해보험 치과치료확인서.pdf",
+        "support": "https://kakaopayinscorp.co.kr/customer-center/claim-info",
+        "cs": "1544-0022",
+        "monitor": "1544-0022",
+        "helpdesk": "1588-0000",
+        "fax": "고객센터 전화",
+        "terms": ""
+      }
+    },
+    {
+      "name": "신한EZ손해보험",
+      "type": "손해",
+      "tags": ["디지털", "pdf"],
+      "links": {
+        "system": "",
+        "guide": "https://www.shinhanez.co.kr/static/cus/CUS50000M01.html",
+        "pdf": "/assets/pdf/신한EZ손해보험-보험금청구서.pdf",
+        "dental": "/assets/pdf/신한EZ손해보험 치과치료확인서.pdf",
+        "support": "https://www.shinhanez.co.kr/static/man/MAIN0000M01.html",
+        "cs": "1544-2580",
+        "monitor": "1544-2580",
+        "helpdesk": "1588-0000",
+        "fax": "0505-987-8282",
+        "terms": "https://www.shinhanez.co.kr/static/pub/PUB2000T021.html"
+      }
+    },
+    {
+      "name": "캐롯손해보험",
+      "type": "손해",
+      "tags": ["디지털", "다이렉트"],
+      "links": {
+        "system": "",
+        "guide": "https://www.carrotins.com/desktop/reward/claim/guide/",
+        "pdf": "/assets/pdf/캐롯손해보험-보험금청구서.pdf",
+        "dental": "/assets/pdf/캐롯손해보험 치과치료확인서.pdf",
+        "support": "https://www.carrotins.com/",
+        "cs": "1566-0300",
+        "monitor": "1566-0300",
+        "helpdesk": "1588-0000",
+        "fax": "고객센터 전화",
+        "terms": "https://www.hwgeneralins.com/notice/ir/product-ing01.do"
+      }
+    },
+    {
+      "name": "AIG손해보험",
+      "type": "손해",
+      "tags": ["글로벌", "pdf", "고객센터"],
+      "links": {
+        "system": "https://sso.aig.co.kr/gaLogin/gaLogin.jsp",
+        "guide": "https://www.aig.co.kr/wt/dpwtm025.html?menuId=MS216",
+        "pdf": "/assets/pdf/AIG손해보험-보험금청구서.pdf",
+        "dental": "/assets/pdf/AIG손해보험 치과치료확인서.pdf",
+        "support": "https://www.aig.co.kr/wm/dpwmm001.html",
+        "cs": "1544-2792",
+        "monitor": "1600-4600",
+        "helpdesk": "02-2260-6855",
+        "fax": "02-2011-4607",
+        "terms": "https://www.aig.co.kr/wo/dpwot001.html?menuId=MS702"
+      }
+    },
+    {
+      "name": "라이나손해보험",
+      "type": "손해",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://ga.linagi.com/html/gap/GA/GAZ911M0.html",
+        "guide": "https://www.chubb.com/kr-kr/claims/individual-insurance.html",
+        "pdf": "/assets/pdf/라이나손해보험-보험금청구서.pdf",
+        "dental": "/assets/pdf/라이나손해보험 치과치료확인서.pdf",
+        "support": "https://ec.aceinsurance.co.kr/jsp/acelimited/mainCert.jsp?utm_source=chubb&utm_medium=internal&utm_campaign=internal&utm_content=mob&utm_term=",
+        "cs": "1566-5800",
+        "monitor": "1566-5800",
+        "helpdesk": "",
+        "fax": "02-2127-2308",
+        "terms": "https://www.chubb.com/kr-kr/disclosure/product.html"
+      }
+    },
+    {
+      "name": "한화손해보험",
+      "type": "손해",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://portal.hwgeneralins.com",
+        "guide": "https://www.hwgeneralins.com/fplaza/compensation/receipt01.do/",
+        "pdf": "/assets/pdf/한화손해보험-보험금청구서.pdf",
+        "dental": "/assets/pdf/한화손해보험 치과치료확인서.pdf",
+        "support": "https://m.hwgeneralins.com/",
+        "cs": "1566-8000",
+        "monitor": "1670-1882",
+        "helpdesk": "02-316-0111",
+        "fax": "0502-779-1004",
+        "terms": "https://www.hwgeneralins.com/notice/ir/product-ing01.do"
+      }
+    },
+    {
+      "name": "삼성생명",
+      "type": "생명",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://ga.samsunglife.com",
+        "guide": "https://www.samsunglife.com/individual/mysamsunglife/insurance/internet/MDP-MYINT020110M",
+        "pdf": "/assets/pdf/삼성생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/삼성생명 치과치료확인서.pdf",
+        "support": "https://www.samsunglife.com/main/PDP-MAMAI000000M",
+        "cs": "1588-3114",
+        "monitor": "1588-3115",
+        "helpdesk": "02-311-4500",
+        "fax": "고객센터 전화",
+        "terms": "https://www.samsunglife.com/individual/products/disclosure/main/PDO-PRPRC010100M"
+      }
+    },
+    {
+      "name": "한화생명",
+      "type": "생명",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://hmp.hanwhalife.com/online/solutions/websquare/websquare.html?w2xPath=/online/ui/uv/gmn/uvgmn010mvw.xml",
+        "guide": "https://www.hanwhalife.com/static/main/myPage/insurance/accident/document/MY_INAPADC_T10000.jsp",
+        "pdf": "/assets/pdf/한화생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/한화생명 치과치료확인서.pdf",
+        "support": "https://www.hanwhalife.com/main/MN_0000000_P10000.do",
+        "cs": "1588-6363",
+        "monitor": "1800-6633",
+        "helpdesk": "02-1522-6379",
+        "fax": "고객센터 전화",
+        "terms": "https://www.hanwhalife.com/index.jsp"
+      }
+    },
+    {
+      "name": "교보생명",
+      "type": "생명",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://sso.kyobo.com:5443/3rdParty/certLoginFormPage.jsp?NONCE=IEYi%2BWEDGPC8Lx4dVfrv9mRFtqk39DlGqrZkYUtprogEY0YcgGAnby%2BdWxAHmjZNrbqzq0zcT0Gt0A3axB%2BNsg%3D%3D&UURL=https%3A%2F%2Fsso.kyobo.com%3A5443%2Fnls3%2Ffcs",
+        "guide": "https://www.kyobo.com/dgt/web/customer/support/need-papers/list",
+        "pdf": "/assets/pdf/교보생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/교보생명 치과치료확인서.pdf",
+        "support": "https://www.kyobo.com/dgt/web/dti/insurance/accInq/intro",
+        "cs": "1588-1001",
+        "monitor": "1588-1636",
+        "helpdesk": "02-721-3130",
+        "fax": "고객센터 전화",
+        "terms": "https://www.kyobo.com/dgt/web/product-official/all-product/search"
+      }
+    },
+    {
+      "name": "미래에셋생명",
+      "type": "생명",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://www.loveageplan.com",
+        "guide": "https://life.miraeasset.com/Cmmn/lifePage.do?cp=MNT-CC-012",
+        "pdf": "/assets/pdf/미래에셋생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/미래에셋생명 치과치료확인서.pdf",
+        "support": "https://life.miraeasset.com/home/index.do#MO-HO-000000-000000",
+        "cs": "1588-0220",
+        "monitor": "1588-0220",
+        "helpdesk": "02-3271-5108",
+        "fax": "고객센터 전화",
+        "terms": "https://life.miraeasset.com/micro/disclosure/product/PC-HO-080301-000000.do"
+      }
+    },
+    {
+      "name": "KB라이프생명",
+      "type": "생명",
+      "tags": ["KB", "pdf"],
+      "links": {
+        "system": "https://sfa.kblife.co.kr/login/main",
+        "guide": "https://www.kblife.co.kr/customer-center/informRequiredDocument.do",
+        "pdf": "/assets/pdf/KB라이프생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/KB라이프생명 치과치료확인서.pdf",
+        "support": "https://www.kblife.co.kr/",
+        "cs": "1588-3374",
+        "monitor": "1566-2730",
+        "helpdesk": "1899-3899",
+        "fax": "02-390-4629",
+        "terms": "https://www.kblife.co.kr/customer-common/productList.do"
+      }
+    },
+    {
+      "name": "신한라이프",
+      "type": "생명",
+      "tags": ["신한라이프", "고객센터"],
+      "links": {
+        "system": "https://ga.shinhanlife.co.kr:11043/colomga010m.msv",
+        "guide": "https://www.shinhanlife.co.kr/hp/cdhf0020t02.do",
+        "pdf": "/assets/pdf/신한라이프-보험금청구서.pdf",
+        "dental": "/assets/pdf/신한라이프 치과치료확인서.pdf",
+        "support": "https://www.shinhanlife.co.kr/hp/cdha0010.do",
+        "cs": "1588-5580",
+        "monitor": "1522-2285",
+        "helpdesk": "02-3455-4119",
+        "fax": "고객센터 전화",
+        "terms": "https://www.shinhanlife.co.kr/hp/cdhi0030.do"
+      }
+    },
+    {
+      "name": "농협생명",
+      "type": "생명",
+      "tags": ["NH", "pdf"],
+      "links": {
+        "system": "https://www.nhlife.co.kr/nhsmart.nhl",
+        "guide": "https://www.nhlife.co.kr/ho/cc/HOCC0010M00.nhl",
+        "pdf": "/assets/pdf/NH농협생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/NH농협생명 치과치료확인서.pdf",
+        "support": "https://www.nhlife.co.kr/main.nhl",
+        "cs": "1544-4000",
+        "monitor": "1544-4422",
+        "helpdesk": "02-3786-8800",
+        "fax": "02-6791-6040",
+        "terms": "https://www.nhlife.co.kr/ho/on/HOON0004M00.nhl"
+      }
+    },
+    {
+      "name": "하나생명",
+      "type": "생명",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://ga.hanalife.co.kr",
+        "guide": "https://www.hanalife.co.kr/csc/accidentGuideRenew/accidentPaymentDocument.do",
+        "pdf": "/assets/pdf/하나생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/하나생명 치과치료확인서.pdf",
+        "support": "https://www.hanalife.co.kr/home/main.do",
+        "cs": "1577-1112",
+        "monitor": "1577-1112",
+        "helpdesk": "02-3709-8602",
+        "fax": "고객센터 전화",
+        "terms": "https://www.hanalife.co.kr/anm/product/allProduct.do?status=on"
+      }
+    },
+    {
+      "name": "DB생명",
+      "type": "생명",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://etopia.idblife.com/SSSCO00001M.mvc",
+        "guide": "https://www.idblife.com/support/guide/acbf_clm_doc",
+        "pdf": "/assets/pdf/DB생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/DB생명 치과치료확인서.pdf",
+        "support": "https://www.idblife.com/",
+        "cs": "1588-3131",
+        "monitor": "02-6470-7663",
+        "helpdesk": "02-2119-5151",
+        "fax": "0505-129-3134",
+        "terms": "https://www.idblife.com/notice/product/sale"
+      }
+    },
+    {
+      "name": "KDB생명",
+      "type": "생명",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "http://kss.kdblife.co.kr/Install/x_installAX.html",
+        "guide": "",
+        "pdf": "/assets/pdf/KDB생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/KDB생명 치과치료확인서.pdf",
+        "support": "https://www.kdblife.co.kr/",
+        "cs": "1588-4040",
+        "monitor": "1588-4040",
+        "helpdesk": "02-6303-2771",
+        "fax": "02-2669-6500",
+        "terms": "https://www.kdblife.co.kr/ajax.do?scrId=HDLMA002M02P"
+      }
+    },
+    {
+      "name": "ABL생명",
+      "type": "생명",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "http://ga.abllife.co.kr",
+        "guide": "https://www.abllife.co.kr/st/custDesk/insSrvcGudn/acdtInsmClamGudn/acdtInsmClamGudn3?page=index",
+        "pdf": "/assets/pdf/ABL생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/ABL생명 치과치료확인서.pdf",
+        "support": "https://www.abllife.co.kr/",
+        "cs": "1588-6500",
+        "monitor": "1566-1002",
+        "helpdesk": "02-3787-8583",
+        "fax": "02-3299-5544",
+        "terms": "https://www.abllife.co.kr/st/pban/prdtPban/whlPrdt/whlPrdt1/whlPrdt11?page=index"
+      }
+    },
+    {
+      "name": "흥국생명",
+      "type": "생명",
+      "tags": ["pdf", "고객센터"],
+      "links": {
+        "system": "https://e-life.heungkuklife.co.kr",
+        "guide": "https://www.heungkuklife.co.kr/cyber/accident/Accident_File_Info.do#none/",
+        "pdf": "/assets/pdf/흥국생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/흥국생명 치과치료확인서.pdf",
+        "support": "https://www.heungkuklife.co.kr/",
+        "cs": "1588-2288",
+        "monitor": "1877-7006",
+        "helpdesk": "031-786-8088",
+        "fax": "고객센터 전화",
+        "terms": "https://www.heungkuklife.co.kr/front/public/saleProduct.do?searchFlgSale=Y#none"
+      }
+    },
+    {
+      "name": "메트라이프",
+      "type": "생명",
+      "tags": ["MetLife", "pdf", "고객센터"],
+      "links": {
+        "system": "https://metplus.metlife.co.kr/nexacro/AgentPortal/index.jsp",
+        "guide": "https://cyber.metlife.co.kr/claim/requiredDocumentNotice",
+        "pdf": "/assets/pdf/메트라이프생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/메트라이프생명 치과치료확인서.pdf",
+        "support": "https://cyber.metlife.co.kr/",
+        "cs": "1588-9600",
+        "monitor": "1588-9600",
+        "helpdesk": "1899-0751",
+        "fax": "고객센터 전화",
+        "terms": "https://brand.metlife.co.kr/pn/mcvrgProd/retrieveMcvrgProdMain.do"
+      }
+    },
+    {
+      "name": "AIA생명",
+      "type": "생명",
+      "tags": ["AIA", "pdf"],
+      "links": {
+        "system": "https://imap.aia.co.kr/NBSE/aiaone",
+        "guide": "https://www.aia.co.kr/ko/customer-support/customer-guide/forms/claims.html",
+        "pdf": "/assets/pdf/AIA생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/AIA생명 치과치료확인서.pdf",
+        "support": "https://www.aia.co.kr/ko.html",
+        "cs": "1588-9898",
+        "monitor": "1588-2513",
+        "helpdesk": "1588-2937",
+        "fax": "02-2021-4540",
+        "terms": "https://mypage.aia.co.kr/AIAHomepage/disclosure/our-products/selling/individual.do"
+      }
+    },
+    {
+      "name": "IBK연금보험",
+      "type": "생명",
+      "tags": ["ibk", "연금", "고객센터"],
+      "links": {
+        "system": "https://sf.ibki.co.kr",
+        "guide": "https://www.ibki.co.kr/process/HP_CSCETR_POSN_DOC_INS_LIST?bltb_cod=SC000014&sctn=in&TAB=in",
+        "dental": "",
+        "pdf": "",
+        "support": "https://www.ibki.co.kr/process/HP_MAIN_FRAME",
+        "cs": "1544-4117",
+        "monitor": "1544-4117",
+        "helpdesk": "02-2270-1692",
+        "fax": "고객센터 전화"                         
+      }
+    },
+    {
+      "name": "처브라이프",
+      "type": "생명",
+      "tags": ["Chubb", "pdf", "고객센터"],
+      "links": {
+        "system": "https://esmart.chubblife.co.kr/index.do",
+        "guide": "https://www.chubblife.co.kr/front/ctmcenter/insurance/listDocuType.do",
+        "pdf": "/assets/pdf/처브라이프-보험금청구서.pdf",
+        "dental": "/assets/pdf/처브라이프 치과치료확인서.pdf",
+        "support": "https://www.chubblife.co.kr/index.do",
+        "cs": "1599-4600",
+        "monitor": "1599-4600",
+        "helpdesk": "1599-4646",
+        "fax": "02-3480-7801",
+        "terms": "https://www.chubblife.co.kr/front/official/sale/list.do"
+      }
+    },
+    {
+      "name": "푸본현대생명",
+      "type": "생명",
+      "tags": ["FubonHyundai", "pdf", "고객센터"],
+      "links": {
+        "system": "https://wsfa.fubonhyundai.com/GA/index_etc.jsp",
+        "guide": "https://www.fubonhyundai.com/#PMP100200000000",
+        "pdf": "/assets/pdf/푸본현대생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/푸본현대생명 치과치료확인서.pdf",
+        "support": "https://www.fubonhyundai.com/#COM010103000000",
+        "cs": "1577-3311",
+        "monitor": "0505-106-0311",
+        "helpdesk": "080-860-1212",
+        "fax": "0505-106-0311",
+        "terms": "https://www.fubonhyundai.com/#CUSI150102010101"
+      }
+    },
+    {
+      "name": "라이나생명",
+      "type": "생명",
+      "tags": ["Cigna", "pdf"],
+      "links": {
+        "system": "https://ga.lina.co.kr/html/gap/GA/GAZ911M0.html",
+        "guide": "https://www.lina.co.kr/cyber/accident-insurance/accident-insurance-info",
+        "pdf": "/assets/pdf/라이나생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/라이나생명 치과치료확인서.pdf",
+        "support": "https://www.lina.co.kr/",
+        "cs": "1588-0058",
+        "monitor": "1588-2442",
+        "helpdesk": "1588-2215",
+        "fax": "02-6944-1200",
+        "terms": "https://www.lina.co.kr/disclosure/product-public-announcement/product-on-sales?key=0"
+      }
+    },
+    {
+      "name": "iM라이프생명",
+      "type": "생명",
+      "tags": ["DGB", "iM", "pdf"],
+      "links": {
+        "system": "https://fgs.imlifeins.co.kr:8443",
+        "guide": "https://www.imlifeins.co.kr/BB/BB_D010.do",
+        "pdf": "/assets/pdf/iM라이프생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/iM라이프생명 치과치료확인서.pdf",
+        "support": "https://www.imlifeins.co.kr/main.do",
+        "cs": "1588-4770",
+        "monitor": "1588-4770",
+        "helpdesk": "02-2087-9594",
+        "fax": "0505-083-5420",
+        "terms": "https://www.imlifeins.co.kr/BA/BA_A020.do"
+      }
+    },
+    {
+      "name": "동양생명",
+      "type": "생명",
+      "tags": ["Tongyang", "pdf", "고객센터"],
+      "links": {
+        "system": "https://1004.myangel.co.kr/colgnsf001m.wqv",
+        "guide": "https://www.myangel.co.kr/indvins/acctClapdClmNtc",
+        "pdf": "/assets/pdf/동양생명-보험금청구서.pdf",
+        "dental": "/assets/pdf/동양생명 치과치료확인서.pdf",
+        "support": "https://www.myangel.co.kr/Mn",
+        "cs": "1577-1004",
+        "monitor": "080-899-1004",
+        "helpdesk": "02-728-9900",
+        "fax": "02-3289-4516",
+        "terms": "https://pbano.myangel.co.kr/paging/WE_AC_WEPAAP020100L"
+      }
+    },
+    {
+      "name": "우체국보험",
+      "type": "공제회사",
+      "tags": ["국영", "우체국", "공제"],
+      "links": {
+        "system": "",
+        "guide": "",
+        "pdf": "/assets/pdf/우체국보험-보험금청구서.pdf",
+        "dental": "",
+        "support": "https://www.epostbank.go.kr",
+        "cs": "1599-0100",
+        "monitor": "",
+        "helpdesk": "",
+        "fax": "0505-005-1224(서울) | 0505-005-1427(경인동부) | 0505-005-1428(경인서부) | 0505-005-2271(강원) | 0505-005-1788(충청) | 0505-005-2163(전북) | 0505-005-1921(전남) | 0505-005-1623(부산) | 0505-005-2070(경북) | 0505-005-7116(서귀포) | 0505-005-2296(제주)",
+        "terms": "https://www.epostbank.go.kr"
+      }
+    },
+    {
+      "name": "The·K",
+      "type": "공제회사",
+      "tags": ["교직원공제회", "공제"],
+      "links": {
+        "system": "",
+        "guide": "",
+        "pdf": "/assets/pdf/The·K-보험금청구서.pdf",
+        "dental": "",
+        "support": "https://www.ktcu.or.kr",
+        "cs": "1577-3993",
+        "monitor": "",
+        "helpdesk": "",
+        "fax": "02-3278-9696",
+        "terms": "https://www.ktcu.or.kr"
+      }
+    },
+    {
+      "name": "MG새마을금고",
+      "type": "공제회사",
+      "tags": ["새마을금고", "공제", "MG"],
+      "links": {
+        "system": "",
+        "guide": "",
+        "pdf": "/assets/pdf/MG새마을금고-보험금청구서.pdf",
+        "dental": "",
+        "support": "https://www.kfcc.co.kr",
+        "cs": "1599-9010",
+        "monitor": "",
+        "helpdesk": "",
+        "fax": "02-3016-7674",
+        "terms": "https://www.kfcc.co.kr"
+      }
+    },
+    {
+      "name": "예별손해보험",
+      "nameFormer": "MG손해보험",
+      "logo": "/assets/logos/예별손해보험.png",
+      "type": "공제회사",
+      "tags": ["예별", "공제", "MG"],
+      "links": {
+        "system": "",
+        "guide": "",
+        "pdf": "/assets/pdf/MG손해보험(예별보험회사)-보험금청구서.pdf",
+        "dental": "",
+        "support": "https://www.yebyeol.co.kr/HO011010DM.scp",
+        "cs": "1588-5959",
+        "monitor": "",
+        "helpdesk": "",
+        "fax": "0505-088-1646",
+        "terms": "https://www.yebyeol.co.kr/PB031210DM.scp?menuId=MN0803006"
+      }
+    },
+    {
+      "name": "수협",
+      "type": "공제회사",
+      "tags": ["수협", "공제", "수산업협동조합"],
+      "links": {
+        "system": "",
+        "guide": "",
+        "pdf": "/assets/pdf/수협-보험금청구서.pdf",
+        "dental": "",
+        "support": "https://www.suhyup.co.kr",
+        "cs": "1588-4119",
+        "monitor": "",
+        "helpdesk": "",
+        "fax": "콜센터 가상번호 부여",
+        "terms": "https://www.suhyup.co.kr"
+      }
+    },
+    {
+      "name": "신협",
+      "type": "공제회사",
+      "tags": ["신협", "공제", "신용협동조합"],
+      "links": {
+        "system": "",
+        "guide": "",
+        "pdf": "/assets/pdf/신협-보험금청구서.pdf",
+        "dental": "/assets/pdf/신협-치과치료확인서.pdf",
+        "support": "https://www.cu.co.kr",
+        "cs": "1544-3030",
+        "monitor": "",
+        "helpdesk": "",
+        "fax": "콜센터 가상번호 부여",
+        "terms": "https://www.cu.co.kr"
+      }
+    }
+  ],
+  "top_pdfs": [
+    { "label": "입원/통원 청구서", "url": "/assets/pdf/입원통원-청구서.pdf" },
+    { "label": "암 진단 확인서", "url": "/assets/pdf/암진단-확인서.pdf" },
+    { "label": "수술 확인서", "url": "/assets/pdf/수술-확인서.pdf" },
+    { "label": "개인(신용)정보 동의서", "url": "/assets/pdf/개인정보동의서.pdf" }
+  ]
+}
