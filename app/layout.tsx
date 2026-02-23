@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { NoRightClick } from "@/components/NoRightClick";
 
 export const metadata: Metadata = {
   title: "청구닷컴 | 보험금 청구 링크 허브",
@@ -41,7 +42,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#0f172a" />
       </head>
       <body className="text-slate-900 mode-compact">
-        {children}
+        <NoRightClick>{children}</NoRightClick>
       </body>
     </html>
   );

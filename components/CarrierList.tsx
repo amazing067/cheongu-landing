@@ -258,7 +258,28 @@ function CarrierRow({ item }: { item: Carrier }) {
       />
       <div className="stack">
         <div className="grid-top">
-          <Btn label="전산 접속" href={L.system} cls="btn-primary btn-compact" />
+          {/* 삼성생명 전산은 Edge 전용 안내 */}
+          {item.name === "삼성생명" ? (
+            <span className="inline-flex items-center gap-1.5">
+              <Btn
+                label="전산 접속"
+                href={L.system}
+                cls="btn-primary btn-compact"
+              />
+              <span
+                className="text-[10px] text-amber-600 font-medium whitespace-nowrap"
+                title="삼성생명 전산접속은 Microsoft Edge에서만 지원됩니다"
+              >
+                (Edge)
+              </span>
+            </span>
+          ) : (
+            <Btn
+              label="전산 접속"
+              href={L.system}
+              cls="btn-primary btn-compact"
+            />
+          )}
           <Btn label="필요서류 안내" href={L.guide} cls="btn-ghost btn-compact" />
           <Btn label="치과치료확인서" href={L.dental} cls="btn-dental btn-compact" />
           <Btn label="보험금 청구서 PDF 다운로드" href={L.pdf} cls="btn-pdf" />
