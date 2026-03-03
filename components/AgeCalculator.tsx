@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const fmt = (d: Date) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -45,11 +45,15 @@ export function AgeCalculator() {
   const [ruleText, setRuleText] = useState("생년월일을 입력하세요");
   const [halfLeft, setHalfLeft] = useState("–");
   const [badge, setBadge] = useState("–");
+  const skipNextMonthBlur = useRef(false);
 
-  const getDobString = () => {
-    if (y.length === 4 && m.length === 2 && d.length === 2)
-      return `${y}-${m}-${d}`;
-    return null;
+  const getDobString = (): string | null => {
+    if (y.length !== 4) return null;
+    const mn = Number(m);
+    const dn = Number(d);
+    if (Number.isNaN(mn) || mn < 1 || mn > 12 || Number.isNaN(dn) || dn < 1 || dn > 31)
+      return null;
+    return `${y}-${String(mn).padStart(2, "0")}-${String(dn).padStart(2, "0")}`;
   };
 
   const renderAge = () => {
@@ -121,6 +125,7 @@ export function AgeCalculator() {
   const onlyDigits = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/\D/g, "");
   };
+  /** 입력 중에는 사용하지 않고, onBlur 시에만 2자리 포맷용 */
   const clamp2 = (v: string, min: number, max: number) => {
     if (!v) return "";
     const n = Number(v);
@@ -177,7 +182,6 @@ export function AgeCalculator() {
                     if (e.target.value.replace(/\D/g, "").length >= 4)
                       document.getElementById("dobM")?.focus();
                   }}
-                  onBlur={(e) => setY(e.target.value)}
                 />
                 <span className="text-slate-400">–</span>
                 <input
@@ -188,10 +192,22 @@ export function AgeCalculator() {
                   className="h-9 rounded-lg px-2.5 text-center border border-slate-300 text-sm bg-white w-[65px]"
                   value={m}
                   onChange={(e) => {
-                    const v = e.target.value.replace(/\D/g, "");
-                    setM(clamp2(v, 1, 12));
-                    if (clamp2(v, 1, 12).length >= 2)
+                    const v = e.target.value.replace(/\D/g, "").slice(0, 2);
+                    if (v.length >= 2) {
+                      setM(clamp2(v, 1, 12));
+                      skipNextMonthBlur.current = true;
                       document.getElementById("dobD")?.focus();
+                    } else {
+                      setM(v);
+                    }
+                  }}
+                  onBlur={(e) => {
+                    if (skipNextMonthBlur.current) {
+                      skipNextMonthBlur.current = false;
+                      return;
+                    }
+                    const v = (e.target as HTMLInputElement).value.replace(/\D/g, "");
+                    if (v !== "") setM(clamp2(v, 1, 12));
                   }}
                 />
                 <span className="text-slate-400">–</span>
@@ -203,8 +219,12 @@ export function AgeCalculator() {
                   className="h-9 rounded-lg px-2.5 text-center border border-slate-300 text-sm bg-white w-[65px]"
                   value={d}
                   onChange={(e) => {
-                    const v = e.target.value.replace(/\D/g, "");
-                    setD(clamp2(v, 1, 31));
+                    const v = e.target.value.replace(/\D/g, "").slice(0, 2);
+                    setD(v);
+                  }}
+                  onBlur={(e) => {
+                    const v = (e.target as HTMLInputElement).value.replace(/\D/g, "");
+                    if (v !== "") setD(clamp2(v, 1, 31));
                   }}
                 />
               </div>

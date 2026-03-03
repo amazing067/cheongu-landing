@@ -443,7 +443,7 @@
     justify-content: center !important;
     max-width: 100% !important;
   }
-  /* 공제회사: 고객센터·FAX 번호 잘리지 않게 */
+  /* 공제회사: 고객센터·FAX 번호 잘리지 않게 (FAX는 두 줄로 표시해 레이아웃 안에 유지) */
   #mutual .table .row .stack .btn-call {
     overflow: visible !important;
     justify-content: center !important;
