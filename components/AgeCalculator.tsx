@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const fmt = (d: Date) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -45,7 +45,6 @@ export function AgeCalculator() {
   const [ruleText, setRuleText] = useState("생년월일을 입력하세요");
   const [halfLeft, setHalfLeft] = useState("–");
   const [badge, setBadge] = useState("–");
-  const skipNextMonthBlur = useRef(false);
 
   const clearAgeResult = () => {
     setAgeNum("--");
@@ -155,14 +154,6 @@ export function AgeCalculator() {
     renderAge();
   };
 
-  /** 입력 중에는 사용하지 않고, onBlur 시에만 2자리 포맷용 */
-  const clamp2 = (v: string, min: number, max: number) => {
-    if (!v) return "";
-    const n = Number(v);
-    if (Number.isNaN(n)) return "";
-    return String(Math.min(max, Math.max(min, n))).padStart(2, "0");
-  };
-
   return (
     <section id="age" className="panel">
       <div className="section-head">
@@ -223,21 +214,8 @@ export function AgeCalculator() {
                   value={m}
                   onChange={(e) => {
                     const v = e.target.value.replace(/\D/g, "").slice(0, 2);
-                    if (v.length >= 2) {
-                      setM(clamp2(v, 1, 12));
-                      skipNextMonthBlur.current = true;
-                      document.getElementById("dobD")?.focus();
-                    } else {
-                      setM(v);
-                    }
-                  }}
-                  onBlur={(e) => {
-                    if (skipNextMonthBlur.current) {
-                      skipNextMonthBlur.current = false;
-                      return;
-                    }
-                    const v = (e.target as HTMLInputElement).value.replace(/\D/g, "");
-                    if (v !== "") setM(clamp2(v, 1, 12));
+                    setM(v);
+                    if (v.length >= 2) document.getElementById("dobD")?.focus();
                   }}
                 />
                 <span className="text-slate-400">–</span>
@@ -251,10 +229,6 @@ export function AgeCalculator() {
                   onChange={(e) => {
                     const v = e.target.value.replace(/\D/g, "").slice(0, 2);
                     setD(v);
-                  }}
-                  onBlur={(e) => {
-                    const v = (e.target as HTMLInputElement).value.replace(/\D/g, "");
-                    if (v !== "") setD(clamp2(v, 1, 31));
                   }}
                 />
               </div>

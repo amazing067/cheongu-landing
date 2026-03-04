@@ -1502,36 +1502,17 @@ if(window.wcs) {
     const resetBtn = document.getElementById('age-reset');
 
     function onlyDigits(e){ e.target.value = e.target.value.replace(/\D/g,''); }
-    function clamp2(v, min, max){ if(!v) return ''; const n=Number(v); if(Number.isNaN(n)) return ''; return String(Math.min(max, Math.max(min, n))).padStart(2,'0'); }
-    let skipNextMonthBlur = false;
 
     yEl?.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 4) mEl.focus(); });
     mEl?.addEventListener('input', e => {
       onlyDigits(e);
       const v = e.target.value.slice(0, 2);
-      if (v.length >= 2) {
-        e.target.value = clamp2(v, 1, 12);
-        skipNextMonthBlur = true;
-        dEl.focus();
-      } else {
-        e.target.value = v;
-      }
-    });
-    mEl?.addEventListener('blur', e => {
-      if (skipNextMonthBlur) {
-        skipNextMonthBlur = false;
-        return;
-      }
-      const v = e.target.value.replace(/\D/g, '');
-      if (v !== '') e.target.value = clamp2(v, 1, 12);
+      e.target.value = v;
+      if (v.length >= 2) dEl.focus();
     });
     dEl?.addEventListener('input', e => {
       onlyDigits(e);
       e.target.value = e.target.value.slice(0, 2);
-    });
-    dEl?.addEventListener('blur', e => {
-      const v = e.target.value.replace(/\D/g, '');
-      if (v !== '') e.target.value = clamp2(v, 1, 31);
     });
     function backspacePrev(curr, prev){ curr?.addEventListener('keydown', e=>{ if(e.key==='Backspace' && !curr.value){ prev.focus(); } }); }
     backspacePrev(mEl, yEl); backspacePrev(dEl, mEl);
