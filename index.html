@@ -1503,14 +1503,49 @@ if(window.wcs) {
 
     function onlyDigits(e){ e.target.value = e.target.value.replace(/\D/g,''); }
     function clamp2(v, min, max){ if(!v) return ''; const n=Number(v); if(Number.isNaN(n)) return ''; return String(Math.min(max, Math.max(min, n))).padStart(2,'0'); }
+    let skipNextMonthBlur = false;
 
     yEl?.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 4) mEl.focus(); });
-    mEl?.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 2) { e.target.value = clamp2(e.target.value, 1, 12); dEl.focus(); } });
-    dEl?.addEventListener('input', e => { onlyDigits(e); if (e.target.value.length >= 2) { e.target.value = clamp2(e.target.value, 1, 31); } });
+    mEl?.addEventListener('input', e => {
+      onlyDigits(e);
+      const v = e.target.value.slice(0, 2);
+      if (v.length >= 2) {
+        e.target.value = clamp2(v, 1, 12);
+        skipNextMonthBlur = true;
+        dEl.focus();
+      } else {
+        e.target.value = v;
+      }
+    });
+    mEl?.addEventListener('blur', e => {
+      if (skipNextMonthBlur) {
+        skipNextMonthBlur = false;
+        return;
+      }
+      const v = e.target.value.replace(/\D/g, '');
+      if (v !== '') e.target.value = clamp2(v, 1, 12);
+    });
+    dEl?.addEventListener('input', e => {
+      onlyDigits(e);
+      e.target.value = e.target.value.slice(0, 2);
+    });
+    dEl?.addEventListener('blur', e => {
+      const v = e.target.value.replace(/\D/g, '');
+      if (v !== '') e.target.value = clamp2(v, 1, 31);
+    });
     function backspacePrev(curr, prev){ curr?.addEventListener('keydown', e=>{ if(e.key==='Backspace' && !curr.value){ prev.focus(); } }); }
     backspacePrev(mEl, yEl); backspacePrev(dEl, mEl);
 
-    function getDobString(){ const y=yEl?.value; const m=mEl?.value; const d=dEl?.value; if(y?.length===4 && m?.length===2 && d?.length===2) return `${y}-${m}-${d}`; return null; }
+    function getDobString(){
+      const y=yEl?.value;
+      const m=mEl?.value;
+      const d=dEl?.value;
+      if(!y || y.length !== 4) return null;
+      const mn = Number(m);
+      const dn = Number(d);
+      if(Number.isNaN(mn) || mn < 1 || mn > 12 || Number.isNaN(dn) || dn < 1 || dn > 31) return null;
+      return `${y}-${String(mn).padStart(2,'0')}-${String(dn).padStart(2,'0')}`;
+    }
     function safeDate(str){ const d=new Date(str); return Number.isNaN(d.getTime())?null:d; }
 
     function renderAge(){
@@ -1525,6 +1560,22 @@ if(window.wcs) {
       halfLeft.textContent = (ms<=0) ? '이미 상령일 지남' : `${fmt(r.half)} (약 ${Math.floor(ms/86400000)}일 ${Math.floor((ms%86400000)/3600000)}시간 남음)`;
       badge.textContent = `${r.ins}세`;
     }
+    function maybeRenderAge(){
+      if (getDobString()) renderAge();
+      else {
+        ageNum.textContent='--';
+        intlAgeEl.textContent='–';
+        ruleText.textContent='생년월일을 입력하세요';
+        halfLeft.textContent='–';
+        badge.textContent='–';
+      }
+    }
+
+    yEl?.addEventListener('input', maybeRenderAge);
+    mEl?.addEventListener('input', maybeRenderAge);
+    mEl?.addEventListener('blur', maybeRenderAge);
+    dEl?.addEventListener('input', maybeRenderAge);
+    dEl?.addEventListener('blur', maybeRenderAge);
 
     if (form) {
       form.addEventListener('submit', (e)=>{ e.preventDefault(); renderAge(); });

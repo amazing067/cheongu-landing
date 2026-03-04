@@ -47,6 +47,14 @@ export function AgeCalculator() {
   const [badge, setBadge] = useState("–");
   const skipNextMonthBlur = useRef(false);
 
+  const clearAgeResult = () => {
+    setAgeNum("--");
+    setIntlAgeVal("–");
+    setRuleText("생년월일을 입력하세요");
+    setHalfLeft("–");
+    setBadge("–");
+  };
+
   const getDobString = (): string | null => {
     if (y.length !== 4) return null;
     const mn = Number(m);
@@ -83,11 +91,7 @@ export function AgeCalculator() {
     setY("");
     setM("");
     setD("");
-    setAgeNum("--");
-    setIntlAgeVal("–");
-    setRuleText("생년월일을 입력하세요");
-    setHalfLeft("–");
-    setBadge("–");
+    clearAgeResult();
   };
 
   useEffect(() => {
@@ -117,14 +121,40 @@ export function AgeCalculator() {
     }
   }, []);
 
+  useEffect(() => {
+    const dobStr = getDobString();
+    if (!dobStr) {
+      clearAgeResult();
+      return;
+    }
+    const dob = new Date(dobStr);
+    if (Number.isNaN(dob.getTime())) {
+      clearAgeResult();
+      return;
+    }
+    const asof = new Date();
+    const r = insAge(dob, asof);
+    setAgeNum(String(r.ins));
+    setIntlAgeVal(String(r.base));
+    setRuleText(
+      asof >= r.half
+        ? "오늘 기준: 최근 생일부터 6개월 경과 → +1"
+        : "오늘 기준: 최근 생일부터 6개월 미만"
+    );
+    const ms = r.half.getTime() - asof.getTime();
+    setHalfLeft(
+      ms <= 0
+        ? "이미 상령일 지남"
+        : `${fmt(r.half)} (약 ${Math.floor(ms / 86400000)}일 ${Math.floor((ms % 86400000) / 3600000)}시간 남음)`
+    );
+    setBadge(`${r.ins}세`);
+  }, [y, m, d]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     renderAge();
   };
 
-  const onlyDigits = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.value = e.target.value.replace(/\D/g, "");
-  };
   /** 입력 중에는 사용하지 않고, onBlur 시에만 2자리 포맷용 */
   const clamp2 = (v: string, min: number, max: number) => {
     if (!v) return "";
