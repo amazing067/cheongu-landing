@@ -29,10 +29,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const faviconVersion = "20260305-1";
+
   return (
     <html lang="ko">
       <head>
-        <link rel="icon" href="/icons/icon-192.png" type="image/png" />
+        <link
+          rel="icon"
+          href={`/icons/icon-192.png?v=${faviconVersion}`}
+          type="image/png"
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap"
