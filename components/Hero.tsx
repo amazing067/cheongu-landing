@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { MailingAddressModal } from "@/components/MailingAddressModal";
 
 const toolPages = [
   {
@@ -162,6 +163,7 @@ export function Hero({
             >
               간호간병 통합서비스 병원
             </button>
+            <MailingAddressModal />
           </div>
         </div>
       </div>

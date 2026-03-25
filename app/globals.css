@@ -54,6 +54,9 @@
 .mini-lime {
   background: linear-gradient(135deg, #a3e635, #22c55e);
 }
+.mini-emerald {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
 
 .table {
   @apply bg-white border border-slate-200 rounded-lg overflow-hidden w-full max-w-full;
