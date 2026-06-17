@@ -132,7 +132,7 @@
         "cs": "1566-3000",
         "monitor": "02-6299-6821",
         "helpdesk": "02-6670-8110",
-        "fax": "0505-170-0765",
+        "fax": "0504-3764-0765",
         "terms": "https://www.hanainsure.co.kr/w/disclosure/product/saleProduct"
       }
     },
@@ -447,7 +447,7 @@
       "type": "생명",
       "tags": ["pdf", "고객센터"],
       "links": {
-        "system": "https://sales.heungkuklife.co.kr/",
+        "system": "https://sales.heungkuklife.co.kr",
         "guide": "https://www.heungkuklife.co.kr/cyber/accident/Accident_File_Info.do#none/",
         "pdf": "/assets/pdf/흥국생명-보험금청구서.pdf",
         "dental": "/assets/pdf/흥국생명 치과치료확인서.pdf",
