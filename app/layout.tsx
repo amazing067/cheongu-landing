@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 import { NoRightClick } from "@/components/NoRightClick";
 
 export const metadata: Metadata = {
@@ -49,6 +50,7 @@ export default function RootLayout({
       </head>
       <body className="text-slate-900 mode-compact">
         <NoRightClick>{children}</NoRightClick>
+        <Analytics />
       </body>
     </html>
   );
