@@ -271,18 +271,18 @@
     },
     {
       "name": "교보생명",
-      "usage_period": "",
-      "usage_hours": "",
-      "call_hours": "",
+      "usage_period": "수신 당일 포함 해당월 말일까지 (단, 상령일이 있는경우 상령일 전까지)",
+      "usage_hours": "08:00~21:00",
+      "call_hours": "09:00~18:00",
       "gye_pi_sang_available": false,
       "mobile_enroll_age": null,
-      "mobile_enroll_age_text": "",
-      "minor_mobile": "미성년자 본인명의 휴대폰이면 가능",
+      "mobile_enroll_age_text": "제한없음",
+      "minor_mobile": "제한없음(계피상이 미성년자불가) 모바일 모니터링은 미성년자불가능",
       "incall_monitoring_phone": "1588-1636",
       "note": "65세 이상 및 미성년자는 유선만 가능합니다.",
-      "monitoring_criteria": "불일치 시 녹취필수(계약자·피보험자 확인) / 인콜 필요",
-      "card_payment_available": true,
-      "card_payment_detail": "가능(자동이체 O)\n계약자/피보험자 카드 가능\n1회성: 콜센터 신청\n자동이체: 고객센터·지점 내방"
+      "monitoring_criteria": "",
+      "card_payment_available": false,
+      "card_payment_detail": ""
     },
     {
       "name": "농협생명",
