@@ -190,7 +190,7 @@ function AccordionItem({
   );
 }
 
-export function MailingAddressModal() {
+export function MailingAddressModal({ className = "" }: { className?: string }) {
   const [open, setOpen] = useState(false);
   const [animateIn, setAnimateIn] = useState(false);
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
@@ -275,10 +275,10 @@ export function MailingAddressModal() {
       <button
         type="button"
         onClick={openModal}
-        className="mini-btn mini-emerald inline-flex items-center gap-2"
+        className={`tool-pill ${className}`}
       >
-        <span aria-hidden>📮</span>
-        청약서 원본 발송 주소록 확인
+        <span className="em" aria-hidden>📮</span>
+        청약서 발송 주소록
       </button>
 
       {open ? (

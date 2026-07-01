@@ -18,12 +18,11 @@
 
   var HOME = "/"; // 헤더 로고 클릭 → 청구닷컴 홈 (추후 회사 소개 페이지로 변경 가능)
   var MARK = "/icons/amazing-mark.png";
-  var FOUNDED = 2025; // 청구닷컴 제작 연도 (저작권 표기 시작 연도)
+  var FOUNDED = 2020; // 청구닷컴 제작 연도 (저작권 표기 연도)
 
-  // 저작권 연도: 창립연도만, 혹은 "창립–현재" 범위 (예: 2025 또는 2025–2026)
+  // 저작권 연도: 창립연도(2020)만 표기
   function copyrightYears() {
-    var now = new Date().getFullYear();
-    return now > FOUNDED ? FOUNDED + "–" + now : String(FOUNDED);
+    return String(FOUNDED);
   }
 
   function cleanTitle() {

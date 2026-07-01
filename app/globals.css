@@ -7,9 +7,11 @@
     @apply scroll-smooth;
   }
   body {
-    @apply antialiased bg-slate-50 text-slate-900;
+    @apply antialiased text-[#191F28];
+    background: #f2f4f6;
     font-family: "Pretendard", system-ui, -apple-system, Segoe UI, Roboto,
       Helvetica, Arial, sans-serif;
+    word-break: keep-all;
   }
   header a,
   .btn {
@@ -17,164 +19,394 @@
   }
 }
 
-/* ===== 청구닷컴 전용 추가 스타일 ===== */
-.hero-search {
-  @apply flex flex-col items-center gap-3 mt-4;
-}
-.search-card {
-  @apply w-full max-w-[900px] bg-white border border-slate-200 rounded-xl p-4;
-}
-.search-title {
-  @apply text-sm font-bold mb-1;
-}
-.search-actions {
-  @apply flex flex-wrap gap-2 justify-center mt-3;
-}
-.mini-btn {
-  @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-full border-0 text-sm font-extrabold text-white shadow-md transition-all duration-150;
-}
-.mini-btn:hover {
-  @apply -translate-y-0.5 brightness-[0.98];
-}
-.mini-purple {
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
-}
-.mini-cyan {
-  background: linear-gradient(135deg, #06b6d4, #0ea5e9);
-}
-.mini-amber {
-  background: linear-gradient(135deg, #f59e0b, #f97316);
-}
-.mini-slate {
-  background: linear-gradient(135deg, #64748b, #475569);
-}
-.mini-pink {
-  background: linear-gradient(135deg, #fb7185, #f472b6);
-}
-.mini-lime {
-  background: linear-gradient(135deg, #a3e635, #22c55e);
-}
-.mini-emerald {
-  background: linear-gradient(135deg, #10b981, #059669);
+:root {
+  --bg: #fff;
+  --soft: #f2f4f6;
+  --ink: #191f28;
+  --sub: #8b95a1;
+  --line: #e5e8eb;
+  --blue: #3182f6;
+  --blue-d: #1b64da;
+  --blue-soft: #eaf2fe;
+  --amz: #e0342a;
+  --amz-soft: #fdeceb;
 }
 
+/* ===== 컨테이너 ===== */
+.maxw {
+  @apply w-full mx-auto box-border;
+  max-width: 940px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* ===== 헤더 ===== */
+.site-hd {
+  @apply sticky top-0 z-50 border-b;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border-color: var(--line);
+}
+.hd-amz {
+  @apply text-[12px] font-extrabold rounded-lg px-2 py-[3px];
+  color: var(--amz);
+  background: var(--amz-soft);
+}
+.hd-nav a:not(.hd-cta) {
+  @apply text-sm font-bold px-2.5 py-2;
+  color: var(--sub);
+}
+.hd-nav a:not(.hd-cta):hover {
+  color: var(--ink);
+}
+.hd-nav a.hd-cta {
+  @apply text-sm font-extrabold rounded-xl px-4 py-2.5;
+  color: #fff;
+  background: var(--blue);
+}
+.hd-nav a.hd-cta:hover {
+  color: #fff;
+  background: var(--blue-d);
+}
+
+/* ===== 히어로 (풀-블리드 흰 블록) ===== */
+.hero-wrap {
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.hero-h1 {
+  @apply text-center font-extrabold tracking-tight m-0;
+  font-size: clamp(25px, 4.2vw, 36px);
+  line-height: 1.25;
+}
+.hero-h1 .bl {
+  color: var(--blue);
+}
+.hero-p {
+  @apply text-center font-medium;
+  color: var(--sub);
+  font-size: 14px;
+  margin: 11px 0 0;
+}
+.searchbar {
+  @apply flex items-center gap-2.5 mx-auto;
+  max-width: 640px;
+  margin-top: 18px;
+  background: var(--soft);
+  border-radius: 15px;
+  padding: 5px 5px 5px 18px;
+}
+.searchbar .ic {
+  @apply text-lg;
+  color: var(--sub);
+}
+.searchbar input {
+  @apply flex-1 border-0 bg-transparent outline-none;
+  font-size: 15.5px;
+  padding: 13px 0;
+  color: var(--ink);
+}
+.searchbar input::placeholder {
+  color: #b0b8c1;
+}
+.searchbar .sb-btn {
+  @apply text-white font-extrabold border-0;
+  background: var(--blue);
+  font-size: 14.5px;
+  border-radius: 11px;
+  padding: 12px 20px;
+}
+.searchbar .sb-btn:hover {
+  background: var(--blue-d);
+}
+
+/* ===== 도구 알약 ===== */
+.tools {
+  @apply flex flex-wrap gap-2 justify-center mx-auto;
+  max-width: 760px;
+  margin-top: 14px;
+}
+.tool-pill {
+  @apply inline-flex items-center gap-2 font-bold;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 11px;
+  padding: 9px 13px;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.tool-pill:hover {
+  border-color: #bcd6fb;
+  transform: translateY(-2px);
+}
+.tool-pill .em {
+  @apply text-base;
+}
+.tool-more {
+  display: none; /* 데스크톱: 더보기 숨김 (도구 전부 노출) */
+  color: var(--blue);
+  border-color: #bcd6fb;
+  background: var(--blue-soft);
+}
+
+/* ===== 채용 바 ===== */
+.recruit-bar {
+  @apply flex items-center gap-3.5 text-white relative overflow-hidden no-underline;
+  border-radius: 16px;
+  padding: 14px 18px;
+  background: linear-gradient(120deg, #3182f6, #1b64da);
+}
+.recruit-bar .em {
+  @apply text-2xl flex-none;
+}
+.recruit-bar .tx {
+  @apply flex-1 min-w-0;
+}
+.recruit-bar b {
+  @apply block font-extrabold;
+  font-size: 15px;
+}
+.recruit-bar .rsub {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.85);
+}
+.recruit-bar .go {
+  @apply flex-none font-extrabold text-white whitespace-nowrap;
+  border-radius: 11px;
+  padding: 10px 16px;
+  font-size: 13.5px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.recruit-bar .go:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* ===== 카테고리 헤더 ===== */
+.catbar {
+  @apply flex items-center gap-2;
+  margin: 22px 0 10px;
+}
+.catbar h2 {
+  @apply font-extrabold tracking-tight m-0;
+  font-size: 16px;
+}
+.catbar .cnt {
+  @apply text-xs font-extrabold rounded-full;
+  color: var(--blue);
+  background: var(--blue-soft);
+  padding: 2px 9px;
+}
+.catbar .rule {
+  @apply flex-1;
+  height: 1px;
+  background: var(--line);
+}
+.section-title {
+  @apply text-[19px] font-extrabold tracking-tight;
+}
+.section-head {
+  @apply flex flex-col items-start gap-1 mb-3;
+  margin-top: 6px;
+}
+.section-sub {
+  @apply hidden;
+}
+
+/* ===== 보험사 행 (전 정보 노출) ===== */
 .table {
-  @apply bg-white border border-slate-200 rounded-lg overflow-hidden w-full max-w-full;
-  container-type: inline-size;
-  container-name: carrierlist;
+  @apply flex flex-col gap-2 w-full;
 }
 .row {
-  @apply grid items-center gap-1.5 py-1.5 px-2.5 border-t border-slate-200/80 min-h-[52px];
-  grid-template-columns: minmax(220px, 1fr) minmax(600px, 2.5fr);
+  @apply flex items-center gap-3.5;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 11px 14px;
+  transition: box-shadow 0.15s;
 }
-.row:first-child {
-  @apply border-t-0;
+.row:hover {
+  box-shadow: 0 8px 22px -14px rgba(25, 31, 40, 0.25);
 }
-
+.row > div:first-child {
+  @apply flex-none flex items-center justify-center;
+  width: 150px;
+}
 .brand {
-  @apply flex items-center gap-2.5 min-h-9 min-w-0;
+  @apply flex items-center justify-center gap-2.5 min-w-0;
 }
 .logo {
-  @apply block h-auto max-h-9 w-auto object-contain bg-transparent p-0 shadow-none;
-}
-@media (min-width: 1280px) {
-  .logo {
-    @apply max-h-10;
-  }
+  @apply block w-auto object-contain;
+  max-height: 38px;
+  max-width: 148px;
 }
 .name {
   @apply sr-only;
 }
-
-/* (구) 회사명 표시: 예별손해보험 (구)MG손해보험 */
-.brand-label {
-  @apply flex flex-col items-start justify-center min-h-[2.5rem];
-}
-.brand-name {
-  @apply text-sm font-bold text-slate-900 leading-tight;
-}
-.brand-former {
-  @apply text-xs text-slate-500 font-medium mt-0.5;
+.brand-with-former {
+  @apply flex-col items-center gap-1 text-center;
 }
 .brand-former-badge {
-  @apply inline-flex items-center px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-100 text-slate-600 border border-slate-200 shrink-0;
+  @apply inline-flex items-center px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-100 text-slate-600 border border-slate-200 shrink-0 max-w-full whitespace-nowrap;
 }
-/* 예별손해보험: 로고 오른쪽에 (구)MG손해보험 배지 */
-.brand-with-former {
-  @apply flex-row items-center gap-2;
+.accordion-toggle {
+  @apply hidden;
 }
 
+.stack {
+  @apply flex-1 min-w-0 flex flex-col gap-1.5;
+}
+.grid-top,
+.grid-bottom {
+  @apply flex flex-wrap gap-1.5;
+}
+
+/* 칩 */
 .btn {
-  @apply min-h-8 max-h-8 py-1.5 px-3 text-[13px] rounded-lg border border-slate-200 bg-white text-slate-900 no-underline whitespace-nowrap shrink-0 grow-0 inline-flex items-center justify-center text-center;
+  @apply inline-flex items-center gap-1.5 whitespace-nowrap font-bold;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 8px 13px;
+  font-size: 13.5px;
+  transition: transform 0.1s;
 }
 .btn:hover {
-  @apply bg-slate-50;
+  transform: translateY(-1px);
 }
-.btn-muted {
-  @apply opacity-55 cursor-not-allowed;
+.bico {
+  font-size: 15px;
+  line-height: 1;
+}
+.edge-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 5px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--blue-d);
 }
 .btn-ghost {
-  @apply border-slate-200 bg-white;
+  background: #fff;
 }
 .btn-primary {
-  @apply bg-violet-600 border-violet-600 text-white;
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
 }
 .btn-primary:hover {
-  @apply bg-violet-700;
+  background: var(--blue-d);
 }
 .btn-pdf {
-  @apply bg-sky-500 border-sky-500 text-white py-1.5 px-3.5;
+  background: var(--amz-soft);
+  border-color: #f4d3d0;
+  color: var(--amz);
 }
 .btn-dental {
-  @apply bg-emerald-500 border-emerald-500 text-white py-1.5 px-3.5;
+  background: #fff;
 }
-/* 전산접속·필요서류·치과확인서: 글자 크기 유지, 가로 패딩만 축소 */
-.btn-compact {
-  @apply px-2;
+.btn-muted {
+  background: #f7f8fa;
+  border-color: transparent;
+  color: #c4cbd3;
+  cursor: default;
 }
-/* 인콜 모니터링: 더 축소된 가로 패딩 + 전체 너비 축소 */
-.btn-call.incall-monitor.btn-compact {
-  @apply px-1.5;
+.btn-muted:hover {
+  transform: none;
 }
 .btn-call {
-  @apply border-slate-300 bg-white inline-flex items-center;
-}
-/* 보험금청구 FAX: 연한 배경으로 눈에 띄게 */
-.btn-call.fax-claim {
-  @apply bg-sky-50 border-sky-200;
-}
-.btn-call.fax-claim:hover {
-  @apply bg-sky-100;
+  background: var(--soft);
+  border-color: transparent;
+  color: var(--ink);
 }
 .btn-call .num {
-  @apply font-extrabold text-sm;
+  @apply font-extrabold;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  font-size: 13.5px;
 }
-/* FAX(보험금청구) 공제회사 전용: 우체국보험 등 긴 번호 - 라벨/번호 줄 분리, 모든 뷰포트 적용 */
-#mutual .btn-call.fax-block {
-  flex-direction: column !important;
-  align-items: center !important;
-  white-space: normal !important;
-  min-height: auto !important;
-  max-height: none !important;
-  text-align: center !important;
+.btn-call.fax-claim {
+  background: var(--soft);
 }
-#mutual .btn-call.fax-block .fax-label {
-  flex-shrink: 0;
-  font-weight: 600;
-}
-#mutual .btn-call.fax-block .num {
-  white-space: normal !important;
-  word-break: break-word !important;
-  overflow-wrap: break-word !important;
-  width: 100%;
-  line-height: 1.5;
-  text-align: center !important;
-}
-#mutual .btn-call.fax-block .num .fax-line {
-  display: block;
+.btn-compact {
+  padding: 8px 12px;
 }
 
-/* 우체국보험 등 긴 FAX: 클릭 시 이미지처럼 라이트블루 헤더 + 그리드 카드 팝업 */
+/* ===== 모바일 (767px 이하) ===== */
+@media (max-width: 767px) {
+  html,
+  body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+  /* 히어로 컴팩트 */
+  .hero-mobile {
+    padding-top: 20px;
+    padding-bottom: 4px;
+  }
+  .hero-h1 {
+    font-size: 22px;
+  }
+  .hero-p {
+    font-size: 12.5px;
+    margin-top: 8px;
+  }
+  .searchbar {
+    margin-top: 12px;
+  }
+  .tools {
+    margin-top: 11px;
+    gap: 7px;
+  }
+  .tool-pill {
+    padding: 8px 12px;
+    font-size: 12.5px;
+  }
+  /* 모바일: 자주 쓰는 3개만 + 더보기 */
+  .tools .tool-extra {
+    display: none;
+  }
+  .tools.open .tool-extra {
+    display: inline-flex;
+  }
+  .tool-more {
+    display: inline-flex;
+    padding: 5px 10px;
+    font-size: 11px;
+    border-radius: 8px;
+  }
+  .tool-more .em {
+    font-size: 11px;
+  }
+  .hd-nav .ghost {
+    display: none;
+  }
+  /* 보험사 행: 세로 스택 */
+  .row {
+    @apply flex-col items-stretch gap-2.5;
+    padding: 12px 14px;
+  }
+  .row > div:first-child {
+    @apply w-full;
+  }
+  .stack {
+    @apply w-full;
+  }
+  /* 채용 바: 줄바꿈 */
+  .recruit-bar {
+    @apply flex-wrap;
+  }
+  .recruit-bar .go {
+    @apply w-full text-center;
+  }
+}
+
+/* ===== 긴 FAX 팝업 (우체국보험 등) ===== */
 .fax-popup-wrap {
   position: relative;
   display: inline-flex;
@@ -191,7 +423,7 @@
   min-width: 320px;
   max-width: 480px;
   background: #fff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   z-index: 1000;
@@ -227,7 +459,7 @@
   gap: 4px;
   padding: 12px 8px;
   background: #fff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--line);
   border-radius: 10px;
   text-decoration: none;
   transition: all 0.15s;
@@ -236,7 +468,6 @@
 .fax-popup-card:hover {
   border-color: #7dd3fc;
   background: #f0f9ff;
-  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.15);
 }
 .fax-popup-card-region {
   font-size: 13px;
@@ -250,13 +481,6 @@
   color: #0284c7;
   line-height: 1.2;
 }
-@media (max-width: 400px) {
-  .fax-popup-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* 팝업 배경: PC는 투명(드롭다운 느낌), 모바일만 어두운 오버레이 */
 .fax-popup-backdrop {
   position: fixed;
   inset: 0;
@@ -268,8 +492,6 @@
   .fax-popup-backdrop {
     background: rgba(0, 0, 0, 0.5);
   }
-}
-@media (max-width: 767px) {
   .fax-popup-wrap .fax-popup {
     position: fixed !important;
     top: 50% !important;
@@ -287,440 +509,8 @@
   }
 }
 
-.row .stack {
-  @apply flex flex-col items-end gap-2;
-}
-.row .grid-top,
-.row .grid-bottom {
-  @apply flex gap-2 flex-wrap justify-end;
-}
-
-/* 아코디언 토글 버튼: PC에서는 숨김 */
-.accordion-toggle {
-  @apply hidden border-0 bg-transparent cursor-pointer text-2xl font-light p-1 leading-none z-10 absolute right-2 top-1/2 -translate-y-1/2 text-blue-500;
-}
-
-/* ===== PC (1024px 이상): 회사당 한 줄, 모든 버튼 한 줄 ===== */
-@media (min-width: 1024px) {
-  .table .row {
-    display: grid !important;
-    grid-template-columns: 240px minmax(0, 1fr) !important;
-    align-items: center !important;
-    gap: 8px !important;
-    padding: 6px 10px !important;
-    min-height: 52px !important;
-    border-radius: 0 !important;
-    margin-bottom: 0 !important;
-    background: #fff !important;
-    border: none !important;
-    border-top: 1px solid rgba(100, 116, 139, 0.22) !important;
-    box-shadow: none !important;
-  }
-  .table .row:first-child {
-    border-top-width: 0 !important;
-  }
-  .table .row > div:first-child {
-    display: block !important;
-    padding: 0 !important;
-    background: transparent !important;
-  }
-  /*
-   * 손해/생명·공제회사: flex-wrap, 가운데 정렬 (로고와 버튼 사이 여백)
-   */
-  .table .row .stack {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    padding: 0 !important;
-    border-top: none !important;
-    background: transparent !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-  }
-  .table {
-    overflow-x: visible !important;
-  }
-  .table .row .grid-top,
-  .table .row .grid-bottom {
-    display: contents !important;
-  }
-  .table .row .logo {
-    max-height: 38px !important;
-  }
-  /* 배지(버튼)가 줄어들어 레이아웃 깨짐 방지: 내용보다 작아지지 않게 */
-  .table .row .btn {
-    display: inline-flex !important;
-    width: auto !important;
-    min-width: min-content !important;
-    flex-shrink: 0 !important;
-  }
-  /* 전화/FAX 칸: 고객센터만 왼쪽 정렬, 인콜·FAX는 가운데 정렬 */
-  .table .row .stack .btn-call {
-    min-width: 0 !important;
-    width: 100%;
-    max-width: 100%;
-    justify-content: flex-start;
-    overflow: hidden;
-  }
-  .table .row .stack .btn-call .num {
-    font-variant-numeric: tabular-nums;
-    display: inline-block;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    vertical-align: middle;
-  }
-  /* 인콜 모니터링: 전체 회사 동일 너비(210px) */
-  .table .row .stack .btn-call.incall-monitor {
-    overflow: visible;
-    justify-content: center;
-    min-width: 210px !important;
-    width: 210px !important;
-    max-width: 210px !important;
-  }
-  .table .row .stack .btn-call.incall-monitor .num {
-    overflow: visible;
-    text-overflow: clip;
-    max-width: none;
-  }
-  /* 보험금청구 FAX: 전체 회사 동일 너비(210px), 인콜 모니터링과 동일 */
-  .table .row .stack .btn-call.fax-claim {
-    overflow: visible;
-    justify-content: center;
-    min-width: 210px !important;
-    width: 210px !important;
-    max-width: 210px !important;
-  }
-  .table .row .stack .btn-call.fax-claim .num {
-    overflow: visible;
-    text-overflow: clip;
-    max-width: none;
-  }
-  .accordion-toggle {
-    display: none !important;
-  }
-  /* 공제회사 섹션(PC): 로고 크기·위치 통일 */
-  #mutual .table .row > div:first-child .brand {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    min-height: 40px !important;
-    height: auto !important;
-  }
-  #mutual .table .row .logo {
-    height: 36px !important;
-    min-height: 36px !important;
-    max-height: 36px !important;
-    width: auto !important;
-    object-fit: contain !important;
-    object-position: center !important;
-    flex-shrink: 0 !important;
-  }
-  /* 예별손해보험: [로고] (구)MG손해보험 나란히, 오른쪽 정렬 */
-  #mutual .table .row > div:first-child a:has(.brand-with-former) {
-    justify-content: center !important;
-  }
-  #mutual .table .row .brand-with-former {
-    flex-direction: row !important;
-    gap: 8px !important;
-    align-items: center !important;
-    min-height: 40px !important;
-  }
-  #mutual .table .row .brand-with-former .brand-former {
-    margin-top: 0 !important;
-  }
-  #mutual .table .row .brand-label {
-    min-height: 36px !important;
-    height: auto !important;
-    justify-content: center !important;
-  }
-  /* 공제회사: 버튼 flex-wrap, 가운데 정렬 */
-  #mutual .table .row .stack {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    max-width: 100% !important;
-  }
-  /* 공제회사: 고객센터·FAX 번호 잘리지 않게 (FAX는 두 줄로 표시해 레이아웃 안에 유지) */
-  #mutual .table .row .stack .btn-call {
-    overflow: visible !important;
-    justify-content: center !important;
-    min-height: 36px !important;
-  }
-  #mutual .table .row .stack .btn-call .num {
-    overflow: visible !important;
-    text-overflow: clip !important;
-    max-width: none !important;
-    white-space: normal !important;
-    word-break: keep-all !important;
-    line-height: 1.4 !important;
-    text-align: center !important;
-  }
-  /* 공제회사 FAX(5번째): 긴 번호(우체국보험 등)만 라벨/번호 두 줄 */
-  #mutual .table .row .stack > *:nth-child(5).btn-call.fax-block {
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 4px !important;
-    white-space: normal !important;
-    text-align: center !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    min-height: auto !important;
-    padding-top: 6px !important;
-    padding-bottom: 6px !important;
-  }
-  #mutual .table .row .stack > *:nth-child(5).btn-call .fax-label {
-    flex-shrink: 0 !important;
-    font-weight: 600 !important;
-  }
-  #mutual .table .row .stack > *:nth-child(5).btn-call .num {
-    white-space: normal !important;
-    word-break: break-word !important;
-    overflow-wrap: break-word !important;
-    width: 100% !important;
-    line-height: 1.5 !important;
-    text-align: center !important;
-  }
-}
-
-/* 와이드 화면: 그리드로 세로 정렬 (테이블 너비 1300px 이상일 때) */
-@container carrierlist (min-width: 1300px) {
-  .row {
-    @apply grid-cols-[240px_1fr] min-h-[52px];
-  }
-  /* 손해/생명: 9칸 그리드, 인콜 모니터링만 210px 고정 */
-  #loss .table .row .stack,
-  #life .table .row .stack {
-    display: grid !important;
-    flex-wrap: unset !important;
-    grid-template-columns: minmax(78px, auto) 84px 100px minmax(110px, auto) 84px 158px 210px 220px 84px !important;
-    justify-content: center !important;
-  }
-  /* 공제회사: 5칸 그리드 원래대로 */
-  #mutual .table .row .stack {
-    display: grid !important;
-    flex-wrap: unset !important;
-    grid-template-columns: auto minmax(170px, max-content) 84px auto minmax(220px, 420px) !important;
-    justify-content: center !important;
-  }
-  .row .grid-top,
-  .row .grid-bottom {
-    @apply contents;
-  }
-  .logo {
-    @apply max-h-[38px];
-  }
-}
-
-/* ===== 모바일 (767px 이하): 카드 + 아코디언 ===== */
-@media (max-width: 767px) {
-  html, body {
-    overflow-x: hidden !important;
-    max-width: 100vw !important;
-  }
-  .maxw {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-  }
-  header nav {
-    display: none !important;
-  }
-  .section-head {
-    margin: 20px 0 10px !important;
-    text-align: center !important;
-  }
-  .section-title {
-    font-size: 24px !important;
-    text-align: center !important;
-  }
-  section.maxw h1 {
-    font-size: 24px !important;
-    line-height: 1.4 !important;
-    padding: 0 10px;
-    margin-bottom: 8px !important;
-    text-align: center !important;
-  }
-  section.maxw h1 + p {
-    font-size: 13px !important;
-    padding: 0 10px;
-    margin-bottom: 12px !important;
-    text-align: center !important;
-  }
-  .hero-search {
-    width: 100% !important;
-    padding: 0 !important;
-  }
-  .search-card {
-    padding: 12px !important;
-    max-width: 100% !important;
-  }
-  .search-actions {
-    gap: 8px !important;
-    margin-top: 10px !important;
-  }
-  .mini-btn {
-    font-size: 12px !important;
-    padding: 8px 12px !important;
-  }
-  #loss-count, #life-count, #mutual-count {
-    display: none !important;
-  }
-  .table {
-    background: none !important;
-    border: none !important;
-  }
-  .table .row {
-    display: block !important;
-    grid-template-columns: none !important;
-    padding: 0 !important;
-    border-radius: 8px;
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    margin-bottom: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    overflow: hidden;
-    min-height: unset !important;
-    border-top: 1px solid #e2e8f0 !important;
-  }
-  .table .row > div:first-child {
-    padding: 12px 15px !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    position: relative !important;
-    background-color: #f0f7ff !important;
-  }
-  .table .row > div:first-child a {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-grow: 1 !important;
-  }
-  .table .row .brand .logo {
-    max-height: 24px !important;
-  }
-  /* 예별손해보험: 모바일에서 가운데 정렬 */
-  .table .row > div:first-child a:has(.brand-with-former) {
-    justify-content: center !important;
-  }
-  .table .row .brand-with-former {
-    flex-direction: row !important;
-    gap: 8px !important;
-    align-items: center !important;
-  }
-  .table .row .brand-with-former .logo {
-    min-height: 24px !important;
-    max-height: 24px !important;
-  }
-  .accordion-toggle {
-    display: inline-block !important;
-  }
-  .table .row .stack {
-    display: none !important;
-    padding: 12px 15px !important;
-    border-top: 1px dashed #eee !important;
-    background-color: #fcfdff !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-  }
-  .table .row.active .stack {
-    display: flex !important;
-  }
-  .table .row.active .accordion-toggle {
-    transform: translateY(-50%) rotate(45deg) !important;
-    color: #dc3545 !important;
-  }
-  .table .row .stack .grid-top {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 6px !important;
-  }
-  .table .row .stack .grid-bottom {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 6px !important;
-    margin-top: 6px !important;
-    align-items: stretch !important;
-  }
-  .table .row .stack .btn {
-    display: flex !important;
-    width: 100% !important;
-    justify-content: center !important;
-    text-align: center !important;
-    font-size: 12px !important;
-    padding: 8px 6px !important;
-    min-height: 34px !important;
-  }
-  .table .row .stack .btn-call {
-    justify-content: center !important;
-    white-space: normal !important;
-    flex-wrap: wrap !important;
-  }
-  .table .row .stack .btn-call .num {
-    white-space: normal !important;
-    word-break: break-word !important;
-  }
-  /* FAX 버튼(공제회사): 모바일에서 라벨/번호 줄 분리 - #mutual base와 함께 적용 */
-  #mutual .table .row .stack .btn-call.fax-block {
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-    gap: 4px !important;
-    padding: 10px 12px !important;
-  }
-  #mutual .table .row .stack .btn-call.fax-block .num {
-    width: 100% !important;
-    line-height: 1.5 !important;
-  }
-  .table .row .stack .btn-primary {
-    display: none !important;
-  }
-  #calc-grid {
-    grid-template-columns: 1fr !important;
-    gap: 16px !important;
-  }
-  #calc-grid::before {
-    display: none !important;
-  }
-  #age .calc-card,
-  #medcalc .mc-card,
-  #medcalc .bg-white.rounded-xl {
-    padding: 10px !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-}
-
+/* ===== 기타 ===== */
 .chip {
-  @apply text-xs px-2.5 py-1 border border-slate-200 rounded-full bg-white;
-}
-.section-title {
-  @apply text-[clamp(28px,3vw,36px)] font-black tracking-tight;
-}
-.section-sub {
-  @apply text-[13.5px] text-slate-600 text-center;
-}
-.section-head {
-  @apply flex flex-col items-center gap-1.5 my-7 mb-3;
-}
-
-/* maxw 컨테이너 */
-.maxw {
-  @apply max-w-[100rem] w-full mx-auto px-6 box-border;
-}
-@media (min-width: 1600px) {
-  .maxw {
-    @apply max-w-[110rem] px-8;
-  }
-}
-@media (min-width: 1920px) {
-  .maxw {
-    @apply max-w-[120rem] px-10;
-  }
+  @apply text-xs px-2.5 py-1 border rounded-full bg-white;
+  border-color: var(--line);
 }

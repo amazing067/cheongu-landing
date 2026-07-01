@@ -12,8 +12,10 @@
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f2f4f6;
+      color: #191f28;
+      word-break: keep-all;
       min-height: 100vh;
       position: relative;
     }
@@ -51,8 +53,8 @@
     
     .search-input:focus {
       outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      border-color: #3182f6;
+      box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.1);
     }
     
     .region-select {
@@ -68,12 +70,12 @@
     
     .region-select:focus {
       outline: none;
-      border-color: #667eea;
+      border-color: #3182f6;
     }
     
     .search-count {
       padding: 12px 20px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
+      background: linear-gradient(135deg, #3182f6, #1b64da);
       color: white;
       border-radius: 30px;
       font-weight: bold;
@@ -85,22 +87,23 @@
     .main-container {
       display: flex;
       gap: 20px;
-      padding: 90px 20px 20px;
+      padding: 90px 20px 40px;
       max-width: 1400px;
       margin: 0 auto;
-      height: 100vh;
+      align-items: flex-start;
     }
-    
-    /* 지도 영역 (축소) */
+
+    /* 지도 영역 (축소) — 스크롤 시 고정 */
     .map-section {
       flex: 0.6;
       background: white;
       border-radius: 20px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.1);
       padding: 20px;
+      position: sticky;
+      top: 90px;
       display: flex;
       flex-direction: column;
-      position: relative;
     }
     
     .map-title {
@@ -134,12 +137,12 @@
     }
     
     .region-path:hover {
-      fill: #667eea;
+      fill: #3182f6;
       fill-opacity: 0.3;
     }
     
     .region-path.active {
-      fill: #667eea;
+      fill: #3182f6;
       fill-opacity: 0.5;
     }
     
@@ -187,7 +190,7 @@
     
     .hospital-list {
       flex: 1;
-      overflow-y: auto;
+      overflow: visible;
       padding-right: 10px;
     }
     
@@ -201,7 +204,7 @@
     }
     
     .hospital-list::-webkit-scrollbar-thumb {
-      background: #667eea;
+      background: #3182f6;
       border-radius: 10px;
     }
     
@@ -216,9 +219,9 @@
     }
     
     .hospital-item:hover {
-      border-color: #667eea;
+      border-color: #3182f6;
       transform: translateX(5px);
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+      box-shadow: 0 5px 15px rgba(49, 130, 246, 0.2);
     }
     
     .hospital-name {
@@ -239,7 +242,7 @@
     .hospital-region {
       display: inline-block;
       padding: 2px 8px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
+      background: linear-gradient(135deg, #3182f6, #1b64da);
       color: white;
       border-radius: 12px;
       font-size: 12px;
@@ -295,12 +298,12 @@
     }
     
     .btn-web {
-      background: #9c27b0;
+      background: #475569;
       color: white;
     }
-    
+
     .btn-web:hover {
-      background: #7b1fa2;
+      background: #334155;
     }
     
     /* 반응형 */
@@ -309,9 +312,13 @@
         flex-direction: column;
         height: auto;
       }
-      
+      /* 모바일: 지도 고정 해제, 목록 내부 스크롤 제거 → 페이지 단일 스크롤 */
+      .map-section {
+        position: static;
+        top: auto;
+      }
       .list-section {
-        max-height: 500px;
+        max-height: none;
       }
     }
     
@@ -351,7 +358,7 @@
     }
     
     .stat-card:hover {
-      background: #667eea;
+      background: #3182f6;
       color: white;
       transform: translateY(-2px);
     }
@@ -631,12 +638,12 @@
   </script>
 
   <!-- 푸터 (데이터 출처) -->
-  <div style="background: white; border-top: 4px solid #667eea; margin-top: 30px; padding: 20px;">
+  <div style="background: white; border-top: 4px solid #3182f6; margin-top: 30px; padding: 20px;">
     <div style="max-width: 1200px; margin: 0 auto;">
       <!-- 데이터 출처 정보 (한 줄) -->
-      <div style="text-align: center; padding: 12px 16px; background: #f8f9fa; border-radius: 10px; border: 2px solid #667eea; margin-bottom: 20px;">
+      <div style="text-align: center; padding: 12px 16px; background: #f8f9fa; border-radius: 10px; border: 2px solid #3182f6; margin-bottom: 20px;">
         <p style="font-size: 14px; color: #333; margin: 0;">
-          🏥 <strong style="color: #667eea;">데이터 출처:</strong> 보건복지부 지정 상급종합병원 (2025년 기준)
+          🏥 <strong style="color: #3182f6;">데이터 출처:</strong> 보건복지부 지정 상급종합병원 (2026년 기준)
         </p>
       </div>
       
@@ -647,7 +654,7 @@
         <p style="font-size: 12px; color: #999; margin: 0;">
           Developed by 프라임에셋 광진2지점 · 김성민
         </p>
-        <a href="javascript:history.back()" style="display: inline-block; margin-top: 8px; padding: 10px 24px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 24px; text-decoration: none; font-weight: 700; font-size: 14px; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); transition: all 0.3s;">
+        <a href="javascript:history.back()" style="display: inline-block; margin-top: 8px; padding: 10px 24px; background: linear-gradient(135deg, #3182f6, #1b64da); color: white; border-radius: 24px; text-decoration: none; font-weight: 700; font-size: 14px; box-shadow: 0 4px 12px rgba(49, 130, 246, 0.3); transition: all 0.3s;">
           뒤로가기
         </a>
       </div>

@@ -8,15 +8,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/site.css?v=final-compact-13" />
-  <link rel="stylesheet" href="/assets/mobile.css?v=11" media="(max-width: 767px)">
+  <link rel="stylesheet" href="/assets/mobile.css?v=12" media="(max-width: 767px)">
   <style>
   :root{
-    --ink:#0f172a; --muted:#475569; --line:#e2e8f0;
-    --brand:#7c3aed; --brand-2:#0ea5e9; --good:#10b981; --bad:#ef4444;
-    --bg:#f8fafc; --card:#ffffff;
-    --chipbg:#f4f3ff; --chipbd:#e9e5ff; --chipfg:#4c1d95;
+    --ink:#191f28; --muted:#475569; --line:#e5e8eb;
+    --brand:#3182f6; --brand-2:#1b64da; --good:#10b981; --bad:#ef4444;
+    --bg:#f2f4f6; --card:#ffffff;
+    --chipbg:#eaf2fe; --chipbd:#cfe0fb; --chipfg:#1b64da;
   }
-  body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;}
+  body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;word-break:keep-all;}
   .maxw{max-width:78rem;margin:0 auto;padding:16px}
   .hstack{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
   .title{font-size:32px;font-weight:900;letter-spacing:-.01em;margin:0}
@@ -42,13 +42,13 @@
   .grid{display:grid;gap:16px}
   @media (min-width:1024px){ .grid-2{grid-template-columns:1fr 1fr} } /* 반반 */
 
-  .hero{ border-radius:20px; padding:22px; border:1px solid rgba(124,58,237,.25); }
+  .hero{ border-radius:20px; padding:22px; border:1px solid rgba(49,130,246,.22); background:#fff; }
   .hero .heading{
     font-size:22px; font-weight:900; margin:0 0 12px; text-align:center;
-    padding:12px 18px; border-radius:999px; color:#fff; letter-spacing:-.01em;
-    background: linear-gradient(135deg,#2563eb,#1d4ed8);
-    box-shadow: 0 10px 24px rgba(37,99,235,.25), inset 0 1px 0 rgba(255,255,255,.25);
-    border: 1px solid rgba(29,78,216,.6);
+    padding:12px 18px; border-radius:14px; color:#fff; letter-spacing:-.01em;
+    background: linear-gradient(135deg,#3182f6,#1b64da);
+    box-shadow: 0 10px 24px rgba(49,130,246,.22), inset 0 1px 0 rgba(255,255,255,.25);
+    border: 1px solid rgba(27,100,218,.55);
   }
   .hero .rows{display:grid; gap:10px}
   @media (min-width:640px){ .hero .rows{grid-template-columns:1fr 1fr} }
@@ -70,6 +70,7 @@
   }
   .key.wide{min-width:16rem;}
   .val{color:#0f172a;text-align:center}
+  .val-detail{margin-top:7px;line-height:1.6;color:#0f172a}
 
   .silson{background:#fff;border:1px solid rgba(100,116,139,.22);border-radius:16px;padding:16px;box-shadow:0 3px 10px rgba(2,6,23,.04)}
   .silson h3{margin:0 0 8px;font-weight:900}
@@ -85,7 +86,7 @@
   @media (min-width:980px){ .compact-grid{grid-template-columns:1fr 1fr} }
   .compact-card .title-mini{
     font-weight:900;margin:0 auto 10px; text-align:center; display:inline-block; padding:8px 14px;
-    border-radius:999px; background:linear-gradient(135deg,#e0f2fe,#e9d5ff); color:#111827; letter-spacing:-.01em;
+    border-radius:12px; background:#eaf2fe; border:1px solid #cfe0fb; color:#1b64da; letter-spacing:-.01em;
   }
   .compact-card{position:relative}
   .kv-mini{display:grid;grid-template-columns:minmax(8rem,10rem) 1fr;gap:10px;align-items:center;border-top:1px dashed #e5e7eb;padding:8px 0}
@@ -130,8 +131,8 @@
   .kv-vert .num{font-weight:800}
   .kv-vert small{font-size:11px;color:#64748b}
 
-  /* 4세대 공통사항 - 두 칸 행 */
-  .row-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  /* 5세대 공통사항 - 나머지 항목: 값이 길어 세로로 쪼개지지 않게 전체폭 1열 */
+  .row-2col{display:grid;grid-template-columns:1fr;gap:0}
   .row-2col .row-kv{border-top:1px dashed rgba(100,116,139,.26);padding:12px 0}
 
   /* 제목 버튼들 */
@@ -140,26 +141,65 @@
 
   /* 테마 보정 */
   .page-enroll.theme-pro{
-    background:
-      radial-gradient(28px 28px at 14px 14px, rgba(124,58,237,.08) 1px, transparent 1px),
-      linear-gradient(180deg, #eef3ff 0%, #eaf0ff 32%, #f7f9ff 100%) !important;
-    background-size:28px 28px, auto !important;
+    background:#f2f4f6 !important;
   }
   .page-enroll .section-title{
-    text-align:center; font-weight:900; margin:0 0 12px; padding:10px 16px; border-radius:999px;
-    color:#0f172a; letter-spacing:-.01em; box-shadow:0 6px 16px rgba(2,6,23,.10);
-    background:linear-gradient(135deg,#eef2ff,#e0f2fe);
+    text-align:center; font-weight:900; margin:0 0 12px; padding:10px 16px; border-radius:12px;
+    color:#1b64da; letter-spacing:-.01em; box-shadow:none;
+    background:#eaf2fe; border:1px solid #cfe0fb;
   }
-  .page-enroll .section-title.st-violet{ background:linear-gradient(135deg,#ede9fe,#e0e7ff); }
-  .page-enroll .section-title.st-blue  { background:linear-gradient(135deg,#dbeafe,#e0f2fe); }
-  .page-enroll .section-title.st-teal  { background:linear-gradient(135deg,#ccfbf1,#d1fae5); }
+  .page-enroll .section-title.st-violet{ background:#eaf2fe; border-color:#cfe0fb; color:#1b64da; }
+  .page-enroll .section-title.st-blue  { background:#eaf2fe; border-color:#cfe0fb; color:#1b64da; }
+  .page-enroll .section-title.st-teal  { background:#eaf2fe; border-color:#cfe0fb; color:#1b64da; }
   .page-enroll.theme-pro .card,
   .page-enroll.theme-pro .silson{
-    background:#fff !important; border:1px solid rgba(100,116,139,.26) !important;
-    border-radius:18px !important; box-shadow:0 10px 24px rgba(2,6,23,.08) !important;
+    background:#fff !important; border:1px solid var(--line) !important;
+    border-radius:14px !important; box-shadow:0 4px 14px rgba(25,31,40,.05) !important;
   }
-  .page-enroll.theme-pro .btn{border-color:#cad3ff !important;background:#fff !important;box-shadow:0 5px 14px rgba(2,6,23,.10) !important}
-  .page-enroll.theme-pro .btn:hover{ transform:translateY(-2px) !important; box-shadow:0 12px 26px rgba(2,6,23,.16) !important; }
+  .page-enroll.theme-pro .btn{border-color:var(--line) !important;background:#fff !important;box-shadow:0 2px 8px rgba(25,31,40,.06) !important}
+  .page-enroll.theme-pro .btn:hover{ transform:translateY(-1px) !important; box-shadow:0 8px 18px rgba(25,31,40,.10) !important; border-color:#bcd6fb !important; }
+
+  /* ===== 모바일 최적화 (≤767px): 모든 키/값 세로 스택 ===== */
+  @media (max-width:767px){
+    .maxw{padding:12px}
+    .title{font-size:24px}
+    .subtitle{font-size:12.5px}
+
+    .hero{padding:16px}
+    .hero .heading{font-size:18px;padding:10px 14px;border-radius:12px}
+    .hero .rows{grid-template-columns:1fr}
+    .hero .actions{gap:8px}
+    .hero .actions .btn{width:100%;justify-content:center;box-sizing:border-box}
+
+    .quick-nav{gap:6px}
+    .quick-nav a{font-size:11px;padding:6px 9px}
+
+    .page-enroll .section-title{font-size:16px;padding:9px 12px}
+
+    /* 상세: 키(위) → 값(아래) 세로 스택, 좌측 정렬 */
+    .spec{grid-template-columns:1fr;gap:6px;padding:12px 0;align-items:start}
+    .key,.key.wide{
+      display:inline-flex;justify-content:flex-start;height:auto;min-width:0;width:auto;max-width:100%;
+      padding:6px 12px;white-space:normal;line-height:1.35;text-align:left
+    }
+    .val{text-align:left;line-height:1.6}
+
+    /* 단독실손/전환인수/유병자 등 키-값도 세로 스택 */
+    .row-kv{grid-template-columns:1fr;gap:4px;padding:12px 0}
+    .row-kv .v{line-height:1.6}
+    .kv-mini{grid-template-columns:1fr;gap:4px;padding:10px 0}
+    .kv-mini .v{line-height:1.55}
+
+    /* 5세대 공통사항: 2열 → 1열 */
+    #common_2col{grid-template-columns:1fr;gap:0}
+    .common-box{padding-top:12px}
+    .row-2col{grid-template-columns:1fr;gap:0}
+    .kv-vert .ln{grid-template-columns:max-content auto;gap:8px}
+
+    /* 유병자·노후 요약: 1열 */
+    .compact-grid{grid-template-columns:1fr}
+    .compact-card .title-mini{display:block;text-align:center}
+  }
   </style>
 </head>
 
@@ -607,7 +647,15 @@ if (!specials.length) {
         if (logoSrc){ const img = $('#logo'); img.src = logoSrc; img.alt = company + ' 로고'; }
 
         // 히어로 KV
-        const ageTxt = enr.mobile_enroll_age_text || (enr.mobile_enroll_age ? `${enr.mobile_enroll_age.min ?? '?'} ~ ${enr.mobile_enroll_age.max ?? '?'}세` : '–');
+        const ageTxt = enr.mobile_enroll_age_text || (function(){
+          const a = enr.mobile_enroll_age;
+          if (!a) return '–';
+          const min = a.min, max = a.max;
+          if (min != null && max != null) return `만 ${min}~${max}세`;
+          if (min != null) return `만 ${min}세 이상`;
+          if (max != null) return `만 ${max}세 이하`;
+          return '–';
+        })();
         $('#kv_mobile_age').textContent = ageTxt || '–';
         $('#kv_usage_hours').textContent = enr.usage_hours || '–';
         $('#kv_call_hours').textContent  = enr.call_hours  || '–';
@@ -649,13 +697,13 @@ if (!specials.length) {
         const gpsWrap = document.getElementById('gps');
         gpsWrap.innerHTML =
           (gpsBool==null ? '' : `<span class="badge ${gpsBool?'ok':'no'}">${gpsBool?'계피상이 가능':'계피상이 불가'}</span>`)
-          + (gpsDetail ? ` <span style="color:#0f172a">${gpsDetail}</span>` : '');
+          + (gpsDetail ? `<div class="val-detail">${gpsDetail}</div>` : '');
 
         const cardDetail = (enr.card_payment_detail || '').trim();
         const cardWrap = document.getElementById('cardpay');
         cardWrap.innerHTML =
           (cardBool==null ? '' : `<span class="badge ${cardBool?'ok':'no'}">${cardBool?'카드납 가능':'카드납 불가'}</span>`)
-          + (cardDetail ? ` <span style="color:#0f172a;white-space:pre-line">${cardDetail}</span>` : '');
+          + (cardDetail ? `<div class="val-detail" style="white-space:pre-line">${cardDetail}</div>` : '');
 
         // 실손 카드(이 호출로 상단에 '단독실손' 배지가 먼저 생김)
         renderSilsonCompany(silsonCompany || {companies:{}}, company);

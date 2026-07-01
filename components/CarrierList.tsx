@@ -8,12 +8,44 @@ function useAccordionRow() {
   return { open, toggle: () => setOpen((v) => !v) };
 }
 
+/**
+ * 삼성생명 전산(Edge 전용) 링크에서 microsoft-edge: 프로토콜을 써야 하는지 판단.
+ * - Windows + 비(非)Edge 브라우저(크롬 등) → 프로토콜로 Edge 실행
+ * - 이미 Edge이거나 맥/모바일 → 일반 https 링크(그대로 현재 Edge/브라우저에서 열림)
+ */
+function useEdgeProtocol() {
+  const [useProto, setUseProto] = useState(false);
+  useEffect(() => {
+    if (typeof navigator !== "undefined") {
+      const ua = navigator.userAgent;
+      const isWin = /Windows/i.test(ua);
+      const isEdge = /Edg\//.test(ua); // Chromium Edge UA 토큰
+      setUseProto(isWin && !isEdge);
+    }
+  }, []);
+  return useProto;
+}
+
 function shortLabel(label: string): string {
   return label
     .replace(/필요서류\s*안내/gi, "필요서류")
     .replace(/치과\s*치료\s*확인서/gi, "치과확인서")
-    .replace(/보험금\s*청구서\s*pdf\s*다운로드/gi, "보험금 청구서 PDF")
-    .replace(/보험금청구서\s*pdf\s*다운로드/gi, "보험금 청구서 PDF");
+    .replace(/보험금\s*청구서\s*pdf\s*다운로드/gi, "청구서 PDF")
+    .replace(/보험금청구서\s*pdf\s*다운로드/gi, "청구서 PDF");
+}
+
+/** 칩 앞 아이콘 */
+function iconFor(label: string): string {
+  if (/전산/.test(label)) return "💻";
+  if (/필요서류/.test(label)) return "📋";
+  if (/치과/.test(label)) return "🦷";
+  if (/PDF|청구서/i.test(label)) return "📄";
+  if (/홈페이지/.test(label)) return "🏠";
+  if (/약관/.test(label)) return "📘";
+  if (/고객센터/.test(label)) return "📞";
+  if (/인콜/.test(label)) return "🎧";
+  if (/FAX/i.test(label)) return "📠";
+  return "";
 }
 
 function Btn({
@@ -26,9 +58,11 @@ function Btn({
   cls?: string;
 }) {
   const short = shortLabel(label);
+  const ico = iconFor(label);
   if (!href)
     return (
       <button className="btn btn-muted" disabled>
+        {ico && <span className="bico" aria-hidden>{ico}</span>}
         {short}
       </button>
     );
@@ -43,6 +77,7 @@ function Btn({
         : {})}
       {...(isDownload ? { download: "" } : {})}
     >
+      {ico && <span className="bico" aria-hidden>{ico}</span>}
       {short}
     </a>
   );
@@ -88,6 +123,7 @@ function FaxPopupBtn({ number }: { number: string }) {
         }}
         aria-expanded={open}
       >
+        <span className="bico" aria-hidden>📠</span>
         보험금청구 FAX <span className="num">({parts.length}개 지역) 클릭</span>
       </button>
       {open && (
@@ -126,6 +162,7 @@ function PhoneBtn({ label, number }: { label: string; number?: string }) {
   if (!number)
     return (
       <button className="btn btn-muted" disabled>
+        <span className="bico" aria-hidden>{iconFor(label)}</span>
         {label}
       </button>
     );
@@ -145,7 +182,11 @@ function PhoneBtn({ label, number }: { label: string; number?: string }) {
       href={tel ? `tel:${tel}` : "#"}
       title={fullText}
     >
-      {label} <span className="num">{number}</span>
+      <span className="bico" aria-hidden>{iconFor(label)}</span>
+      <span className="lb">
+        {label.replace("인콜 모니터링", "인콜").replace("보험금청구 FAX", "FAX")}
+      </span>{" "}
+      <span className="num">{number}</span>
     </a>
   );
 }
@@ -169,8 +210,6 @@ function RowFirstCell({
     <div>
       <a
         href={detailUrl}
-        target="_blank"
-        rel="noopener noreferrer"
         className="block no-underline"
       >
         <div className={`brand${nameFormer ? " brand-with-former" : ""}`}>
@@ -207,6 +246,7 @@ function RowFirstCell({
 
 function CarrierRow({ item }: { item: Carrier }) {
   const { open, toggle } = useAccordionRow();
+  const useEdgeProto = useEdgeProtocol();
   const L = item.links || {};
   const logoSrc = item.logo || `/assets/logos/${item.name}.png`;
   const detailUrl = `/tools/e-enroll.html?c=${encodeURIComponent(item.name)}`;
@@ -258,21 +298,30 @@ function CarrierRow({ item }: { item: Carrier }) {
       />
       <div className="stack">
         <div className="grid-top">
-          {/* 삼성생명 전산은 Edge 전용 안내 */}
-          {item.name === "삼성생명" ? (
-            <span className="inline-flex items-center gap-1.5">
-              <Btn
-                label="전산 접속"
-                href={L.system}
-                cls="btn-primary btn-compact"
-              />
-              <span
-                className="text-[10px] text-amber-600 font-medium whitespace-nowrap"
-                title="삼성생명 전산접속은 Microsoft Edge에서만 지원됩니다"
-              >
-                (Edge)
+          {/* 삼성생명 전산은 Edge 전용 → Windows에서 클릭 시 Edge로 실행 */}
+          {item.name === "삼성생명" && L.system ? (
+            <a
+              className="btn btn-primary btn-compact"
+              href={useEdgeProto ? `microsoft-edge:${L.system}` : L.system}
+              {...(useEdgeProto
+                ? {
+                    title:
+                      "삼성생명 전산접속 — 'Microsoft Edge을(를) 여시겠습니까?' 창이 뜨면 '열기'를 누르세요.",
+                  }
+                : {
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                    title: "삼성생명 전산접속 (Microsoft Edge에서 열림)",
+                  })}
+            >
+              <span className="bico" aria-hidden>
+                💻
               </span>
-            </span>
+              전산 접속
+              <span className="edge-badge" aria-hidden>
+                Edge
+              </span>
+            </a>
           ) : (
             <Btn
               label="전산 접속"
@@ -364,18 +413,12 @@ export function CarrierList({
 
   return (
     <>
-      <section id="loss" className="mt-6">
-        <div className="section-head">
-          <h2 className="section-title">손해보험사</h2>
-          <p className="section-sub">
-            비어있는 항목은 비활성 버튼으로 표시됩니다.
-            <br />💡 각 보험사 로고를 클릭하면 전자청구 등 상세 정보를 확인하실
-            수 있습니다.
-          </p>
+      <section id="loss" className="mt-2">
+        <div className="catbar">
+          <h2>손해보험사</h2>
+          <span className="cnt">{loss.length}</span>
+          <span className="rule" />
         </div>
-        <span className="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-xs border border-slate-200 bg-white mx-auto mb-2">
-          {loss.length}개
-        </span>
         <div className="table">
           {loss.map((item) => (
             <CarrierRow key={item.name} item={item} />
@@ -388,18 +431,12 @@ export function CarrierList({
         )}
       </section>
 
-      <section id="life" className="mt-12">
-        <div className="section-head">
-          <h2 className="section-title">생명보험사</h2>
-          <p className="section-sub">
-            비어있는 항목은 비활성 버튼으로 표시됩니다.
-            <br />💡 각 보험사 로고를 클릭하면 전자청구 등 상세 정보를 확인하실
-            수 있습니다.
-          </p>
+      <section id="life" className="mt-8">
+        <div className="catbar">
+          <h2>생명보험사</h2>
+          <span className="cnt">{life.length}</span>
+          <span className="rule" />
         </div>
-        <span className="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-xs border border-slate-200 bg-white mx-auto mb-2">
-          {life.length}개
-        </span>
         <div className="table">
           {life.map((item) => (
             <CarrierRow key={item.name} item={item} />
@@ -412,18 +449,12 @@ export function CarrierList({
         )}
       </section>
 
-      <section id="mutual" className="mt-12">
-        <div className="section-head">
-          <h2 className="section-title">공제회사</h2>
-          <p className="section-sub">
-            상호부조 방식의 보험 서비스를 제공하는 공제회사입니다.
-            <br />💡 각 공제회사 로고를 클릭하면 전자청구 등 상세 정보를
-            확인하실 수 있습니다.
-          </p>
+      <section id="mutual" className="mt-8">
+        <div className="catbar">
+          <h2>공제회사</h2>
+          <span className="cnt">{mutual.length}</span>
+          <span className="rule" />
         </div>
-        <span className="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-xs border border-slate-200 bg-white mx-auto mb-2">
-          {mutual.length}개
-        </span>
         <div className="table">
           {mutual.map((item) => (
             <CarrierRow key={item.name} item={item} />

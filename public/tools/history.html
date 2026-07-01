@@ -11,8 +11,9 @@
         /* 페이지 기본 스타일 */
         body {
             font-family: 'Pretendard', sans-serif;
-            background-color: #f8fafc;
-            color: #1e293b;
+            background-color: #f2f4f6;
+            color: #191f28;
+            word-break: keep-all; /* 전체: 한글 단어 중간 줄바꿈 금지 */
             margin: 0;
             padding: 10px; /* 모바일 여백 */
             line-height: 1.6;
@@ -82,7 +83,8 @@
             text-align: center;
             vertical-align: top;
             white-space: normal; /* 한 화면 맞춤: 줄바꿈 허용 */
-            overflow-wrap: break-word; /* 좁은 열에서도 셀 안에서 줄바꿈 → 넘치지 않음 */
+            word-break: keep-all; /* 한글은 공백에서만 줄바꿈(단어 중간 안 깨짐) */
+            overflow-wrap: normal;
         }
 
         /* 테이블 헤더 (세대별 제목 줄) */
@@ -276,7 +278,7 @@
             text-decoration: none;
         }
         .btn:hover { background: #f1f5f9; box-shadow: 0 4px 12px rgba(2,6,23,.10); }
-        .btn-primary { background: linear-gradient(135deg,#2563eb,#1d4ed8); color: #fff; border-color: transparent; }
+        .btn-primary { background: linear-gradient(135deg,#3182f6,#1b64da); color: #fff; border-color: transparent; }
         .btn-primary:hover { filter: brightness(1.05); }
         
         /* 모달 안의 1세대 표 스타일 */
@@ -741,7 +743,7 @@
                         <td class="align-left"><strong>도수·체외·증식/주사 면책</strong><br>비급여 MRI: 특약2 포함<br><span class="note">(자부담 50%)</span></td>
                     </tr>
                     <tr>
-                        <th>보험료 차등 (비급여)</th>
+                        <th>보험료 차등<br>(비급여)</th>
                         <td>없음</td>
                         <td>없음</td>
                         <td>없음</td>

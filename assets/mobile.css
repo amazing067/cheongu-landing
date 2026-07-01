@@ -451,9 +451,9 @@ header > .maxw > a[href="/"] {
   .page-enroll .rowspec .spec,
   .page-enroll .row-kv,
   .page-enroll .kv-mini {
-    /* 1열 강제 해제 -> '키'는 자동, '값'은 나머지 2열 */
-    grid-template-columns: auto 1fr !important; 
-    gap: 12px !important; /* 키/값 사이 간격 */
+    /* 모바일: 키(위) → 값(아래) 세로 스택으로 값이 넓게 읽히도록 */
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
   }
 
   /* * 4. (핵심 수정) 값(Value) 텍스트 왼쪽 정렬 */
@@ -473,9 +473,14 @@ header > .maxw > a[href="/"] {
    */
   .page-enroll .rowspec .spec .key {
      min-width: 0 !important; /* 최소 너비 제한 해제 */
-     padding: 6px 10px !important; /* 패딩 살짝 줄임 */
-     font-size: 11px !important;
-     flex-shrink: 0; /* 찌그러지지 않게 */
+     width: max-content !important; /* 칩은 글자만큼만 */
+     max-width: 100% !important;
+     justify-self: start !important; /* 좌측 정렬 칩으로 */
+     padding: 6px 12px !important;
+     font-size: 12px !important;
+     white-space: normal !important; /* 긴 키(계피상이…)도 줄바꿈 */
+     line-height: 1.35 !important;
+     flex-shrink: 0;
   }
 
   /* * 6. (기존 유지) 헤더 버튼/로고 정리 */
@@ -483,15 +488,23 @@ header > .maxw > a[href="/"] {
     display: none;
   }
   .page-enroll header.maxw .hstack:nth-of-type(2) {
-    flex-wrap: nowrap; 
+    flex-wrap: nowrap;
+    align-items: flex-start !important;  /* 로고를 이름(제목) 줄에 맞춤 */
     gap: 10px !important;
   }
   .page-enroll header.maxw .logo {
-    height: 32px !important;
-    width: 32px !important;
+    height: 34px !important;
+    width: auto !important;        /* 와이드 워드마크 찌그러짐 방지 */
+    max-width: 116px !important;
+    object-fit: contain !important;
+    margin-top: 2px !important;
     border: none !important;
     background: none !important;
     border-radius: 0 !important;
+  }
+  /* 모바일 헤더 컴팩트: 군더더기 부제 숨김 */
+  .page-enroll header.maxw .subtitle {
+    display: none !important;
   }
   .page-enroll header.maxw .title {
     font-size: 24px !important;

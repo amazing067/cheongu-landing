@@ -19,7 +19,7 @@ export default function Home() {
       <Header />
       <Hero searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <JoinCTA />
-      <main className="maxw px-5 pb-20">
+      <main className="maxw pb-20">
         <CarrierList
           searchQuery={searchQuery}
           onClearSearch={clearSearch}

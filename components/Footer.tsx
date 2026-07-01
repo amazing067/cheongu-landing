@@ -7,9 +7,8 @@ import { BrandCredit } from "@/components/BrandCredit";
 export function Footer() {
   const [showContact, setShowContact] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
-  const FOUNDED = 2025; // 청구닷컴 제작 연도
-  const now = new Date().getFullYear();
-  const year = now > FOUNDED ? `${FOUNDED}–${now}` : `${FOUNDED}`;
+  const FOUNDED = 2020; // 청구닷컴 제작 연도
+  const year = `${FOUNDED}`;
   const privacyDate = new Date().toLocaleDateString("ko-KR", {
     year: "numeric",
     month: "long",
