@@ -79,7 +79,7 @@ export function Footer() {
                 궁금한 점이나 건의사항을 남겨주세요. 빠르게 답변드리겠습니다.
               </p>
               <a
-                href="https://pf.kakao.com/_JxmxaJn"
+                href="https://pf.kakao.com/_mSxkxgn/chat"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="relative flex items-center justify-center gap-2 w-full py-4 px-5 bg-[#FEE500] text-[#3C1E1E] rounded-xl font-bold text-[15px] hover:bg-[#FDD835] transition mb-6"

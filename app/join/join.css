@@ -15,6 +15,8 @@
   min-height:100vh;
 }
 .joinpage *{box-sizing:border-box}
+/* 전역 globals.css의 .row(흰 배경·테두리·라운드) 무력화 — nav/footer 흰알약 버그 방지 */
+.joinpage .row{background:transparent;border:0;border-radius:0;padding:0}
 .joinpage ::selection{background:var(--accent);color:#fff}
 .joinpage .serif{font-family:'Instrument Serif','Noto Sans KR',serif;font-style:italic}
 .joinpage .mono{font-family:'JetBrains Mono','SF Mono',ui-monospace,monospace;font-feature-settings:'tnum'}
@@ -31,8 +33,10 @@
   backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .joinpage .nav .row{display:flex;align-items:center;gap:12px;height:60px}
 .joinpage .nav .brand{display:flex;align-items:center;gap:9px;font-weight:900;font-size:17px}
-.joinpage .nav .brand .mk{width:24px;height:24px}
-.joinpage .nav .brand .amz{color:var(--accent);font-weight:900}
+.joinpage .nav .brand .ci{color:#191F28}
+.joinpage .nav .brand .bx{display:flex;flex-direction:column;line-height:1;gap:2px}
+.joinpage .nav .brand .amz{color:#e0342a;font-weight:800;font-size:13px;letter-spacing:-.025em}
+.joinpage .nav .brand .sub{font-size:11px;font-weight:700;color:#334155}
 .joinpage .nav .sp{margin-left:auto;display:flex;align-items:center;gap:16px}
 .joinpage .nav .sp a.back{font-size:13px;font-weight:700;color:var(--dim)}
 .joinpage .nav .sp a.apply{background:var(--ink);color:#fff;padding:9px 16px;border-radius:9px;font-weight:800;font-size:13px}
@@ -121,8 +125,9 @@
 .joinpage .prime .tx{flex:1}
 .joinpage .prime .tx b{font-size:16px;font-weight:900}
 .joinpage .prime .tx p{margin:4px 0 0;font-size:13px;color:var(--dim)}
+.joinpage .prime .prime-links{flex:none;display:flex;flex-direction:column;gap:8px}
 .joinpage .prime a.link{flex:none;font-size:13px;font-weight:800;color:var(--ink);border:1px solid var(--line);
-  padding:10px 16px;border-radius:10px;background:var(--paper)}
+  padding:10px 16px;border-radius:10px;background:var(--paper);text-decoration:none;white-space:nowrap;text-align:center}
 .joinpage .prime a.link:hover{border-color:var(--accent);color:var(--accent)}
 
 /* apply */
@@ -162,6 +167,8 @@
 .joinpage .ft .row{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
 .joinpage .ft .amz{color:#fff;font-weight:900}
 .joinpage .ft .links{display:flex;gap:16px;font-size:13px}
+.joinpage .ft .links a{color:rgba(255,255,255,.72);text-decoration:none;font-weight:600}
+.joinpage .ft .links a:hover{color:#fff}
 .joinpage .ft .cr{width:100%;border-top:1px solid rgba(255,255,255,.12);margin-top:16px;padding-top:14px;
   text-align:center;font-size:12px;color:rgba(255,255,255,.5)}
 
@@ -169,4 +176,7 @@
   .joinpage .pillars,.joinpage .bens,.joinpage .apply{grid-template-columns:1fr}
   .joinpage .prime{flex-direction:column;text-align:center}
   .joinpage .nav .sp a.back{display:none}
+}
+@media(max-width:560px){
+  .joinpage .nav .brand .sub{display:none}
 }

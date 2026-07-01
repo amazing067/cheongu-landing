@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { BrandMark } from "@/components/BrandMark";
 import "./join.css";
 
 /* ─── 설정: 실제 값으로 바꾸면 됨 ─────────────────────────── */
@@ -8,15 +9,10 @@ const KAKAO_CHAT = "https://pf.kakao.com/_mSxkxgn/chat";
 const PHONE = "02-2038-4379";
 const PHONE_TEL = "0220384379";
 const PRIME_SITE = "https://primeasset.kr"; // 프라임에셋 공식 (필요 시 어메이징 전용으로 교체)
+const AMAZING_SITE = "https://프라임에셋.com"; // 어메이징사업부 공식 사이트
 /* 신청 폼은 /api/apply 로 전송 → EMAIL_* 설정 시 induo@naver.com 으로 메일 발송.
    설정이 없거나 실패하면 카카오 상담으로 자동 폴백됩니다. */
 /* ────────────────────────────────────────────────────────── */
-
-const Hex = ({ size = 24 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden>
-    <polygon points="12,2 21,7 21,17 12,22 3,17 3,7" fill="#e0342a" />
-  </svg>
-);
 
 type Pillar = {
   acc: string;
@@ -147,7 +143,12 @@ export default function JoinPage() {
       <nav className="nav">
         <div className="wrap row">
           <a className="brand" href="/">
-            청구닷컴 <Hex size={22} /> <span className="amz">AMAZING</span>
+            <span className="ci">청구닷컴</span>
+            <BrandMark variant="mark" height={26} />
+            <span className="bx">
+              <span className="amz">AMAZING</span>
+              <span className="sub">프라임에셋 어메이징사업부</span>
+            </span>
           </a>
           <div className="sp">
             <a className="back" href="/">← 청구닷컴 홈</a>
@@ -170,6 +171,9 @@ export default function JoinPage() {
             <span className="since">직접 개발·운영 · since 2019</span>
           </p>
           <div className="btns">
+            <a className="btn btn-ghost" href={AMAZING_SITE} target="_blank" rel="noopener noreferrer">
+              어메이징사업부 바로가기
+            </a>
             <a className="btn btn-primary" href="#apply">1분 지원하기</a>
             <a className="btn btn-kakao" href={KAKAO_CHAT} target="_blank" rel="noopener noreferrer">
               카톡으로 먼저 상담
@@ -180,7 +184,7 @@ export default function JoinPage() {
             <span className="st"><b className="mono">16</b>개 자체 시스템</span>
             <span className="st">업무 <b className="mono">40%</b> 자동화</span>
             <span className="st"><b className="mono">10</b>일 온보딩</span>
-            <span className="st">DB 월 <b className="mono">100</b>건+ 전액 지원</span>
+            <span className="st">AI 보장분석 <b className="mono">1:1</b> 지원</span>
           </div>
         </div>
       </header>
@@ -269,9 +273,14 @@ export default function JoinPage() {
               <b>프라임에셋 어메이징사업부</b>
               <p>대형 GA 프라임에셋 소속으로 생·손보 32개사(생보 19 · 손보 13) 상품을 함께 다룹니다. 안정된 소속 위에서 자유롭게 영업하세요.</p>
             </div>
-            <a className="link" href={PRIME_SITE} target="_blank" rel="noopener noreferrer">
-              프라임에셋 공식 사이트 ›
-            </a>
+            <div className="prime-links">
+              <a className="link" href={PRIME_SITE} target="_blank" rel="noopener noreferrer">
+                프라임에셋 공식 사이트 ›
+              </a>
+              <a className="link" href={AMAZING_SITE} target="_blank" rel="noopener noreferrer">
+                어메이징사업부 공식 사이트 ›
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -361,7 +370,7 @@ export default function JoinPage() {
         <div className="wrap">
           <div className="row">
             <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Hex size={22} />
+              <BrandMark variant="mark" height={24} />
               <span><span className="amz">AMAZING</span> · 프라임에셋 어메이징사업부</span>
             </span>
             <div className="links">
@@ -369,7 +378,7 @@ export default function JoinPage() {
               <a href={PRIME_SITE} target="_blank" rel="noopener noreferrer">프라임에셋</a>
             </div>
           </div>
-          <div className="cr">프라임에셋 어메이징사업부 · 김성민 © 2025–2026</div>
+          <div className="cr">프라임에셋 어메이징사업부 · 김성민 © 2020</div>
         </div>
       </footer>
     </div>
