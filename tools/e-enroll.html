@@ -172,7 +172,7 @@
       <div class="quick-nav">
         <a class="btn" href="#enroll">모바일청약</a>
         <a class="btn" href="#silson_single">단독실손</a>
-        <a class="btn" href="#silson_common_card">4세대실손</a>
+        <a class="btn" href="#silson_common_card">5세대실손</a>
         <a class="btn" href="#ub_section">유병자실손</a>
         <a class="btn" href="#senior_section">노후실손</a>
       </div>
@@ -240,7 +240,7 @@
       </div>
 
       <div class="card narrow" id="silson_common_card" style="margin-top:10px">
-        <h4 class="section-title st-blue" style="margin-bottom:10px">4세대 실손 공통사항</h4>
+        <h4 class="section-title st-blue" style="margin-bottom:10px">5세대 실손 공통사항</h4>
         <!-- 좌우 1/2 출력 영역 -->
         <div id="common_2col"></div>
 
@@ -316,10 +316,10 @@
     }
 
     // 단독실손 배지만 생성(카드 배지는 enroll 데이터로 연동해서 따로 갱신)
-    function addBadgesFromSilson(record){
+    function addBadgesFromSilson(soloText){
       const bf = $('#badges');
       bf.innerHTML = '';
-      const solo = asBool(record['단독가입여부']);
+      const solo = asBool(soloText);
       bf.insertAdjacentHTML(
         'beforeend',
         `<span class="badge ${solo===false?'no':(solo===true?'ok':'')}" data-badge="solo">`+
@@ -344,15 +344,23 @@
       const updated = bundle?.last_updated || '';
       const record = bundle?.companies?.[name] || {};
 
-      addBadgesFromSilson(record);
+      // 단독실손(단독형 실손): 2026년 기준 농협손해보험만 가입 가능, 그 외 전부 불가
+      const soloText = (name === '농협손해보험') ? '가능' : '불가';
+      addBadgesFromSilson(soloText);
+
+      // 농협손해보험: 단독실손 청약 시 방문진단 필수 → 특이사항에 강조 표기
+      const visitNote = (name === '농협손해보험')
+        ? '<strong style="color:#dc2626">📋 단독실손 청약 시 방문진단 필수(무조건 진행)</strong> — 간호사 방문 혈압·혈액·소변 검사(예약제), 진단계약은 청약철회 불가'
+        : '';
+      const teukiText = [record['특이사항'], visitNote].filter(Boolean).join('<br>');
 
       // 요약/배지
       $('#silson_summary').innerHTML =
-        kvRow('단독가입여부', record['단독가입여부']) +
+        kvRow('단독가입여부', soloText) +
         kvRow('가입나이',     record['가입나이']) +
         kvRow('중복가입',     record['중복가입']) +
         kvRow('진단여부',     record['진단여부']) +
-        kvRow('특이사항',     record['특이사항']);
+        kvRow('특이사항',     teukiText);
 
       // === 4세대 공통사항: 좌/우 1/2 출력 ===
       const c = record['공통사항'] || {};
@@ -360,18 +368,19 @@
         <div class="common-box">
           <h5>주계약(급여)</h5>
           <div class="kv-vert">
-            <div class="tt">80% 보상 · 공제금액</div>
-            <div class="ln"><span class="tag">의원</span><span class="num">1만원</span></div>
-            <div class="ln"><span class="tag">상급·종합병원</span><span class="num">2만원</span></div>
+            <div class="tt">입원 80% 보상 · 외래 건보 본인부담률 연동</div>
+            <div class="ln"><span class="tag">입원 자부담</span><span class="num">20%</span></div>
+            <div class="ln"><span class="tag">외래</span><span class="num">건보 연동</span></div>
           </div>
         </div>`;
       const rightHTML = `
         <div class="common-box">
-          <h5>특약(비급여)</h5>
+          <h5>특약(비급여) · 중증/비중증</h5>
           <div class="kv-vert">
-            <div class="tt">보상/공제 · 3만원 또는 30%</div>
-            <div class="ln"><span class="tag">보상비율</span><span class="num">70%</span></div>
-            <div class="ln"><span class="tag">공제</span><span class="num">3만원</span></div>
+            <div class="tt">비급여 이원화 (중증·비중증)</div>
+            <div class="ln"><span class="tag">중증</span><span class="num">70% (자부담 30%)</span></div>
+            <div class="ln"><span class="tag">비중증</span><span class="num">50% (자부담 50%)</span></div>
+            <div class="ln"><span class="tag">비중증 한도</span><span class="num">연 1천만</span></div>
           </div>
         </div>`;
       $('#common_2col').innerHTML = leftHTML + rightHTML;
@@ -379,12 +388,12 @@
       // 나머지 항목: 1/2 그리드로 묶어서 두 줄
       $('#silson_common_rest').innerHTML = `
         <div class="row-2col">
-          ${kvCell('재가입주기',   c['재가입주기'] || '5년')}
-          ${kvCell('보험기간',     c['보험기간']   || '1년 갱신형')}
+          ${kvCell('재가입주기',   '5년')}
+          ${kvCell('보험기간',     '1년 갱신형')}
         </div>
         <div class="row-2col">
-          ${kvCell('자기부담금',   c['자기부담금'] || '급여 20% / 비급여 30%')}
-          ${kvCell('보험료차등제', c['보험료차등제'] || '있음(손해율 연동)')}
+          ${kvCell('자기부담금',   '급여 20% / 중증 30% / 비중증 50%')}
+          ${kvCell('보험료차등제', '강화 (미수령 5%↓ / 최대 300%↑)')}
         </div>`;
 
       // 전환/인수

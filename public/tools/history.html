@@ -20,7 +20,7 @@
 
         /* 메인 컨테이너 */
         .container {
-            max-width: 1400px; /* 표를 위해 너비 확장 */
+            max-width: min(1760px, 96vw); /* 7세대 표를 한 화면에 */
             margin: 20px auto;
             padding: 16px 24px;
             background-color: #ffffff;
@@ -65,13 +65,14 @@
         /* ✅ 비교 테이블 스타일 */
         .comparison-table {
             width: 100%;
-            min-width: 1400px; /* 가로 스크롤 유도 (6열 + 항목) */
+            min-width: 0; /* 한 화면에 맞춤 (가로 스크롤 제거) */
+            table-layout: fixed;
             border-collapse: collapse; /* 테두리 한 줄로 */
-            font-size: 14px;
+            font-size: 13px;
         }
-        
+
         .exTable-wrapper .comparison-table {
-            min-width: 1000px;
+            min-width: 0;
         }
 
         .comparison-table th,
@@ -80,7 +81,8 @@
             padding: 12px 14px;
             text-align: center;
             vertical-align: top;
-            white-space: nowrap; /* 기본적으로 줄바꿈 방지 */
+            white-space: normal; /* 한 화면 맞춤: 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 좁은 열에서도 셀 안에서 줄바꿈 → 넘치지 않음 */
         }
 
         /* 테이블 헤더 (세대별 제목 줄) */
@@ -91,6 +93,7 @@
             top: 0;
             background-color: #fff; /* 고정 시 배경 */
             border-top: 0; /* 스티키 헤더의 위쪽 테두리 제거 */
+            word-break: keep-all; /* 헤더는 단어 단위로만 줄바꿈 */
         }
         .comparison-table thead th:first-child {
             width: 12%; /* 항목명 칸 너비 */
@@ -111,6 +114,7 @@
         .bar-gen2 { background-color: #f59e0b; } /* 2세대(주황) */
         .bar-gen3 { background-color: #ef4444; } /* 3세대(빨강) */
         .bar-gen4 { background-color: #3b82f6; } /* 4세대(파랑) */
+        .bar-gen5 { background-color: #7c3aed; } /* 5세대(보라) */
         
         .gen-subtitle {
             font-size: 13px;
@@ -147,7 +151,7 @@
         /* 1) 주요내용 테이블의 통원/입원 항목은 가운데 정렬 */
         .table-main td {
             text-align: center;
-            white-space: nowrap;
+            white-space: normal; /* 한 화면 맞춤: 셀 안에서 줄바꿈 (가로 넘침 방지) */
         }
         .table-main .align-left {
             text-align: center; /* 요청에 따라 중앙 정렬로 변경 */
@@ -209,6 +213,15 @@
         .dot-gen2 { background: #f59e0b; }
         .dot-gen3 { background: #ef4444; }
         .dot-gen4 { background: #3b82f6; }
+        .dot-gen5 { background: #7c3aed; }
+
+        /* 세대 바로가기 버튼 + 열 강조 */
+        .gen-btn { cursor: pointer; border: 1px solid #e2e8f0; font-family: inherit; transition: transform .12s, box-shadow .12s, background .12s, color .12s; }
+        .gen-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(2,6,23,.14); }
+        .gen-btn.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+        .gen-btn.active .legend-dot { box-shadow: 0 0 0 2px #fff; }
+        .comparison-table td.col-hl { background-color: #f5f3ff !important; }
+        .comparison-table thead th.col-hl { box-shadow: inset 0 -4px 0 #7c3aed; }
 
         /* ✅ 버튼 툴바 (1세대 상세 보기 버튼용) */
         .toolbar { 
@@ -405,7 +418,7 @@
             display: none; 
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 1024px) {
             /* 컨테이너 여백 축소 */
             .container { padding: 12px 10px; }
             h1 { font-size: 24px; }
@@ -437,6 +450,8 @@
             .mobile-controls .seg[data-gen="g4"].active{ background:#f59e0b; color:#111827; border-color:#f59e0b; }
             .mobile-controls .seg[data-gen="g5"].active{ background:#ef4444; color:#fff; border-color:#ef4444; }
             .mobile-controls .seg[data-gen="g6"].active{ background:#3b82f6; color:#fff; border-color:#3b82f6; }
+            .mobile-controls .seg[data-gen="g7"]{ border-color:#ddd6fe; background:#f5f3ff; color:#5b21b6; }
+            .mobile-controls .seg[data-gen="g7"].active{ background:#7c3aed; color:#fff; border-color:#7c3aed; }
             
             .table-wrapper[data-gen] .comparison-table { 
                 min-width: 0; 
@@ -486,6 +501,8 @@
             .table-wrapper[data-gen="g5"] .comparison-table tbody td:nth-child(6) { display: table-cell; width: 65%; }
             .table-wrapper[data-gen="g6"] .comparison-table thead th:nth-child(7),
             .table-wrapper[data-gen="g6"] .comparison-table tbody td:nth-child(7) { display: table-cell; width: 65%; }
+            .table-wrapper[data-gen="g7"] .comparison-table thead th:nth-child(8),
+            .table-wrapper[data-gen="g7"] .comparison-table tbody td:nth-child(8) { display: table-cell; width: 65%; }
 
 
             /* 💡 [신규] 모달창 내부에서는 모바일이라도 첫 번째 열 고정(sticky)을 복원 */
@@ -519,12 +536,14 @@
         <p class="subtitle">
             가입 시기별로 보장 내용이 다르므로, 정확한 내용은 가입하신 상품의 약관을 반드시 확인하셔야 합니다.
         </p>
-        <div class="legend" aria-label="세대별 색상 범례">
-            <span class="legend-item"><span class="legend-dot dot-gen1"></span>1세대</span>
-            <span class="legend-item"><span class="legend-dot dot-gen2"></span>2세대</span>
-            <span class="legend-item"><span class="legend-dot dot-gen3"></span>3세대</span>
-            <span class="legend-item"><span class="legend-dot dot-gen4"></span>4세대</span>
+        <div class="legend" aria-label="세대 바로가기">
+            <button type="button" class="legend-item gen-btn" data-cols="2" data-gen="g1"><span class="legend-dot dot-gen1"></span>1세대</button>
+            <button type="button" class="legend-item gen-btn" data-cols="3,4,5" data-gen="g2"><span class="legend-dot dot-gen2"></span>2세대</button>
+            <button type="button" class="legend-item gen-btn" data-cols="6" data-gen="g5"><span class="legend-dot dot-gen3"></span>3세대</button>
+            <button type="button" class="legend-item gen-btn" data-cols="7" data-gen="g6"><span class="legend-dot dot-gen4"></span>4세대</button>
+            <button type="button" class="legend-item gen-btn" data-cols="8" data-gen="g7"><span class="legend-dot dot-gen5"></span>5세대</button>
         </div>
+        <p class="subtitle" style="margin-top:8px;font-size:13px;color:#7c3aed;font-weight:700">👆 세대 버튼을 누르면 해당 세대가 강조되고 표로 이동합니다</p>
         
         
 
@@ -537,6 +556,7 @@
             <button class="seg" data-target="mainTable" data-gen="g4">2세대(III)</button>
             <button class="seg" data-target="mainTable" data-gen="g5">3세대</button>
             <button class="seg" data-target="mainTable" data-gen="g6">4세대</button>
+            <button class="seg" data-target="mainTable" data-gen="g7">5세대</button>
         </div>
         <div id="mainTable" class="table-wrapper" data-gen="g6">
             <table class="comparison-table table-main">
@@ -565,7 +585,11 @@
                         </th>
                         <th>
                             <div class="gen-bar bar-gen4">4세대 (신 실손)</div>
-                            <div class="gen-subtitle">'21.7월 ~ 현재</div>
+                            <div class="gen-subtitle">'21.7월 ~ '26.4월</div>
+                        </th>
+                        <th>
+                            <div class="gen-bar bar-gen5">5세대</div>
+                            <div class="gen-subtitle">'26.5월 ~ 현재</div>
                         </th>
                     </tr>
                 </thead>
@@ -578,12 +602,14 @@
                         <td>15년마다 재가입</td>
                         <td>15년마다 재가입</td>
                         <td><strong>5년마다 재가입</strong></td>
+                        <td><strong>5년마다 재가입</strong></td>
                     </tr>
                     <tr>
                         <th>갱신 주기</th>
                         <td>3년, 5년 등</td>
                         <td>3년</td>
                         <td><strong>1년</strong></td>
+                        <td>1년</td>
                         <td>1년</td>
                         <td>1년</td>
                         <td>1년</td>
@@ -596,6 +622,7 @@
                         <td class="align-left">동일</td>
                         <td class="align-left"><strong>기본형 (급여/비급여)</strong><br>+ <strong>3대 비급여 특약</strong></td>
                         <td class="align-left"><strong>주계약 (급여)</strong><br>+ <strong>특약 (비급여/3대)</strong></td>
+                        <td class="align-left"><strong>주계약 (급여)</strong><br>+ <strong>특약1 (중증 비급여)</strong><br>+ <strong>특약2 (비중증 비급여)</strong></td>
                     </tr>
                     <tr>
                         <th>가입 금액 (입원)</th>
@@ -605,6 +632,7 @@
                         <td>5천만원</td>
                         <td>5천만원</td>
                         <td><strong>1억</strong> (급여 5천 + 비급여 5천)</td>
+                        <td class="align-left">급여 5천 / 중증 5천<br><strong>비중증 1천</strong></td>
                     </tr>
                     <tr>
                         <th>가입 금액 (통원)</th>
@@ -614,6 +642,7 @@
                         <td>30만원 (외래 25 + 약제 5)</td>
                         <td>30만원 (외래 25 + 약제 5)</td>
                         <td><strong>급여 20만 / 비급여 20만</strong><br><span class="note">(회당)</span></td>
+                        <td>비중증 비급여<br><strong>1일 20만원</strong></td>
                     </tr>
                     <tr>
                         <th>자기부담금 (입원)</th>
@@ -623,6 +652,7 @@
                         <td class="align-left"><strong>급여 10% / 비급여 20%</strong><br>(연 200만 한도)</td>
                         <td class="align-left"><strong>급여 10% / 비급여 20%</strong><br>(연 200만 한도)</td>
                         <td class="align-left"><strong>급여 20% / 비급여 30%</strong><br>(급여는 건보 상한제 적용)</td>
+                        <td class="align-left"><strong>급여 20% / 중증 30%</strong><br><strong>비중증 50%</strong><br><span class="note">(중증 입원 연 상한 500만)</span></td>
                     </tr>
                     <tr>
                         <th>자기부담금 (통원)</th>
@@ -632,6 +662,7 @@
                         <td class="align-left">외래 1~2만, 약제 8천원<br>(급여 10% / 비급여 20%와 큰 금액)</td>
                         <td class="align-left">외래 1~2만, 약제 8천원<br><strong>[특약] 30%</strong> (최소 2만)</td>
                         <td class="align-left"><strong>급여 1~2만 / 비급여 3만</strong><br>(급여 20% / 비급여 30%와 큰 금액)</td>
+                        <td class="align-left">급여: 건보 본인부담률 연동<br>중증 30%+3만 / <strong>비중증 50%+5만</strong></td>
                     </tr>
                     <tr>
                         <th>보장 비율</th>
@@ -641,6 +672,7 @@
                         <td>선택 90% or 80%</td>
                         <td><strong>급여 90% / 비급여 80%</strong><br><strong>[특약] 70%</strong></td>
                         <td><strong>급여 80% / 비급여 70%</strong></td>
+                        <td class="align-left"><strong>급여(입원) 80%</strong><br>중증비급여 70% / 비중증 50%</td>
                     </tr>
                     <tr>
                         <th>보장 기준</th>
@@ -650,6 +682,7 @@
                         <td>입원일</td>
                         <td class="align-left">사고당 보장금액<br>도달시까지</td>
                         <td>진료일</td>
+                        <td class="align-left">급여: 건보 본인부담 기준<br>비급여: 실발생 기준</td>
                     </tr>
                     <tr>
                         <th>
@@ -662,6 +695,7 @@
                         <td>365일<br><span class="note">(동일 질병당)</span></td>
                         <td class="align-left">사고당 한도 도달시<br>(기간 무관)</td>
                         <td>5,000만원<br><span class="note">한도 내 보상</span></td>
+                        <td>4세대와 동일<br><span class="note">(개별 약관 확인)</span></td>
                     </tr>
                     <tr>
                         <th>
@@ -674,6 +708,7 @@
                         <td>연간 180회</td>
                         <td>연간 180회</td>
                         <td>급여: 무제한<br>비급여: 연 100회</td>
+                        <td class="align-left">급여 건보 연동<br>비급여 1일 20만 상한</td>
                     </tr>
                     <tr>
                         <th>면책 기간</th>
@@ -683,6 +718,7 @@
                         <td>90일</td>
                         <td>90일</td>
                         <td class="text-o">없음</td>
+                        <td>90일</td>
                     </tr>
                     <tr>
                         <th>상급 병실</th>
@@ -692,6 +728,7 @@
                         <td>동일</td>
                         <td>동일</td>
                         <td><strong>급여 병실(2-3인실) 해당</strong></td>
+                        <td>개별 약관 확인<br><span class="note">(공식 요약 미명시)</span></td>
                     </tr>
                     <tr>
                         <th>3대 비급여 특약</th>
@@ -701,6 +738,7 @@
                         <td class="align-left">기본 담보에 포함</td>
                         <td class="align-left"><strong>[특약 분리]</strong><br>• 도수/체외/증식: 350만(50회)<br>• 비급여 주사: 250만(50회)<br>• 비급여 MRI: 300만</td>
                         <td class="align-left"><strong>[비급여 특약에 통합]</strong><br>• 도수/체외/증식: 350만(50회)<br>• 비급여 주사: 250만(50회)<br>• 비급여 MRI: 300만</td>
+                        <td class="align-left"><strong>도수·체외·증식/주사 면책</strong><br>비급여 MRI: 특약2 포함<br><span class="note">(자부담 50%)</span></td>
                     </tr>
                     <tr>
                         <th>보험료 차등 (비급여)</th>
@@ -710,6 +748,7 @@
                         <td>없음</td>
                         <td>없음</td>
                         <td class="text-o">⭕<br><span class="note">(비급여 이용량 연계)</span></td>
+                        <td class="text-o">⭕ <strong>강화</strong><br><span class="note">(미수령 5%↓ / 최대 300%↑)</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -727,6 +766,7 @@
             <button class="seg" data-target="exTable" data-gen="g4">2세대(III)</button>
             <button class="seg" data-target="exTable" data-gen="g5">3세대</button>
             <button class="seg" data-target="exTable" data-gen="g6">4세대</button>
+            <button class="seg" data-target="exTable" data-gen="g7">5세대</button>
         </div>
         
         <div id="exTable" class="table-wrapper exTable-wrapper" data-gen="g6">
@@ -756,7 +796,11 @@
                         </th>
                         <th>
                             <div class="gen-bar bar-gen4">4세대</div>
-                            <div class="gen-subtitle">'21.7월 ~ 현재</div>
+                            <div class="gen-subtitle">'21.7월 ~ '26.4월</div>
+                        </th>
+                        <th>
+                            <div class="gen-bar bar-gen5">5세대</div>
+                            <div class="gen-subtitle">'26.5월 ~ 현재</div>
                         </th>
                     </tr>
                 </thead>
@@ -765,6 +809,7 @@
                         <th>치매 (F00-F03)</th>
                         <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
                         <td class="text-x">❌</td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
@@ -778,12 +823,14 @@
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                     </tr>
                     <tr>
                         <th>한방병원</th>
                         <td><span class="badge badge-variant badge-link" data-open="gen1">회사별 상이</span></td>
                         <td><span class="text-o">⭕</span><br><span class="note">(급/비급여)</span></td>
                         <td class="text-x">❌</td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
@@ -796,6 +843,7 @@
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                     </tr>
                     <tr>
                         <th>정신과 (F04-F99)</th>
@@ -805,6 +853,17 @@
                          <td class="text-o">⭕ <span class="text-o-small">(급여)</span><br><span class="note">(우울증 등)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                         <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                    </tr>
+                    <tr>
+                        <th>임신·출산</th>
+                        <td class="text-x">❌</td>
+                        <td class="text-x">❌</td>
+                        <td class="text-x">❌</td>
+                        <td class="text-x">❌</td>
+                        <td class="text-x">❌</td>
+                        <td class="text-x">❌</td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
                     </tr>
                     <tr>
                         <th>해외 치료</th>
@@ -812,6 +871,7 @@
                         <td>국내치료 시 40%</td>
                         <td>국내치료 시 40%</td>
                         <td>국내치료 시 40%</td>
+                        <td class="text-x">❌</td>
                         <td class="text-x">❌</td>
                         <td class="text-x">❌</td>
                     </tr>
@@ -823,6 +883,7 @@
                         <td>40%</td>
                         <td class="align-left">급여 90%<br>비급여 80%</td>
                         <td class="align-left">급여 80%<br>비급여 70%</td>
+                        <td class="align-left">급여 80%<br>비급여 50~70%</td>
                     </tr>
                     <tr>
                         <th>국민건강보험 미적용시</th>
@@ -832,6 +893,7 @@
                         <td>40%</td>
                         <td>40%</td>
                         <td>비급여와 동일<br>(70%)</td>
+                        <td>비급여와 동일<br>(50~70%)</td>
                     </tr>
                     <tr>
                         <th>응급실 (비응급)</th>
@@ -839,6 +901,7 @@
                         <td class="text-o">⭕</td>
                         <td class="text-o">⭕</td>
                         <td class="text-o">⭕</td>
+                        <td class="text-x">상급종합병원<br>면책</td>
                         <td class="text-x">상급종합병원<br>면책</td>
                         <td class="text-x">상급종합병원<br>면책</td>
                     </tr>
@@ -1144,6 +1207,34 @@
                     setActiveSeg(ctrl, btn.getAttribute('data-target'), btn.getAttribute('data-gen'));
                 });
             });
+
+            // --- 세대 바로가기 버튼: 해당 세대 열 강조 + 표로 스크롤 ---
+            function focusGeneration(cols, gen){
+                document.querySelectorAll('.comparison-table .col-hl').forEach(function(c){ c.classList.remove('col-hl'); });
+                ['mainTable','exTable'].forEach(function(id){
+                    var wrap = document.getElementById(id); if(!wrap) return;
+                    wrap.setAttribute('data-gen', gen); // 모바일: 해당 세대 열만 표시
+                    var table = wrap.querySelector('table'); if(!table) return;
+                    cols.forEach(function(n){
+                        table.querySelectorAll('thead th:nth-child('+n+'), tbody td:nth-child('+n+')').forEach(function(cell){ cell.classList.add('col-hl'); });
+                    });
+                });
+                document.querySelectorAll('.mobile-controls .seg').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-gen') === gen); });
+                var mt = document.getElementById('mainTable');
+                if (mt) mt.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            document.querySelectorAll('.gen-btn').forEach(function(btn){
+                btn.addEventListener('click', function(){
+                    var cols = (btn.getAttribute('data-cols') || '').split(',').map(Number).filter(Boolean);
+                    focusGeneration(cols, btn.getAttribute('data-gen'));
+                    document.querySelectorAll('.gen-btn').forEach(function(b){ b.classList.remove('active'); });
+                    btn.classList.add('active');
+                });
+            });
+
+            // 초기 기본 세대(모바일 탭 뷰): 5세대로 통일 — 표시 열 = 활성 버튼
+            ['mainTable','exTable'].forEach(function(id){ var w=document.getElementById(id); if(w) w.setAttribute('data-gen','g7'); });
+            document.querySelectorAll('.mobile-controls .seg').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-gen')==='g7'); });
 
             // --- 💡 '보장 기간' 도움말 팝업 스크립트 (2개) ---
 
