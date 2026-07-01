@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandMark } from "@/components/BrandMark";
 
 export function Header() {
   return (
@@ -7,6 +8,20 @@ export function Header() {
         <Link href="/" className="text-xl font-extrabold no-underline">
           청구닷컴
         </Link>
+        <span
+          className="flex items-center gap-2 pl-2.5 border-l border-slate-200"
+          title="제작 · 프라임에셋 어메이징사업부"
+        >
+          <BrandMark variant="mark" height={28} />
+          <span className="hidden sm:flex flex-col leading-none">
+            <span className="text-[13px] font-extrabold tracking-tight text-[#e0342a]">
+              AMAZING
+            </span>
+            <span className="mt-0.5 text-[10px] font-semibold text-slate-400">
+              프라임에셋 어메이징사업부
+            </span>
+          </span>
+        </span>
         <nav className="ml-auto flex items-center gap-2">
           <a href="#loss" className="btn btn-ghost">
             손해보험사

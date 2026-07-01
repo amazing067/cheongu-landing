@@ -1394,6 +1394,14 @@ async function generateSinglePdf(P, templateConfig, kFontBytes, sigImageBytes) {
     }
   }
   
+  // 어메이징사업부 브랜딩을 PDF 속성(문서 정보)에 은은하게 심는다.
+  // 서류 지면에는 전혀 표시되지 않고, 파일 속성에만 남는다.
+  try {
+    pdfDoc.setAuthor("프라임에셋 어메이징사업부");
+    pdfDoc.setCreator("청구닷컴(청구.com) · 프라임에셋 어메이징사업부");
+    pdfDoc.setProducer("청구닷컴 · 프라임에셋 어메이징사업부");
+  } catch (e) { /* 메타데이터 설정 실패는 무시 */ }
+
   form.flatten();
   return await pdfDoc.save();
 }
@@ -1408,5 +1416,6 @@ function downloadFile(blob, fileName) {
 }
 
 </script>
+  <script src="/assets/amazing-brand.js" defer></script>
 </body>
 </html>

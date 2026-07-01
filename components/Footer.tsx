@@ -1,11 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { BrandMark } from "@/components/BrandMark";
+import { BrandCredit } from "@/components/BrandCredit";
 
 export function Footer() {
   const [showContact, setShowContact] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
-  const year = new Date().getFullYear();
+  const FOUNDED = 2025; // 청구닷컴 제작 연도
+  const now = new Date().getFullYear();
+  const year = now > FOUNDED ? `${FOUNDED}–${now}` : `${FOUNDED}`;
   const privacyDate = new Date().toLocaleDateString("ko-KR", {
     year: "numeric",
     month: "long",
@@ -33,12 +37,18 @@ export function Footer() {
               </button>
             </div>
           </div>
-          <div className="mt-5 pt-4 border-t border-slate-200">
-            <p className="text-center text-[11px] text-slate-500 font-medium">
-              <span className="text-slate-400 mr-1.5">Developed by</span>
-              <span className="text-slate-600 font-bold">프라임에셋 광진2지점</span>
+          <div className="mt-5 pt-5 border-t border-slate-200 flex flex-col items-center gap-2.5">
+            <BrandMark variant="full" height={40} />
+            <p className="text-center text-[11px] text-slate-500 font-medium leading-relaxed">
+              <span className="text-slate-700 font-bold">
+                프라임에셋 어메이징사업부
+              </span>
               <span className="mx-1.5 text-slate-300">·</span>
               <span className="text-slate-500 font-semibold">김성민</span>
+              <br />
+              <span className="text-slate-400">
+                이 서비스는 어메이징사업부가 기획·개발했습니다.
+              </span>
             </p>
           </div>
         </div>
@@ -83,6 +93,7 @@ export function Footer() {
               <p className="text-center text-slate-400 text-sm mb-4">
                 또는 본 사이트 문의 양식 이용
               </p>
+              <BrandCredit />
             </div>
           </div>
         </div>
@@ -144,6 +155,7 @@ export function Footer() {
                   <strong>문의:</strong> 본 사이트 문의 양식 이용
                 </p>
               </section>
+              <BrandCredit />
             </div>
           </div>
         </div>
