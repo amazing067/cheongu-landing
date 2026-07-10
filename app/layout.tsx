@@ -47,6 +47,10 @@ export default function RootLayout({
         />
         <link rel="manifest" href="/manifest.webmanifest" />
         <meta name="theme-color" content="#0f172a" />
+        <meta
+          name="naver-site-verification"
+          content="b39cdcf2746e23ed3ae7e09800358ac349a5633e"
+        />
       </head>
       <body className="text-slate-900 mode-compact">
         <NoRightClick>{children}</NoRightClick>
