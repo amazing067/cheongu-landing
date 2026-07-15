@@ -4,16 +4,16 @@ import { Analytics } from "@vercel/analytics/next";
 import { NoRightClick } from "@/components/NoRightClick";
 
 export const metadata: Metadata = {
-  title: "청구닷컴 | 보험금 청구 링크 허브",
+  title: "청구닷컴 | 보험금 청구 필요서류·팩스번호·고객센터 한눈에",
   description:
-    "전산 접속 · 필요서류 · 보험금 청구서 PDF · 치과치료확인서 · 고객센터 · 인콜 모니터링 · 보험금청구 FAX",
+    "보험금 청구에 필요한 모든 것 — 보험사별 필요서류, 청구서 PDF, 팩스번호, 고객센터 전화번호, 전산 접속까지 한 페이지에서. 프라임에셋 어메이징사업부가 만든 보험금 청구 링크 허브.",
   formatDetection: { telephone: false },
   openGraph: {
     type: "website",
     siteName: "청구닷컴",
-    title: "청구닷컴 | 보험금 청구 링크 허브",
+    title: "청구닷컴 | 보험금 청구 필요서류·팩스번호·고객센터 한눈에",
     description:
-      "전산 접속 · 필요서류 · 보험금 청구서 PDF · 치과치료확인서 · 고객센터 · 인콜 모니터링 · 보험금청구 FAX",
+      "보험사별 필요서류 · 청구서 PDF · 팩스번호 · 고객센터 · 전산 접속까지 한 페이지에서 — 보험금 청구 링크 허브",
     url: "https://청구.com/",
     images: [
       {
@@ -50,6 +50,40 @@ export default function RootLayout({
         <meta
           name="naver-site-verification"
           content="b39cdcf2746e23ed3ae7e09800358ac349a5633e"
+        />
+        {/* 구조화 데이터 — 청구닷컴이 어메이징사업부 브랜드 자산임을 검색엔진에 연결 */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "WebSite",
+                  "@id": "https://xn--2e0br60d.com/#website",
+                  name: "청구닷컴",
+                  url: "https://xn--2e0br60d.com/",
+                  description:
+                    "보험사별 보험금 청구 필요서류·청구서 PDF·팩스번호·고객센터를 한 페이지에 모은 링크 허브",
+                  inLanguage: "ko",
+                  publisher: { "@id": "https://xn--2e0br60d.com/#org" },
+                },
+                {
+                  "@type": "Organization",
+                  "@id": "https://xn--2e0br60d.com/#org",
+                  name: "프라임에셋 어메이징사업부",
+                  alternateName: ["어메이징사업부"],
+                  url: "https://xn--h32b21du9cf7grcy2k20f.com/",
+                  parentOrganization: { "@type": "Organization", name: "프라임에셋" },
+                  sameAs: [
+                    "https://xn--h32b21du9cf7grcy2k20f.com/",
+                    "https://xn--oi2b19pfvd21bx33a.com/",
+                    "https://talk.naver.com/profile/wj20ujg",
+                  ],
+                },
+              ],
+            }),
+          }}
         />
       </head>
       <body className="text-slate-900 mode-compact">

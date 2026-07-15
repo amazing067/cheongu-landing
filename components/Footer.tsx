@@ -39,15 +39,29 @@ export function Footer() {
           <div className="mt-5 pt-5 border-t border-slate-200 flex flex-col items-center gap-2.5">
             <BrandMark variant="full" height={40} />
             <p className="text-center text-[11px] text-slate-500 font-medium leading-relaxed">
-              <span className="text-slate-700 font-bold">
+              <a
+                href="https://xn--h32b21du9cf7grcy2k20f.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-700 font-bold hover:text-slate-900 underline-offset-2 hover:underline"
+              >
                 프라임에셋 어메이징사업부
-              </span>
+              </a>
               <span className="mx-1.5 text-slate-300">·</span>
               <span className="text-slate-500 font-semibold">김성민</span>
               <br />
               <span className="text-slate-400">
                 이 서비스는 어메이징사업부가 기획·개발했습니다.
               </span>
+              <br />
+              <a
+                href="https://xn--oi2b19pfvd21bx33a.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-400 hover:text-slate-600 underline-offset-2 hover:underline"
+              >
+                함께할 보험설계사를 찾습니다 — 리쿠르팅 안내 →
+              </a>
             </p>
           </div>
         </div>
