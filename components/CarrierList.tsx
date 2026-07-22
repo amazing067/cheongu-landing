@@ -411,8 +411,17 @@ export function CarrierList({
   const life = filterCarriers(lifeRaw, searchQuery);
   const mutual = filterCarriers(mutualRaw, searchQuery);
 
+  const pdfUpdatedLabel = data.pdfUpdated
+    ? data.pdfUpdated.replace(/-/g, ".")
+    : null;
+
   return (
     <>
+      {pdfUpdatedLabel && (
+        <p className="mt-2 text-right text-xs text-slate-400">
+          청구서 서식 업데이트 {pdfUpdatedLabel}
+        </p>
+      )}
       <section id="loss" className="mt-2">
         <div className="catbar">
           <h2>손해보험사</h2>
