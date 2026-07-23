@@ -99,6 +99,7 @@ export function Hero({
               📊
             </span>
             실손 변천사
+            <span className="tool-badge-new">5세대</span>
           </button>
           <a href="#calc-panels" className="tool-pill tool-extra">
             <span className="em" aria-hidden>

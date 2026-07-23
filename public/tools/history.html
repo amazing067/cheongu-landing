@@ -166,6 +166,14 @@
         .text-o-small { color: #16a34a; font-weight: 700; font-size: 0.9em; } /* O (급여) */
         /* 작은 주석/보조 설명 */
         .note { color: #6b7280; font-size: 12px; font-weight: 600; }
+        /* 도수치료 관리급여 이관 → 빨간 굵은 취소선으로 강조 */
+        s.strike-red {
+            color: #991b1b;
+            font-weight: 800;
+            text-decoration: line-through;
+            text-decoration-color: #dc2626;
+            text-decoration-thickness: 3px;
+        }
         
         /* 텍스트 강조 (보라색) */
         strong {
@@ -481,6 +489,8 @@
             
             .table-wrapper[data-gen] .comparison-table thead th:nth-child(n+2) { display: none; }
             .table-wrapper[data-gen] .comparison-table tbody td { display: none; }
+            /* 전 세대 공통 행(관리급여 등 colspan 셀)은 어떤 세대를 선택해도 항상 표시 */
+            .table-wrapper[data-gen] .comparison-table tbody td.common-cell { display: table-cell !important; width: 65%; }
             .table-wrapper[data-gen] .comparison-table tbody th { 
                 display: table-cell; 
                 position: static; 
@@ -534,6 +544,9 @@
 <body>
 
     <div class="container">
+        <div style="margin:0 0 12px;padding:9px 14px;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;text-align:center;font-size:13px;font-weight:700;color:#334155;">
+            🆕 <span style="color:#dc2626;">5세대(2026.5 출시)</span> 반영 완료 — 도수치료 관리급여 전환·임신 출산 보장 등 최신 내용 포함
+        </div>
         <h1>실손의료비 세대별 한눈에 비교</h1>
         <p class="subtitle">
             가입 시기별로 보장 내용이 다르므로, 정확한 내용은 가입하신 상품의 약관을 반드시 확인하셔야 합니다.
@@ -738,9 +751,27 @@
                         <td class="align-left">기본 담보에 포함</td>
                         <td class="align-left">기본 담보에 포함</td>
                         <td class="align-left">기본 담보에 포함</td>
-                        <td class="align-left"><strong>[특약 분리]</strong><br>• 도수/체외/증식: 350만(50회)<br>• 비급여 주사: 250만(50회)<br>• 비급여 MRI: 300만</td>
-                        <td class="align-left"><strong>[비급여 특약에 통합]</strong><br>• 도수/체외/증식: 350만(50회)<br>• 비급여 주사: 250만(50회)<br>• 비급여 MRI: 300만</td>
-                        <td class="align-left"><strong>도수·체외·증식/주사 면책</strong><br>비급여 MRI: 특약2 포함<br><span class="note">(자부담 50%)</span></td>
+                        <td class="align-left"><strong>[특약 분리]</strong><br>• <s class="strike-red">도수</s>/체외/증식: 350만(50회)<br>• 비급여 주사: 250만(50회)<br>• 비급여 MRI: 300만<br><span class="note">(도수는 2026.7~ 관리급여로 이관 ↓)</span></td>
+                        <td class="align-left"><strong>[비급여 특약에 통합]</strong><br>• <s class="strike-red">도수</s>/체외/증식: 350만(50회)<br>• 비급여 주사: 250만(50회)<br>• 비급여 MRI: 300만<br><span class="note">(도수는 2026.7~ 관리급여로 이관 ↓)</span></td>
+                        <td class="align-left"><strong><s class="strike-red">도수</s>·체외·증식/주사 면책</strong><br>비급여 MRI: 특약2 포함<br><span class="note">(자부담 50% · 도수는 2026.7~ 관리급여 ↓)</span></td>
+                    </tr>
+                    <tr>
+                        <th>도수치료 관리급여<br><span class="note">(2026.7.1 시행)</span></th>
+                        <td class="align-left common-cell" colspan="7" style="background:#fff7ed;">
+                            <strong>⚠️ 전 세대 공통 — 법령(보건복지부 고시) 개정으로 가입 세대와 무관하게 동일 적용</strong>
+                            <div style="margin-top:8px;padding:10px 12px;background:#fee2e2;border-left:4px solid #dc2626;border-radius:6px;">
+                                <span style="color:#dc2626;font-weight:900;">🔴 도수치료 — 관리급여 전환 (2026.7.1~)</span><br>
+                                • 비급여에서 <strong>관리급여</strong>(건강보험 편입)로 전환 — 전국 동일 <strong>1회 43,850원, 본인부담률 95%</strong><br>
+                                • 인정횟수 <strong>주 2회 · 연 15회</strong>(관절 구축 등 예외 시 최대 연 24회) · 기본 물리치료 2주 이상/4회 이상 선행 필요<br>
+                                • 인정기준 <strong>초과분은 건강보험·실손 모두 지급 제한</strong> · 영수증에는 비급여가 아닌 <strong>급여(관리급여)</strong>로 표기
+                            </div>
+                            <div style="margin-top:8px;padding:10px 12px;background:#dbeafe;border-left:4px solid #2563eb;border-radius:6px;">
+                                <span style="color:#1d4ed8;font-weight:900;">🔵 체외충격파 — 관리급여 전환 유예 (비급여 유지)</span><br>
+                                • 아직 비급여 그대로 — 기존처럼 실손 청구 가능<br>
+                                • 다만 의료계 <strong>자율규제</strong>(<span style="color:#dc2626;font-weight:800;">주 1회 · 연 12회 · 동일 부위 6회</span>)는 법적 강제가 아닌 의료계 권고 기준<br>
+                                • 초과 시술 자체는 가능하나, 초과분은 보험사가 실손 지급을 거절할 수 있음
+                            </div>
+                        </td>
                     </tr>
                     <tr>
                         <th>보험료 차등<br>(비급여)</th>
@@ -865,7 +896,7 @@
                         <td class="text-x">❌</td>
                         <td class="text-x">❌</td>
                         <td class="text-x">❌</td>
-                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span></td>
+                        <td class="text-o">⭕ <span class="text-o-small">(급여)</span><br><span class="note">(<span style="color:#dc2626;font-weight:700;">분만예정일 280일 이전 가입</span> 시 보장 — 임신 후 가입분 제외)</span></td>
                     </tr>
                     <tr>
                         <th>해외 치료</th>

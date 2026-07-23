@@ -144,6 +144,17 @@
 .tool-pill .em {
   @apply text-base;
 }
+.tool-badge-new {
+  margin-left: 2px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
 .tool-more {
   display: none; /* 데스크톱: 더보기 숨김 (도구 전부 노출) */
   color: var(--blue);
