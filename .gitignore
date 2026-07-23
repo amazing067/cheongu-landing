@@ -30,3 +30,11 @@ out/
 .env.local
 .env.*.local
 
+
+# 도구 자동 생성물
+.codex/
+.playwright-mcp/
+*.tsbuildinfo
+
+# 시안/목업 보관함 (커밋 안 함)
+_archive/
