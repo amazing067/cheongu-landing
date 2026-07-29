@@ -413,6 +413,11 @@
   -->
   <h1 class="visually-hidden">전국 상급종합병원 지도 — 3차 병원 전체 목록과 위치</h1>
 
+  <!-- 정적 HTML 로 된 홈 링크. amazing-brand.js 가 헤더를 JS 로 주입하지만
+       네이버 크롤러는 JS 를 실행하지 않아 그 링크를 못 본다.
+       상단이 고정 검색창이라 자리가 없어 화면에서는 감추고 크롤러에만 노출한다. -->
+  <nav class="visually-hidden" aria-label="위치"><a href="/">청구닷컴</a> › 전국 상급종합병원 지도</nav>
+
   <!-- 검색창 -->
   <div class="search-container">
     <div class="search-wrapper">

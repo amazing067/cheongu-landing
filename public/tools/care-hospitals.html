@@ -24,6 +24,11 @@
             font-family: 'Pretendard', sans-serif;
             word-break: keep-all;
         }
+
+        /* 상위 페이지로 돌아가는 경로 (크롤러가 홈과 이 페이지를 잇는 링크이기도 함) */
+        .crumb { font-size: 12px; color: #94a3b8; margin: 0; padding: 14px 20px 0; }
+        .crumb a { color: #475569; text-decoration: none; font-weight: 700; }
+        .crumb a:hover { text-decoration: underline; }
         
         /* 애니메이션 */
         @keyframes fadeIn {
@@ -70,6 +75,11 @@
     </style>
 </head>
 <body class="min-h-screen bg-[#f2f4f6]">
+    <!-- 정적 HTML 로 된 홈 링크. amazing-brand.js 가 헤더를 JS 로 주입하지만
+         네이버 크롤러는 JS 를 실행하지 않아 그 링크를 못 본다.
+         이게 없으면 이 페이지가 크롤 막다른 길이 된다. -->
+    <nav class="crumb" aria-label="위치"><a href="/">청구닷컴</a> <span aria-hidden>›</span> 간호간병 통합서비스 병원 찾기</nav>
+
     <!-- 로딩 오버레이 -->
     <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
         <div class="bg-white rounded-2xl p-8 shadow-2xl text-center">
