@@ -1,9 +1,21 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
-import { NoRightClick } from "@/components/NoRightClick";
+
+// 구글 서치콘솔 소유확인 값 (bohumreport@gmail.com / 어메이징사업부 계정,
+// 속성: https://www.xn--2e0br60d.com, 2026-07-29 발급).
+// 확인이 끝난 뒤에도 이 태그를 지우면 소유권이 해제되므로 절대 삭제하지 말 것.
+// 값은 구글이 계정·속성별로 발급하므로 임의로 바꿔 쓸 수 없다.
+const GOOGLE_SITE_VERIFICATION = "kU6KbPjW-C2z8YrJpuSfjIppr0eaV45FUXuou4w0daM";
+
+// 대표 도메인 = www.청구.com (퓨니코드 www.xn--2e0br60d.com).
+// 실서버가 non-www → www 로 307 리다이렉트하므로 모든 표기를 www 로 통일해야
+// 검색엔진에 랭킹 신호가 한 주소로 모인다. sitemap.ts / robots.ts 와 동일하게 유지할 것.
+const SITE_URL = "https://www.xn--2e0br60d.com";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  alternates: { canonical: "/" },
   title: "청구닷컴 | 보험금 청구 필요서류·팩스번호·고객센터 한눈에 — 어메이징사업부",
   description:
     "보험금 청구에 필요한 모든 것 — 보험사별 필요서류, 청구서 PDF, 팩스번호, 고객센터 전화번호, 전산 접속까지 한 페이지에서. 프라임에셋 어메이징사업부가 만든 보험금 청구 링크 허브.",
@@ -29,10 +41,11 @@ export const metadata: Metadata = {
     title: "청구닷컴 | 보험금 청구 필요서류·팩스번호·고객센터 한눈에 — 어메이징사업부",
     description:
       "보험사별 필요서류 · 청구서 PDF · 팩스번호 · 고객센터 · 전산 접속까지 한 페이지에서 — 어메이징사업부가 만든 보험금 청구 링크 허브",
-    url: "https://청구.com/",
+    locale: "ko_KR",
+    url: `${SITE_URL}/`,
     images: [
       {
-        url: "https://청구.com/assets/og-image.png",
+        url: `${SITE_URL}/assets/og-image.png`,
         width: 1200,
         height: 630,
       },
@@ -72,6 +85,12 @@ export default function RootLayout({
           name="naver-site-verification"
           content="b39cdcf2746e23ed3ae7e09800358ac349a5633e"
         />
+        {GOOGLE_SITE_VERIFICATION && (
+          <meta
+            name="google-site-verification"
+            content={GOOGLE_SITE_VERIFICATION}
+          />
+        )}
         {/* 구조화 데이터 — 청구닷컴이 어메이징사업부 브랜드 자산임을 검색엔진에 연결 */}
         <script
           type="application/ld+json"
@@ -81,24 +100,24 @@ export default function RootLayout({
               "@graph": [
                 {
                   "@type": "WebSite",
-                  "@id": "https://xn--2e0br60d.com/#website",
+                  "@id": "https://www.xn--2e0br60d.com/#website",
                   name: "청구닷컴",
                   alternateName: ["청구.com", "어메이징사업부 청구닷컴"],
-                  url: "https://xn--2e0br60d.com/",
+                  url: "https://www.xn--2e0br60d.com/",
                   description:
                     "보험사별 보험금 청구 필요서류·청구서 PDF·팩스번호·고객센터를 한 페이지에 모은 링크 허브",
                   inLanguage: "ko",
-                  publisher: { "@id": "https://xn--2e0br60d.com/#org" },
+                  publisher: { "@id": "https://www.xn--2e0br60d.com/#org" },
                 },
                 {
                   "@type": "Organization",
-                  "@id": "https://xn--2e0br60d.com/#org",
+                  "@id": "https://www.xn--2e0br60d.com/#org",
                   name: "프라임에셋 어메이징사업부",
                   alternateName: ["어메이징사업부", "어메이징 사업부", "AMAZING"],
                   url: "https://xn--h32b21du9cf7grcy2k20f.com/",
                   logo: {
                     "@type": "ImageObject",
-                    url: "https://xn--2e0br60d.com/icons/icon-512.png",
+                    url: "https://www.xn--2e0br60d.com/icons/icon-512.png",
                     width: 512,
                     height: 512,
                   },
@@ -115,7 +134,7 @@ export default function RootLayout({
         />
       </head>
       <body className="text-slate-900 mode-compact">
-        <NoRightClick>{children}</NoRightClick>
+        {children}
         <Analytics />
       </body>
     </html>

@@ -2,6 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Carrier, LinksData } from "@/types/carrier";
+import rawLinks from "@/data/links.json";
+
+// 예전에는 브라우저에서 /data/links.json 을 fetch 했는데, 그러면 서버가 내려주는
+// HTML 에 "데이터 로딩 중..." 만 남고 보험사 41개·팩스·고객센터가 통째로 빠진다.
+// 구글은 JS 를 실행해 주지만 네이버 크롤러는 사실상 못 보므로, 빌드 시점에 묶어서
+// 첫 HTML 부터 내용이 들어가게 한다. (links.json 수정 → 배포 흐름은 그대로)
+const data = rawLinks as unknown as LinksData;
 
 function useAccordionRow() {
   const [open, setOpen] = useState(false);
@@ -361,19 +368,6 @@ export function CarrierList({
   searchQuery: string;
   onClearSearch?: () => void;
 }) {
-  const [data, setData] = useState<LinksData | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch(`/data/links.json?ts=${Date.now()}`, { cache: "no-store" })
-      .then((res) => {
-        if (!res.ok) throw new Error("failed to load");
-        return res.json();
-      })
-      .then(setData)
-      .catch(() => setError("데이터 로드 실패: /data/links.json"));
-  }, []);
-
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === "/") {
@@ -388,20 +382,6 @@ export function CarrierList({
     document.addEventListener("keydown", handleKeydown);
     return () => document.removeEventListener("keydown", handleKeydown);
   }, [onClearSearch]);
-
-  if (error) {
-    return (
-      <div className="px-4 py-3 text-sm text-red-600">{error}</div>
-    );
-  }
-
-  if (!data) {
-    return (
-      <div className="px-4 py-8 text-center text-slate-500">
-        데이터 로딩 중...
-      </div>
-    );
-  }
 
   const lossRaw = data.carriers.filter((x) => x.type === "손해");
   const lifeRaw = data.carriers.filter((x) => x.type === "생명");

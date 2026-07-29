@@ -3,7 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>간호간병 통합서비스 병원 찾기 v2.0 - 청구닷컴</title>
+    <title>간호간병 통합서비스 병원 찾기 - 청구닷컴</title>
+    <meta name="description" content="간호간병통합서비스를 운영하는 전국 병원을 지역별로 검색하세요. 간병인 없이 입원 가능한 병동 운영 병원 목록과 보험금 청구 시 확인 사항을 함께 안내합니다.">
+    <meta name="keywords" content="간호간병통합서비스, 간호간병 병원, 간병보험, 간호간병통합서비스 병원 찾기, 간호간병 입원일당, 청구닷컴">
+    <link rel="canonical" href="https://www.xn--2e0br60d.com/tools/care-hospitals.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="청구닷컴">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:title" content="간호간병 통합서비스 병원 찾기 - 청구닷컴">
+    <meta property="og:description" content="간호간병통합서비스 운영 병원을 지역별로 한 번에 검색.">
+    <meta property="og:url" content="https://www.xn--2e0br60d.com/tools/care-hospitals.html">
+    <meta property="og:image" content="https://www.xn--2e0br60d.com/assets/og-image.png">
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -947,7 +958,6 @@
                             </button>
                         </div>
 
-
                         <!-- 통계 정보 -->
                         <div class="flex gap-4 pt-3 border-t-2 border-gray-100">
                             <div class="flex items-center gap-2 flex-1">
@@ -1511,50 +1521,7 @@
     })();
     </script>
 
-<!-- Anti-copy: 복제 방지 스크립트 -->
-<script>
-(function(){
-  // 이미지 드래그 방지
-  document.addEventListener('dragstart', e => e.preventDefault(), true);
-  document.querySelectorAll('img').forEach(img => { img.setAttribute('draggable','false'); });
-
-  // 우클릭 차단
-  document.addEventListener('contextmenu', e => { 
-    e.preventDefault(); 
-    alert('🔒 무단 복제 금지\n저작권 보호 중입니다.');
-  }, true);
-
-  // F12, Ctrl+U/S/P, Ctrl+Shift+I/J/C 차단
-  document.addEventListener('keydown', function(e){
-    const k = (e.key || '').toLowerCase();
-    const ctrl = e.ctrlKey || e.metaKey;
-    const block =
-      k === 'f12' ||
-      (ctrl && ['u','s','p'].includes(k)) ||
-      (ctrl && e.shiftKey && ['i','j','c'].includes(k));
-    if(block){ 
-      e.preventDefault(); 
-      e.stopPropagation(); 
-      alert('🔒 보호된 페이지입니다');
-    }
-  }, true);
-
-  // 복사/잘라내기 차단 (입력 필드 제외)
-  ['copy','cut'].forEach(evt => {
-    document.addEventListener(evt, function(ev){
-      const tag = (ev.target && ev.target.tagName || '').toLowerCase();
-      const editable = ev.target && (ev.target.isContentEditable || ['input','textarea'].includes(tag));
-      if(!editable){ 
-        ev.preventDefault(); 
-        alert('콘텐츠 복사 금지');
-      }
-    }, true);
-  });
-
-})();
-</script>
   <script src="/assets/amazing-brand.js" defer></script>
 </body>
 </html>
-
 

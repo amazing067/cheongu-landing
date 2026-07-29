@@ -155,6 +155,30 @@
   line-height: 1;
   letter-spacing: 0.02em;
 }
+/* 보험나이 계산기의 계산하기/초기화 버튼.
+   원래 레거시 assets/site.css 에만 있던 클래스라 Next 페이지에서는 스타일이 빠져
+   그냥 텍스트처럼 보였다. globals.css 로 옮겨 홈·계산기 단독 페이지 모두에서 살린다. */
+.key {
+  @apply inline-flex items-center justify-center font-semibold;
+  border: 1px solid var(--line, #e2e8f0);
+  background: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.key:hover {
+  background: #f8fafc;
+}
+.key-primary {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  color: #fff;
+}
+.key-primary:hover {
+  background: #6d28d9;
+}
 .tool-more {
   display: none; /* 데스크톱: 더보기 숨김 (도구 전부 노출) */
   color: var(--blue);
