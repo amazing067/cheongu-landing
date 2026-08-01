@@ -9,7 +9,11 @@ const KAKAO_CHAT = "https://pf.kakao.com/_mSxkxgn/chat";
 const PHONE = "02-2038-4379";
 const PHONE_TEL = "0220384379";
 const PRIME_SITE = "https://primeasset.kr"; // 프라임에셋 공식 (필요 시 어메이징 전용으로 교체)
-const AMAZING_SITE = "https://프라임에셋.com"; // 어메이징사업부 공식 사이트
+// 리쿠르팅용 어메이징사업부 소개 사이트 (프라임에셋.com). 기존 링크는 이대로 유지한다.
+const AMAZING_SITE = "https://프라임에셋.com";
+// 어메이징사업부 포털(어메이징사업부.com) — 위와 다른 사이트다.
+// 2026-08-01 사용자 요청: 리쿠르팅 링크는 그대로 두고 포털 홍보 링크를 「따로」 하나 더 노출.
+const AMAZING_PORTAL = "https://어메이징사업부.com";
 /* 신청 폼은 /api/apply 로 전송 → EMAIL_* 설정 시 induo@naver.com 으로 메일 발송.
    설정이 없거나 실패하면 카카오 상담으로 자동 폴백됩니다. */
 /* ────────────────────────────────────────────────────────── */
@@ -174,6 +178,9 @@ export default function JoinPage() {
             <a className="btn btn-ghost" href={AMAZING_SITE} target="_blank" rel="noopener noreferrer">
               어메이징사업부 바로가기
             </a>
+            <a className="btn btn-ghost" href={AMAZING_PORTAL} target="_blank" rel="noopener noreferrer">
+              어메이징사업부.com 포털
+            </a>
             <a className="btn btn-primary" href="#apply">1분 지원하기</a>
             <a className="btn btn-kakao" href={KAKAO_CHAT} target="_blank" rel="noopener noreferrer">
               카톡으로 먼저 상담
@@ -280,6 +287,10 @@ export default function JoinPage() {
               <a className="link" href={AMAZING_SITE} target="_blank" rel="noopener noreferrer">
                 어메이징사업부 공식 사이트 ›
               </a>
+              {/* 포털은 리쿠르팅 사이트와 별개로 따로 홍보한다(2026-08-01 요청) */}
+              <a className="link" href={AMAZING_PORTAL} target="_blank" rel="noopener noreferrer">
+                어메이징사업부.com 포털 ›
+              </a>
             </div>
           </div>
         </div>
@@ -375,6 +386,7 @@ export default function JoinPage() {
             </span>
             <div className="links">
               <a href="/">청구닷컴 홈</a>
+              <a href={AMAZING_PORTAL} target="_blank" rel="noopener noreferrer">어메이징사업부.com</a>
               <a href={PRIME_SITE} target="_blank" rel="noopener noreferrer">프라임에셋</a>
             </div>
           </div>

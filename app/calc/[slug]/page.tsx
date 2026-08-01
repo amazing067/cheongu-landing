@@ -4,6 +4,7 @@ import { AgeCalculator } from "@/components/AgeCalculator";
 import { MedCalculator } from "@/components/MedCalculator";
 import { SITE_URL } from "@/lib/carriers";
 import { calcPath, calcUrl, calculators, findCalculator } from "@/lib/calculators";
+import { Footer } from "@/components/Footer";
 
 // 서버 컴포넌트. 계산기 위젯 자체는 클라이언트 컴포넌트지만, 제목·설명 본문·FAQ 는
 // 서버에서 HTML 로 나가므로 크롤러가 읽을 실질 콘텐츠가 확보된다.
@@ -93,6 +94,7 @@ export default async function CalcPage({ params }: Props) {
   };
 
   return (
+    <>
     <main className="mx-auto max-w-3xl px-5 py-8">
       <script
         type="application/ld+json"
@@ -166,5 +168,7 @@ export default async function CalcPage({ params }: Props) {
         </a>
       </nav>
     </main>
+    <Footer />
+    </>
   );
 }

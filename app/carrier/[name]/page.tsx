@@ -10,6 +10,7 @@ import {
   splitPhones,
 } from "@/lib/carriers";
 import type { Carrier } from "@/types/carrier";
+import { Footer } from "@/components/Footer";
 
 // 서버 컴포넌트로 두는 게 핵심이다. 홈은 검색 상자·아코디언 때문에 클라이언트 렌더인데,
 // 이 페이지는 처음부터 완성된 HTML 로 나가야 네이버 크롤러도 팩스번호까지 읽어간다.
@@ -204,6 +205,7 @@ export default async function CarrierPage({ params }: Props) {
   };
 
   return (
+    <>
     <main className="mx-auto max-w-3xl px-5 py-8">
       <script
         type="application/ld+json"
@@ -326,5 +328,7 @@ export default async function CarrierPage({ params }: Props) {
         </a>
       </nav>
     </main>
+    <Footer />
+    </>
   );
 }

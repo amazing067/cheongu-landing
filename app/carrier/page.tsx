@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SITE_URL, carriersByType, carrierPath } from "@/lib/carriers";
 import type { Carrier } from "@/types/carrier";
+import { Footer } from "@/components/Footer";
 
 // 보험사 41곳으로 가는 허브. 크롤러가 개별 페이지를 전부 발견하는 통로이자,
 // "보험사 팩스번호 모음" 류 검색어를 직접 노리는 페이지다.
@@ -97,6 +98,7 @@ export default function CarrierIndexPage() {
   };
 
   return (
+    <>
     <main className="mx-auto max-w-3xl px-5 py-8">
       <script
         type="application/ld+json"
@@ -131,5 +133,7 @@ export default function CarrierIndexPage() {
         </a>
       </nav>
     </main>
+    <Footer />
+    </>
   );
 }
