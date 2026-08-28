@@ -50,6 +50,19 @@ function eunNeun(word: string): string {
   return (last - 0xac00) % 28 === 0 ? "는" : "은";
 }
 
+/** 전화번호 표 밑에 붙는 안내 한 줄. FAQ 답변과 같은 내용을 안내체로 짧게 쓴다. */
+function faxNoticeLine(name: string, fax: string, cs?: string): string {
+  const subject = `${name}${eunNeun(name)}`;
+  const center = cs ? `고객센터(${cs})` : "고객센터";
+  if (fax.includes("폐지")) {
+    return `${subject} 보험금 청구 팩스 접수를 종료했습니다. 모바일 앱 또는 홈페이지에서 서류를 사진으로 올려 접수해 주세요.`;
+  }
+  if (fax.includes("발급")) {
+    return `${subject} 고정된 팩스번호가 없습니다. ${center}에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 드립니다.`;
+  }
+  return `${subject} 공개된 팩스번호가 없습니다. ${center}로 전화해 접수 방법을 안내받으시거나 모바일 앱으로 접수해 주세요.`;
+}
+
 /** 번호가 없는 회사의 팩스 안내 문장. 상태 문구별로 실제 접수 방법을 풀어 쓴다. */
 function faxNoticeAnswer(name: string, fax: string, cs?: string): string {
   const subject = `${name}${eunNeun(name)}`;
@@ -119,20 +132,28 @@ function PhoneRow({ label, value }: { label: string; value?: string }) {
     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-slate-100 py-3 last:border-b-0">
       <dt className="w-28 shrink-0 text-sm font-bold text-slate-500">{label}</dt>
       <dd className="flex flex-wrap gap-x-4 gap-y-1">
-        {phones.map((p) => (
-          <a
-            key={p.number}
-            href={`tel:${p.tel}`}
-            className="text-base font-extrabold text-slate-900 no-underline hover:text-blue-700"
-          >
-            {p.number}
-            {p.label && (
-              <span className="ml-1 text-xs font-semibold text-slate-400">
-                {p.label}
-              </span>
-            )}
-          </a>
-        ))}
+        {phones.map((p) =>
+          // 숫자가 없는 값("폐지·앱 접수" 등)까지 링크로 만들면 href="tel:" 인
+          // 죽은 링크가 된다. 모바일에서 눌리는데 아무 반응이 없다.
+          p.tel ? (
+            <a
+              key={p.number}
+              href={`tel:${p.tel}`}
+              className="text-base font-extrabold text-slate-900 no-underline hover:text-blue-700"
+            >
+              {p.number}
+              {p.label && (
+                <span className="ml-1 text-xs font-semibold text-slate-400">
+                  {p.label}
+                </span>
+              )}
+            </a>
+          ) : (
+            <span key={p.number} className="text-base font-extrabold text-slate-400">
+              {p.number}
+            </span>
+          )
+        )}
       </dd>
     </div>
   );
@@ -297,6 +318,11 @@ export default async function CarrierPage({ params }: Props) {
             <PhoneRow label="헬프데스크" value={L.helpdesk} />
             <PhoneRow label="보험금청구 FAX" value={L.fax} />
           </dl>
+          {!hasFaxNumber && L.fax && (
+            <p className="mt-1 rounded-xl bg-slate-50 px-3 py-2.5 text-xs leading-relaxed text-slate-500">
+              ※ {faxNoticeLine(carrier.name, L.fax, L.cs)}
+            </p>
+          )}
         </section>
       )}
 
