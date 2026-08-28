@@ -432,6 +432,44 @@
   .stack {
     @apply w-full;
   }
+
+  /* 목록 버튼 배치 (모바일)
+   * flex-wrap 으로 흘려보내면 버튼 폭이 제각각이라 오른쪽 끝이 어긋나고
+   * 홈페이지·고객센터·인콜이 한 줄씩 혼자 차지한다.
+   * 역할별로 나눈다 — 청구서 PDF 는 맨 위 풀폭, 링크는 2열,
+   * 전화번호는 풀폭 1열로 두어 번호가 크게 보이고 엄지로 누르기 쉽게. */
+  .grid-top {
+    @apply grid gap-1.5;
+    grid-template-columns: 1fr 1fr;
+  }
+  .grid-top .btn-pdf {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+  .grid-bottom {
+    @apply flex-col;
+  }
+  /* 약관확인은 전화번호보다 위에 — 링크끼리 붙여둔다 */
+  .grid-bottom .btn-ghost {
+    order: -1;
+  }
+  /* 공제회사는 grid-top 이 3개(홈페이지·고객센터·약관확인)라 끝이 혼자 남는다.
+   * 3개일 때만 마지막을 풀폭으로. 손보·생명(5개)은 해당되지 않는다. */
+  .grid-top > :nth-child(3):last-child {
+    grid-column: 1 / -1;
+  }
+  /* 우체국보험의 지역별 FAX 는 팝업 버튼이라 래퍼가 폭을 안 먹는다 */
+  .grid-bottom .fax-popup-wrap {
+    @apply flex w-full;
+  }
+  .grid-bottom .fax-popup-wrap > .btn {
+    @apply flex-1;
+  }
+  .grid-top .btn,
+  .grid-bottom .btn {
+    @apply justify-center min-w-0;
+  }
+
   /* 채용 바: 줄바꿈 */
   .recruit-bar {
     @apply flex-wrap;
