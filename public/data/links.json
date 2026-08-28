@@ -165,7 +165,7 @@
         "support": "https://kakaopayinscorp.co.kr/customer-center/claim-info",
         "cs": "1544-0022",
         "monitor": "1544-0022",
-        "helpdesk": "1588-0000",
+        "helpdesk": "",
         "fax": "고객센터 전화",
         "terms": ""
       }
@@ -182,7 +182,7 @@
         "support": "https://www.shinhanez.co.kr/static/man/MAIN0000M01.html",
         "cs": "1544-2580",
         "monitor": "1544-2580",
-        "helpdesk": "1588-0000",
+        "helpdesk": "",
         "fax": "0505-987-8282",
         "terms": "https://www.shinhanez.co.kr/static/pub/PUB2000T021.html"
       }
@@ -199,7 +199,7 @@
         "support": "https://www.carrotins.com/",
         "cs": "1566-0300",
         "monitor": "1566-0300",
-        "helpdesk": "1588-0000",
+        "helpdesk": "",
         "fax": "고객센터 전화",
         "terms": "https://www.hwgeneralins.com/notice/ir/product-ing01.do"
       }
@@ -284,7 +284,7 @@
         "support": "https://www.hanwhalife.com/main/MN_0000000_P10000.do",
         "cs": "1588-6363",
         "monitor": "1800-6633",
-        "helpdesk": "02-1522-6379",
+        "helpdesk": "1522-6379",
         "fax": "고객센터 전화",
         "terms": "https://www.hanwhalife.com/index.jsp"
       }
@@ -318,7 +318,7 @@
         "support": "https://life.miraeasset.com/home/index.do#MO-HO-000000-000000",
         "cs": "1588-0220",
         "monitor": "1588-0220",
-        "helpdesk": "02-3271-5108",
+        "helpdesk": "02-3271-4848",
         "fax": "고객센터 전화",
         "terms": "https://life.miraeasset.com/micro/disclosure/product/PC-HO-080301-000000.do"
       }
