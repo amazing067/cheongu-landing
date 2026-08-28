@@ -33,11 +33,45 @@ function decodeName(raw: string): string {
   }
 }
 
+/**
+ * fax 필드에는 실제 번호 대신 "폐지·앱 접수" / "콜센터 발급" / "고객센터 전화"
+ * 같은 상태 문구가 들어가는 회사가 있다. 이걸 번호처럼 문장에 끼워 넣으면
+ * "팩스번호는 콜센터 발급 입니다" 같은 문장이 검색결과로 나간다.
+ */
+function isFaxNumber(fax?: string): boolean {
+  return /^[0-9]/.test(fax?.trim() ?? "");
+}
+
+/** 받침에 따라 은/는 을 고른다. "흥국화재은" 같은 문장이 검색결과로 나가지 않도록. */
+function eunNeun(word: string): string {
+  const last = word.trim().slice(-1).charCodeAt(0);
+  const isHangul = last >= 0xac00 && last <= 0xd7a3;
+  if (!isHangul) return "는";
+  return (last - 0xac00) % 28 === 0 ? "는" : "은";
+}
+
+/** 번호가 없는 회사의 팩스 안내 문장. 상태 문구별로 실제 접수 방법을 풀어 쓴다. */
+function faxNoticeAnswer(name: string, fax: string, cs?: string): string {
+  const subject = `${name}${eunNeun(name)}`;
+  const center = cs ? `고객센터(${cs})` : "고객센터";
+  if (fax.includes("폐지")) {
+    return `${subject} 보험금 청구 팩스 접수를 종료했습니다. 모바일 앱 또는 홈페이지에서 서류를 사진으로 올려 접수하시면 됩니다. 문의는 ${center}로 하시면 됩니다.`;
+  }
+  if (fax.includes("발급")) {
+    return `${subject} 고정된 팩스번호가 없습니다. ${center}에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 주며, 그 번호로 서류를 보내시면 됩니다.`;
+  }
+  return `${subject} 공개된 팩스번호가 없습니다. ${center}로 전화해 접수 방법을 안내받으시거나 모바일 앱으로 접수하시면 됩니다.`;
+}
+
 /** 검색결과에 그대로 노출되는 문장 — 실제 번호를 넣어야 클릭률이 오른다. */
 function buildDescription(c: Carrier): string {
   const L = c.links || {};
   const bits: string[] = [];
-  if (L.fax) bits.push(`보험금청구 팩스 ${splitPhones(L.fax)[0]?.number ?? L.fax}`);
+  if (isFaxNumber(L.fax)) {
+    bits.push(`보험금청구 팩스 ${splitPhones(L.fax)[0]?.number ?? L.fax}`);
+  } else if (L.fax?.includes("폐지")) {
+    bits.push("보험금청구 팩스 접수 종료");
+  }
   if (L.cs) bits.push(`고객센터 ${L.cs}`);
   if (L.monitor) bits.push(`인콜 ${L.monitor}`);
   const numbers = bits.length ? ` ${bits.join(" · ")}.` : "";
@@ -137,13 +171,19 @@ export default async function CarrierPage({ params }: Props) {
 
   const L = carrier.links || {};
   const faxFirst = splitPhones(L.fax)[0]?.number;
+  const hasFaxNumber = isFaxNumber(L.fax);
 
   // 검색에서 실제로 들어오는 질문들 — 답 박스(FAQ 리치 결과)로 잡히도록 스키마에 싣는다.
   const faqs: { q: string; a: string }[] = [];
-  if (faxFirst) {
+  if (hasFaxNumber) {
     faqs.push({
       q: `${carrier.name} 보험금 청구 팩스번호는?`,
       a: `${carrier.name}의 보험금 청구 팩스번호는 ${L.fax} 입니다. 청구서와 필요서류를 팩스로 보내신 뒤 접수 여부를 고객센터로 확인하시는 것이 안전합니다.`,
+    });
+  } else if (L.fax) {
+    faqs.push({
+      q: `${carrier.name} 보험금 청구 팩스번호는?`,
+      a: faxNoticeAnswer(carrier.name, L.fax, L.cs),
     });
   }
   if (L.cs) {
@@ -306,9 +346,9 @@ export default async function CarrierPage({ params }: Props) {
           <li>보험금 청구서 PDF 를 내려받아 작성합니다.</li>
           <li>진단서·영수증 등 서류를 함께 준비합니다.</li>
           <li>
-            {faxFirst
+            {hasFaxNumber
               ? `팩스(${faxFirst}) 또는 모바일 앱으로 접수합니다.`
-              : "팩스 또는 모바일 앱으로 접수합니다."}
+              : "모바일 앱 또는 홈페이지로 접수합니다."}
           </li>
           <li>
             {L.cs

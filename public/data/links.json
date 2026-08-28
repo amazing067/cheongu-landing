@@ -148,8 +148,8 @@
         "dental": "/assets/pdf/NH농협손해보험 치과치료확인서.pdf",
         "support": "https://www.nhfire.co.kr/index.nhfire",
         "cs": "1644-9000",
-        "monitor": "1644-9000",
-        "helpdesk": "1644-0090",
+        "monitor": "1644-9600",
+        "helpdesk": "1644-0096",
         "fax": "0505-060-7000",
         "terms": "https://www.nhfire.co.kr/announce/productAnnounce/retrieveInsuranceProductsAnnounce.nhfire"
       }
@@ -285,7 +285,7 @@
         "cs": "1588-6363",
         "monitor": "1800-6633",
         "helpdesk": "1522-6379",
-        "fax": "고객센터 전화",
+        "fax": "콜센터 발급",
         "terms": "https://www.hanwhalife.com/index.jsp"
       }
     },
@@ -370,7 +370,7 @@
         "cs": "1544-4000",
         "monitor": "1544-4422",
         "helpdesk": "02-3786-8800",
-        "fax": "02-6791-6040",
+        "fax": "02-6971-6040",
         "terms": "https://www.nhlife.co.kr/ho/on/HOON0004M00.nhl"
       }
     },
@@ -387,7 +387,7 @@
         "cs": "1577-1112",
         "monitor": "1577-1112",
         "helpdesk": "02-3709-8602",
-        "fax": "고객센터 전화",
+        "fax": "콜센터 발급",
         "terms": "https://www.hanalife.co.kr/anm/product/allProduct.do?status=on"
       }
     },
@@ -468,8 +468,8 @@
         "pdf": "/assets/pdf/메트라이프생명-보험금청구서.pdf",
         "support": "https://cyber.metlife.co.kr/",
         "cs": "1588-9600",
-        "monitor": "1588-9600",
-        "helpdesk": "1899-0751",
+        "monitor": "1588-9609",
+        "helpdesk": "0502-370-0205",
         "fax": "고객센터 전화",
         "terms": "https://brand.metlife.co.kr/pn/mcvrgProd/retrieveMcvrgProdMain.do"
       }
@@ -552,7 +552,7 @@
         "support": "https://www.lina.co.kr/",
         "cs": "1588-0058",
         "monitor": "1588-2442",
-        "helpdesk": "1588-2215",
+        "helpdesk": "02-3781-2006",
         "fax": "02-6944-1200",
         "terms": "https://www.lina.co.kr/disclosure/product-public-announcement/product-on-sales?key=0"
       }
@@ -587,7 +587,7 @@
         "cs": "1577-1004",
         "monitor": "080-899-1004",
         "helpdesk": "02-728-9900",
-        "fax": "02-3289-4516",
+        "fax": "폐지·앱 접수",
         "terms": "https://pbano.myangel.co.kr/paging/WE_AC_WEPAAP020100L"
       }
     },
@@ -674,7 +674,7 @@
         "cs": "1588-4119",
         "monitor": "",
         "helpdesk": "",
-        "fax": "콜센터 가상번호 부여",
+        "fax": "콜센터 발급",
         "terms": "https://www.suhyup.co.kr"
       }
     },
@@ -691,7 +691,7 @@
         "cs": "1544-3030",
         "monitor": "",
         "helpdesk": "",
-        "fax": "콜센터 가상번호 부여",
+        "fax": "콜센터 발급",
         "terms": "https://www.cu.co.kr"
       }
     }
