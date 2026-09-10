@@ -757,46 +757,67 @@
 }
 
 @media (max-width: 700px) {
+  /* 좁은 폭에서는 전체를 한 단계씩 줄인다.
+     가로 스크롤은 쓰지 않는다 — 모바일에서 옆으로 미는 사람이 거의 없다.
+     대신 글자·여백·설명을 모두 조여 2열 두 줄로 유지한다. */
   .recruit-cards {
-    padding: 15px;
+    padding: 12px 13px;
   }
   .recruit-cards .rc-head {
-    @apply flex-col items-stretch gap-3;
+    @apply flex-col items-stretch gap-2;
+    margin-bottom: 9px;
   }
   .recruit-cards .rc-btn {
     @apply text-center;
+    font-size: 12.5px;
+    padding: 8px 15px;
   }
   .recruit-cards .rc-h {
-    font-size: 15.5px;
+    font-size: 14.5px;
   }
   .recruit-cards .rc-lead {
-    font-size: 12px;
+    font-size: 11px;
+    line-height: 1.5;
   }
-  /* 좁은 폭에서는 문장 한 토막을 접는다. 뜻은 그대로 통하고 한 줄이 준다 */
+  .recruit-cards .rc-lead p {
+    margin-top: 2px;
+  }
   .recruit-cards .rc-lead .tail {
     @apply hidden;
   }
   .recruit-cards .rc-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
+    gap: 5px;
   }
-  /* 5칸이 2열로 떨어지면 3줄이 되고 마지막 칸이 혼자 전체 폭을 먹는다.
-     제일 흔한 항목(보장분석 — 어느 GA나 있다) 하나만 접는다 */
+  /* 5칸이 2열로 떨어지면 세 줄이 되고 마지막 칸이 혼자 전체 폭을 먹는다.
+     제일 흔한 항목(보장분석 — 어느 GA 나 있다) 하나만 접어 두 줄로 맞춘다 */
   .recruit-cards .rc-card.drop-mobile {
     @apply hidden;
   }
   .recruit-cards .rc-card {
-    padding: 10px 10px 11px;
+    padding: 8px 9px 9px;
+  }
+  .recruit-cards .rc-bdg {
+    font-size: 9.5px;
+    padding: 2px 6px;
   }
   .recruit-cards .rc-card .t {
-    font-size: 12.5px;
-    margin-top: 7px;
+    font-size: 11.5px;
+    margin-top: 5px;
   }
   .recruit-cards .rc-card .d {
-    font-size: 11px;
-    margin-top: 4px;
+    font-size: 10px;
+    margin-top: 2px;
+    line-height: 1.4;
   }
   .recruit-cards .rc-foot {
-    @apply flex-col-reverse items-start gap-2;
+    @apply flex-col-reverse items-start gap-1;
+    margin-top: 9px;
+    padding-top: 8px;
+    font-size: 11px;
+  }
+  .recruit-cards .rc-foot .cnt {
+    font-size: 10.5px;
+    padding: 3px 7px;
   }
 }

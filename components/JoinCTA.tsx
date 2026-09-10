@@ -101,8 +101,10 @@ export function JoinCTA({ variant = "bar" }: { variant?: "bar" | "cards" }) {
                 </p>
               </div>
             </div>
+            {/* 버튼은 지원으로 돌려놓는다. "29개 살펴보기"는 문턱이 낮지만
+                정작 지원 의사가 있는 사람에게 다음 단계가 보이지 않는다. */}
             <Link href="/join" className="rc-btn">
-              {FEATURE_COUNT}개 살펴보기
+              1분 지원하기 →
             </Link>
           </div>
 
