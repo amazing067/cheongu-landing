@@ -8,6 +8,11 @@ import { Analytics } from "@vercel/analytics/next";
 // 값은 구글이 계정·속성별로 발급하므로 임의로 바꿔 쓸 수 없다.
 const GOOGLE_SITE_VERIFICATION = "kU6KbPjW-C2z8YrJpuSfjIppr0eaV45FUXuou4w0daM";
 
+// Bing 웹마스터도구 소유확인 값 (2026-09-10 발급).
+// ChatGPT 검색이 Bing 색인을 쓰기 때문에 등록했다 — 구글·네이버만으로는
+// AI 검색에 안 잡힌다. 구글 값과 마찬가지로 확인 후에도 지우면 소유권이 풀린다.
+const BING_SITE_VERIFICATION = "B8405522ACE1F187A3C514F7E7CEA09B";
+
 // 대표 도메인 = www.청구.com (퓨니코드 www.xn--2e0br60d.com).
 // 실서버가 non-www → www 로 307 리다이렉트하므로 모든 표기를 www 로 통일해야
 // 검색엔진에 랭킹 신호가 한 주소로 모인다. sitemap.ts / robots.ts 와 동일하게 유지할 것.
@@ -91,6 +96,7 @@ export default function RootLayout({
             content={GOOGLE_SITE_VERIFICATION}
           />
         )}
+        <meta name="msvalidate.01" content={BING_SITE_VERIFICATION} />
         {/* 구조화 데이터 — 청구닷컴이 어메이징사업부 브랜드 자산임을 검색엔진에 연결 */}
         <script
           type="application/ld+json"
