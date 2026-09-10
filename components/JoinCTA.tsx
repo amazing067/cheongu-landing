@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TrackedLink } from "@/components/TrackedLink";
 
 /**
  * 채용 진입 CTA — /join 으로 이동.
@@ -103,9 +103,9 @@ export function JoinCTA({ variant = "bar" }: { variant?: "bar" | "cards" }) {
             </div>
             {/* 버튼은 지원으로 돌려놓는다. "29개 살펴보기"는 문턱이 낮지만
                 정작 지원 의사가 있는 사람에게 다음 단계가 보이지 않는다. */}
-            <Link href="/join" className="rc-btn">
+            <TrackedLink href="/join" event="cards" className="rc-btn">
               1분 지원하기 →
-            </Link>
+            </TrackedLink>
           </div>
 
           <div className="rc-grid">
@@ -139,7 +139,7 @@ export function JoinCTA({ variant = "bar" }: { variant?: "bar" | "cards" }) {
     <section className="maxw mt-4">
       {/* 이모지는 빼둔다. 카드 쪽과 같은 규칙이다 — 이모지가 붙는 순간
           템플릿으로 만든 배너처럼 보인다. */}
-      <Link href="/join" className="recruit-bar">
+      <TrackedLink href="/join" event="bar" className="recruit-bar">
         <span className="tx">
           <b>어메이징사업부와 함께할 설계사분을 찾아요</b>
           <span className="rsub">
@@ -147,7 +147,7 @@ export function JoinCTA({ variant = "bar" }: { variant?: "bar" | "cards" }) {
           </span>
         </span>
         <span className="go">1분 지원하기 →</span>
-      </Link>
+      </TrackedLink>
     </section>
   );
 }
