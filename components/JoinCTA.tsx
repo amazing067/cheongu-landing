@@ -135,10 +135,9 @@ export function JoinCTA({ variant = "bar" }: { variant?: "bar" | "cards" }) {
 
   return (
     <section className="maxw mt-4">
+      {/* 이모지는 빼둔다. 카드 쪽과 같은 규칙이다 — 이모지가 붙는 순간
+          템플릿으로 만든 배너처럼 보인다. */}
       <Link href="/join" className="recruit-bar">
-        <span className="em" aria-hidden>
-          🤝
-        </span>
         <span className="tx">
           <b>어메이징사업부와 함께할 설계사분을 찾아요</b>
           <span className="rsub">

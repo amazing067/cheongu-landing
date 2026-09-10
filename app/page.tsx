@@ -19,7 +19,7 @@ export default function Home() {
     <>
       <Header />
       <Hero searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <JoinCTA />
+      <JoinCTA variant="cards" />
       <main className="maxw pb-20">
         <CarrierList
           searchQuery={searchQuery}
@@ -56,7 +56,7 @@ export default function Home() {
           </div>
         </section>
         <CarrierIndexLinks />
-        <JoinCTA variant="cards" />
+        <JoinCTA />
       </main>
       <Footer />
       <JoinFab />
