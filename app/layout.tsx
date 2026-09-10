@@ -56,6 +56,11 @@ export const metadata: Metadata = {
       },
     ],
   },
+  // 트위터 카드가 없어 SEO 진단에서 소셜 항목이 계속 걸렸다.
+  // 값은 기존 openGraph 를 그대로 따라가므로 문구가 새로 생기지는 않는다.
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({
@@ -97,6 +102,9 @@ export default function RootLayout({
           />
         )}
         <meta name="msvalidate.01" content={BING_SITE_VERIFICATION} />
+        {/* AI 크롤러용 사이트 안내. llms.txt 를 실제로 읽는다고 공개한 곳은 없지만
+            비용이 없어서 걸어둔다 (app/llms.txt/route.ts 참고). */}
+        <link rel="llms" href="/llms.txt" type="text/plain" />
         {/* 구조화 데이터 — 청구닷컴이 어메이징사업부 브랜드 자산임을 검색엔진에 연결 */}
         <script
           type="application/ld+json"

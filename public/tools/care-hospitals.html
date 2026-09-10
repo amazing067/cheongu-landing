@@ -73,12 +73,17 @@
             100% { transform: rotate(360deg); }
         }
     </style>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <link rel="llms" href="/llms.txt" type="text/plain">
 </head>
 <body class="min-h-screen bg-[#f2f4f6]">
     <!-- 정적 HTML 로 된 홈 링크. amazing-brand.js 가 헤더를 JS 로 주입하지만
          네이버 크롤러는 JS 를 실행하지 않아 그 링크를 못 본다.
          이게 없으면 이 페이지가 크롤 막다른 길이 된다. -->
     <nav class="crumb" aria-label="위치"><a href="/">청구닷컴</a> <span aria-hidden>›</span> 간호간병 통합서비스 병원 찾기</nav>
+  <main id="main">
 
     <!-- 로딩 오버레이 -->
     <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
@@ -147,7 +152,7 @@
                         id="searchInput"
                         placeholder="병원명, 지역, 주소로 검색하세요... (예: 서울, 삼성병원, 강남구)"
                         class="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-all text-base shadow-sm"
-                    />
+                    / aria-label="병원명, 지역, 주소로 검색하세요 예 서울, 삼성병원, 강남구">
                 </div>
                 <button
                     id="searchButton"
@@ -2430,6 +2435,8 @@
       <p class="cg-note">이 페이지는 제도와 용어를 설명하기 위한 참고 자료다. 개별 사안은 해당 기관이나 의료기관에 확인해야 한다.</p>
     </section>
   <!-- ENRICH:END -->
+
+  </main>
 </body>
 </html>
 

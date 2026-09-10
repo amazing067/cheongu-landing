@@ -403,6 +403,10 @@
   border-radius: 12px;
 }
   </style>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <link rel="llms" href="/llms.txt" type="text/plain">
 </head>
 <body>
   <!--
@@ -417,11 +421,12 @@
        네이버 크롤러는 JS 를 실행하지 않아 그 링크를 못 본다.
        상단이 고정 검색창이라 자리가 없어 화면에서는 감추고 크롤러에만 노출한다. -->
   <nav class="visually-hidden" aria-label="위치"><a href="/">청구닷컴</a> › 전국 상급종합병원 지도</nav>
+  <main id="main">
 
   <!-- 검색창 -->
   <div class="search-container">
     <div class="search-wrapper">
-      <input type="text" class="search-input" id="searchInput" placeholder="🔍 병원명, 지역, 주소 검색...">
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍 병원명, 지역, 주소 검색..." aria-label="병원명, 지역, 주소 검색">
       <select class="region-select" id="regionSelect">
         <option value="">전체 지역</option>
       </select>
@@ -1418,5 +1423,7 @@
       <p class="cg-note">이 페이지는 제도와 용어를 설명하기 위한 참고 자료다. 개별 사안은 해당 기관이나 의료기관에 확인해야 한다.</p>
     </section>
   <!-- ENRICH:END -->
+
+  </main>
 </body>
 </html>

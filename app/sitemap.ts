@@ -24,6 +24,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    // 소개·문의·개인정보처리방침 — 검색 유입용은 아니지만 신뢰도(E-E-A-T) 신호라
+    // 크롤러가 반드시 발견해야 한다. 보험은 YMYL 이라 이게 순위에 실제로 작용한다.
+    ...["/about", "/contact", "/privacy"].map((path) => ({
+      url: `${BASE}${path}`,
+      lastModified: TOOLS_MODIFIED,
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    })),
     // 검색 유입용 정보 페이지 — 홈 다음으로 검색량이 큰 콘텐츠들이라 우선순위를 높게 준다.
     // (e-enroll.html 은 noindex 유지, claim-autofill/pdf-* 는 미완성이라 제외)
     {

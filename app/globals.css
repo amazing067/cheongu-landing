@@ -587,3 +587,21 @@
   @apply text-xs px-2.5 py-1 border rounded-full bg-white;
   border-color: var(--line);
 }
+
+/* 소개·문의·개인정보처리방침 같은 글 페이지의 본문 스타일.
+   Tailwind typography 플러그인을 안 쓰므로 필요한 것만 직접 정의한다. */
+.prose-cg {
+  @apply text-slate-700 leading-relaxed;
+}
+.prose-cg h2 {
+  @apply text-lg font-bold text-slate-900 mt-8 mb-3;
+}
+.prose-cg p {
+  @apply mb-4;
+}
+.prose-cg ul {
+  @apply list-disc pl-5 mb-4 space-y-1.5;
+}
+.prose-cg a {
+  @apply text-blue-600 underline underline-offset-2 hover:text-blue-800;
+}
