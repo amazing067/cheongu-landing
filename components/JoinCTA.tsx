@@ -74,8 +74,10 @@ const FEATURES = [
 
 export function JoinCTA({ variant = "bar" }: { variant?: "bar" | "cards" }) {
   if (variant === "cards") {
+    // maxw 에 위 여백을 주지 않는다. 히어로(흰 블록) 바로 아래에 붙여야
+    // 회색 띠가 한 줄 지나가지 않고 한 덩어리로 읽힌다.
     return (
-      <section className="maxw mt-12">
+      <section className="maxw">
         <div className="recruit-cards">
           <div className="rc-head">
             <div className="rc-tx">
