@@ -56,7 +56,7 @@ export default function Home() {
           </div>
         </section>
         <CarrierIndexLinks />
-        <JoinCTA variant="card" />
+        <JoinCTA variant="cards" />
       </main>
       <Footer />
       <JoinFab />

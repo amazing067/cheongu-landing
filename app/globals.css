@@ -605,3 +605,79 @@
 .prose-cg a {
   @apply text-blue-600 underline underline-offset-2 hover:text-blue-800;
 }
+
+/* ===== 채용 카드 (JoinCTA variant="cards") =====
+   기존 한 줄 배너는 누르기 전에는 아무것도 안 보여서, 무엇을 주는지 모른 채
+   지나가는 구조였다. 내용을 펼쳐 보여주되 자리를 적게 쓰도록
+   제목·부제를 한 줄씩으로 눕히고 카드 설명도 한 줄로 맞췄다.
+   (원안 대비 절반 — PC 145px / 모바일 336px) */
+.recruit-cards {
+  @apply border rounded-[18px] bg-white;
+  border-color: var(--line);
+  padding: 15px 16px;
+}
+.recruit-cards .rc-head {
+  @apply flex items-center gap-2.5;
+  margin-bottom: 11px;
+}
+.recruit-cards .rc-tx {
+  @apply flex-1 min-w-0;
+}
+.recruit-cards .rc-h {
+  @apply font-extrabold tracking-tight;
+  font-size: 15.5px;
+  line-height: 1.4;
+}
+.recruit-cards .rc-h .hl {
+  color: var(--blue);
+}
+.recruit-cards .rc-sub {
+  @apply font-semibold;
+  font-size: 12px;
+  color: var(--sub);
+  margin-top: 4px;
+  line-height: 1.55;
+}
+.recruit-cards .rc-btn {
+  @apply flex-none font-extrabold text-white no-underline whitespace-nowrap;
+  background: var(--blue);
+  font-size: 12.5px;
+  padding: 9px 15px;
+  border-radius: 10px;
+}
+.recruit-cards .rc-btn:hover {
+  background: var(--blue-d);
+}
+.recruit-cards .rc-grid {
+  @apply grid gap-2;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.recruit-cards .rc-card {
+  @apply border rounded-[11px];
+  border-color: var(--line);
+  background: #fbfcfd;
+  padding: 10px 11px;
+}
+.recruit-cards .rc-card .t {
+  @apply font-extrabold flex items-center gap-1.5;
+  font-size: 12.5px;
+}
+.recruit-cards .rc-card .d {
+  @apply font-medium;
+  font-size: 11.5px;
+  color: #5c6672;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+/* 좁은 화면에서는 2열 + 버튼 전체폭 — 4열을 억지로 유지하면 글자가 깨진다 */
+@media (max-width: 700px) {
+  .recruit-cards .rc-head {
+    @apply flex-col items-stretch;
+  }
+  .recruit-cards .rc-btn {
+    @apply text-center;
+  }
+  .recruit-cards .rc-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
