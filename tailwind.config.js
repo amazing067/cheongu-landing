@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Pretendard", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Noto Sans KR", "sans-serif"]
+        sans: ["Pretendard Variable", "Pretendard", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Noto Sans KR", "sans-serif"]
       },
       colors: {
         brand: {

@@ -9,7 +9,7 @@
   body {
     @apply antialiased text-[#191F28];
     background: #f2f4f6;
-    font-family: "Pretendard", system-ui, -apple-system, Segoe UI, Roboto,
+    font-family: "Pretendard Variable", "Pretendard", system-ui, -apple-system, Segoe UI, Roboto,
       Helvetica, Arial, sans-serif;
     word-break: keep-all;
   }

@@ -10,7 +10,7 @@
   --dim:rgba(10,11,16,.72); --dim2:rgba(10,11,16,.55); --line:rgba(10,11,16,.14);
   --accent:#2563EB; --accent-soft:rgba(37,99,235,.10);
   background:var(--paper); color:var(--ink);
-  font-family:'Pretendard',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-family:'Pretendard Variable','Pretendard',system-ui,-apple-system,'Segoe UI',sans-serif;
   word-break:keep-all; overflow-wrap:anywhere; line-height:1.55;
   min-height:100vh;
 }

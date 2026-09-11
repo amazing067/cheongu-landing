@@ -84,9 +84,10 @@ export default function RootLayout({
           rel="apple-touch-icon"
           href={`/icons/icon-192.png?v=${faviconVersion}`}
         />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {/* Pretendard 는 Google Fonts 에 없다 (요청하면 400). 공식 배포처인 jsDelivr 에서 받는다 */}
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800;900&display=swap"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css"
           rel="stylesheet"
         />
         <link rel="manifest" href="/manifest.webmanifest" />
