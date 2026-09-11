@@ -11,6 +11,10 @@
     background: #f2f4f6;
     font-family: "Pretendard Variable", "Pretendard", system-ui, -apple-system, Segoe UI, Roboto,
       Helvetica, Arial, sans-serif;
+    /* Pretendard 는 맑은 고딕보다 획이 얇고 폭이 좁다. 가변 폰트(45~920)라
+       450 은 파일 추가 없이 쓸 수 있고, 자간을 살짝 벌려야 받침이 뭉개지지 않는다 */
+    font-weight: 450;
+    letter-spacing: 0.01em;
     word-break: keep-all;
   }
   header a,
@@ -662,7 +666,7 @@
   font-size: 12.5px;
   color: var(--rc-body);
   line-height: 1.6;
-  letter-spacing: -0.015em;
+  letter-spacing: 0.01em;
   max-width: 600px;
 }
 .recruit-cards .rc-lead p {
@@ -704,7 +708,7 @@
 .recruit-cards .rc-bdg {
   @apply inline-block font-extrabold text-white;
   font-size: 10.5px;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
   padding: 3px 7px;
   border-radius: 4px;
   line-height: 1.3;
@@ -721,7 +725,7 @@
 .recruit-cards .rc-card .t {
   @apply font-extrabold;
   font-size: 13px;
-  letter-spacing: -0.028em;
+  letter-spacing: 0.01em;
   margin-top: 8px;
   line-height: 1.3;
 }
@@ -731,7 +735,7 @@
   color: var(--rc-body);
   margin-top: 5px;
   line-height: 1.45;
-  letter-spacing: -0.015em;
+  letter-spacing: 0.01em;
 }
 
 .recruit-cards .rc-foot {
@@ -741,7 +745,7 @@
   border-top: 1px solid var(--rc-line);
   font-size: 12.5px;
   color: var(--rc-body);
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
 }
 .recruit-cards .rc-foot b {
   @apply font-bold;
