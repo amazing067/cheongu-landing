@@ -140,9 +140,14 @@ export default async function GuidePage({ params }: Props) {
           어메이징사업부가 직접 만들어 쓰는 <b>영업 시스템 29개</b> 중 하나를
           공개한 것입니다.
         </p>
-        <Link href="/" className="gc-btn">
-          보험사 41곳 청구정보 보기
-        </Link>
+        <div className="gc-actions">
+          <Link href="/" className="gc-btn">
+            보험사 41곳 청구정보 보기
+          </Link>
+          <Link href="/join" className="gc-btn2">
+            영업 시스템 둘러보기
+          </Link>
+        </div>
       </div>
 
       {/* 먼저 경고한다. 한도를 모르고 보내면 반려된다 */}
@@ -291,9 +296,14 @@ export default async function GuidePage({ params }: Props) {
           보험사 <b>41곳</b>의 청구 서류와 연락처를 전부 정리해 뒀습니다.
           종수술분류표, 실손 계산기, 상급종합병원 목록도 함께 있습니다.
         </p>
-        <Link href="/" className="gc-btn">
-          청구닷컴 전체 보기
-        </Link>
+        <div className="gc-actions">
+          <Link href="/" className="gc-btn">
+            청구닷컴 전체 보기
+          </Link>
+          <Link href="/join" className="gc-btn2">
+            영업 시스템 둘러보기
+          </Link>
+        </div>
       </div>
 
       <Footer />

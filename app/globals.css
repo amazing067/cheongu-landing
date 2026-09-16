@@ -842,14 +842,19 @@
   --gc-line: #e7e5e4;
   --gc-gold: #f09018;
 
-  @apply rounded-xl border bg-white;
+  @apply rounded-xl border bg-white text-center;
   border-color: var(--gc-line);
   color: var(--gc-ink);
-  padding: 20px 20px 22px;
+  padding: 24px 20px 26px;
+}
+/* 버튼 두 개를 나란히. 좁은 화면에서는 세로로 쌓고 가로로 꽉 채운다 */
+.guide-cta .gc-actions {
+  @apply flex flex-wrap items-center justify-center gap-2.5;
+  margin-top: 18px;
 }
 .guide-cta .gc-top {
-  @apply flex items-center gap-2.5;
-  margin-bottom: 12px;
+  @apply flex items-center justify-center gap-2.5;
+  margin-bottom: 14px;
 }
 .guide-cta .gc-site {
   @apply font-extrabold;
@@ -871,12 +876,12 @@
   white-space: nowrap;
 }
 .guide-cta .gc-lead {
-  @apply font-semibold;
+  @apply font-semibold mx-auto;
   font-size: 13px;
   line-height: 1.65;
   color: var(--gc-body);
   margin-top: 8px;
-  max-width: 620px;
+  max-width: 560px;
 }
 .guide-cta .gc-lead b {
   @apply font-extrabold;
@@ -888,10 +893,23 @@
   font-size: 13.5px;
   padding: 11px 18px;
   border-radius: 7px;
-  margin-top: 16px;
 }
 .guide-cta .gc-btn:hover {
   background: #b8271e;
+}
+/* 두 번째 버튼 — 주된 행동(청구정보 보기)을 가리지 않게 테두리형으로 */
+.guide-cta .gc-btn2 {
+  @apply inline-block font-extrabold no-underline border;
+  color: var(--gc-ink);
+  border-color: #d6d3d1;
+  background: #fff;
+  font-size: 13.5px;
+  padding: 10px 17px;
+  border-radius: 7px;
+}
+.guide-cta .gc-btn2:hover {
+  background: #fafaf9;
+  border-color: var(--gc-gold);
 }
 /* 하단 출구 — 상단에서 이미 말했으니 여기는 한 톤 낮춘다 */
 .guide-cta--end .gc-h {
@@ -901,7 +919,11 @@
   .guide-cta .gc-h {
     font-size: 16.5px;
   }
-  .guide-cta .gc-btn {
+  .guide-cta .gc-actions {
+    @apply flex-col items-stretch;
+  }
+  .guide-cta .gc-btn,
+  .guide-cta .gc-btn2 {
     @apply block text-center;
   }
 }
