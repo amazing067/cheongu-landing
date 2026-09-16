@@ -845,12 +845,12 @@
   @apply rounded-xl border bg-white text-center;
   border-color: var(--gc-line);
   color: var(--gc-ink);
-  padding: 24px 20px 26px;
+  padding: 30px 24px 32px;
 }
 /* 버튼 두 개를 나란히. 좁은 화면에서는 세로로 쌓고 가로로 꽉 채운다 */
 .guide-cta .gc-actions {
-  @apply flex flex-wrap items-center justify-center gap-2.5;
-  margin-top: 18px;
+  @apply flex flex-wrap items-center justify-center gap-3;
+  margin-top: 22px;
 }
 .guide-cta .gc-top {
   @apply flex items-center justify-center gap-2.5;
@@ -858,30 +858,30 @@
 }
 .guide-cta .gc-site {
   @apply font-extrabold;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--gc-body);
-  padding-left: 10px;
+  padding-left: 12px;
   border-left: 1px solid var(--gc-line);
 }
 .guide-cta .gc-h {
   @apply font-extrabold tracking-tight;
-  font-size: 18px;
-  line-height: 1.42;
+  font-size: 23px;
+  line-height: 1.38;
 }
 /* 굵은 밑줄 하나가 이 블록의 유일한 장식이다.
    줄바꿈이 밑줄 가운데를 자르면 장식이 사고로 보인다 — 통째로 넘긴다 */
 .guide-cta .gc-h .u {
-  border-bottom: 3px solid var(--gc-gold);
-  padding-bottom: 1px;
+  border-bottom: 4px solid var(--gc-gold);
+  padding-bottom: 2px;
   white-space: nowrap;
 }
 .guide-cta .gc-lead {
   @apply font-semibold mx-auto;
-  font-size: 13px;
-  line-height: 1.65;
+  font-size: 15px;
+  line-height: 1.7;
   color: var(--gc-body);
-  margin-top: 8px;
-  max-width: 560px;
+  margin-top: 11px;
+  max-width: 620px;
 }
 .guide-cta .gc-lead b {
   @apply font-extrabold;
@@ -890,9 +890,9 @@
 .guide-cta .gc-btn {
   @apply inline-block font-extrabold text-white no-underline;
   background: var(--amz);
-  font-size: 13.5px;
-  padding: 11px 18px;
-  border-radius: 7px;
+  font-size: 15px;
+  padding: 14px 24px;
+  border-radius: 8px;
 }
 .guide-cta .gc-btn:hover {
   background: #b8271e;
@@ -903,9 +903,9 @@
   color: var(--gc-ink);
   border-color: #d6d3d1;
   background: #fff;
-  font-size: 13.5px;
-  padding: 10px 17px;
-  border-radius: 7px;
+  font-size: 15px;
+  padding: 13px 23px;
+  border-radius: 8px;
 }
 .guide-cta .gc-btn2:hover {
   background: #fafaf9;
@@ -913,11 +913,14 @@
 }
 /* 하단 출구 — 상단에서 이미 말했으니 여기는 한 톤 낮춘다 */
 .guide-cta--end .gc-h {
-  font-size: 16.5px;
+  font-size: 20px;
 }
 @media (max-width: 640px) {
   .guide-cta .gc-h {
-    font-size: 16.5px;
+    font-size: 19px;
+  }
+  .guide-cta .gc-lead {
+    font-size: 14px;
   }
   .guide-cta .gc-actions {
     @apply flex-col items-stretch;

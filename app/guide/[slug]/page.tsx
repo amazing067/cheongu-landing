@@ -126,7 +126,7 @@ export default async function GuidePage({ params }: Props) {
       */}
       <div className="guide-cta mt-6">
         <div className="gc-top">
-          <BrandMark variant="full" height={26} />
+          <BrandMark variant="full" height={32} />
           <span className="gc-site">청구닷컴</span>
         </div>
         <p className="gc-h">
@@ -144,9 +144,14 @@ export default async function GuidePage({ params }: Props) {
           <Link href="/" className="gc-btn">
             보험사 41곳 청구정보 보기
           </Link>
-          <Link href="/join" className="gc-btn2">
+          <a
+            href="https://xn--h32b21du9cf7grcy2k20f.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="gc-btn2"
+          >
             영업 시스템 둘러보기
-          </Link>
+          </a>
         </div>
       </div>
 
@@ -300,9 +305,14 @@ export default async function GuidePage({ params }: Props) {
           <Link href="/" className="gc-btn">
             청구닷컴 전체 보기
           </Link>
-          <Link href="/join" className="gc-btn2">
+          <a
+            href="https://xn--h32b21du9cf7grcy2k20f.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="gc-btn2"
+          >
             영업 시스템 둘러보기
-          </Link>
+          </a>
         </div>
       </div>
 
