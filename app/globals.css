@@ -853,15 +853,23 @@
   margin-top: 22px;
 }
 .guide-cta .gc-top {
-  @apply flex items-center justify-center gap-2.5;
+  @apply flex flex-wrap items-center justify-center gap-x-2 gap-y-1;
   margin-bottom: 14px;
+}
+/* 만든 곳 → 이 사이트. 앞쪽은 낮추고 지금 보고 있는 곳을 진하게 */
+.guide-cta .gc-org {
+  @apply font-bold;
+  font-size: 15px;
+  color: var(--gc-body);
+}
+.guide-cta .gc-sep {
+  font-size: 15px;
+  color: #d6d3d1;
 }
 .guide-cta .gc-site {
   @apply font-extrabold;
   font-size: 15px;
-  color: var(--gc-body);
-  padding-left: 12px;
-  border-left: 1px solid var(--gc-line);
+  color: var(--gc-ink);
 }
 .guide-cta .gc-h {
   @apply font-extrabold tracking-tight;
