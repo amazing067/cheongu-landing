@@ -195,6 +195,28 @@ function LinkRow({
   );
 }
 
+/**
+ * 상세페이지 하단 「빠른 도구」.
+ * 검색으로 상세페이지에 바로 들어온 사람은 홈에만 있는 도구를 못 보고 나간다.
+ * 청구 용무(번호 확인 → 청구서 PDF)가 끝난 자리에 두어 흐름을 끊지 않는다.
+ * 계산기 두 개는 홈 안의 패널이라 홈으로 보낸다.
+ * (홈의 「청약서 발송 주소록」은 모달이라 링크로 걸 자리가 없어 제외했다)
+ */
+const QUICK_TOOLS: { emoji: string; label: string; href: string; external?: boolean }[] = [
+  { emoji: "🔬", label: "종수술분류표", href: "/tools/op-surgery-codes.html" },
+  { emoji: "🧮", label: "실손 계산기", href: "/#medcalc" },
+  { emoji: "📊", label: "실손 변천사", href: "/tools/history.html" },
+  { emoji: "🎂", label: "보험나이 계산기", href: "/#calc-panels" },
+  {
+    emoji: "🔁",
+    label: "계약전환 간편계산기",
+    href: "https://www.e-insmarket.or.kr/mins/minsInsCal.knia",
+    external: true,
+  },
+  { emoji: "🏥", label: "상급종합병원", href: "/tools/tertiary-hospitals.html" },
+  { emoji: "🏨", label: "간호간병 병원", href: "/tools/care-hospitals.html" },
+];
+
 export default async function CarrierPage({ params }: Props) {
   const { name } = await params;
   const carrier = findCarrier(decodeName(name));
@@ -356,6 +378,30 @@ export default async function CarrierPage({ params }: Props) {
         </ul>
       </section>
       )}
+
+      <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-5">
+        <h2 className="mb-1 text-lg font-black text-slate-900">빠른 도구</h2>
+        <p className="mb-3 text-xs text-slate-400">
+          청구 전에 확인하면 좋은 자료들입니다.
+        </p>
+        <div className="tools open">
+          {QUICK_TOOLS.map((t) => (
+            <a
+              key={t.label}
+              href={t.href}
+              className="tool-pill"
+              {...(t.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
+            >
+              <span className="em" aria-hidden>
+                {t.emoji}
+              </span>
+              {t.label}
+            </a>
+          ))}
+        </div>
+      </section>
 
       {faqs.length > 0 && (
         <section className="mb-8">
