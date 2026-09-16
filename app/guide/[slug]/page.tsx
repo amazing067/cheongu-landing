@@ -117,24 +117,32 @@ export default async function GuidePage({ params }: Props) {
 
       {/*
         검색에서 이 페이지로 바로 들어온 사람은 청구닷컴이 뭘 하는 곳인지 모른다.
-        팩스번호만 얻고 나가면 사이트를 본 적도 없는 셈이다. 표를 보기 전에
-        "여기 이런 것도 있다"를 한 번 보여주고 메인으로 갈 길을 크게 낸다.
+        팩스번호만 얻고 나가면 사이트를 본 적도 없는 셈이다.
+
+        온통 흰 페이지에서 이 블록만 짙은 남색으로 두어, 표를 읽기 전에 눈이
+        한 번 걸리게 한다. 사이트의 다른 카드와 같은 모양을 쓰면 또 하나의
+        내용 카드로 읽혀 그냥 지나친다.
       */}
       <Link
         href="/"
-        className="mt-5 flex items-center justify-between gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4 no-underline transition hover:bg-blue-100"
+        className="mt-6 block rounded-2xl bg-slate-900 px-6 py-7 no-underline transition hover:bg-slate-800 sm:px-8"
       >
-        <span>
-          <span className="block text-sm font-black text-slate-900">
-            청구닷컴 메인으로 바로가기
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+          <div>
+            <p className="text-lg font-black leading-snug text-white sm:text-xl">
+              팩스번호만 찾으러 오셨나요?
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-slate-300">
+              필요서류와 청구서 PDF, 전산 접속까지
+              <br className="hidden sm:block" />{" "}
+              보험사 <span className="font-extrabold text-white">41곳</span>을 한
+              곳에 모아뒀습니다.
+            </p>
+          </div>
+          <span className="shrink-0 rounded-xl bg-white px-6 py-3.5 text-center text-sm font-black text-slate-900">
+            보험사 41곳 보러가기
           </span>
-          <span className="mt-0.5 block text-xs leading-relaxed text-slate-600">
-            보험사 41곳 필요서류 · 청구서 PDF · 전산 접속 · 실손 계산기까지 한 곳에
-          </span>
-        </span>
-        <span className="shrink-0 rounded-xl bg-blue-600 px-3.5 py-2 text-xs font-extrabold text-white">
-          바로가기 →
-        </span>
+        </div>
       </Link>
 
       {/* 먼저 경고한다. 한도를 모르고 보내면 반려된다 */}
@@ -273,11 +281,24 @@ export default async function GuidePage({ params }: Props) {
         </dl>
       </section>
 
-      <p className="mt-8">
-        <Link href="/" className="text-sm font-bold text-slate-500 no-underline hover:underline">
-          ← 전체 보험사 청구 정보 보러가기
-        </Link>
-      </p>
+      {/*
+        표를 다 본 사람용 출구. 상단 배너와 같은 남색을 또 쓰면 두 번 소리치는
+        꼴이라, 여기는 흰 바탕에 굵은 테두리로 조용하게 두되 누를 것이 분명하게.
+      */}
+      <Link
+        href="/"
+        className="mt-10 block rounded-2xl border-2 border-slate-900 bg-white px-6 py-6 text-center no-underline transition hover:bg-slate-50 sm:px-8"
+      >
+        <span className="block text-base font-black text-slate-900 sm:text-lg">
+          찾으시는 번호가 없었나요?
+        </span>
+        <span className="mt-1.5 block text-sm leading-relaxed text-slate-600">
+          보험사 41곳의 청구 서류와 연락처를 전부 정리해 뒀습니다
+        </span>
+        <span className="mt-4 inline-block rounded-xl bg-slate-900 px-6 py-3 text-sm font-black text-white">
+          청구닷컴 전체 보기
+        </span>
+      </Link>
 
       <Footer />
     </main>
