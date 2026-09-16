@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BrandMark } from "@/components/BrandMark";
 import { Footer } from "@/components/Footer";
 import { carrierPath, carriers, SITE_URL } from "@/lib/carriers";
 import { findGuide, guidePath, guideUrl, guides } from "@/lib/guides";
@@ -119,31 +120,30 @@ export default async function GuidePage({ params }: Props) {
         검색에서 이 페이지로 바로 들어온 사람은 청구닷컴이 뭘 하는 곳인지 모른다.
         팩스번호만 얻고 나가면 사이트를 본 적도 없는 셈이다.
 
-        온통 흰 페이지에서 이 블록만 짙은 남색으로 두어, 표를 읽기 전에 눈이
-        한 번 걸리게 한다. 사이트의 다른 카드와 같은 모양을 쓰면 또 하나의
-        내용 카드로 읽혀 그냥 지나친다.
+        디자인 규칙은 globals.css 의 .recruit-cards 주석을 따른다.
+        이모지·그라데이션·어두운 배경 없이, 색은 로고에서 뽑은 빨강·주황 두 가지.
+        눈에 띄게 하는 일은 색을 어둡게 하는 게 아니라 로고와 굵은 밑줄이 한다.
       */}
-      <Link
-        href="/"
-        className="mt-6 block rounded-2xl bg-slate-900 px-6 py-7 no-underline transition hover:bg-slate-800 sm:px-8"
-      >
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
-          <div>
-            <p className="text-lg font-black leading-snug text-white sm:text-xl">
-              팩스번호만 찾으러 오셨나요?
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-slate-300">
-              필요서류와 청구서 PDF, 전산 접속까지
-              <br className="hidden sm:block" />{" "}
-              보험사 <span className="font-extrabold text-white">41곳</span>을 한
-              곳에 모아뒀습니다.
-            </p>
-          </div>
-          <span className="shrink-0 rounded-xl bg-white px-6 py-3.5 text-center text-sm font-black text-slate-900">
-            보험사 41곳 보러가기
-          </span>
+      <div className="guide-cta mt-6">
+        <div className="gc-top">
+          <BrandMark variant="full" height={26} />
+          <span className="gc-site">청구닷컴</span>
         </div>
-      </Link>
+        <p className="gc-h">
+          팩스번호만 찾으러 오셨나요? 여기가 <span className="u">그 다음</span>입니다
+        </p>
+        <p className="gc-lead">
+          보험사 <b>41곳</b>의 필요서류와 청구서 PDF, 전산 접속 주소까지 한 곳에
+          있습니다. 청구를 도우면서 매번 찾아 헤매던 것들입니다.
+        </p>
+        <p className="gc-lead">
+          어메이징사업부가 직접 만들어 쓰는 <b>영업 시스템 29개</b> 중 하나를
+          공개한 것입니다.
+        </p>
+        <Link href="/" className="gc-btn">
+          보험사 41곳 청구정보 보기
+        </Link>
+      </div>
 
       {/* 먼저 경고한다. 한도를 모르고 보내면 반려된다 */}
       <section className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5">
@@ -282,23 +282,19 @@ export default async function GuidePage({ params }: Props) {
       </section>
 
       {/*
-        표를 다 본 사람용 출구. 상단 배너와 같은 남색을 또 쓰면 두 번 소리치는
-        꼴이라, 여기는 흰 바탕에 굵은 테두리로 조용하게 두되 누를 것이 분명하게.
+        표를 다 본 사람용 출구. 상단에서 이미 한 번 말했으니 여기서는 짧게,
+        대신 설계사라면 걸릴 말을 한 줄 얹는다.
       */}
-      <Link
-        href="/"
-        className="mt-10 block rounded-2xl border-2 border-slate-900 bg-white px-6 py-6 text-center no-underline transition hover:bg-slate-50 sm:px-8"
-      >
-        <span className="block text-base font-black text-slate-900 sm:text-lg">
-          찾으시는 번호가 없었나요?
-        </span>
-        <span className="mt-1.5 block text-sm leading-relaxed text-slate-600">
-          보험사 41곳의 청구 서류와 연락처를 전부 정리해 뒀습니다
-        </span>
-        <span className="mt-4 inline-block rounded-xl bg-slate-900 px-6 py-3 text-sm font-black text-white">
+      <div className="guide-cta guide-cta--end mt-10">
+        <p className="gc-h">찾으시는 번호가 없었나요?</p>
+        <p className="gc-lead">
+          보험사 <b>41곳</b>의 청구 서류와 연락처를 전부 정리해 뒀습니다.
+          종수술분류표, 실손 계산기, 상급종합병원 목록도 함께 있습니다.
+        </p>
+        <Link href="/" className="gc-btn">
           청구닷컴 전체 보기
-        </span>
-      </Link>
+        </Link>
+      </div>
 
       <Footer />
     </main>
