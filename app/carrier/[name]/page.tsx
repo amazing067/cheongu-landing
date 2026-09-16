@@ -101,12 +101,47 @@ function buildDescription(c: Carrier): string {
   return `${c.name} 보험금 청구에 필요한 서류, 보험금 청구서 PDF 양식, 팩스번호, 고객센터 전화번호를 한 페이지에 정리했습니다.${numbers} 청구닷컴 — 프라임에셋 어메이징사업부`;
 }
 
+/**
+ * 검색결과 제목.
+ *
+ * 왜 바꿨나 — 서치콘솔·서치어드바이저 실측(2026-09) 결과,
+ * 노출은 폭발했는데(네이버 30일 123만) CTR 이 0.7% 로 바닥이었다.
+ * 메리츠화재 12.4만 노출 CTR 0.4%, 삼성생명 11.4만 노출 0.4%.
+ * 사람들이 치는 검색어는 "<보험사> 팩스번호" / "<보험사> 고객센터" 인데
+ * 옛 제목은 "팩스번호"라는 단어만 있고 정작 번호가 없었다. 번호를 대놓고
+ * 적어둔 블로그에 클릭을 뺏기는 구조였다.
+ *
+ * 팩스 관련 검색어는 CTR 이 10~32% 로 사이트 평균의 수십 배다
+ * (교보생명 보험청구 팩스 31.9%, 메리츠화재 팩스번호 24.8%).
+ * 그 의도에 제목으로 바로 답한다.
+ *
+ * 대리점명(프라임에셋 어메이징사업부)은 제목에 넣지 않는다. 자리를 잡아먹어
+ * 번호가 잘리고, 보험사명과 모집조직명이 한 제목에 나란히 놓이면 광고로
+ * 해석될 여지가 있다. 설명·푸터·구조화데이터에는 이미 들어가 있다.
+ */
+function buildTitle(c: Carrier): string {
+  const L = c.links || {};
+  const fax = (L.fax || "").trim();
+
+  if (isFaxNumber(fax)) {
+    const first = splitPhones(fax)[0]?.number ?? fax;
+    const cs = L.cs ? ` · 고객센터 ${L.cs}` : "";
+    return `${c.name} 보험금청구 팩스번호 ${first}${cs} | 청구닷컴`;
+  }
+  if (fax.includes("발급")) {
+    return `${c.name} 팩스번호는 고객센터 발급${L.cs ? ` · ${L.cs}` : ""} | 청구닷컴`;
+  }
+  // 「폐지·앱 접수」 / 「고객센터 전화」 / 값 없음 — 고객센터 검색을 노린다
+  const head = L.cs ? `${c.name} 고객센터 ${L.cs}` : `${c.name} 보험금 청구`;
+  return `${head} · 보험금 청구서 양식·필요서류 | 청구닷컴`;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { name } = await params;
   const carrier = findCarrier(decodeName(name));
   if (!carrier) return {};
 
-  const title = `${carrier.name} 보험금 청구 — 필요서류·청구서 PDF·팩스번호·고객센터 | 청구닷컴`;
+  const title = buildTitle(carrier);
   const description = buildDescription(carrier);
 
   return {
