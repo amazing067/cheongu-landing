@@ -51,6 +51,16 @@ function eunNeun(word: string): string {
 }
 
 /** 전화번호 표 밑에 붙는 안내 한 줄. FAQ 답변과 같은 내용을 안내체로 짧게 쓴다. */
+/**
+ * 「발급」 회사 중 우체국보험만 공식 안내에 팩스 조건이 따로 적혀 있다.
+ * (청구금액당 100만원 이하 / 발급받은 가상 팩스번호는 유효기간 경과 시 재발급)
+ * 한화생명·하나생명·수협·신협에는 해당 없는 조건이라 공통 문구에 섞지 않는다.
+ */
+function faxIssuedExtra(name: string): string {
+  if (name !== "우체국보험") return "";
+  return " 팩스 접수는 청구금액 100만원 이하만 가능하며, 발급받은 번호는 유효기간이 지나면 쓸 수 없어 재발급받아야 합니다.";
+}
+
 function faxNoticeLine(name: string, fax: string, cs?: string): string {
   const subject = `${name}${eunNeun(name)}`;
   const center = cs ? `고객센터(${cs})` : "고객센터";
@@ -58,7 +68,7 @@ function faxNoticeLine(name: string, fax: string, cs?: string): string {
     return `${subject} 보험금 청구 팩스 접수를 종료했습니다. 모바일 앱 또는 홈페이지에서 서류를 사진으로 올려 접수해 주세요.`;
   }
   if (fax.includes("발급")) {
-    return `${subject} 고정된 팩스번호가 없습니다. ${center}에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 드립니다.`;
+    return `${subject} 고정된 팩스번호가 없습니다. ${center}에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 드립니다.${faxIssuedExtra(name)}`;
   }
   return `${subject} 공개된 팩스번호가 없습니다. ${center}로 전화해 접수 방법을 안내받으시거나 모바일 앱으로 접수해 주세요.`;
 }
@@ -71,7 +81,7 @@ function faxNoticeAnswer(name: string, fax: string, cs?: string): string {
     return `${subject} 보험금 청구 팩스 접수를 종료했습니다. 모바일 앱 또는 홈페이지에서 서류를 사진으로 올려 접수하시면 됩니다. 문의는 ${center}로 하시면 됩니다.`;
   }
   if (fax.includes("발급")) {
-    return `${subject} 고정된 팩스번호가 없습니다. ${center}에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 주며, 그 번호로 서류를 보내시면 됩니다.`;
+    return `${subject} 고정된 팩스번호가 없습니다. ${center}에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 주며, 그 번호로 서류를 보내시면 됩니다.${faxIssuedExtra(name)}`;
   }
   return `${subject} 공개된 팩스번호가 없습니다. ${center}로 전화해 접수 방법을 안내받으시거나 모바일 앱으로 접수하시면 됩니다.`;
 }
