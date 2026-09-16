@@ -115,6 +115,28 @@ export default async function GuidePage({ params }: Props) {
         공식 홈페이지 기준 · 최종 확인 2026.09.16
       </p>
 
+      {/*
+        검색에서 이 페이지로 바로 들어온 사람은 청구닷컴이 뭘 하는 곳인지 모른다.
+        팩스번호만 얻고 나가면 사이트를 본 적도 없는 셈이다. 표를 보기 전에
+        "여기 이런 것도 있다"를 한 번 보여주고 메인으로 갈 길을 크게 낸다.
+      */}
+      <Link
+        href="/"
+        className="mt-5 flex items-center justify-between gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4 no-underline transition hover:bg-blue-100"
+      >
+        <span>
+          <span className="block text-sm font-black text-slate-900">
+            청구닷컴 메인으로 바로가기
+          </span>
+          <span className="mt-0.5 block text-xs leading-relaxed text-slate-600">
+            보험사 41곳 필요서류 · 청구서 PDF · 전산 접속 · 실손 계산기까지 한 곳에
+          </span>
+        </span>
+        <span className="shrink-0 rounded-xl bg-blue-600 px-3.5 py-2 text-xs font-extrabold text-white">
+          바로가기 →
+        </span>
+      </Link>
+
       {/* 먼저 경고한다. 한도를 모르고 보내면 반려된다 */}
       <section className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5">
         <h2 className="mb-1.5 text-base font-black text-slate-900">
