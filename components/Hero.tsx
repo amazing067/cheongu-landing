@@ -98,6 +98,16 @@ export function Hero({
         {/* 모바일: 종수술분류표·실손 계산기·실손 변천사만 노출, 나머지는 더보기 */}
         <div className={`tools ${toolsOpen ? "open" : ""}`}>
           <a
+            href="/guide/보험금청구-팩스번호"
+            className="tool-pill"
+            title="보험사 41곳 보험금청구 팩스번호와 금액 한도 총정리"
+          >
+            <span className="em" aria-hidden>
+              📠
+            </span>
+            보험사별 팩스번호
+          </a>
+          <a
             href="/tools/op-surgery-codes.html"
             onClick={handleOpSurgery}
             className="tool-pill"

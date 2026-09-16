@@ -248,6 +248,7 @@ function LinkRow({
  * (홈의 「청약서 발송 주소록」은 모달이라 링크로 걸 자리가 없어 제외했다)
  */
 const QUICK_TOOLS: { emoji: string; label: string; href: string; external?: boolean }[] = [
+  { emoji: "📠", label: "보험사별 팩스번호", href: "/guide/보험금청구-팩스번호" },
   { emoji: "🔬", label: "종수술분류표", href: "/tools/op-surgery-codes.html" },
   { emoji: "🧮", label: "실손 계산기", href: "/#medcalc" },
   { emoji: "📊", label: "실손 변천사", href: "/tools/history.html" },

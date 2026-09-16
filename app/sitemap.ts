@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { carriers, carrierUrl } from "@/lib/carriers";
 import { calcUrl, calculators } from "@/lib/calculators";
+import { guideUrl, guides } from "@/lib/guides";
 
 // 네이버·구글 검색로봇에 청구닷컴의 페이지 목록을 알려주는 사이트맵.
 // 소유확인된 도메인(www.청구.com)과 동일하게 www + punycode 로 표기한다.
@@ -9,6 +10,8 @@ const BASE = "https://www.xn--2e0br60d.com"; // www.청구.com
 const LAST_MODIFIED = new Date("2026-07-11");
 // tools 페이지는 이번 SEO 정비 시점으로 갱신 — 재크롤을 유도한다.
 const TOOLS_MODIFIED = new Date("2026-07-29");
+// 팩스번호 가이드는 25개사 전수조사(2026-09-16) 기준이라 날짜를 따로 준다.
+const GUIDE_MODIFIED = new Date("2026-09-16");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -60,6 +63,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.7,
     },
+    // 가이드 — 여러 회사를 한 번에 비교하는 검색("보험사 팩스번호 총정리")을 받는다.
+    // 보험사별 상세페이지는 단일 회사 검색만 잡아서 이 수요를 놓치고 있었다.
+    ...guides.map((g) => ({
+      url: guideUrl(g.slug),
+      lastModified: GUIDE_MODIFIED,
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
     // 계산기 단독 페이지 — "보험나이 계산기" 처럼 그 자체로 검색량이 있는 키워드용.
     ...calculators.map((c) => ({
       url: calcUrl(c.slug),
