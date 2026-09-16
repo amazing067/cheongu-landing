@@ -125,9 +125,10 @@ export default async function GuidePage({ params }: Props) {
         눈에 띄게 하는 일은 색을 어둡게 하는 게 아니라 로고와 굵은 밑줄이 한다.
       */}
       <div className="guide-cta mt-6">
-        {/* 만든 곳(어메이징사업부)과 이 사이트(청구닷컴)의 관계를 한 줄로 보여준다 */}
+        {/* 만든 곳(어메이징사업부)과 이 사이트(청구닷컴)의 관계를 한 줄로 보여준다.
+            워드마크는 심볼 아래 AMAZING 글자까지 있는 형태를 그대로 쓴다 */}
         <div className="gc-top">
-          <BrandMark variant="mark" height={26} />
+          <BrandMark variant="full" height={32} />
           <span className="gc-org">어메이징사업부</span>
           <span className="gc-sep" aria-hidden>
             /
