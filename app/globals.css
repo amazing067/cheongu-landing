@@ -499,8 +499,8 @@
   left: 50%;
   transform: translateX(-50%);
   margin-top: 6px;
-  min-width: 320px;
-  max-width: 480px;
+  min-width: 300px;
+  max-width: 520px;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -511,14 +511,13 @@
 .fax-popup-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 16px;
-  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
-  font-size: 16px;
+  gap: 7px;
+  padding: 11px 14px;
+  background: #f0f9ff;
+  font-size: 14px;
   font-weight: 800;
   color: #0f172a;
-  border-bottom: 1px solid #bae6fd;
+  border-bottom: 1px solid #e0f2fe;
 }
 .fax-popup-header-icon {
   font-size: 18px;
@@ -526,40 +525,46 @@
 }
 .fax-popup-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
-  gap: 10px;
-  padding: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
+  gap: 7px;
+  padding: 10px;
 }
 .fax-popup-card {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 12px 8px;
+  gap: 10px;
+  padding: 10px 12px;
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 9px;
   text-decoration: none;
-  transition: all 0.15s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: background 0.15s, border-color 0.15s;
 }
 .fax-popup-card:hover {
   border-color: #7dd3fc;
   background: #f0f9ff;
 }
+/* 라벨(질병·상해·일반·치아·지역)은 알약으로 묶어 번호와 구분한다 */
 .fax-popup-card-region {
-  font-size: 13px;
-  font-weight: 700;
-  color: #0f172a;
-  line-height: 1.2;
+  flex: none;
+  min-width: 40px;
+  padding: 3px 8px;
+  text-align: center;
+  background: #f1f5f9;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #475569;
+  line-height: 1.35;
 }
 .fax-popup-card-num {
-  font-size: 14px;
+  margin-left: auto;
+  font-size: 15px;
   font-weight: 800;
   color: #0284c7;
   line-height: 1.2;
   white-space: nowrap;
+  letter-spacing: 0.01em;
 }
 .fax-popup-backdrop {
   position: fixed;
