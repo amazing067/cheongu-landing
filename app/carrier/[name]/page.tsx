@@ -180,6 +180,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+/**
+ * 팩스번호가 청구 종류별로 나뉜 회사가 있다.
+ * (메리츠화재 질병/상해, 라이나손해보험 일반/치아)
+ * 데이터에는 "번호(라벨) | 번호(라벨)" 로 들어오는데, 그대로 문장에 넣으면
+ * 파이프 기호가 그대로 읽힌다. FAQ 답변용으로 사람 말처럼 풀어 쓴다.
+ */
+function faxSentence(fax?: string): string {
+  const ps = splitPhones(fax);
+  if (ps.length <= 1) return fax ?? "";
+  return ps.map((p) => (p.label ? `${p.label} ${p.number}` : p.number)).join(", ");
+}
+
 function PhoneRow({ label, value }: { label: string; value?: string }) {
   const phones = splitPhones(value);
   if (!phones.length) return null;
@@ -278,7 +290,7 @@ export default async function CarrierPage({ params }: Props) {
   if (hasFaxNumber) {
     faqs.push({
       q: `${carrier.name} 보험금 청구 팩스번호는?`,
-      a: `${carrier.name}의 보험금 청구 팩스번호는 ${L.fax} 입니다. 청구서와 필요서류를 팩스로 보내신 뒤 접수 여부를 고객센터로 확인하시는 것이 안전합니다.`,
+      a: `${carrier.name}의 보험금 청구 팩스번호는 ${faxSentence(L.fax)} 입니다. 청구서와 필요서류를 팩스로 보내신 뒤 접수 여부를 고객센터로 확인하시는 것이 안전합니다.`,
     });
   } else if (L.fax) {
     faqs.push({

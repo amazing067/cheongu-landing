@@ -1,0 +1,103 @@
+
+
+
+
+
+<!DOCTYPE html>
+<!--[if IE 7]><html lang="ko" class="ie7"><![endif]-->
+<!--[if IE 8]><html lang="ko" class="ie8"><![endif]-->
+<!--[if IE 9]><html lang="ko" class="ie9"><![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="ko">
+<!--<![endif]-->
+
+<head>
+	<!--[if IE 7]><meta http-equiv="X-UA-Compatible" content="IE=7"><![endif]-->
+	<!--[if IE 8]><meta http-equiv="X-UA-Compatible" content="IE=8"><![endif]-->
+	<!--[if IE 9]><meta http-equiv="X-UA-Compatible" content="IE=9"><![endif]-->
+	<!--[if IE 10]><meta http-equiv="X-UA-Compatible" content="IE=10"><![endif]-->
+	<!--[if IE 11]><meta http-equiv="X-UA-Compatible" content="IE=11"><![endif]-->
+	<!--[if gt IE 11]><meta http-equiv="X-UA-Compatible" content="IE=11"><![endif]-->
+ <meta name="author" content="메리츠화재">
+ <meta name="description" content="메리츠화재 공식 사이트입니다. 고객서비스 및 보험가입안내 제공. 암보험, 치매보험, 펫보험, 건강보험, 치아보험, 태아보험, 어린이보험, 운전자보험, 입원비보험, 수술비보험, 종합보험, 실비보험, 실손보험, 유병자보험, 주택화재보험, 골절보험 등. 인터넷고객센터를 이용한 계약조회, 보험금 청구, 보험계약 대출, 증명서 발급, 고객정보 변경, 보험료 납입, 전자민원 신청, 서비스망 찾기 등의 서비스를 만나보세요.">
+ <meta name="keywords" content="메리츠화재, 메리츠화재, 운전자보험, 암보험, 태아보험, 어린이보험, 실비보험, 실손보험, 유병자보험, 주택화재보험, 골절보험, 치매보험, 펫보험, 시니어보험, 간편보험, 입원비보험, 수술비보험, 종합보험, 건강보험, 자동차보험, 다이렉트자동차보험, 다이렉트 해외여행보험, 채팅상담, 보험료계산, 보험가입 상담신청">
+	<title>메리츠화재</title>
+	<link rel="shortcut icon" href="/common/images/meritz_favicon.ico">
+	<link rel="stylesheet" href="/common/js/angular-block-ui/angular-block-ui.min.css">
+	<link rel="stylesheet" href="/default/css/style.css">
+	<link rel="stylesheet" href="/default/css/biz.css">
+	<link rel="stylesheet" href="/default/css/font.css">
+	<!-- <link rel="stylesheet" type="text/css" href="https://api.typolink.co.kr/css?family=RixSGo+L:400|RixSGo+M:400|RixSGo+B:400|RixSGo+EB:400"> -->
+	<!--[if lt IE 9]>
+        <script src="/common/js/json3/json3.min.js"></script>
+        <script src="/common/js/html5shiv/html5shiv.min.js"></script>
+    <![endif]-->
+
+	
+	<script src="/common/js/jquery/jquery.min.js"></script>
+	<script src="/common/js/jquery/jquery.form.min.js"></script>
+	<script src="/common/js/underscore/underscore-min.js"></script>
+	<script src="/common/js/jquery/jquery.cookie.js"></script>
+	<script src="/common/js/angular/angular.js"></script>
+	<script src="/common/js/angular/angular-route.js"></script>
+	<script src="/common/js/angular/angular-animate.js"></script>
+	<script src="/common/js/angular-block-ui/angular-block-ui.min.js"></script>
+	
+	
+	
+	<script type="text/javascript">
+	var mz = {DOMAIN:'',WEBROOT:'',APPROOT:'default',WEBPAGE:''
+		,MODE:{
+		    LOG:true,
+		    TRACE:true
+		}, DOWNLOADURL:'', ENVIRINFODIVCD:'', srcVersion:''
+	
+	};
+	</script>
+	<script src="/default/js/library_allinone.js"></script>
+	<script src="/default/app/comm/common.js?v="></script>
+	<script src="/common/app/app.js"></script>
+	<script src="/common/app/core/core.js"></script>
+	<script src="/default/app/comm/comm.js?v="></script>
+	<script src="/default/app/run.js?v="></script>
+	<script src="/default/app/comm/app-animate.js"></script>
+	<script src="/common/js/swiper/swiper.jquery.min.js"></script>
+	
+
+</head>
+
+<body>
+	<div class="skipnav">
+		<a href="#content">본문 바로가기</a>
+		<a href="#gnb">대메뉴 바로가기</a>
+		<a href="#footer">페이지 하단 바로가기</a>
+	</div>
+	<div id="wrap">
+		<div data-ui-header id="header"></div>
+		<!-- 콘텐츠 -->
+		<div id="container" class="error_container">
+			<div class="error_wrap">
+				<div class="bx_error">
+					<span class="ico_error"></span>
+					<p>
+						<strong>서비스가 정상적으로 처리되지 않았습니다.<br>이용에 불편을 드려 죄송합니다.</strong>
+					</p>
+					<p class="txt_tip">
+						<span>문의사항은
+							<em>인터넷 상담</em>
+							또는
+							<em>고객 콜센터(1566-7711)</em>를 이용해 주시기 바랍니다.</span>
+					</p>
+				</div>
+				<div class="btn_area">
+					<a href="/customer-center/online-counsel.do" class="btn btn_gr01"><span>인터넷 상담</span></a>
+					<a href="/main.do" class="btn btn_g01"><span>메인화면으로 이동</span></a>
+				</div>
+			</div>
+		</div>
+		<!--// 콘텐츠 -->
+		<div data-ui-footer id="footer"></div>
+	</div>
+</body>
+
+</html>

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BrandMark } from "@/components/BrandMark";
 import { Footer } from "@/components/Footer";
-import { carrierPath, carriers, SITE_URL } from "@/lib/carriers";
+import { carrierPath, carriers, splitPhones, SITE_URL } from "@/lib/carriers";
 import { findGuide, guidePath, guideUrl, guides } from "@/lib/guides";
 import { FAX_LIMITS } from "@/lib/fax-limits";
 
@@ -261,8 +261,17 @@ export default async function GuidePage({ params }: Props) {
                       {c.name}
                     </Link>
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3 font-bold text-slate-900">
-                    {c.links?.fax}
+                  <td className="px-4 py-3 font-bold text-slate-900">
+                    {splitPhones(c.links?.fax).map((p) => (
+                      <span key={p.number} className="block whitespace-nowrap">
+                        {p.number}
+                        {p.label && (
+                          <span className="ml-1 text-xs font-semibold text-slate-400">
+                            {p.label}
+                          </span>
+                        )}
+                      </span>
+                    ))}
                   </td>
                   <td className="px-4 py-3 text-slate-600">
                     {FAX_LIMITS[c.name] ?? (

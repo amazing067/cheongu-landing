@@ -90,17 +90,24 @@ function Btn({
   );
 }
 
-/** FAX 번호 " | " 파싱 → [{ region, number, tel }] (우체국보험 등, 형식: 0505-005-1224(서울)) */
-function parseFaxNumbers(num: string): { region: string; number: string; tel: string }[] {
+/**
+ * FAX 번호 " | " 파싱 → [{ label, number, tel }]
+ * 형식: 0505-005-1224(서울)
+ *
+ * 괄호 안은 원래 지역이었는데(우체국보험), 청구 종류로 번호가 나뉜 회사가
+ * 생겼다 — 메리츠화재 질병/상해, 라이나손해보험 일반/치아.
+ * 그래서 "지역" 이 아니라 "라벨" 이다. 버튼 문구도 라벨을 그대로 보여준다.
+ */
+function parseFaxNumbers(num: string): { label: string; number: string; tel: string }[] {
   return num
     .split(/\s*\|\s*/)
     .filter(Boolean)
     .map((p) => {
       const m = p.trim().match(/^([\d\-]+)\(([^)]+)\)$/);
       const number = m ? m[1].trim() : p.trim();
-      const region = m ? m[2].trim() : p.trim();
-      const tel = p.replace(/[^0-9]/g, "");
-      return { region, number, tel };
+      const label = m ? m[2].trim() : p.trim();
+      const tel = number.replace(/[^0-9]/g, "");
+      return { label, number, tel };
     });
 }
 
@@ -131,7 +138,14 @@ function FaxPopupBtn({ number }: { number: string }) {
         aria-expanded={open}
       >
         <span className="bico" aria-hidden>📠</span>
-        보험금청구 FAX <span className="num">({parts.length}개 지역) 클릭</span>
+        보험금청구 FAX{" "}
+        <span className="num">
+          (
+          {parts.every((p) => p.label && p.label !== p.number)
+            ? parts.map((p) => p.label).join("/")
+            : `${parts.length}개`}
+          ) 클릭
+        </span>
       </button>
       {open && (
         <>
@@ -153,7 +167,7 @@ function FaxPopupBtn({ number }: { number: string }) {
                 className="fax-popup-card"
                 onClick={() => setOpen(false)}
               >
-                <span className="fax-popup-card-region">{p.region}</span>
+                <span className="fax-popup-card-region">{p.label}</span>
                 <span className="fax-popup-card-num">{p.number}</span>
               </a>
             ))}
