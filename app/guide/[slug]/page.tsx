@@ -59,6 +59,7 @@ export default async function GuidePage({ params }: Props) {
   const guide = findGuide(decodeSlug((await params).slug));
   if (!guide) notFound();
 
+  const ctaHead = guide.ctaHead ?? "청구 정보, 한 곳에 모아뒀습니다";
   const withFax = carriers.filter((c) => isFaxNumber(c.links?.fax));
   const withoutFax = carriers.filter(
     (c) => c.links?.fax && !isFaxNumber(c.links.fax),
@@ -74,7 +75,7 @@ export default async function GuidePage({ params }: Props) {
         inLanguage: "ko",
         mainEntityOfPage: guideUrl(guide.slug),
         publisher: { "@id": `${SITE_URL}/#org` },
-        dateModified: "2026-09-16",
+        dateModified: guide.updated.replace(/\./g, "-"),
       },
       {
         "@type": "BreadcrumbList",
@@ -113,7 +114,7 @@ export default async function GuidePage({ params }: Props) {
       </h1>
       <p className="mt-2 text-sm leading-relaxed text-slate-600">{guide.lead}</p>
       <p className="mt-1 text-xs text-slate-400">
-        공식 홈페이지 기준 · 최종 확인 2026.09.16
+        최종 확인 {guide.updated}
       </p>
 
       {/*
@@ -135,9 +136,7 @@ export default async function GuidePage({ params }: Props) {
           </span>
           <span className="gc-site">청구닷컴</span>
         </div>
-        <p className="gc-h">
-          팩스번호만 찾으러 오셨나요? 여기가 <span className="u">그 다음</span>입니다
-        </p>
+        <p className="gc-h">{ctaHead}</p>
         <p className="gc-lead">
           보험사 <b>41곳</b>의 필요서류와 청구서 PDF, 전산 접속 주소까지 한 곳에
           있습니다. 청구를 도우면서 매번 찾아 헤매던 것들입니다.
@@ -161,6 +160,52 @@ export default async function GuidePage({ params }: Props) {
         </div>
       </div>
 
+      {/* 산문형 가이드 본문 — 절차·서류처럼 순서가 있는 내용 */}
+      {guide.sections?.map((sec) => (
+        <section key={sec.heading} className="mt-8">
+          <h2 className="mb-3 text-lg font-black text-slate-900">{sec.heading}</h2>
+          {sec.paragraphs?.map((t) => (
+            <p key={t} className="mb-2.5 text-sm leading-relaxed text-slate-700">
+              {t}
+            </p>
+          ))}
+          {sec.steps && (
+            <ol className="mt-1 space-y-2.5">
+              {sec.steps.map((st, i) => (
+                <li
+                  key={st.t}
+                  className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-4"
+                >
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-black text-white">
+                    {i + 1}
+                  </span>
+                  <span>
+                    <b className="block text-sm font-extrabold text-slate-900">{st.t}</b>
+                    <span className="mt-1 block text-sm leading-relaxed text-slate-600">
+                      {st.d}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          )}
+          {sec.bullets && (
+            <ul className="ml-4 mt-1 list-disc space-y-1.5 text-sm leading-relaxed text-slate-700">
+              {sec.bullets.map((b) => (
+                <li key={b}>{b}</li>
+              ))}
+            </ul>
+          )}
+          {sec.warn && (
+            <p className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-slate-700">
+              {sec.warn}
+            </p>
+          )}
+        </section>
+      ))}
+
+      {guide.showFaxTables && (
+      <>
       {/* 먼저 경고한다. 한도를 모르고 보내면 반려된다 */}
       <section className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5">
         <h2 className="mb-1.5 text-base font-black text-slate-900">
@@ -285,6 +330,9 @@ export default async function GuidePage({ params }: Props) {
         </ul>
       </section>
 
+      </>
+      )}
+
       <section className="mt-8">
         <h2 className="mb-3 text-lg font-black text-slate-900">자주 묻는 질문</h2>
         <dl className="space-y-4">
@@ -296,6 +344,61 @@ export default async function GuidePage({ params }: Props) {
           ))}
         </dl>
       </section>
+
+      {/* 다른 가이드로 — 팩스 가이드와 누수 가이드는 서로 이어지는 내용이다 */}
+      {guides.filter((g) => g.slug !== guide.slug).length > 0 && (
+        <section className="mt-8">
+          <h2 className="mb-3 text-lg font-black text-slate-900">함께 보면 좋은 것</h2>
+          <ul className="flex list-none flex-wrap gap-2 p-0">
+            {guides
+              .filter((g) => g.slug !== guide.slug)
+              .map((g) => (
+                <li key={g.slug}>
+                  <Link
+                    href={guidePath(g.slug)}
+                    className="inline-block rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-900 no-underline hover:bg-slate-50"
+                  >
+                    {g.h1}
+                  </Link>
+                </li>
+              ))}
+          </ul>
+        </section>
+      )}
+
+      {guide.sources && (
+        <section className="mt-8">
+          <h2 className="mb-2 text-base font-black text-slate-900">근거 자료</h2>
+          <ul className="ml-4 list-disc space-y-1 text-sm leading-relaxed text-slate-600">
+            {guide.sources.map((src) => (
+              <li key={src.url}>
+                <a
+                  href={src.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="no-underline hover:underline"
+                >
+                  {src.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/*
+        광고심의 기준의 경고문구. 축약·변경 불가라 lib/guides.ts 의 원문을 그대로 쓴다.
+        본문과 색을 다르게 두라는 기준에 맞춰 회색 상자에 담는다.
+      */}
+      {guide.disclaimers && (
+        <aside className="mt-8 rounded-2xl border border-slate-300 bg-slate-100 p-5">
+          {guide.disclaimers.map((d) => (
+            <p key={d} className="text-xs leading-relaxed text-slate-500">
+              ※ {d}
+            </p>
+          ))}
+        </aside>
+      )}
 
       {/*
         표를 다 본 사람용 출구. 상단에서 이미 한 번 말했으니 여기서는 짧게,

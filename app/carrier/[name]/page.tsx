@@ -249,6 +249,7 @@ function LinkRow({
  */
 const QUICK_TOOLS: { emoji: string; label: string; href: string; external?: boolean }[] = [
   { emoji: "📠", label: "보험사별 팩스번호", href: "/guide/보험금청구-팩스번호" },
+  { emoji: "💧", label: "누수 배상 청구", href: "/guide/누수-배상책임-청구" },
   { emoji: "🔬", label: "종수술분류표", href: "/tools/op-surgery-codes.html" },
   { emoji: "🧮", label: "실손 계산기", href: "/#medcalc" },
   { emoji: "📊", label: "실손 변천사", href: "/tools/history.html" },

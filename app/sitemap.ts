@@ -67,7 +67,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // 보험사별 상세페이지는 단일 회사 검색만 잡아서 이 수요를 놓치고 있었다.
     ...guides.map((g) => ({
       url: guideUrl(g.slug),
-      lastModified: GUIDE_MODIFIED,
+      // 가이드마다 조사한 날이 다르다 — 그 날짜를 그대로 준다
+      lastModified: new Date(g.updated.replace(/\./g, "-")),
       changeFrequency: "monthly" as const,
       priority: 0.9,
     })),

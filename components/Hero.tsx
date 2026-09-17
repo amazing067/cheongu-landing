@@ -108,6 +108,16 @@ export function Hero({
             보험사별 팩스번호
           </a>
           <a
+            href="/guide/누수-배상책임-청구"
+            className="tool-pill"
+            title="누수로 아랫집에 피해를 줬을 때 청구 절차와 서류"
+          >
+            <span className="em" aria-hidden>
+              💧
+            </span>
+            누수 배상 청구
+          </a>
+          <a
             href="/tools/op-surgery-codes.html"
             onClick={handleOpSurgery}
             className="tool-pill"
