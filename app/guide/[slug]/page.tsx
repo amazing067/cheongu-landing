@@ -18,6 +18,27 @@ export function generateStaticParams() {
 
 type Props = { params: Promise<{ slug: string }> };
 
+/**
+ * 본문 안의 **강조** 를 주황 밑줄로 바꾼다.
+ * 굵게만 쓰면 회색 문단 벽에서 눈에 띄지 않는다. 형광펜 배경은 쓰지 않는다
+ * — 광고 배너로 읽혀 오히려 건너뛴다 (globals.css .recruit-cards 주석).
+ */
+function Rich({ t }: { t: string }) {
+  return (
+    <>
+      {t.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+        i % 2 === 1 ? (
+          <b key={i} className="gd-mk">
+            {part}
+          </b>
+        ) : (
+          <span key={i}>{part}</span>
+        ),
+      )}
+    </>
+  );
+}
+
 function decodeSlug(raw: string): string {
   try {
     return decodeURIComponent(raw);
@@ -96,7 +117,7 @@ export default async function GuidePage({ params }: Props) {
   };
 
   return (
-    <main className="maxw pb-20">
+    <main className="maxw guide-doc pb-20">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -109,13 +130,12 @@ export default async function GuidePage({ params }: Props) {
         › {guide.h1}
       </nav>
 
-      <h1 className="mt-2 text-2xl font-black leading-tight text-slate-900 sm:text-3xl">
-        {guide.h1}
-      </h1>
-      <p className="mt-2 text-sm leading-relaxed text-slate-600">{guide.lead}</p>
-      <p className="mt-1 text-xs text-slate-400">
-        최종 확인 {guide.updated}
-      </p>
+      <header className="mt-3">
+        <span className="gd-kicker">{guide.kicker ?? "청구 가이드"}</span>
+        <h1 className="gd-title">{guide.h1}</h1>
+        <p className="gd-standfirst">{guide.lead}</p>
+        <p className="gd-date">최종 확인 {guide.updated}</p>
+      </header>
 
       {/*
         검색에서 이 페이지로 바로 들어온 사람은 청구닷컴이 뭘 하는 곳인지 모른다.
@@ -161,28 +181,26 @@ export default async function GuidePage({ params }: Props) {
       </div>
 
       {/* 산문형 가이드 본문 — 절차·서류처럼 순서가 있는 내용 */}
-      {guide.sections?.map((sec) => (
-        <section key={sec.heading} className="mt-8">
-          <h2 className="mb-3 text-lg font-black text-slate-900">{sec.heading}</h2>
+      {guide.sections?.map((sec, si) => (
+        <section key={sec.heading} className="mt-9">
+          <h2 className="gd-h">
+            <span className="n">{String(si + 1).padStart(2, "0")}</span>
+            <span>{sec.heading}</span>
+          </h2>
           {sec.paragraphs?.map((t) => (
-            <p key={t} className="mb-2.5 text-sm leading-relaxed text-slate-700">
-              {t}
+            <p key={t} className="gd-p">
+              <Rich t={t} />
             </p>
           ))}
           {sec.steps && (
-            <ol className="mt-1 space-y-2.5">
+            <ol className="gd-steps">
               {sec.steps.map((st, i) => (
-                <li
-                  key={st.t}
-                  className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-4"
-                >
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-black text-white">
-                    {i + 1}
-                  </span>
+                <li key={st.t}>
+                  <span className="n">{i + 1}</span>
                   <span>
-                    <b className="block text-sm font-extrabold text-slate-900">{st.t}</b>
-                    <span className="mt-1 block text-sm leading-relaxed text-slate-600">
-                      {st.d}
+                    <b className="t">{st.t}</b>
+                    <span className="d">
+                      <Rich t={st.d} />
                     </span>
                   </span>
                 </li>
@@ -190,15 +208,17 @@ export default async function GuidePage({ params }: Props) {
             </ol>
           )}
           {sec.bullets && (
-            <ul className="ml-4 mt-1 list-disc space-y-1.5 text-sm leading-relaxed text-slate-700">
+            <ul className="gd-ul">
               {sec.bullets.map((b) => (
-                <li key={b}>{b}</li>
+                <li key={b}>
+                  <Rich t={b} />
+                </li>
               ))}
             </ul>
           )}
           {sec.warn && (
-            <p className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-slate-700">
-              {sec.warn}
+            <p className="gd-warn">
+              <Rich t={sec.warn} />
             </p>
           )}
         </section>
@@ -207,11 +227,9 @@ export default async function GuidePage({ params }: Props) {
       {guide.showFaxTables && (
       <>
       {/* 먼저 경고한다. 한도를 모르고 보내면 반려된다 */}
-      <section className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5">
-        <h2 className="mb-1.5 text-base font-black text-slate-900">
-          보내기 전에 — 팩스는 금액 한도가 있습니다
-        </h2>
-        <p className="text-sm leading-relaxed text-slate-700">
+      <section className="gd-panel mt-8">
+        <h2 className="gd-h">보내기 전에 — 팩스는 금액 한도가 있습니다</h2>
+        <p className="mb-0">
           거의 모든 보험사가 팩스 접수에 금액 상한을 둡니다. 한도를 넘겨 보내면
           접수되지 않고, 원본 서류를 우편이나 방문으로 다시 내야 합니다. 보낸
           뒤에는 고객센터로 접수 여부를 꼭 확인하세요.
@@ -219,7 +237,7 @@ export default async function GuidePage({ params }: Props) {
       </section>
 
       <section className="mt-8">
-        <h2 className="mb-1 text-lg font-black text-slate-900">
+        <h2 className="gd-h" style={{ marginBottom: 6 }}>
           팩스번호가 있는 보험사 {withFax.length}곳
         </h2>
         <p className="mb-3 text-xs text-slate-400">
@@ -262,7 +280,7 @@ export default async function GuidePage({ params }: Props) {
       </section>
 
       <section className="mt-8">
-        <h2 className="mb-1 text-lg font-black text-slate-900">
+        <h2 className="gd-h" style={{ marginBottom: 6 }}>
           팩스번호가 따로 없는 보험사 {withoutFax.length}곳
         </h2>
         <p className="mb-3 text-xs text-slate-400">
@@ -305,8 +323,8 @@ export default async function GuidePage({ params }: Props) {
       </section>
 
       <section className="mt-8 rounded-2xl bg-slate-50 p-5">
-        <h2 className="mb-2 text-base font-black text-slate-900">알아두면 좋은 것</h2>
-        <ul className="ml-4 list-disc space-y-1.5 text-sm leading-relaxed text-slate-600">
+        <h2 className="gd-h">알아두면 좋은 것</h2>
+        <ul className="gd-ul">
           <li>
             같은 보험사라도 <b>청구 종류에 따라 팩스번호가 다릅니다.</b> KB손해보험은
             장기보험 상해·질병, 일반보험(단체), 재물배상이 각각 다른 번호입니다.
@@ -334,12 +352,17 @@ export default async function GuidePage({ params }: Props) {
       )}
 
       <section className="mt-8">
-        <h2 className="mb-3 text-lg font-black text-slate-900">자주 묻는 질문</h2>
-        <dl className="space-y-4">
+        <h2 className="gd-h">
+          <span className="n">Q&amp;A</span>
+          <span>자주 묻는 질문</span>
+        </h2>
+        <dl className="gd-faq">
           {guide.faqs.map((f) => (
-            <div key={f.q} className="rounded-2xl bg-slate-50 p-4">
-              <dt className="text-sm font-extrabold text-slate-900">{f.q}</dt>
-              <dd className="mt-1.5 text-sm leading-relaxed text-slate-600">{f.a}</dd>
+            <div key={f.q}>
+              <dt>{f.q}</dt>
+              <dd>
+                <Rich t={f.a} />
+              </dd>
             </div>
           ))}
         </dl>
@@ -348,7 +371,7 @@ export default async function GuidePage({ params }: Props) {
       {/* 다른 가이드로 — 팩스 가이드와 누수 가이드는 서로 이어지는 내용이다 */}
       {guides.filter((g) => g.slug !== guide.slug).length > 0 && (
         <section className="mt-8">
-          <h2 className="mb-3 text-lg font-black text-slate-900">함께 보면 좋은 것</h2>
+          <h2 className="gd-h">함께 보면 좋은 것</h2>
           <ul className="flex list-none flex-wrap gap-2 p-0">
             {guides
               .filter((g) => g.slug !== guide.slug)
@@ -356,7 +379,7 @@ export default async function GuidePage({ params }: Props) {
                 <li key={g.slug}>
                   <Link
                     href={guidePath(g.slug)}
-                    className="inline-block rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-900 no-underline hover:bg-slate-50"
+                    className="gd-next"
                   >
                     {g.h1}
                   </Link>
@@ -368,8 +391,8 @@ export default async function GuidePage({ params }: Props) {
 
       {guide.sources && (
         <section className="mt-8">
-          <h2 className="mb-2 text-base font-black text-slate-900">근거 자료</h2>
-          <ul className="ml-4 list-disc space-y-1 text-sm leading-relaxed text-slate-600">
+          <h2 className="gd-h">근거 자료</h2>
+          <ul className="gd-ul">
             {guide.sources.map((src) => (
               <li key={src.url}>
                 <a

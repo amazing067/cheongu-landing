@@ -938,3 +938,230 @@
     @apply block text-center;
   }
 }
+
+/* ===== 가이드 본문 (/guide/[slug]) =====
+   첫 화면은 제목도 본문도 전부 같은 검정 굵은 글씨에 회색 문단이었다.
+   사장님 지적: "너무 아무것도없어". 원인은 두 가지다.
+   · 강조가 하나도 없어서 어디부터 읽을지 눈이 정하지 못한다
+   · 한 줄이 900px 라 한글로 90자가 넘는다. 다음 줄 시작점을 눈이 못 찾는다
+
+   고치는 방법은 배경색을 까는 것이 아니다 (.recruit-cards 주석의 규칙 그대로).
+   줄을 760px 로 묶고, 로고 주황 하나만 써서 번호·밑줄·세로바로 리듬을 만든다.
+
+   ★ 가운데 정렬은 하지 않는다. 가운데는 유도 블록(.guide-cta)만이다.
+     긴 한글 문단을 가운데로 놓으면 줄마다 왼쪽 시작점이 달라져 더 안 읽힌다. */
+.guide-doc {
+  --gd-ink: #1c1917;
+  --gd-body: #44403c;
+  --gd-mute: #78716c;
+  --gd-line: #e7e5e4;
+  --gd-gold: #f09018;
+  --gd-gold-d: #c26a05;
+  --gd-gold-soft: #fff6ea;
+}
+.guide-doc > nav,
+.guide-doc > header,
+.guide-doc > section,
+.guide-doc > aside,
+.guide-doc > .guide-cta {
+  max-width: 760px;
+}
+
+/* 머리글 — 주황 짧은 선 + 분류 + 제목. 신문 기사 머리처럼 잡는다 */
+.guide-doc .gd-kicker {
+  @apply inline-flex items-center gap-2 font-extrabold;
+  font-size: 12px;
+  color: var(--gd-gold-d);
+  letter-spacing: 0.02em;
+}
+.guide-doc .gd-kicker::before {
+  content: "";
+  width: 22px;
+  height: 3px;
+  background: var(--gd-gold);
+  border-radius: 2px;
+}
+.guide-doc .gd-title {
+  @apply font-black tracking-tight;
+  color: var(--gd-ink);
+  font-size: 27px;
+  line-height: 1.32;
+  margin-top: 9px;
+}
+.guide-doc .gd-standfirst {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--gd-body);
+  margin-top: 11px;
+}
+.guide-doc .gd-date {
+  font-size: 12px;
+  color: var(--gd-mute);
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 1px solid var(--gd-line);
+}
+
+/* 섹션 제목 — 주황 번호 + 밑선 */
+.guide-doc .gd-h {
+  @apply flex items-baseline gap-2.5 font-black tracking-tight;
+  color: var(--gd-ink);
+  font-size: 19px;
+  line-height: 1.4;
+  padding-bottom: 9px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid var(--gd-line);
+}
+.guide-doc .gd-h .n {
+  @apply flex-none font-black;
+  font-size: 13px;
+  color: var(--gd-gold);
+  letter-spacing: 0.06em;
+}
+
+.guide-doc .gd-p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--gd-body);
+  margin-bottom: 11px;
+}
+
+/* 본문 강조 — 굵게 + 주황 밑줄. 형광펜 배경은 쓰지 않는다(광고 배너처럼 보인다) */
+.guide-doc .gd-mk {
+  @apply font-extrabold;
+  color: var(--gd-ink);
+  border-bottom: 2.5px solid var(--gd-gold);
+  padding-bottom: 1px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* 목록 — 기본 회색 점 대신 주황 사각 */
+.guide-doc .gd-ul {
+  @apply list-none p-0;
+  margin: 3px 0 0;
+}
+.guide-doc .gd-ul li {
+  position: relative;
+  padding-left: 15px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--gd-body);
+  margin-top: 5px;
+}
+.guide-doc .gd-ul li::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 0.72em;
+  width: 5px;
+  height: 5px;
+  background: var(--gd-gold);
+  border-radius: 1px;
+}
+
+/* 순서 — 번호를 검은 동그라미로 두면 어느 사이트에나 있는 그 모양이 된다.
+   테두리를 없애고 왼쪽에 주황 숫자만 크게 놓은 뒤 선으로 나눈다 */
+.guide-doc .gd-steps {
+  @apply list-none m-0 p-0;
+  border-top: 1px solid var(--gd-line);
+}
+.guide-doc .gd-steps li {
+  @apply flex gap-3.5;
+  padding: 13px 2px;
+  border-bottom: 1px solid var(--gd-line);
+}
+.guide-doc .gd-steps .n {
+  @apply flex-none font-black;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--gd-gold);
+  width: 20px;
+  letter-spacing: -0.02em;
+}
+.guide-doc .gd-steps .t {
+  @apply block font-extrabold;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--gd-ink);
+}
+.guide-doc .gd-steps .d {
+  @apply block;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--gd-body);
+  margin-top: 3px;
+}
+
+/* 주의 — 둥근 노란 상자는 생성형 UI 의 기본값이다. 왼쪽 주황 세로바로 바꾼다 */
+.guide-doc .gd-warn,
+.guide-doc .gd-panel {
+  background: var(--gd-gold-soft);
+  border-left: 3px solid var(--gd-gold);
+  border-radius: 0 10px 10px 0;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--gd-body);
+}
+.guide-doc .gd-warn {
+  padding: 12px 15px;
+  margin-top: 14px;
+}
+.guide-doc .gd-panel {
+  padding: 16px 18px;
+}
+.guide-doc .gd-panel .gd-h {
+  border-bottom: 0;
+  padding-bottom: 0;
+  margin-bottom: 7px;
+  font-size: 17px;
+}
+
+/* 자주 묻는 질문 — 회색 상자 대신 선으로만 나눈다 */
+.guide-doc .gd-faq {
+  border-top: 1px solid var(--gd-line);
+}
+.guide-doc .gd-faq > div {
+  padding: 14px 2px;
+  border-bottom: 1px solid var(--gd-line);
+}
+.guide-doc .gd-faq dt {
+  @apply font-extrabold;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--gd-ink);
+}
+.guide-doc .gd-faq dd {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--gd-body);
+  margin: 5px 0 0;
+}
+
+/* 다른 가이드 — 주황 밑줄이 딸린 카드 */
+.guide-doc .gd-next {
+  @apply inline-block bg-white no-underline;
+  border: 1px solid var(--gd-line);
+  border-bottom: 3px solid var(--gd-gold);
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--gd-ink);
+}
+.guide-doc .gd-next:hover {
+  background: var(--gd-gold-soft);
+}
+
+@media (max-width: 640px) {
+  .guide-doc .gd-title {
+    font-size: 22px;
+  }
+  .guide-doc .gd-h {
+    font-size: 17px;
+  }
+  .guide-doc .gd-p,
+  .guide-doc .gd-ul li {
+    font-size: 14.5px;
+  }
+}
