@@ -98,7 +98,30 @@ function faxNoticeAnswer(name: string, fax: string, cs?: string): string {
  * 그래서 회사마다 실제로 다른 사실을 본문에 드러낸다.
  * ★ 지어내지 않는다. links.json 과 lib/fax-limits.ts 에 검증해 둔 값만 쓴다.
  */
-type Fact = { label: string; text: string };
+type Fact = { label: string; text: string; hi?: boolean };
+
+/**
+ * 본문 안의 **강조** 를 굵게 + 주황 밑줄로 바꾼다. 가이드 페이지와 같은 표기법.
+ * 팩스번호와 금액 한도는 이 페이지에서 사람들이 찾아온 값이라 눈에 걸려야 한다.
+ */
+function Mark({ t }: { t: string }) {
+  return (
+    <>
+      {t.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+        i % 2 === 1 ? (
+          <b key={i} className="amt">
+            {part}
+          </b>
+        ) : (
+          <span key={i}>{part}</span>
+        ),
+      )}
+    </>
+  );
+}
+
+/** JSON-LD·메타에는 ** 표기가 들어가면 안 된다 */
+const plain = (t: string) => t.replace(/\*\*/g, "");
 
 /**
  * 팩스 한도 값을 문장으로 만든다.
@@ -111,12 +134,12 @@ type Fact = { label: string; text: string };
 function limitSentence(name: string, limit: string): string {
   const subject = `${name}${eunNeun(name)}`;
   if (limit === "제한 없음") {
-    return `${subject} 팩스 접수에 금액 상한을 두지 않습니다. 다만 팩스는 보낸 쪽에서 도착 여부를 알 수 없으니 접수 확인은 하시는 편이 안전합니다.`;
+    return `${subject} 팩스 접수에 **금액 상한이 없습니다**. 다만 팩스는 보낸 쪽에서 도착 여부를 알 수 없으니 접수 확인은 하시는 편이 안전합니다.`;
   }
   if (limit.includes("/")) {
-    return `${subject} 청구 담보에 따라 팩스 상한이 다릅니다 — ${limit}. 상한을 넘는 건은 원본 서류를 등기우편이나 방문으로 내셔야 합니다.`;
+    return `${subject} 청구 담보에 따라 팩스 상한이 다릅니다 — **${limit}**. 상한을 넘는 건은 원본 서류를 등기우편이나 방문으로 내셔야 합니다.`;
   }
-  return `${subject} 팩스로는 ${limit} 건만 접수됩니다. 상한을 넘으면 원본 서류를 등기우편이나 방문으로 내셔야 합니다.`;
+  return `${subject} 팩스로는 **${limit}** 건만 접수됩니다. 상한을 넘으면 원본 서류를 등기우편이나 방문으로 내셔야 합니다.`;
 }
 
 /** 「이 순서로」 4단계에 덧붙일 짧은 한 마디. 상한이 없으면 아무 말도 붙이지 않는다 */
@@ -143,9 +166,9 @@ function carrierFacts(c: Carrier): Fact[] {
       text:
         ps.length > 1
           ? `청구 종류에 따라 팩스번호가 나뉩니다 — ${ps
-              .map((p) => (p.label ? `${p.label} ${p.number}` : p.number))
+              .map((p) => (p.label ? `${p.label} **${p.number}**` : `**${p.number}**`))
               .join(", ")}. 어느 쪽으로 보낼지 확인하고 보내세요.`
-          : `팩스 ${ps[0].number} 로 보내시면 됩니다. 팩스는 보낸 쪽에서 도착 여부를 알 수 없으니 ${center}로 접수 확인까지 하시는 편이 안전합니다.`,
+          : `팩스 **${ps[0].number}** 로 보내시면 됩니다. 팩스는 보낸 쪽에서 도착 여부를 알 수 없으니 ${center}로 접수 확인까지 하시는 편이 안전합니다.`,
     });
   } else {
     out.push({ label: "접수 방법", text: faxNoticeAnswer(name, fax, L.cs) });
@@ -153,11 +176,12 @@ function carrierFacts(c: Carrier): Fact[] {
 
   // 팩스 금액 한도 — 41곳 중 공식에서 확인된 곳은 14곳뿐이다
   if (limit) {
-    out.push({ label: "팩스 금액 한도", text: limitSentence(name, limit) });
+    out.push({ label: "팩스 금액 한도", text: limitSentence(name, limit), hi: true });
   } else if (isFaxNumber(fax)) {
     out.push({
       label: "팩스 금액 한도",
-      text: `${name}의 팩스 금액 상한은 공식 안내에서 확인하지 못했습니다. 거의 모든 보험사가 상한을 두고 있으니, 금액이 큰 청구라면 보내기 전에 ${center}로 확인하세요.`,
+      text: `${name}의 팩스 금액 상한은 **공식 안내에서 확인되지 않았습니다**. 거의 모든 보험사가 상한을 두고 있으니, 금액이 큰 청구라면 보내기 전에 ${center}로 확인하세요.`,
+      hi: true,
     });
   }
 
@@ -501,7 +525,7 @@ export default async function CarrierPage({ params }: Props) {
               mainEntity: faqs.map((f) => ({
                 "@type": "Question",
                 name: f.q,
-                acceptedAnswer: { "@type": "Answer", text: f.a },
+                acceptedAnswer: { "@type": "Answer", text: plain(f.a) },
               })),
             },
           ]
@@ -585,9 +609,11 @@ export default async function CarrierPage({ params }: Props) {
           </h2>
           <dl className="carrier-facts">
             {facts.map((f) => (
-              <div key={f.label}>
+              <div key={f.label} className={f.hi ? "hi" : undefined}>
                 <dt>{f.label}</dt>
-                <dd>{f.text}</dd>
+                <dd>
+                  <Mark t={f.text} />
+                </dd>
               </div>
             ))}
           </dl>
@@ -647,7 +673,7 @@ export default async function CarrierPage({ params }: Props) {
               <div key={f.q} className="rounded-2xl bg-slate-50 p-4">
                 <dt className="text-sm font-extrabold text-slate-900">{f.q}</dt>
                 <dd className="mt-1.5 text-sm leading-relaxed text-slate-600">
-                  {f.a}
+                  <Mark t={f.a} />
                 </dd>
               </div>
             ))}

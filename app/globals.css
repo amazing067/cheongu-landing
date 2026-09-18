@@ -1269,3 +1269,26 @@
     font-size: 13px;
   }
 }
+
+/* 팩스 금액 한도 행 — 모르고 보내면 청구가 반려되는 조건이라
+   같은 목록 안에서도 눈에 걸려야 한다. 확인일 도장과 같은 어휘로 통일한다. */
+.carrier-facts > div.hi {
+  background: #fff7ec;
+  border-left: 3px solid #f09018;
+  border-bottom-color: #f6e4cc;
+  border-radius: 0 10px 10px 0;
+  padding: 13px 15px;
+}
+.carrier-facts > div.hi dt {
+  background: #f09018;
+  color: #fff;
+}
+/* 번호·금액처럼 찾아온 값. FAQ 답변에도 같은 표기가 들어간다 */
+.amt {
+  font-weight: 800;
+  color: #1c1917;
+  border-bottom: 2.5px solid #f09018;
+  padding-bottom: 1px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
