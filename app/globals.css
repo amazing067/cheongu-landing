@@ -1171,3 +1171,50 @@
     font-size: 14.5px;
   }
 }
+
+/* ===== 보험사 상세 — 「청구 전에 알아둘 것」 =====
+   구글이 상세페이지 41개 중 31개만 색인했다. 나머지는 「크롤링됨 — 색인 생성 안 됨」.
+   재보니 본문이 1,100자뿐인데 페이지끼리 최대 89.6% 가 같았다.
+   회사마다 실제로 다른 사실(접수 방법·팩스 한도·서식 구성)을 본문에 드러내 해결한다. */
+.carrier-facts {
+  margin: 0;
+  border-top: 1px solid var(--line, #e7e5e4);
+}
+.carrier-facts > div {
+  padding: 13px 2px;
+  border-bottom: 1px solid var(--line, #e7e5e4);
+}
+.carrier-facts dt {
+  display: inline-block;
+  margin-bottom: 5px;
+  padding: 3px 9px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #475569;
+  line-height: 1.35;
+}
+.carrier-facts dd {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: #44403c;
+}
+
+/* 같은 구분의 다른 보험사 — 크롤러가 넘어갈 길을 만든다 */
+.sibling-pill {
+  display: inline-block;
+  padding: 9px 13px;
+  background: #fff;
+  border: 1px solid var(--line, #e7e5e4);
+  border-radius: 9px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1c1917;
+  text-decoration: none;
+}
+.sibling-pill:hover {
+  border-color: #7dd3fc;
+  background: #f0f9ff;
+}

@@ -10,6 +10,7 @@ import {
   splitPhones,
 } from "@/lib/carriers";
 import type { Carrier } from "@/types/carrier";
+import { FAX_LIMITS } from "@/lib/fax-limits";
 import { Footer } from "@/components/Footer";
 
 // 서버 컴포넌트로 두는 게 핵심이다. 홈은 검색 상자·아코디언 때문에 클라이언트 렌더인데,
@@ -84,6 +85,112 @@ function faxNoticeAnswer(name: string, fax: string, cs?: string): string {
     return `${subject} 고정된 팩스번호가 없습니다. ${center}에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 주며, 그 번호로 서류를 보내시면 됩니다.${faxIssuedExtra(name)}`;
   }
   return `${subject} 공개된 팩스번호가 없습니다. ${center}로 전화해 접수 방법을 안내받으시거나 모바일 앱으로 접수하시면 됩니다.`;
+}
+
+/**
+ * 「청구 전에 알아둘 것」에 들어갈 회사별 사실.
+ *
+ * 구글 서치콘솔 기준(2026-09-18) 보험사 41곳 중 색인된 것이 31개뿐이고
+ * 55개가 「크롤링됨/발견됨 — 색인 생성 안 됨」이었다. 실제로 재보니 상세페이지
+ * 본문이 1,100자뿐인데 페이지끼리 최대 89.6% 가 같았다. 구글이 중복으로 본 것이다.
+ *
+ * 그래서 회사마다 실제로 다른 사실을 본문에 드러낸다.
+ * ★ 지어내지 않는다. links.json 과 lib/fax-limits.ts 에 검증해 둔 값만 쓴다.
+ */
+type Fact = { label: string; text: string };
+
+function carrierFacts(c: Carrier): Fact[] {
+  const L = c.links || {};
+  const name = c.name;
+  const center = L.cs ? `고객센터(${L.cs})` : "고객센터";
+  const fax = (L.fax || "").trim();
+  const limit = FAX_LIMITS[name];
+  const out: Fact[] = [];
+
+  // 접수 방법 — 팩스 값의 형태가 회사마다 다섯 가지다
+  if (isFaxNumber(fax)) {
+    const ps = splitPhones(fax);
+    out.push({
+      label: "접수 방법",
+      text:
+        ps.length > 1
+          ? `청구 종류에 따라 팩스번호가 나뉩니다 — ${ps
+              .map((p) => (p.label ? `${p.label} ${p.number}` : p.number))
+              .join(", ")}. 어느 쪽으로 보낼지 확인하고 보내세요.`
+          : `팩스 ${ps[0].number} 로 보내시면 됩니다. 팩스는 보낸 쪽에서 도착 여부를 알 수 없으니 ${center}로 접수 확인까지 하시는 편이 안전합니다.`,
+    });
+  } else {
+    out.push({ label: "접수 방법", text: faxNoticeAnswer(name, fax, L.cs) });
+  }
+
+  // 팩스 금액 한도 — 41곳 중 공식에서 확인된 곳은 14곳뿐이다
+  if (limit) {
+    out.push({
+      label: "팩스 금액 한도",
+      text: `${name}${eunNeun(name)} 팩스 접수에 ${limit} 상한을 두고 있습니다. 이 금액을 넘으면 접수되지 않고 원본 서류를 우편이나 방문으로 다시 내야 합니다.`,
+    });
+  } else if (isFaxNumber(fax)) {
+    out.push({
+      label: "팩스 금액 한도",
+      text: `${name}의 팩스 금액 상한은 공식 안내에서 확인하지 못했습니다. 거의 모든 보험사가 상한을 두고 있으니, 금액이 큰 청구라면 보내기 전에 ${center}로 확인하세요.`,
+    });
+  }
+
+  // 준비 서류 — 어떤 서식을 제공하는지가 회사마다 다르다
+  const docs: string[] = [];
+  if (L.pdf) docs.push("보험금 청구서");
+  if (L.dental) docs.push("치과치료확인서");
+  if (docs.length) {
+    out.push({
+      label: "청구서 서식",
+      text:
+        docs.length > 1
+          ? `${name}${eunNeun(name)} ${docs[0]}와 ${docs[1]} 서식을 따로 씁니다. 치과 치료로 청구하실 때는 두 가지를 함께 내셔야 합니다. 아래에서 내려받으실 수 있습니다.`
+          : `${name} ${docs[0]} 서식을 아래에서 내려받아 작성하시면 됩니다.`,
+    });
+  }
+
+  // 공제회사는 보험사와 부르는 말과 창구가 다르다
+  if (c.type === "공제회사") {
+    out.push({
+      label: "공제 상품입니다",
+      text: `${name}${eunNeun(name)} 보험회사가 아니라 공제기관입니다. 보험금이 아니라 공제금이라고 부르며, 청구 서식과 창구도 보험사와 다릅니다. 서류는 반드시 ${name} 양식으로 내셔야 합니다.`,
+    });
+  }
+
+  return out;
+}
+
+/** 같은 구분(손해·생명·공제)의 다른 회사 — 내부 링크가 없어 크롤러가 못 넘어가고 있었다 */
+function siblingCarriers(c: Carrier, limit = 8): Carrier[] {
+  const same = carriers.filter((x) => x.type === c.type && x.name !== c.name);
+  if (!same.length) return [];
+  // 이름 순으로 돌리면 이웃한 회사끼리 목록이 거의 같아져 중복이 오히려 늘었다.
+  // 이름으로 만든 수를 시작점과 보폭으로 써서 회사마다 다른 조합이 나오게 한다.
+  let h = 0;
+  for (const ch of c.name) h = (h * 31 + ch.charCodeAt(0)) % 100003;
+  const step = 1 + (h % Math.max(1, same.length - 1));
+  const out: Carrier[] = [];
+  const seen = new Set<string>();
+  // ★ k 를 same.length 로 반드시 끊는다. step 이 same.length 와 공약수를 가지면
+  //   (h + k*step) % same.length 가 일부 칸만 돌아 조건이 영원히 안 채워진다.
+  //   실제로 그렇게 써서 빌드가 static 생성 29/59 에서 멈췄다.
+  for (let k = 0; k < same.length && out.length < limit; k++) {
+    const x = same[(h + k * step) % same.length];
+    if (!seen.has(x.name)) {
+      seen.add(x.name);
+      out.push(x);
+    }
+  }
+  // 위에서 못 들른 회사가 남으면 순서대로 채운다
+  for (let k = 0; k < same.length && out.length < limit; k++) {
+    const x = same[k];
+    if (!seen.has(x.name)) {
+      seen.add(x.name);
+      out.push(x);
+    }
+  }
+  return out;
 }
 
 /** 검색결과에 그대로 노출되는 문장 — 실제 번호를 넣어야 클릭률이 오른다. */
@@ -284,6 +391,8 @@ export default async function CarrierPage({ params }: Props) {
   const L = carrier.links || {};
   const faxFirst = splitPhones(L.fax)[0]?.number;
   const hasFaxNumber = isFaxNumber(L.fax);
+  const facts = carrierFacts(carrier);
+  const siblings = siblingCarriers(carrier);
 
   // 검색에서 실제로 들어오는 질문들 — 답 박스(FAQ 리치 결과)로 잡히도록 스키마에 싣는다.
   const faqs: { q: string; a: string }[] = [];
@@ -312,6 +421,25 @@ export default async function CarrierPage({ params }: Props) {
       a: `이 페이지에서 ${carrier.name} 보험금 청구서 PDF 를 바로 내려받을 수 있습니다.${
         pdfUpdated ? ` 서식 기준일은 ${pdfUpdated.replace(/-/g, ".")} 입니다.` : ""
       }`,
+    });
+  }
+  // 팩스 한도는 회사마다 값이 다르고, 모르고 보내면 반려되는 조건이라 따로 묻는 사람이 많다
+  if (FAX_LIMITS[carrier.name]) {
+    faqs.push({
+      q: `${carrier.name} 팩스로 얼마까지 청구할 수 있나요?`,
+      a: `${carrier.name}${eunNeun(carrier.name)} 팩스 접수에 ${FAX_LIMITS[carrier.name]} 상한을 두고 있습니다. 이 금액을 넘는 청구는 팩스로 접수되지 않으며, 원본 서류를 우편이나 방문으로 제출하셔야 합니다.`,
+    });
+  }
+  if (L.dental) {
+    faqs.push({
+      q: `${carrier.name} 치과 치료도 이 청구서로 내나요?`,
+      a: `아닙니다. ${carrier.name}${eunNeun(carrier.name)} 치과치료확인서 서식이 따로 있습니다. 치과 치료 보험금을 청구하실 때는 보험금 청구서와 치과치료확인서를 함께 내셔야 하며, 두 가지 모두 이 페이지에서 내려받을 수 있습니다.`,
+    });
+  }
+  if (carrier.type === "공제회사") {
+    faqs.push({
+      q: `${carrier.name} 공제금 청구도 보험금 청구와 같나요?`,
+      a: `${carrier.name}${eunNeun(carrier.name)} 보험회사가 아니라 공제기관이라 보험금이 아닌 공제금으로 부릅니다. 청구 서식과 접수 창구가 보험사와 다르므로 반드시 ${carrier.name} 양식으로 작성해 제출하셔야 합니다.`,
     });
   }
 
@@ -417,6 +545,22 @@ export default async function CarrierPage({ params }: Props) {
         </section>
       )}
 
+      {facts.length > 0 && (
+        <section className="mb-8">
+          <h2 className="mb-3 text-lg font-black text-slate-900">
+            {carrier.name} 청구 전에 알아둘 것
+          </h2>
+          <dl className="carrier-facts">
+            {facts.map((f) => (
+              <div key={f.label}>
+                <dt>{f.label}</dt>
+                <dd>{f.text}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
+
       {(L.pdf || L.dental || L.guide || L.terms || L.support || L.system) && (
       <section className="mb-8">
         <h2 className="mb-1 text-lg font-black text-slate-900">
@@ -483,18 +627,32 @@ export default async function CarrierPage({ params }: Props) {
           보험금 청구, 이 순서로 하시면 됩니다
         </h2>
         <ol className="ml-4 list-decimal space-y-1.5 text-sm leading-relaxed text-slate-600">
-          <li>위 &ldquo;필요서류 안내&rdquo;에서 청구 사유별 서류를 확인합니다.</li>
-          <li>보험금 청구서 PDF 를 내려받아 작성합니다.</li>
-          <li>진단서·영수증 등 서류를 함께 준비합니다.</li>
+          <li>
+            {L.guide
+              ? `위 「필요서류 안내」에서 ${carrier.name}이(가) 청구 사유별로 요구하는 서류를 확인합니다.`
+              : `청구 사유별로 필요한 서류를 ${L.cs ? `고객센터(${L.cs})` : "고객센터"}에 확인합니다.`}
+          </li>
+          <li>
+            {L.pdf
+              ? `${carrier.name} 보험금 청구서 PDF 를 내려받아 작성합니다.${
+                  L.dental ? " 치과 치료라면 치과치료확인서도 함께 받습니다." : ""
+                }`
+              : `${carrier.name} 양식의 보험금 청구서를 준비합니다.`}
+          </li>
+          <li>진단서·영수증 등 청구 사유를 증명할 서류를 함께 준비합니다.</li>
           <li>
             {hasFaxNumber
-              ? `팩스(${faxFirst}) 또는 모바일 앱으로 접수합니다.`
-              : "모바일 앱 또는 홈페이지로 접수합니다."}
+              ? `팩스 ${faxFirst} 로 보냅니다.${
+                  FAX_LIMITS[carrier.name]
+                    ? ` 청구금액이 ${FAX_LIMITS[carrier.name]}를 넘으면 팩스로는 접수되지 않으니 우편이나 방문을 이용합니다.`
+                    : ""
+                }`
+              : faxNoticeLine(carrier.name, L.fax || "", L.cs)}
           </li>
           <li>
             {L.cs
-              ? `접수 여부를 고객센터(${L.cs})로 확인합니다.`
-              : "접수 여부를 고객센터로 확인합니다."}
+              ? `보낸 뒤 고객센터(${L.cs})로 접수 여부를 확인합니다. 팩스는 보낸 쪽에서 도착을 알 수 없습니다.`
+              : "보낸 뒤 고객센터로 접수 여부를 확인합니다."}
           </li>
         </ol>
         <p className="mt-3 text-xs leading-relaxed text-slate-400">
@@ -502,6 +660,26 @@ export default async function CarrierPage({ params }: Props) {
           해당 보험사 또는 담당 설계사에게 확인하세요.
         </p>
       </section>
+
+      {siblings.length > 0 && (
+        <section className="mb-8">
+          <h2 className="mb-1 text-lg font-black text-slate-900">
+            다른 {carrier.type === "공제회사" ? "공제기관" : `${carrier.type}보험사`} 청구 안내
+          </h2>
+          <p className="mb-3 text-xs text-slate-400">
+            가입하신 곳이 여러 군데라면 여기서 바로 넘어가실 수 있습니다.
+          </p>
+          <ul className="flex list-none flex-wrap gap-2 p-0">
+            {siblings.map((s) => (
+              <li key={s.name}>
+                <a href={carrierPath(s.name)} className="sibling-pill">
+                  {s.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <nav className="border-t border-slate-200 pt-5 text-sm">
         <a href="/" className="font-bold text-blue-700 no-underline hover:underline">
