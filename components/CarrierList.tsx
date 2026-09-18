@@ -138,14 +138,7 @@ function FaxPopupBtn({ number }: { number: string }) {
         aria-expanded={open}
       >
         <span className="bico" aria-hidden>📠</span>
-        보험금청구 FAX{" "}
-        <span className="num">
-          (
-          {parts.every((p) => p.label && p.label !== p.number)
-            ? parts.map((p) => p.label).join("/")
-            : `${parts.length}개`}
-          ) 클릭
-        </span>
+        보험금청구 FAX <span className="num">클릭</span>
       </button>
       {open && (
         <>
