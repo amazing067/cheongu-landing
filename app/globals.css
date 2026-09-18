@@ -1218,3 +1218,54 @@
   border-color: #7dd3fc;
   background: #f0f9ff;
 }
+
+/* ===== 팩스번호 확인일 도장 =====
+   팩스번호는 각 사가 예고 없이 바꾼다. 하루에 3곳이 바뀐 날도 있었고
+   삼성화재는 공식 홈페이지가 아직 옛 번호를 표시한다.
+   그래서 「언제 확인한 값인가」 가 이 사이트에서 제일 중요한 정보인데,
+   처음엔 작은 회색 글씨로 오른쪽에 뒀더니 눈에 안 들어왔다.
+
+   눈에 띄게 하는 일은 배경을 어둡게 하는 게 아니라 로고 주황이 한다
+   (globals.css .recruit-cards 주석의 규칙). 가이드의 주의 상자와 같은
+   왼쪽 주황 세로바 + 날짜에 굵은 주황 밑줄. */
+.fax-stamp {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 3px 9px;
+  margin: 16px 0 12px;
+  padding: 12px 15px;
+  background: #fff7ec;
+  border-left: 3px solid #f09018;
+  border-radius: 0 10px 10px 0;
+}
+.fax-stamp .d {
+  flex: none;
+  font-size: 15.5px;
+  font-weight: 900;
+  color: #1c1917;
+  letter-spacing: -0.01em;
+  border-bottom: 2.5px solid #f09018;
+  padding-bottom: 1px;
+  white-space: nowrap;
+}
+.fax-stamp .t {
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #57534e;
+}
+.fax-stamp .sub {
+  flex: none;
+  font-size: 12px;
+  color: #a8a29e;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .fax-stamp .d {
+    font-size: 14.5px;
+  }
+  .fax-stamp .t {
+    font-size: 13px;
+  }
+}

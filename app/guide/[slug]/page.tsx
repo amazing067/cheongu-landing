@@ -241,16 +241,17 @@ export default async function GuidePage({ params }: Props) {
           팩스번호가 있는 보험사 {withFax.length}곳
         </h2>
         <p className="mb-3 text-xs text-slate-400">
-          {faxUpdated && (
-            <>
-              <b className="font-bold text-slate-500">
-                각 사 확인 {faxUpdated.replace(/-/g, ".")}
-              </b>
-              {" · "}
-            </>
-          )}
           회사명을 누르면 필요서류·청구서 PDF 까지 볼 수 있습니다.
         </p>
+        {faxUpdated && (
+          <p className="fax-stamp">
+            <span className="d">팩스번호 {faxUpdated.replace(/-/g, ".")} 확인</span>
+            <span className="t">
+              각 사 콜센터와 공식 안내에서 직접 확인한 값입니다. 팩스번호는 예고
+              없이 바뀌니, 보내신 뒤 고객센터로 접수 여부를 확인하세요.
+            </span>
+          </p>
+        )}
         <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
           <table className="w-full border-collapse text-sm">
             <thead>

@@ -416,18 +416,23 @@ export function CarrierList({
 
   return (
     <>
-      {(faxUpdatedLabel || pdfUpdatedLabel) && (
-        <p className="mt-2 text-right text-xs leading-relaxed text-slate-400">
-          {faxUpdatedLabel && (
-            <span className="font-bold text-slate-500">
-              팩스번호 확인 {faxUpdatedLabel}
-            </span>
+      {faxUpdatedLabel ? (
+        <p className="fax-stamp">
+          <span className="d">팩스번호 {faxUpdatedLabel} 확인</span>
+          <span className="t">
+            보험사 {data.carriers.length}곳을 각 사 콜센터와 공식 안내에서 직접
+            확인한 값입니다.
+          </span>
+          {pdfUpdatedLabel && (
+            <span className="sub">청구서 서식 {pdfUpdatedLabel}</span>
           )}
-          {faxUpdatedLabel && pdfUpdatedLabel && (
-            <span aria-hidden> · </span>
-          )}
-          {pdfUpdatedLabel && <span>청구서 서식 {pdfUpdatedLabel}</span>}
         </p>
+      ) : (
+        pdfUpdatedLabel && (
+          <p className="mt-2 text-right text-xs text-slate-400">
+            청구서 서식 업데이트 {pdfUpdatedLabel}
+          </p>
+        )
       )}
       <section id="loss" className="mt-2">
         <div className="catbar">
