@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BrandMark } from "@/components/BrandMark";
 import { Footer } from "@/components/Footer";
-import { carrierPath, carriers, splitPhones, SITE_URL } from "@/lib/carriers";
+import { carrierPath, carriers, faxUpdated, splitPhones, SITE_URL } from "@/lib/carriers";
 import { findGuide, guidePath, guideUrl, guides } from "@/lib/guides";
 import { FAX_LIMITS } from "@/lib/fax-limits";
 
@@ -241,6 +241,14 @@ export default async function GuidePage({ params }: Props) {
           팩스번호가 있는 보험사 {withFax.length}곳
         </h2>
         <p className="mb-3 text-xs text-slate-400">
+          {faxUpdated && (
+            <>
+              <b className="font-bold text-slate-500">
+                각 사 확인 {faxUpdated.replace(/-/g, ".")}
+              </b>
+              {" · "}
+            </>
+          )}
           회사명을 누르면 필요서류·청구서 PDF 까지 볼 수 있습니다.
         </p>
         <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">

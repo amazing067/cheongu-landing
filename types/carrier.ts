@@ -24,5 +24,7 @@ export interface Carrier {
 export interface LinksData {
   /** 청구서 PDF 서식 최종 업데이트일 (YYYY-MM-DD) */
   pdfUpdated?: string;
+  /** 팩스번호·금액 한도를 각 사에 확인한 날 */
+  faxUpdated?: string;
   carriers: Carrier[];
 }

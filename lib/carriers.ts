@@ -13,6 +13,9 @@ export const carriers: Carrier[] = data.carriers;
 
 export const pdfUpdated: string | undefined = data.pdfUpdated;
 
+/** 팩스번호·금액 한도를 각 사 콜센터·공식 안내로 확인한 날 */
+export const faxUpdated: string | undefined = data.faxUpdated;
+
 /**
  * URL 경로에 쓰는 보험사 식별자.
  * 한글 그대로 쓴다 — 검색엔진이 한글 URL 을 정상 처리하고, 주소만 봐도 무슨 페이지인지 안다.

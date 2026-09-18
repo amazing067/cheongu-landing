@@ -408,12 +408,25 @@ export function CarrierList({
   const pdfUpdatedLabel = data.pdfUpdated
     ? data.pdfUpdated.replace(/-/g, ".")
     : null;
+  // 팩스번호는 각 사가 예고 없이 바꾼다. 언제 확인한 값인지 보여야
+  // 방문자가 최신인지 판단할 수 있다.
+  const faxUpdatedLabel = data.faxUpdated
+    ? data.faxUpdated.replace(/-/g, ".")
+    : null;
 
   return (
     <>
-      {pdfUpdatedLabel && (
-        <p className="mt-2 text-right text-xs text-slate-400">
-          청구서 서식 업데이트 {pdfUpdatedLabel}
+      {(faxUpdatedLabel || pdfUpdatedLabel) && (
+        <p className="mt-2 text-right text-xs leading-relaxed text-slate-400">
+          {faxUpdatedLabel && (
+            <span className="font-bold text-slate-500">
+              팩스번호 확인 {faxUpdatedLabel}
+            </span>
+          )}
+          {faxUpdatedLabel && pdfUpdatedLabel && (
+            <span aria-hidden> · </span>
+          )}
+          {pdfUpdatedLabel && <span>청구서 서식 {pdfUpdatedLabel}</span>}
         </p>
       )}
       <section id="loss" className="mt-2">

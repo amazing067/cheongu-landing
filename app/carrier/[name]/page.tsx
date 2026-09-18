@@ -6,6 +6,7 @@ import {
   carrierPath,
   carrierUrl,
   findCarrier,
+  faxUpdated,
   pdfUpdated,
   splitPhones,
 } from "@/lib/carriers";
@@ -554,6 +555,14 @@ export default async function CarrierPage({ params }: Props) {
           </h2>
           <p className="mb-2 text-xs text-slate-400">
             번호를 누르면 바로 연결됩니다.
+            {faxUpdated && (
+              <>
+                {" · "}
+                <b className="font-bold text-slate-500">
+                  팩스번호 확인 {faxUpdated.replace(/-/g, ".")}
+                </b>
+              </>
+            )}
           </p>
           <dl>
             <PhoneRow label="고객센터" value={L.cs} />
