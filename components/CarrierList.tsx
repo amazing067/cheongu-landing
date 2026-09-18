@@ -105,7 +105,7 @@ function parseFaxNumbers(num: string): { label: string; number: string; tel: str
     .map((p) => {
       const m = p.trim().match(/^([\d\-]+)\(([^)]+)\)$/);
       const number = m ? m[1].trim() : p.trim();
-      const label = m ? m[2].trim() : p.trim();
+      const label = m ? m[2].trim() : "";
       const tel = number.replace(/[^0-9]/g, "");
       return { label, number, tel };
     });
@@ -167,7 +167,9 @@ function FaxPopupBtn({ number }: { number: string }) {
                 className="fax-popup-card"
                 onClick={() => setOpen(false)}
               >
-                <span className="fax-popup-card-region">{p.label}</span>
+                {p.label && (
+                  <span className="fax-popup-card-region">{p.label}</span>
+                )}
                 <span className="fax-popup-card-num">{p.number}</span>
               </a>
             ))}
