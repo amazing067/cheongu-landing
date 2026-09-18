@@ -199,6 +199,15 @@ function carrierFacts(c: Carrier): Fact[] {
     });
   }
 
+  // 보낸 팩스가 도착했는지 직접 볼 수 있는 곳. 41곳 중 라이나생명에만 있다
+  if (L.faxCheck) {
+    out.push({
+      label: "팩스 도착 확인",
+      text: `${name}${eunNeun(name)} 보낸 팩스가 도착했는지 **고객이 직접 조회**할 수 있습니다. 로그인 없이 확인되니, 보내신 뒤 전화로 묻지 않아도 됩니다.`,
+      hi: true,
+    });
+  }
+
   // 공제회사는 보험사와 부르는 말과 창구가 다르다
   if (c.type === "공제회사") {
     out.push({
@@ -485,6 +494,12 @@ export default async function CarrierPage({ params }: Props) {
       a: `아닙니다. ${carrier.name}${eunNeun(carrier.name)} 치과치료확인서 서식이 따로 있습니다. 치과 치료 보험금을 청구하실 때는 보험금 청구서와 치과치료확인서를 함께 내셔야 하며, 두 가지 모두 이 페이지에서 내려받을 수 있습니다.`,
     });
   }
+  if (L.faxCheck) {
+    faqs.push({
+      q: `${carrier.name} 팩스가 잘 갔는지 어떻게 확인하나요?`,
+      a: `${carrier.name}${eunNeun(carrier.name)} 보낸 팩스의 수신 내역을 고객이 직접 조회할 수 있는 페이지를 운영합니다. 로그인 없이 확인할 수 있어, 접수 여부를 전화로 묻지 않아도 됩니다. 이 페이지의 「팩스 도착 확인」 버튼으로 들어가시면 됩니다.`,
+    });
+  }
   if (carrier.type === "공제회사") {
     faqs.push({
       q: `${carrier.name} 공제금 청구도 보험금 청구와 같나요?`,
@@ -620,7 +635,7 @@ export default async function CarrierPage({ params }: Props) {
         </section>
       )}
 
-      {(L.pdf || L.dental || L.guide || L.terms || L.support || L.system) && (
+      {(L.pdf || L.dental || L.guide || L.terms || L.support || L.system || L.faxCheck) && (
       <section className="mb-8">
         <h2 className="mb-1 text-lg font-black text-slate-900">
           {carrier.name} 청구 서류 · 바로가기
@@ -634,6 +649,7 @@ export default async function CarrierPage({ params }: Props) {
           <LinkRow label="📄 보험금 청구서 PDF 내려받기" href={L.pdf} download />
           <LinkRow label="🦷 치과치료확인서" href={L.dental} download />
           <LinkRow label="📋 필요서류 안내" href={L.guide} external />
+          <LinkRow label="📠 팩스 도착 확인" href={L.faxCheck} external />
           <LinkRow label="📘 약관 확인" href={L.terms} external />
           <LinkRow label="🏠 홈페이지" href={L.support} external />
           <LinkRow label="💻 전산 접속" href={L.system} external />

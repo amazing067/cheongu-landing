@@ -554,7 +554,8 @@
         "cs": "1588-0058",
         "monitor": "1588-2442",
         "helpdesk": "02-3781-2006",
-        "fax": "02-6944-1200",
+        "fax": "02-6944-1200 | 02-6944-1201",
+        "faxCheck": "https://m.lina.co.kr/cyber/accident/fax",
         "terms": "https://www.lina.co.kr/disclosure/product-public-announcement/product-on-sales?key=0"
       }
     },

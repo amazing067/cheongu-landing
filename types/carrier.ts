@@ -8,6 +8,8 @@ export interface CarrierLinks {
   monitor?: string;
   helpdesk?: string;
   fax?: string;
+  /** 보낸 팩스가 도착했는지 고객이 직접 조회하는 페이지 (라이나생명) */
+  faxCheck?: string;
   terms?: string;
 }
 
