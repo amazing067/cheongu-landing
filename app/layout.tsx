@@ -1,6 +1,27 @@
+import fs from "node:fs";
+import path from "node:path";
 import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
+
+/**
+ * 이 페이지가 만들어진 빌드 버전.
+ * scripts/prepare-public.js 가 data/version.json 에 써두고, 여기서 빌드 때 읽어
+ * HTML 에 새긴다. assets/fresh.js 가 서버의 최신 버전과 견줘 낡은 화면을 고친다.
+ * (카카오톡·네이버 인앱 브라우저가 Cache-Control 을 지키지 않아 생긴 문제다)
+ *
+ * import 로 가져오지 않는 이유: version.json 은 빌드 생성물이라 git 에 없다.
+ * 없을 때 빌드가 깨지지 않도록 읽기에 실패하면 빈 값으로 둔다 — 그러면
+ * fresh.js 가 아무 일도 하지 않고 지나간다.
+ */
+const BUILD_VERSION: string = (() => {
+  try {
+    const raw = fs.readFileSync(path.join(process.cwd(), "data", "version.json"), "utf8");
+    return String(JSON.parse(raw).v || "");
+  } catch {
+    return "";
+  }
+})();
 
 // 구글 서치콘솔 소유확인 값 (bohumreport@gmail.com / 어메이징사업부 계정,
 // 속성: https://www.xn--2e0br60d.com, 2026-07-29 발급).
@@ -151,6 +172,16 @@ export default function RootLayout({
       <body className="text-slate-900 mode-compact">
         {children}
         <Analytics />
+        {BUILD_VERSION && (
+          <>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.__BUILD_V__=${JSON.stringify(BUILD_VERSION)};`,
+              }}
+            />
+            <script src="/assets/fresh.js" defer />
+          </>
+        )}
       </body>
     </html>
   );

@@ -47,3 +47,18 @@ _원본_로고/
 seomator.toml
 _조사_팩스확인/
 _분석_트래픽/
+
+# ── public/ 안의 생성물 ────────────────────────────────
+# scripts/prepare-public.js 가 루트 assets·data·tools·icons 에서 만들어 낸다.
+# git 에 두면 빌드마다 바뀌어 지저분하고, 실수로 public/ 쪽을 고쳤다가
+# 다음 빌드에 덮여 사라지는 사고도 난다. 원본은 항상 루트 쪽이다.
+# (public/sw.js 와 public/primeasset-ci.png 는 생성물이 아니라 그대로 둔다)
+public/assets/
+public/data/
+public/tools/
+public/icons/
+public/CNAME
+public/manifest.webmanifest
+
+# 빌드 버전 — 배포마다 달라진다
+data/version.json
