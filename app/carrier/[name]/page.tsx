@@ -99,6 +99,33 @@ function faxNoticeAnswer(name: string, fax: string, cs?: string): string {
  */
 type Fact = { label: string; text: string };
 
+/**
+ * 팩스 한도 값을 문장으로 만든다.
+ * 값이 세 가지 형태로 들어온다.
+ *   "100만원 이하"                          → 보통
+ *   "제한 없음"                             → 흥국화재 (콜센터 확인)
+ *   "실손 제한 없음 / 정액담보 200만원 미만"   → 삼성화재 (담보별로 다름)
+ * "팩스 접수에 제한 없음 상한을 두고 있습니다" 같은 문장이 나가지 않게 나눈다.
+ */
+function limitSentence(name: string, limit: string): string {
+  const subject = `${name}${eunNeun(name)}`;
+  if (limit === "제한 없음") {
+    return `${subject} 팩스 접수에 금액 상한을 두지 않습니다. 다만 팩스는 보낸 쪽에서 도착 여부를 알 수 없으니 접수 확인은 하시는 편이 안전합니다.`;
+  }
+  if (limit.includes("/")) {
+    return `${subject} 청구 담보에 따라 팩스 상한이 다릅니다 — ${limit}. 상한을 넘는 건은 원본 서류를 등기우편이나 방문으로 내셔야 합니다.`;
+  }
+  return `${subject} 팩스로는 ${limit} 건만 접수됩니다. 상한을 넘으면 원본 서류를 등기우편이나 방문으로 내셔야 합니다.`;
+}
+
+/** 「이 순서로」 4단계에 덧붙일 짧은 한 마디. 상한이 없으면 아무 말도 붙이지 않는다 */
+function limitStepNote(name: string): string {
+  const limit = FAX_LIMITS[name];
+  if (!limit || limit === "제한 없음") return "";
+  if (limit.includes("/")) return ` 담보에 따라 상한이 다릅니다 — ${limit}.`;
+  return ` ${limit} 건만 접수되니, 넘으면 원본 서류를 등기우편이나 방문으로 내셔야 합니다.`;
+}
+
 function carrierFacts(c: Carrier): Fact[] {
   const L = c.links || {};
   const name = c.name;
@@ -125,10 +152,7 @@ function carrierFacts(c: Carrier): Fact[] {
 
   // 팩스 금액 한도 — 41곳 중 공식에서 확인된 곳은 14곳뿐이다
   if (limit) {
-    out.push({
-      label: "팩스 금액 한도",
-      text: `${name}${eunNeun(name)} 팩스 접수에 ${limit} 상한을 두고 있습니다. 이 금액을 넘으면 접수되지 않고 원본 서류를 우편이나 방문으로 다시 내야 합니다.`,
-    });
+    out.push({ label: "팩스 금액 한도", text: limitSentence(name, limit) });
   } else if (isFaxNumber(fax)) {
     out.push({
       label: "팩스 금액 한도",
@@ -427,7 +451,7 @@ export default async function CarrierPage({ params }: Props) {
   if (FAX_LIMITS[carrier.name]) {
     faqs.push({
       q: `${carrier.name} 팩스로 얼마까지 청구할 수 있나요?`,
-      a: `${carrier.name}${eunNeun(carrier.name)} 팩스 접수에 ${FAX_LIMITS[carrier.name]} 상한을 두고 있습니다. 이 금액을 넘는 청구는 팩스로 접수되지 않으며, 원본 서류를 우편이나 방문으로 제출하셔야 합니다.`,
+      a: limitSentence(carrier.name, FAX_LIMITS[carrier.name]),
     });
   }
   if (L.dental) {
@@ -642,11 +666,7 @@ export default async function CarrierPage({ params }: Props) {
           <li>진단서·영수증 등 청구 사유를 증명할 서류를 함께 준비합니다.</li>
           <li>
             {hasFaxNumber
-              ? `팩스 ${faxFirst} 로 보냅니다.${
-                  FAX_LIMITS[carrier.name]
-                    ? ` 청구금액이 ${FAX_LIMITS[carrier.name]}를 넘으면 팩스로는 접수되지 않으니 우편이나 방문을 이용합니다.`
-                    : ""
-                }`
+              ? `팩스 ${faxFirst} 로 보냅니다.${limitStepNote(carrier.name)}`
               : faxNoticeLine(carrier.name, L.fax || "", L.cs)}
           </li>
           <li>
