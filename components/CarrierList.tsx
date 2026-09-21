@@ -195,11 +195,15 @@ function NoFaxBtn({ fax, mobileUpload }: { fax: string; mobileUpload?: string })
       </a>
     );
   }
-  const text = fax.includes("발급") ? "번호 발급" : fax.includes("폐지") ? "앱으로 접수" : "고객센터 문의";
+  const issued = fax.includes("발급");
+  const text = issued ? "가상 FAX번호 전화로 발급" : "FAX번호 미공개, 고객센터 문의";
+  const title = issued
+    ? "고정된 팩스번호가 없습니다. 고객센터에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 줍니다. 그 번호로 서류를 보내세요."
+    : "공개된 팩스번호가 없습니다. 고객센터로 전화해 접수 방법을 안내받으세요.";
   return (
-    <span className="btn btn-call center fax-claim btn-compact btn-static" title={`보험금청구 FAX — ${text}`}>
+    <span className="btn btn-call center fax-claim btn-compact btn-static" title={title}>
       <span className="bico" aria-hidden>📠</span>
-      <span className="lb">FAX</span> <span className="num">{text}</span>
+      <span className="num">{text}</span>
     </span>
   );
 }
