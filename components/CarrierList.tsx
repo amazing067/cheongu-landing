@@ -229,7 +229,7 @@ function NoFaxPopupBtn({
         aria-expanded={open}
       >
         <span className="bico" aria-hidden>📠</span>
-        <span className="lb">FAX</span> <span className="num">{btnText}</span>
+        <span className="lb">FAX</span> <span className="num">{btnText} 클릭</span>
       </button>
       {open && (
         <>
