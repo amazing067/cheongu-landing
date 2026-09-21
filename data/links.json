@@ -67,6 +67,7 @@
         "monitor": "1544-0019",
         "helpdesk": "1544-8119",
         "fax": "0505-136-6500",
+        "agentClaim": {"how": "계약관리 담당자를 통해 접수 — 5천만원 이상·사망·보험금 위임 건은 원본 우편·방문"},
         "terms": "https://www.kbinsure.co.kr/CG802030001.ec"
       }
     },
@@ -101,6 +102,7 @@
         "monitor": "1600-5182",
         "helpdesk": "02-3455-3984",
         "fax": "0507-333-9999",
+        "mobileUpload": "https://m.lotteins.co.kr/mobile/mobins_qrcodeReg.jsp",
         "terms": "https://www.lotteins.co.kr/web/C/D/H/cdh190.jsp#!"
       }
     },
@@ -118,6 +120,7 @@
         "monitor": "1688-6997",
         "helpdesk": "1688-3550",
         "fax": "0504-800-0700",
+        "mobileUpload": "https://m.heungkukfire.co.kr/INM/longInsuSimpleReceptCustInfo.do",
         "terms": "https://www.heungkukfire.co.kr/FRW/announce/insGoodsGongsiSale.do"
       }
     },
@@ -135,6 +138,7 @@
         "monitor": "02-6299-6821",
         "helpdesk": "02-6670-8110",
         "fax": "0504-3764-0765",
+        "agentClaim": {"how": "모집인 간편접수 — 모집인 본인 휴대폰번호 확인 후 담당 고객 건을 접수", "url": "https://m.hanainsure.co.kr/ext/recSimple"},
         "terms": "https://www.hanainsure.co.kr/w/disclosure/product/saleProduct"
       }
     },
@@ -287,6 +291,7 @@
         "monitor": "1800-6633",
         "helpdesk": "1522-6379",
         "fax": "콜센터 발급",
+        "agentClaim": {"how": "FP플래너 FP 대리청구 — 청구금액 1,000만원 이하"},
         "terms": "https://www.hanwhalife.com/index.jsp"
       }
     },
@@ -304,6 +309,7 @@
         "monitor": "1588-1636",
         "helpdesk": "02-721-3130",
         "fax": "고객센터 전화",
+        "agentClaim": {"how": "FP(담당 컨설턴트) 대리접수 신청", "url": "https://www.kyobo.com/dgt/web/dti/insurance/accInq/intro"},
         "terms": "https://www.kyobo.com/dgt/web/product-official/all-product/search"
       }
     },
@@ -338,6 +344,7 @@
         "monitor": "1566-2730",
         "helpdesk": "1899-3899",
         "fax": "02-390-4629",
+        "agentClaim": {"how": "라이프파트너 보험금 청구서비스"},
         "terms": "https://www.kblife.co.kr/customer-common/productList.do"
       }
     },
@@ -355,6 +362,7 @@
         "monitor": "1522-2285",
         "helpdesk": "02-3455-4119",
         "fax": "고객센터 전화",
+        "agentClaim": {"how": "FC 전용 보험금 웹 청구 — FC 본인인증 후 접수, 청구금액 1,000만원 이하"},
         "terms": "https://www.shinhanlife.co.kr/hp/cdhi0030.do"
       }
     },
@@ -372,6 +380,7 @@
         "monitor": "1544-4422",
         "helpdesk": "02-3786-8800",
         "fax": "02-6971-6040",
+        "agentClaim": {"how": "담당 FC에게 서류를 내면 FC가 대리청구"},
         "terms": "https://www.nhlife.co.kr/ho/on/HOON0004M00.nhl"
       }
     },
@@ -439,6 +448,7 @@
         "monitor": "1566-1002",
         "helpdesk": "02-3787-8583",
         "fax": "02-3299-5544",
+        "agentClaim": {"how": "A-Tab(보험설계사 방문) 접수 — 위임청구·위임수령 건은 불가"},
         "terms": "https://www.abllife.co.kr/st/pban/prdtPban/whlPrdt/whlPrdt1/whlPrdt11?page=index"
       }
     },
@@ -556,6 +566,7 @@
         "helpdesk": "02-3781-2006",
         "fax": "02-6944-1200 | 02-6944-1201 | 02-6944-1281 | 02-6944-1282 | 02-6944-1283",
         "faxCheck": "https://m.lina.co.kr/cyber/accident/fax",
+        "agentClaim": {"how": "설계사 대리접수 청구서(GA)를 써서 팩스 02-6944-1201로 — 수익자 동의, 등록된 수금설계사만 인정", "url": "https://ga.lina.co.kr/help/gap/GA/plnrDlgtRcInsmClmb.pdf"},
         "terms": "https://www.lina.co.kr/disclosure/product-public-announcement/product-on-sales?key=0"
       }
     },
@@ -573,6 +584,7 @@
         "monitor": "1588-4770",
         "helpdesk": "02-2087-9594",
         "fax": "0505-083-5420",
+        "agentClaim": {"how": "FC 대리접수 — 대리청구인 신분증 필요"},
         "terms": "https://www.imlifeins.co.kr/BA/BA_A020.do"
       }
     },
@@ -590,6 +602,7 @@
         "monitor": "080-899-1004",
         "helpdesk": "02-728-9900",
         "fax": "폐지·앱 접수",
+        "mobileUpload": "https://www.myangel.co.kr/Landing/LndpiabaClmFax",
         "terms": "https://pbano.myangel.co.kr/paging/WE_AC_WEPAAP020100L"
       }
     },

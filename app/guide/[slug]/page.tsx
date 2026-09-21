@@ -85,6 +85,9 @@ export default async function GuidePage({ params }: Props) {
   const withoutFax = carriers.filter(
     (c) => c.links?.fax && !isFaxNumber(c.links.fax),
   );
+  // 팩스 대신 링크(QR)로 서류 사진을 올리는 곳, 설계사가 대신 접수하는 곳 (2026-09-21 확인)
+  const withMobileUpload = carriers.filter((c) => c.links?.mobileUpload);
+  const withAgentClaim = carriers.filter((c) => c.links?.agentClaim);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -323,7 +326,18 @@ export default async function GuidePage({ params }: Props) {
                     </Link>
                   </td>
                   <td className="px-4 py-3 text-slate-600">
-                    {noFaxNote(c.links?.fax ?? "")}
+                    {c.links?.mobileUpload && c.links.fax?.includes("폐지") ? (
+                      <a
+                        href={c.links.mobileUpload}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-bold text-blue-700 underline"
+                      >
+                        모바일 청구 링크 열기 (팩스 접수 종료)
+                      </a>
+                    ) : (
+                      noFaxNote(c.links?.fax ?? "")
+                    )}
                   </td>
                   <td className="px-4 py-3 text-slate-600">
                     {FAX_LIMITS[c.name] ?? (
@@ -339,6 +353,106 @@ export default async function GuidePage({ params }: Props) {
           </table>
         </div>
       </section>
+
+      {/*
+        팩스 말고 링크로 보내는 창구. 고객 옆에서 휴대폰으로 서류를 찍어 바로 올릴 수 있어
+        설계사가 대신 접수해 주기 가장 쉬운 방식이다. 로그인이 필요 없는 곳만 싣는다.
+      */}
+      {withMobileUpload.length > 0 && (
+        <section className="mt-8">
+          <h2 className="gd-h" style={{ marginBottom: 6 }}>
+            팩스 대신 링크로 보내는 곳 {withMobileUpload.length}곳
+          </h2>
+          <p className="mb-3 text-xs text-slate-400">
+            로그인 없이 링크에서 피보험자 정보를 넣고 서류 사진을 올리면 접수됩니다.
+            휴대폰에서 여세요.
+          </p>
+          <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+            <table className="w-full border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-slate-200 bg-slate-50 text-left">
+                  <th className="whitespace-nowrap px-4 py-3 font-extrabold">보험사</th>
+                  <th className="whitespace-nowrap px-4 py-3 font-extrabold">모바일 청구</th>
+                  <th className="whitespace-nowrap px-4 py-3 font-extrabold">고객센터</th>
+                </tr>
+              </thead>
+              <tbody>
+                {withMobileUpload.map((c) => (
+                  <tr key={c.name} className="border-t border-slate-100">
+                    <td className="whitespace-nowrap px-4 py-3 font-bold">
+                      <Link href={carrierPath(c.name)} className="no-underline hover:underline">
+                        {c.name}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3">
+                      <a
+                        href={c.links?.mobileUpload}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-bold text-blue-700 underline"
+                      >
+                        링크 열기
+                      </a>
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-slate-600">
+                      {c.links?.cs ?? "—"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      {withAgentClaim.length > 0 && (
+        <section className="mt-8">
+          <h2 className="gd-h" style={{ marginBottom: 6 }}>
+            설계사가 대신 접수하는 곳 {withAgentClaim.length}곳
+          </h2>
+          <p className="mb-3 text-xs text-slate-400">
+            각 사가 공식으로 열어 둔 설계사(FC·FP) 대리접수 창구입니다. 고객의 청구 동의와
+            서명은 반드시 받아야 합니다.
+          </p>
+          <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+            <table className="w-full border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-slate-200 bg-slate-50 text-left">
+                  <th className="whitespace-nowrap px-4 py-3 font-extrabold">보험사</th>
+                  <th className="whitespace-nowrap px-4 py-3 font-extrabold">접수 방법 · 조건</th>
+                </tr>
+              </thead>
+              <tbody>
+                {withAgentClaim.map((c) => (
+                  <tr key={c.name} className="border-t border-slate-100">
+                    <td className="whitespace-nowrap px-4 py-3 font-bold">
+                      <Link href={carrierPath(c.name)} className="no-underline hover:underline">
+                        {c.name}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3 text-slate-600">
+                      {c.links?.agentClaim?.how}
+                      {c.links?.agentClaim?.url && (
+                        <>
+                          {" "}
+                          <a
+                            href={c.links.agentClaim.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="whitespace-nowrap font-bold text-blue-700 underline"
+                          >
+                            {c.links.agentClaim.url.endsWith(".pdf") ? "서식 받기" : "바로가기"}
+                          </a>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
 
       <section className="mt-8 rounded-2xl bg-slate-50 p-5">
         <h2 className="gd-h">알아두면 좋은 것</h2>

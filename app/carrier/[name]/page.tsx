@@ -63,9 +63,12 @@ function faxIssuedExtra(name: string): string {
   return " 팩스 접수는 청구금액 100만원 이하만 가능하며, 발급받은 번호는 유효기간이 지나면 쓸 수 없어 재발급받아야 합니다.";
 }
 
-function faxNoticeLine(name: string, fax: string, cs?: string): string {
+function faxNoticeLine(name: string, fax: string, cs?: string, mobileUpload?: string): string {
   const subject = `${name}${eunNeun(name)}`;
   const center = cs ? `고객센터(${cs})` : "고객센터";
+  if (fax.includes("폐지") && mobileUpload) {
+    return `${subject} 보험금 청구 팩스 접수를 종료했습니다. 대신 로그인 없이 링크에서 서류 사진을 올리는 「모바일 청구」 창구가 있습니다 — 아래 버튼으로 여세요.`;
+  }
   if (fax.includes("폐지")) {
     return `${subject} 보험금 청구 팩스 접수를 종료했습니다. 모바일 앱 또는 홈페이지에서 서류를 사진으로 올려 접수해 주세요.`;
   }
@@ -76,9 +79,12 @@ function faxNoticeLine(name: string, fax: string, cs?: string): string {
 }
 
 /** 번호가 없는 회사의 팩스 안내 문장. 상태 문구별로 실제 접수 방법을 풀어 쓴다. */
-function faxNoticeAnswer(name: string, fax: string, cs?: string): string {
+function faxNoticeAnswer(name: string, fax: string, cs?: string, mobileUpload?: string): string {
   const subject = `${name}${eunNeun(name)}`;
   const center = cs ? `고객센터(${cs})` : "고객센터";
+  if (fax.includes("폐지") && mobileUpload) {
+    return `${subject} 보험금 청구 팩스 접수를 종료했습니다. 대신 로그인 없이 링크에서 피보험자 정보를 넣고 서류 사진을 올리는 「모바일 청구」 창구로 접수하시면 됩니다. 문의는 ${center}로 하시면 됩니다.`;
+  }
   if (fax.includes("폐지")) {
     return `${subject} 보험금 청구 팩스 접수를 종료했습니다. 모바일 앱 또는 홈페이지에서 서류를 사진으로 올려 접수하시면 됩니다. 문의는 ${center}로 하시면 됩니다.`;
   }
@@ -171,7 +177,24 @@ function carrierFacts(c: Carrier): Fact[] {
           : `팩스 **${ps[0].number}** 로 보내시면 됩니다. 팩스는 보낸 쪽에서 도착 여부를 알 수 없으니 ${center}로 접수 확인까지 하시는 편이 안전합니다.`,
     });
   } else {
-    out.push({ label: "접수 방법", text: faxNoticeAnswer(name, fax, L.cs) });
+    out.push({ label: "접수 방법", text: faxNoticeAnswer(name, fax, L.cs, L.mobileUpload) });
+  }
+
+  // 로그인 없는 모바일 청구 창구 — 링크(QR)에서 서류 사진만 올리면 된다
+  if (L.mobileUpload) {
+    out.push({
+      label: "링크로 서류 제출",
+      text: `${name}${eunNeun(name)} **로그인 없이** 링크에서 피보험자 정보를 넣고 서류 사진을 올려 청구할 수 있습니다. 앱을 깔지 않아도 되고, 고객 옆에서 설계사가 대신 올려 드리기도 쉽습니다. 휴대폰에서 여는 것을 권합니다.`,
+      hi: true,
+    });
+  }
+
+  // 설계사 대리접수 — 각 사가 공식으로 열어 둔 창구만 싣는다
+  if (L.agentClaim) {
+    out.push({
+      label: "설계사 대리접수",
+      text: `${name}${eunNeun(name)} 담당 설계사가 고객 대신 접수하는 공식 창구가 있습니다 — **${L.agentClaim.how}**. 고객의 청구 동의와 서명은 반드시 받아야 합니다.`,
+    });
   }
 
   // 팩스 금액 한도 — 41곳 중 공식에서 확인된 곳은 14곳뿐이다
@@ -462,7 +485,7 @@ export default async function CarrierPage({ params }: Props) {
   } else if (L.fax) {
     faqs.push({
       q: `${carrier.name} 보험금 청구 팩스번호는?`,
-      a: faxNoticeAnswer(carrier.name, L.fax, L.cs),
+      a: faxNoticeAnswer(carrier.name, L.fax, L.cs, L.mobileUpload),
     });
   }
   if (L.cs) {
@@ -611,8 +634,20 @@ export default async function CarrierPage({ params }: Props) {
           </dl>
           {!hasFaxNumber && L.fax && (
             <p className="mt-1 rounded-xl bg-slate-50 px-3 py-2.5 text-xs leading-relaxed text-slate-500">
-              ※ {faxNoticeLine(carrier.name, L.fax, L.cs)}
+              ※ {faxNoticeLine(carrier.name, L.fax, L.cs, L.mobileUpload)}
             </p>
+          )}
+          {/* 로그인 없이 링크로 서류 사진을 올리는 창구 (2026-09-21 직접 확인한 3곳) */}
+          {L.mobileUpload && (
+            <a
+              href={L.mobileUpload}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 flex items-center justify-between rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-bold text-blue-800 no-underline hover:border-blue-400"
+            >
+              <span>📱 로그인 없이 서류 사진 올려 청구하기</span>
+              <span className="text-xs font-semibold text-blue-500">휴대폰에서 여세요</span>
+            </a>
           )}
         </section>
       )}
@@ -635,7 +670,7 @@ export default async function CarrierPage({ params }: Props) {
         </section>
       )}
 
-      {(L.pdf || L.dental || L.guide || L.terms || L.support || L.system || L.faxCheck) && (
+      {(L.pdf || L.dental || L.guide || L.terms || L.support || L.system || L.faxCheck || L.mobileUpload || L.agentClaim?.url) && (
       <section className="mb-8">
         <h2 className="mb-1 text-lg font-black text-slate-900">
           {carrier.name} 청구 서류 · 바로가기
@@ -649,6 +684,12 @@ export default async function CarrierPage({ params }: Props) {
           <LinkRow label="📄 보험금 청구서 PDF 내려받기" href={L.pdf} download />
           <LinkRow label="🦷 치과치료확인서" href={L.dental} download />
           <LinkRow label="📋 필요서류 안내" href={L.guide} external />
+          <LinkRow label="📱 모바일 청구 (로그인 없이)" href={L.mobileUpload} external />
+          <LinkRow
+            label={L.agentClaim?.url?.endsWith(".pdf") ? "🧑‍💼 설계사 대리접수 서식" : "🧑‍💼 설계사 대리접수"}
+            href={L.agentClaim?.url}
+            external
+          />
           <LinkRow label="📠 팩스 도착 확인" href={L.faxCheck} external />
           <LinkRow label="📘 약관 확인" href={L.terms} external />
           <LinkRow label="🏠 홈페이지" href={L.support} external />
@@ -718,7 +759,7 @@ export default async function CarrierPage({ params }: Props) {
           <li>
             {hasFaxNumber
               ? `팩스 ${faxFirst} 로 보냅니다.${limitStepNote(carrier.name)}`
-              : faxNoticeLine(carrier.name, L.fax || "", L.cs)}
+              : faxNoticeLine(carrier.name, L.fax || "", L.cs, L.mobileUpload)}
           </li>
           <li>
             {L.cs
