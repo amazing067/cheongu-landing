@@ -174,7 +174,113 @@ function FaxPopupBtn({ number }: { number: string }) {
   );
 }
 
-function PhoneBtn({ label, number }: { label: string; number?: string }) {
+/**
+ * 팩스번호 대신 「폐지·앱 접수」「콜센터 발급」「고객센터 전화」 같은 글자가 들어간 회사.
+ * 예전엔 href="#" 이라 누르면 화면 맨 위로 튀었다. 이제 작은 창으로 접수 방법을 알려준다.
+ * 동양생명처럼 로그인 없는 모바일 청구 창구가 있으면 그 링크를 띄운다.
+ */
+function NoFaxPopupBtn({
+  name,
+  fax,
+  cs,
+  mobileUpload,
+}: {
+  name: string;
+  fax: string;
+  cs?: string;
+  mobileUpload?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("click", close);
+    return () => document.removeEventListener("click", close);
+  }, [open]);
+
+  // 받침 있으면 「은」, 없으면 「는」 (영문 끝은 「는」)
+  const last = name.charCodeAt(name.length - 1);
+  const eun = last >= 0xac00 && last <= 0xd7a3 && (last - 0xac00) % 28 !== 0 ? "은" : "는";
+  const closed = fax.includes("폐지");
+  const issued = fax.includes("발급");
+  const btnText = mobileUpload ? "모바일 청구" : issued ? "번호 발급" : "고객센터 문의";
+  const note = mobileUpload
+    ? `${name}${eun} 팩스 접수를 종료했습니다. 로그인 없이 링크에서 서류 사진을 올려 청구하세요. 휴대폰에서 여는 것을 권합니다.`
+    : closed
+      ? `${name}${eun} 팩스 접수를 종료했습니다. 모바일 앱이나 홈페이지에서 서류를 사진으로 올려 접수해 주세요.`
+      : issued
+        ? `${name}${eun} 고정된 팩스번호가 없습니다. 고객센터에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 드립니다.`
+        : `${name}${eun} 공개된 팩스번호가 없습니다. 고객센터로 전화해 접수 방법을 안내받으세요.`;
+  const csTel = cs?.replace(/[^0-9]/g, "");
+
+  return (
+    <div className="fax-popup-wrap" ref={ref}>
+      <button
+        type="button"
+        className="btn btn-call center fax-claim fax-popup-trigger btn-compact"
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((v) => !v);
+        }}
+        aria-expanded={open}
+      >
+        <span className="bico" aria-hidden>📠</span>
+        <span className="lb">FAX</span> <span className="num">{btnText}</span>
+      </button>
+      {open && (
+        <>
+          <div className="fax-popup-backdrop" aria-hidden onClick={() => setOpen(false)} />
+          <div className="fax-popup fax-popup-modal">
+            <div className="fax-popup-header">
+              <span className="fax-popup-header-icon">📠</span>
+              {name} 보험금 청구 FAX
+            </div>
+            <p className="fax-popup-note">{note}</p>
+            <div className="fax-popup-grid one">
+              {mobileUpload ? (
+                <a
+                  href={mobileUpload}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="fax-popup-card"
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="fax-popup-card-region">로그인 없이</span>
+                  <span className="fax-popup-card-num">📱 모바일 청구 링크 열기</span>
+                </a>
+              ) : null}
+              {cs && csTel ? (
+                <a href={`tel:${csTel}`} className="fax-popup-card" onClick={() => setOpen(false)}>
+                  <span className="fax-popup-card-region">고객센터</span>
+                  <span className="fax-popup-card-num">{cs}</span>
+                </a>
+              ) : null}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function PhoneBtn({
+  label,
+  number,
+  name,
+  cs,
+  mobileUpload,
+}: {
+  label: string;
+  number?: string;
+  /** 아래 셋은 보험금청구 FAX 버튼에서만 쓴다 — 번호가 없는 회사의 안내 팝업용 */
+  name?: string;
+  cs?: string;
+  mobileUpload?: string;
+}) {
   if (!number)
     return (
       <button className="btn btn-muted" disabled>
@@ -191,6 +297,10 @@ function PhoneBtn({ label, number }: { label: string; number?: string }) {
   const hasLongFax = isFax && /\s\|\s/.test(number);
 
   if (hasLongFax) return <FaxPopupBtn number={number} />;
+  // 번호 대신 「폐지·앱 접수」 같은 글자면 href="#" 로 맨 위로 튀지 않게 안내 팝업을 띄운다
+  if (isFax && !tel) {
+    return <NoFaxPopupBtn name={name ?? ""} fax={number} cs={cs} mobileUpload={mobileUpload} />;
+  }
 
   return (
     <a
@@ -291,7 +401,7 @@ function CarrierRow({ item }: { item: Carrier }) {
           </div>
           <div className="grid-bottom">
             <Btn label="보험금 청구서 PDF 다운로드" href={L.pdf} cls="btn-pdf" />
-            <PhoneBtn label="보험금청구 FAX" number={L.fax} />
+            <PhoneBtn label="보험금청구 FAX" number={L.fax} name={item.name} cs={L.cs} mobileUpload={L.mobileUpload} />
           </div>
         </div>
       </div>
@@ -353,7 +463,7 @@ function CarrierRow({ item }: { item: Carrier }) {
         <div className="grid-bottom">
           <PhoneBtn label="고객센터" number={L.cs} />
           <PhoneBtn label="인콜 모니터링" number={L.monitor} />
-          <PhoneBtn label="보험금청구 FAX" number={L.fax} />
+          <PhoneBtn label="보험금청구 FAX" number={L.fax} name={item.name} cs={L.cs} mobileUpload={L.mobileUpload} />
           <Btn label="약관확인" href={L.terms} cls="btn-ghost" />
         </div>
       </div>

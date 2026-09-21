@@ -1292,3 +1292,15 @@
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
+
+/* 번호 없는 FAX 안내 팝업 (동양생명 모바일 청구·가상번호 발급 회사) */
+.fax-popup-note {
+  margin: 0;
+  padding: 12px 14px 4px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #475569;
+}
+.fax-popup-grid.one {
+  grid-template-columns: 1fr;
+}
