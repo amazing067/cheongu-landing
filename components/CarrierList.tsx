@@ -198,7 +198,7 @@ function NoFaxBtn({ fax, mobileUpload }: { fax: string; mobileUpload?: string })
   const issued = fax.includes("발급");
   const title = issued
     ? "고정된 팩스번호가 없습니다. 고객센터에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 줍니다. 그 번호로 서류를 보내세요."
-    : "공개된 팩스번호가 없습니다. 고객센터로 전화해 접수 방법을 안내받으세요.";
+    : "보험금 청구 접수 방법은 고객센터에서 안내합니다. 전화해 안내받으세요.";
   return (
     <span className="btn btn-call center fax-claim btn-compact btn-static" title={title}>
       <span className="bico" aria-hidden>📠</span>

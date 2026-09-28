@@ -1,6 +1,6 @@
 {
   "pdfUpdated": "2026-07-22",
-  "faxUpdated": "2026-09-18",
+  "faxUpdated": "2026-09-28",
   "carriers": [
     {
       "name": "삼성화재",
@@ -481,7 +481,7 @@
         "cs": "1588-9600",
         "monitor": "1588-9609",
         "helpdesk": "0502-370-0205",
-        "fax": "고객센터 전화",
+        "fax": "콜센터 발급",
         "terms": "https://brand.metlife.co.kr/pn/mcvrgProd/retrieveMcvrgProdMain.do"
       }
     },

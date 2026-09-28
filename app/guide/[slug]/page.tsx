@@ -73,7 +73,7 @@ const isFaxNumber = (fax?: string) => /^[0-9]/.test(fax?.trim() ?? "");
 function noFaxNote(fax: string): string {
   if (fax.includes("발급")) return "고객센터에서 가상번호 발급";
   if (fax.includes("폐지")) return "팩스 접수 종료 · 앱으로 접수";
-  return "공개된 번호 없음 · 고객센터 문의";
+  return "고객센터에서 접수 방법 안내";
 }
 
 export default async function GuidePage({ params }: Props) {
