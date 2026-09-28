@@ -66,13 +66,8 @@ if (!EXE) {
 
 const data = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "links.json"), "utf8"));
 
-// fax-limits.ts 에서 값만 뽑는다 (TS 를 실행하지 않고 파싱)
-const limitsSrc = fs.readFileSync(path.join(ROOT, "lib", "fax-limits.ts"), "utf8");
-const body = limitsSrc.slice(limitsSrc.indexOf("export const FAX_LIMITS"));
-const LIMITS = {};
-for (const m of body.matchAll(/^\s*"?([^":\n/]+?)"?:\s*"([^"]+)"/gm)) {
-  LIMITS[m[1].trim()] = m[2];
-}
+// 한도 값은 data/fax-limits.json 에 있다 (lib/fax-limits.ts 는 이 파일을 읽어 쓰고 근거 기록만 둔다)
+const LIMITS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "fax-limits.json"), "utf8"));
 
 const esc = (s) =>
   String(s ?? "").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
@@ -106,12 +101,18 @@ const row = (c) => {
   </tr>`;
 };
 
+// 사이트 팩스 가이드 표(app/guide/[slug]/page.tsx noFaxNote)와 같은 문구
+const noFaxNote = (fax) =>
+  fax.includes("발급") ? "고객센터에서 가상번호 발급"
+  : fax.includes("폐지") ? "팩스 접수 종료 · 앱으로 접수"
+  : "고객센터에서 접수 방법 안내";
+
 // 번호가 없어도 한도가 있는 곳이 있다 (우체국보험 = 콜센터 발급 + 100만원 이하)
 const rowNo = (c) => {
   const lim = LIMITS[c.name];
   return `<tr>
     <td class="nm">${esc(c.name)}</td>
-    <td class="fx no">${esc(c.links.fax)}</td>
+    <td class="fx no">${esc(noFaxNote(c.links.fax))}</td>
     <td class="lm${lim ? "" : " none"}">${esc(lim || "—")}</td>
     <td class="cs">${esc(c.links.cs || "—")}</td>
   </tr>`;
