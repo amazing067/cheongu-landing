@@ -499,11 +499,16 @@ if (!specials.length) {
       $('#silson_updated').textContent = updated ? `※ 데이터 기준일: ${updated}` : '';
 
       // 유병자/노후 컴팩트
+      //  「판매여부」가 「판매 안 함」이면 빈 칸(–)을 줄줄이 늘어놓지 않고 그 한 줄만 보여 준다 (2026-10-26 5세대 조사)
+      const notSold = d => /안\s*함|없음|판매하지\s*않/.test(String((d && d['판매여부']) || ''));
+      const soldLine = d => `<div class="kv-mini"><div class="k">판매</div><div class="v">${d['판매여부']}</div></div>`;
       const ubData = record['유병자 실손 컴팩트'] || {};
-      buildMini('#ub_kvs', ['가입나이','단독가입여부','진단여부','입원','통원','재가입주기','보험기간','자기부담금','3대비급여/약제비','알릴의무'], ubData);
+      if (notSold(ubData)) $('#ub_kvs').innerHTML = soldLine(ubData);
+      else buildMini('#ub_kvs', ['가입나이','단독가입여부','진단여부','입원','통원','재가입주기','보험기간','자기부담금','3대비급여/약제비','알릴의무'], ubData);
 
       const snData = record['노후 실손 컴팩트'] || {};
-      buildMini('#senior_kvs', ['가입나이','단독가입여부','진단여부','기본계약1','기본계약2','선택계약1','선택계약2','재가입주기','보험기간','3대비급여/약제비','알릴의무'], snData);
+      if (notSold(snData)) $('#senior_kvs').innerHTML = soldLine(snData);
+      else buildMini('#senior_kvs', ['가입나이','단독가입여부','진단여부','기본계약1','기본계약2','선택계약1','선택계약2','재가입주기','보험기간','3대비급여/약제비','알릴의무'], snData);
     }
 
     // ===== 공제회사 전용 렌더링 함수 =====
