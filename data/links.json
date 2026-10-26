@@ -111,7 +111,7 @@
       "type": "손해",
       "tags": ["pdf", "고객센터"],
       "links": {
-        "system": "https://sales.heungkukfire.co.kr/#/login",
+        "system": "https://salesup.heungkukfire.co.kr/",
         "guide": "https://www.heungkukfire.co.kr/FRW/compensation/accidentDocInfo.do",
         "pdf": "/assets/pdf/흥국화재-보험금청구서.pdf",
         "dental": "/assets/pdf/흥국화재 치과치료확인서.pdf",
