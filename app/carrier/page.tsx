@@ -61,6 +61,11 @@ function Group({ title, items }: { title: string; items: readonly Carrier[] }) {
                   (구) {c.nameFormer}
                 </span>
               )}
+              {c.mergedInto && (
+                <span className="mt-0.5 block text-[11px] font-semibold text-slate-400">
+                  {c.mergedInto.name}에 합병
+                </span>
+              )}
             </a>
           </li>
         ))}

@@ -40,6 +40,12 @@ export interface Carrier {
   name: string;
   /** 구(舊) 회사명 표시용 (예: 예별손해보험 + "(구)MG손해보험") */
   nameFormer?: string;
+  /**
+   * 다른 회사에 합병됐지만 브랜드·창구가 남아 있어 항목을 따로 둘 때.
+   * 예) 캐롯손해보험 — 2025-10-01 한화손해보험에 흡수합병. 캐롯 사이트·고객센터는 그대로,
+   *     서식·우편 접수처는 한화손보 것 (사장님 2026-10-26: 페이지는 두고 합병 한 줄을 넣는다)
+   */
+  mergedInto?: { name: string; date: string; note?: string };
   type: "손해" | "생명" | "공제회사";
   tags?: string[];
   links?: CarrierLinks;

@@ -956,6 +956,13 @@ if (!specials.length) {
             `<span class="badge ${b?'ok':'no'}">${b?'계피상이 가능':'계피상이 불가'}</span>`);
         })();
 
+        // 합병된 회사 — 배지 맨 앞에. 단독실손 배지가 칸을 한 번 비우므로 그 뒤에 넣는다
+        if (base.mergedInto && base.mergedInto.name){
+          const m = base.mergedInto;
+          $('#badges').insertAdjacentHTML('afterbegin',
+            `<span class="badge" data-badge="merged">${String(m.date || '').replace(/-/g,'.')} ${m.name}에 합병</span>`);
+        }
+
       }catch(err){
         console.error(err);
         const host = document.createElement('div');

@@ -498,6 +498,14 @@ export default async function CarrierPage({ params }: Props) {
 
   // 검색에서 실제로 들어오는 질문들 — 답 박스(FAQ 리치 결과)로 잡히도록 스키마에 싣는다.
   const faqs: { q: string; a: string }[] = [];
+  // 합병된 회사는 「아직 있는 회사인가」부터 묻는다
+  if (carrier.mergedInto) {
+    const m = carrier.mergedInto;
+    faqs.push({
+      q: `${carrier.name}${eunNeun(carrier.name)} ${m.name}에 합병됐나요?`,
+      a: `네. ${carrier.name}${eunNeun(carrier.name)} ${m.date.replace(/-/g, ".")} ${m.name}에 합병됐습니다.${m.note ? ` ${m.note}` : ""}`,
+    });
+  }
   if (hasFaxNumber) {
     faqs.push({
       q: `${carrier.name} 보험금 청구 팩스번호는?`,
@@ -623,11 +631,23 @@ export default async function CarrierPage({ params }: Props) {
             (구) {carrier.nameFormer}
           </p>
         )}
+        {carrier.mergedInto && (
+          <p className="mt-1 text-sm font-semibold text-slate-400">
+            {carrier.mergedInto.date.replace(/-/g, ".")} {carrier.mergedInto.name}에 합병
+          </p>
+        )}
         <p className="mt-3 text-sm leading-relaxed text-slate-600">
           {carrier.name} 보험금 청구에 필요한 <strong>서류 안내</strong>,{" "}
           <strong>보험금 청구서 PDF 양식</strong>, <strong>팩스번호</strong>,{" "}
           <strong>고객센터 전화번호</strong>를 한 곳에 모았습니다.
         </p>
+        {carrier.mergedInto && (
+          <p className="mt-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm leading-relaxed text-blue-900">
+            {carrier.name}
+            {eunNeun(carrier.name)} {carrier.mergedInto.date.replace(/-/g, ".")}{" "}
+            <strong>{carrier.mergedInto.name}에 합병</strong>됐습니다. {carrier.mergedInto.note}
+          </p>
+        )}
       </header>
 
       {/* 번호가 하나도 없는 보험사면 빈 카드만 남으므로 섹션째 숨긴다 */}

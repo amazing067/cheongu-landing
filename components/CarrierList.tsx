@@ -260,6 +260,7 @@ function RowFirstCell({
   logoSrc,
   itemName,
   nameFormer,
+  mergedInto,
   open,
   onToggle,
 }: {
@@ -267,6 +268,7 @@ function RowFirstCell({
   logoSrc: string;
   itemName: string;
   nameFormer?: string;
+  mergedInto?: { name: string; date: string };
   open: boolean;
   onToggle: (e: React.MouseEvent) => void;
 }) {
@@ -276,7 +278,7 @@ function RowFirstCell({
         href={detailUrl}
         className="block no-underline"
       >
-        <div className={`brand${nameFormer ? " brand-with-former" : ""}`}>
+        <div className={`brand${nameFormer || mergedInto ? " brand-with-former" : ""}`}>
           <img
             src={logoSrc}
             alt={`${itemName} 로고`}
@@ -290,6 +292,7 @@ function RowFirstCell({
           ) : (
             <span className="name">{itemName}</span>
           )}
+          {mergedInto && <span className="brand-former-badge">{mergedInto.name}에 합병</span>}
         </div>
       </a>
       <button
@@ -357,6 +360,7 @@ function CarrierRow({ item }: { item: Carrier }) {
         logoSrc={logoSrc}
         itemName={item.name}
         nameFormer={item.nameFormer}
+        mergedInto={item.mergedInto}
         open={open}
         onToggle={toggle}
       />
