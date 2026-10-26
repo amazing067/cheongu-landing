@@ -192,13 +192,24 @@ function carrierFacts(c: Carrier): Fact[] {
       label: "접수 방법",
       text:
         ps.length > 1
-          ? `청구 종류에 따라 팩스번호가 나뉩니다 — ${ps
+          ? `팩스번호가 나뉘어 있습니다 — ${ps
               .map((p) => (p.label ? `${p.label} **${p.number}**` : `**${p.number}**`))
               .join(", ")}. 어느 쪽으로 보낼지 확인하고 보내세요.`
           : `팩스 **${ps[0].number}** 로 보내시면 됩니다. 팩스는 보낸 쪽에서 도착 여부를 알 수 없으니 ${center}로 접수 확인까지 하시는 편이 안전합니다.`,
     });
   } else {
     out.push({ label: "접수 방법", text: faxNoticeAnswer(name, L) });
+  }
+
+  // 이메일 접수 — 공식에 주소를 공개한 곳만 (41곳 중 DB손해보험 하나, 2026-10-26)
+  if (L.emailClaim) {
+    out.push({
+      label: "이메일 접수",
+      text: `${name}${eunNeun(name)} 이메일로도 받습니다. 보험금 청구서를 작성해 필요서류와 함께 **${L.emailClaim.address}** 로 보내면 됩니다.${
+        L.emailClaim.note ? ` (${L.emailClaim.note})` : ""
+      }`,
+      hi: true,
+    });
   }
 
   // 로그인 없는 모바일 청구 창구 — 링크(QR)에서 서류 사진만 올리면 된다

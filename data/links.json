@@ -45,6 +45,7 @@
         "guide": "https://www.idbins.com/pc/bizxpress/ct/dc/FWCUSV1301.shtm",
         "pdf": "/assets/pdf/DB손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/DB손해보험 치과치료확인서.pdf",
+        "emailClaim": { "address": "DB2017@DBINS.co.kr", "note": "최대 10MB, 넘으면 압축해서 보냅니다" },
         "support": "https://www.idbins.com/FWMAIV0001.do",
         "cs": "1588-0100",
         "monitor": "1566-0757",
@@ -137,7 +138,7 @@
         "support": "https://www.hanainsure.co.kr/",
         "cs": "1566-3000",
         "monitor": "02-6299-6821",
-        "helpdesk": "02-6670-8110",
+        "helpdesk": "1660-4290",
         "fax": "0504-3764-0765",
         "agentClaim": {"how": "모집인 간편접수 — 모집인 본인 휴대폰번호 확인 후 담당 고객 건을 접수", "url": "https://m.hanainsure.co.kr/ext/recSimple"},
         "terms": "https://www.hanainsure.co.kr/w/disclosure/product/saleProduct"
@@ -430,7 +431,7 @@
       "type": "생명",
       "tags": ["pdf", "고객센터"],
       "links": {
-        "system": "http://kss.kdblife.co.kr/Install/x_installAX.html",
+        "system": "",
         "guide": "https://www.kdblife.co.kr/ajax.do?scrId=HCSCT005M10P",
         "pdf": "/assets/pdf/KDB생명-보험금청구서.pdf",
         "dental": "/assets/pdf/KDB생명 치과치료확인서.pdf",
@@ -524,7 +525,7 @@
         "cs": "1644-4117",
         "monitor": "1644-4117",
         "helpdesk": "02-2270-1692",
-        "fax": "고객센터 전화"                         
+        "fax": "02-2270-1577"
       }
     },
     {
@@ -555,7 +556,7 @@
         "dental": "/assets/pdf/푸본현대생명 치과치료확인서.pdf",
         "support": "https://www.fubonhyundai.com/#COM010103000000",
         "cs": "1577-3311",
-        "monitor": "0505-106-0311",
+        "monitor": "1577-3311",
         "helpdesk": "080-860-1212",
         "fax": "0505-106-0311",
         "terms": "https://www.fubonhyundai.com/#CUSI150102010101"
@@ -574,7 +575,7 @@
         "cs": "1588-0058",
         "monitor": "1588-2442",
         "helpdesk": "02-3781-2006",
-        "fax": "02-6944-1200 | 02-6944-1201 | 02-6944-1281 | 02-6944-1282 | 02-6944-1283",
+        "fax": "02-6944-1200(고객) | 02-6944-1201(설계사 대리접수)",
         "faxCheck": "https://m.lina.co.kr/cyber/accident/fax",
         "agentClaim": {"how": "설계사 대리접수 청구서(GA)를 써서 팩스 02-6944-1201로 — 수익자 동의, 등록된 수금설계사만 인정", "url": "https://ga.lina.co.kr/help/gap/GA/plnrDlgtRcInsmClmb.pdf"},
         "terms": "https://www.lina.co.kr/disclosure/product-public-announcement/product-on-sales?key=0"

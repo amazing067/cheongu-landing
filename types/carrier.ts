@@ -33,6 +33,11 @@ export interface CarrierLinks {
    * how 는 조건까지 담은 한 줄, url 은 전용 화면·서식이 있을 때만.
    */
   agentClaim?: { how: string; url?: string };
+  /**
+   * 이메일로 청구서류를 받는 곳. 공식에 주소가 공개된 곳만 싣는다.
+   * 예) DB손해보험 — 필요서류 안내 「E-Mail 접수는 … DB2017@DBINS.co.kr 로 보내주세요 (최대 10MB 가능. 초과시 압축발송)」
+   */
+  emailClaim?: { address: string; note?: string };
   terms?: string;
 }
 
