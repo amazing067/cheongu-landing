@@ -671,9 +671,10 @@ if (!specials.length) {
       if (!line) return;
       const fax = String(L.fax || '').trim();
       const isNum = /^[0-9]/.test(fax);
-      if (!isNum) return;               // 번호가 없는 회사는 한도도 뜻이 없다
-
       const limit = limits[company] || '';
+      // 번호가 없어도 전화로 번호를 받는 「발급」 회사는 한도가 공식에 있으면 보여 준다.
+      // 한도까지 모르는 곳은 「확인되지 않았습니다」 를 띄워 봐야 뜻이 없다.
+      if (!isNum && !limit) return;
       const cs = L.cs ? String(L.cs) : '';
       let v, n;
       if (limit === '제한 없음') {
@@ -713,6 +714,9 @@ if (!specials.length) {
       const isNum = /^[0-9]/.test(fax);
       const cs = L.cs ? String(L.cs) : '';
       const center = cs ? '고객센터(' + cs + ')' : '고객센터';
+      // 팩스번호를 받으려고 거는 곳. 대표번호와 다른 전용 번호가 공식에 있으면 그쪽 (삼성생명 등)
+      const callee = L.faxPhone ? L.faxPhone.label + '(' + L.faxPhone.number + ')' : center;
+      const ars = L.faxPhone && L.faxPhone.ars ? ' 전화한 뒤 ARS 에서 ' + L.faxPhone.ars + '을 누르세요.' : '';
       const limit = limits[company] || '';
       const faq = [];
 
@@ -729,8 +733,8 @@ if (!specials.length) {
       } else if (fax.indexOf('발급') >= 0) {
         faq.push([
           company + ' 보험금 청구 팩스번호는?',
-          company + eunNeun(company) + ' 고정된 팩스번호가 없습니다. ' + center
-            + '에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 주며, 그 번호로 보내시면 됩니다.'
+          company + eunNeun(company) + ' 고정된 팩스번호가 없습니다. ' + callee
+            + '에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 주며, 그 번호로 보내시면 됩니다.' + ars
         ]);
       } else if (fax.indexOf('폐지') >= 0) {
         faq.push([

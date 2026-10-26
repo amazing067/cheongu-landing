@@ -1,6 +1,6 @@
 {
   "pdfUpdated": "2026-07-22",
-  "faxUpdated": "2026-09-28",
+  "faxUpdated": "2026-10-26",
   "carriers": [
     {
       "name": "삼성화재",
@@ -8,10 +8,10 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "https://erp.samsungfire.com/irj/servlet/prt/portal/prtroot/logon.LogonPage",
-        "guide": "https://www.samsungfire.com/v2/html/claim/01/C_010_030_001.html?_v=202510231242",
+        "guide": "https://www.samsungfire.com/vh/page/VH.HPCLA001.do",
         "pdf": "/assets/pdf/삼성화재-보험금청구서.pdf",
         "dental": "/assets/pdf/삼성화재 치과치료확인서.pdf",
-        "support": "https://www.samsungfire.com/claim/P_P03_01_02_011.html",
+        "support": "https://www.samsungfire.com/",
         "cs": "1588-5114",
         "monitor": "1566-0553",
         "helpdesk": "1899-5005",
@@ -33,7 +33,7 @@
         "monitor": "1577-3223",
         "helpdesk": "02-2628-4567",
         "fax": "0507-774-6060",
-        "terms": "https://www.hi.co.kr/serviceAction.do"
+        "terms": "https://www.hi.co.kr/serviceAction.do?menuId=100932"
       }
     },
     {
@@ -77,7 +77,7 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "http://sales.meritzfire.com/salesportal/Layout/MeritzSales.jsp",
-        "guide": "https://www.meritzfire.com",
+        "guide": "https://www.meritzfire.com/compensation/longterm-insurance/request-document.do",
         "pdf": "/assets/pdf/메리츠화재-보험금청구서.pdf",
         "dental": "/assets/pdf/메리츠화재 치과치료확인서.pdf",
         "support": "https://www.meritzfire.com/compensation.do#!/",
@@ -85,6 +85,7 @@
         "monitor": "1577-7711",
         "helpdesk": "02-3786-2777",
         "fax": "0505-021-3400(질병) | 0505-021-3500(상해)",
+        "faxCheck": "https://www.meritzfire.com/compensation/fax-service/receive-state.do",
         "terms": "https://www.meritzfire.com/disclosure/product-announcement/product-list.do#!"
       }
     },
@@ -172,7 +173,7 @@
         "monitor": "1544-0022",
         "helpdesk": "",
         "fax": "고객센터 전화",
-        "terms": ""
+        "terms": "https://kakaopayinscorp.co.kr/disclosure/goods"
       }
     },
     {
@@ -249,7 +250,7 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "https://portal.hwgeneralins.com",
-        "guide": "https://www.hwgeneralins.com/fplaza/compensation/receipt01.do/",
+        "guide": "https://www.hwgeneralins.com/fplaza/compensation/receipt01.do",
         "pdf": "/assets/pdf/한화손해보험-보험금청구서.pdf",
         "dental": "/assets/pdf/한화손해보험 치과치료확인서.pdf",
         "support": "https://m.hwgeneralins.com/",
@@ -273,7 +274,8 @@
         "cs": "1588-3114",
         "monitor": "1588-3115",
         "helpdesk": "02-311-4500",
-        "fax": "고객센터 전화",
+        "fax": "콜센터 발급",
+        "faxPhone": {"number": "1577-4118", "label": "사고보험금 상담 전용"},
         "terms": "https://www.samsunglife.com/individual/products/disclosure/main/PDO-PRPRC010100M"
       }
     },
@@ -292,7 +294,7 @@
         "helpdesk": "1522-6379",
         "fax": "콜센터 발급",
         "agentClaim": {"how": "FP플래너 FP 대리청구 — 청구금액 1,000만원 이하"},
-        "terms": "https://www.hanwhalife.com/index.jsp"
+        "terms": "https://www.hanwhalife.com/main/disclosure/goods/disclosurenotice/DF_GDDN000_P10000.do?MENU_ID1=DF_GDGL000"
       }
     },
     {
@@ -308,7 +310,7 @@
         "cs": "1588-1001",
         "monitor": "1588-1636",
         "helpdesk": "02-721-3130",
-        "fax": "고객센터 전화",
+        "fax": "콜센터 발급",
         "agentClaim": {"how": "FP(담당 컨설턴트) 대리접수 신청", "url": "https://www.kyobo.com/dgt/web/dti/insurance/accInq/intro"},
         "terms": "https://www.kyobo.com/dgt/web/product-official/all-product/search"
       }
@@ -335,7 +337,7 @@
       "type": "생명",
       "tags": ["KB", "pdf"],
       "links": {
-        "system": "https://sfa.kblife.co.kr/login/main",
+        "system": "https://sfa.kblife.co.kr/index.jsp",
         "guide": "https://www.kblife.co.kr/customer-center/informRequiredDocument.do",
         "pdf": "/assets/pdf/KB라이프생명-보험금청구서.pdf",
         "dental": "/assets/pdf/KB라이프생명 치과치료확인서.pdf",
@@ -361,7 +363,7 @@
         "cs": "1588-5580",
         "monitor": "1522-2285",
         "helpdesk": "02-3455-4119",
-        "fax": "고객센터 전화",
+        "fax": "콜센터 발급",
         "agentClaim": {"how": "FC 전용 보험금 웹 청구 — FC 본인인증 후 접수, 청구금액 1,000만원 이하"},
         "terms": "https://www.shinhanlife.co.kr/hp/cdhi0030.do"
       }
@@ -423,7 +425,7 @@
       "tags": ["pdf", "고객센터"],
       "links": {
         "system": "http://kss.kdblife.co.kr/Install/x_installAX.html",
-        "guide": "",
+        "guide": "https://www.kdblife.co.kr/ajax.do?scrId=HCSCT005M10P",
         "pdf": "/assets/pdf/KDB생명-보험금청구서.pdf",
         "dental": "/assets/pdf/KDB생명 치과치료확인서.pdf",
         "support": "https://www.kdblife.co.kr/",
@@ -465,7 +467,8 @@
         "cs": "1588-2288",
         "monitor": "1877-7006",
         "helpdesk": "031-786-8088",
-        "fax": "고객센터 전화",
+        "fax": "콜센터 발급",
+        "faxPhone": {"number": "1588-2288", "label": "고객센터", "ars": "9번, 3번, 2번"},
         "terms": "https://www.heungkuklife.co.kr/front/public/saleProduct.do?searchFlgSale=Y#none"
       }
     },
@@ -612,15 +615,15 @@
       "tags": ["국영", "우체국", "공제"],
       "links": {
         "system": "",
-        "guide": "",
+        "guide": "https://www.epostlife.go.kr/PYIMIM0001.do",
         "pdf": "/assets/pdf/우체국보험-보험금청구서.pdf",
         "dental": "",
-        "support": "https://www.epostbank.go.kr",
+        "support": "https://www.epostlife.go.kr/",
         "cs": "1599-0100",
         "monitor": "",
         "helpdesk": "",
         "fax": "콜센터 발급",
-        "terms": "https://www.epostbank.go.kr"
+        "terms": "https://www.epostlife.go.kr/ASISDM00AT.do"
       }
     },
     {
@@ -629,7 +632,7 @@
       "tags": ["교직원공제회", "공제"],
       "links": {
         "system": "",
-        "guide": "",
+        "guide": "https://www.ktcu.or.kr/PPW-CSC-300110",
         "pdf": "/assets/pdf/The·K-보험금청구서.pdf",
         "dental": "",
         "support": "https://www.ktcu.or.kr",
@@ -637,7 +640,7 @@
         "monitor": "",
         "helpdesk": "",
         "fax": "02-3278-9696",
-        "terms": "https://www.ktcu.or.kr"
+        "terms": "https://www.ktcu.or.kr/PPW-FIC-800100"
       }
     },
     {
@@ -665,7 +668,7 @@
       "tags": ["예별", "공제", "MG"],
       "links": {
         "system": "",
-        "guide": "",
+        "guide": "https://www.yebyeol.co.kr/RW021010DM.scp?menuId=MN0501010",
         "pdf": "/assets/pdf/MG손해보험(예별보험회사)-보험금청구서.pdf",
         "dental": "",
         "support": "https://www.yebyeol.co.kr/HO011010DM.scp",
@@ -682,10 +685,10 @@
       "tags": ["수협", "공제", "수산업협동조합"],
       "links": {
         "system": "",
-        "guide": "",
+        "guide": "https://suhyup-bank.com/ib20/mnu/PBM02120",
         "pdf": "/assets/pdf/수협-보험금청구서.pdf",
         "dental": "",
-        "support": "https://www.suhyup.co.kr",
+        "support": "https://www.shinsure.co.kr/",
         "cs": "1588-4119",
         "monitor": "",
         "helpdesk": "",

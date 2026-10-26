@@ -10,7 +10,7 @@ import {
   pdfUpdated,
   splitPhones,
 } from "@/lib/carriers";
-import type { Carrier } from "@/types/carrier";
+import type { Carrier, CarrierLinks } from "@/types/carrier";
 import { FAX_LIMITS } from "@/lib/fax-limits";
 import { Footer } from "@/components/Footer";
 
@@ -52,47 +52,65 @@ function eunNeun(word: string): string {
   return (last - 0xac00) % 28 === 0 ? "는" : "은";
 }
 
-/** 전화번호 표 밑에 붙는 안내 한 줄. FAQ 답변과 같은 내용을 안내체로 짧게 쓴다. */
-/**
- * 「발급」 회사 중 우체국보험·메트라이프만 공식 안내에 팩스 조건이 따로 적혀 있다.
- * 우체국보험 : 청구금액당 100만원 이하 / 발급받은 가상 팩스번호는 유효기간 경과 시 재발급
- * 메트라이프 : 청구액 100만원까지 / 사망·장해·진단보험금은 팩스 불가 (2026-09-21판 청구서)
- * 한화생명·하나생명·수협·신협에는 해당 없는 조건이라 공통 문구에 섞지 않는다.
- */
-function faxIssuedExtra(name: string): string {
-  if (name === "메트라이프")
-    return " 팩스 접수는 청구금액 100만원 이하만 가능하며, 사망·장해·진단보험금은 팩스로 청구할 수 없습니다.";
-  if (name !== "우체국보험") return "";
-  return " 팩스 접수는 청구금액 100만원 이하만 가능하며, 발급받은 번호는 유효기간이 지나면 쓸 수 없어 재발급받아야 합니다.";
+/** 팩스번호를 받으려고 거는 곳. 전용 번호가 따로 있으면 그쪽, 없으면 대표 고객센터 */
+function faxCallee(L: CarrierLinks): string {
+  if (L.faxPhone) return `${L.faxPhone.label}(${L.faxPhone.number})`;
+  return L.cs ? `고객센터(${L.cs})` : "고객센터";
 }
 
-function faxNoticeLine(name: string, fax: string, cs?: string, mobileUpload?: string): string {
+/** 전화한 뒤 ARS 에서 누를 번호가 공식 안내에 적혀 있으면 덧붙인다 (흥국생명) */
+function faxArs(L: CarrierLinks): string {
+  return L.faxPhone?.ars ? ` 전화한 뒤 ARS 에서 ${L.faxPhone.ars}을 누르세요.` : "";
+}
+
+/**
+ * 번호가 없는 「발급」 회사의 팩스 금액 한도 한 마디. 전화번호 표 밑 안내에만 붙인다.
+ * 「청구 전에 알아둘 것」·FAQ 에는 한도 항목이 따로 있어 거기까지 붙이면 같은 말이 두 번 나온다.
+ * 한도는 lib/fax-limits.ts 값을 그대로 쓴다. 회사별 문장을 여기 따로 적으면 값이 두 벌로 갈라진다.
+ */
+function faxLimitExtra(name: string): string {
+  const limit = FAX_LIMITS[name];
+  if (!limit || limit === "제한 없음") return "";
+  // 「100만원 이하 (사망·장해·진단 제외)」 처럼 괄호 조건이 붙은 값은 조건을 문장 끝으로 뺀다
+  const m = limit.match(/^(.+?)\s*\((.+)\)$/);
+  return m ? ` 팩스로는 ${m[1]} 건만 접수됩니다(${m[2]}).` : ` 팩스로는 ${limit} 건만 접수됩니다.`;
+}
+
+/** 우체국보험만 공식 안내에 「발급받은 가상 팩스번호는 유효기간 경과 시 재발급」 조건이 있다 */
+function faxIssuedExtra(name: string): string {
+  return name === "우체국보험" ? " 발급받은 번호는 유효기간이 지나면 쓸 수 없어 재발급받아야 합니다." : "";
+}
+
+/** 전화번호 표 밑에 붙는 안내 한 줄. FAQ 답변과 같은 내용을 안내체로 짧게 쓴다. */
+function faxNoticeLine(name: string, L: CarrierLinks): string {
+  const fax = (L.fax || "").trim();
   const subject = `${name}${eunNeun(name)}`;
-  const center = cs ? `고객센터(${cs})` : "고객센터";
-  if (fax.includes("폐지") && mobileUpload) {
+  const center = L.cs ? `고객센터(${L.cs})` : "고객센터";
+  if (fax.includes("폐지") && L.mobileUpload) {
     return `${subject} 보험금 청구 팩스 접수를 종료했습니다. 대신 로그인 없이 링크에서 서류 사진을 올리는 「모바일 청구」 창구가 있습니다 — 아래 버튼으로 여세요.`;
   }
   if (fax.includes("폐지")) {
     return `${subject} 보험금 청구 팩스 접수를 종료했습니다. 모바일 앱 또는 홈페이지에서 서류를 사진으로 올려 접수해 주세요.`;
   }
   if (fax.includes("발급")) {
-    return `${subject} 고정된 팩스번호가 없습니다. ${center}에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 드립니다.${faxIssuedExtra(name)}`;
+    return `${subject} 고정된 팩스번호가 없습니다. ${faxCallee(L)}에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 드립니다.${faxArs(L)}${faxLimitExtra(name)}${faxIssuedExtra(name)}`;
   }
   return `${subject} 보험금 청구 접수 방법을 ${center}에서 안내합니다. 전화로 안내받으시거나 모바일 앱으로 접수해 주세요.`;
 }
 
 /** 번호가 없는 회사의 팩스 안내 문장. 상태 문구별로 실제 접수 방법을 풀어 쓴다. */
-function faxNoticeAnswer(name: string, fax: string, cs?: string, mobileUpload?: string): string {
+function faxNoticeAnswer(name: string, L: CarrierLinks): string {
+  const fax = (L.fax || "").trim();
   const subject = `${name}${eunNeun(name)}`;
-  const center = cs ? `고객센터(${cs})` : "고객센터";
-  if (fax.includes("폐지") && mobileUpload) {
+  const center = L.cs ? `고객센터(${L.cs})` : "고객센터";
+  if (fax.includes("폐지") && L.mobileUpload) {
     return `${subject} 보험금 청구 팩스 접수를 종료했습니다. 대신 로그인 없이 링크에서 피보험자 정보를 넣고 서류 사진을 올리는 「모바일 청구」 창구로 접수하시면 됩니다. 문의는 ${center}로 하시면 됩니다.`;
   }
   if (fax.includes("폐지")) {
     return `${subject} 보험금 청구 팩스 접수를 종료했습니다. 모바일 앱 또는 홈페이지에서 서류를 사진으로 올려 접수하시면 됩니다. 문의는 ${center}로 하시면 됩니다.`;
   }
   if (fax.includes("발급")) {
-    return `${subject} 고정된 팩스번호가 없습니다. ${center}에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 주며, 그 번호로 서류를 보내시면 됩니다.${faxIssuedExtra(name)}`;
+    return `${subject} 고정된 팩스번호가 없습니다. ${faxCallee(L)}에 전화해 본인 확인을 거치면 가상 팩스번호를 발급해 주며, 그 번호로 서류를 보내시면 됩니다.${faxArs(L)}${faxIssuedExtra(name)}`;
   }
   return `${subject} 보험금 청구 접수 방법을 ${center}에서 안내합니다. 전화로 안내받으시거나 모바일 앱으로 접수하시면 됩니다.`;
 }
@@ -180,7 +198,7 @@ function carrierFacts(c: Carrier): Fact[] {
           : `팩스 **${ps[0].number}** 로 보내시면 됩니다. 팩스는 보낸 쪽에서 도착 여부를 알 수 없으니 ${center}로 접수 확인까지 하시는 편이 안전합니다.`,
     });
   } else {
-    out.push({ label: "접수 방법", text: faxNoticeAnswer(name, fax, L.cs, L.mobileUpload) });
+    out.push({ label: "접수 방법", text: faxNoticeAnswer(name, L) });
   }
 
   // 로그인 없는 모바일 청구 창구 — 링크(QR)에서 서류 사진만 올리면 된다
@@ -225,7 +243,7 @@ function carrierFacts(c: Carrier): Fact[] {
     });
   }
 
-  // 보낸 팩스가 도착했는지 직접 볼 수 있는 곳. 41곳 중 라이나생명에만 있다
+  // 보낸 팩스가 도착했는지 직접 볼 수 있는 곳. 41곳 중 라이나생명·메리츠화재 두 곳만 있다
   if (L.faxCheck) {
     out.push({
       label: "팩스 도착 확인",
@@ -488,7 +506,7 @@ export default async function CarrierPage({ params }: Props) {
   } else if (L.fax) {
     faqs.push({
       q: `${carrier.name} 보험금 청구 팩스번호는?`,
-      a: faxNoticeAnswer(carrier.name, L.fax, L.cs, L.mobileUpload),
+      a: faxNoticeAnswer(carrier.name, L),
     });
   }
   if (L.cs) {
@@ -634,10 +652,15 @@ export default async function CarrierPage({ params }: Props) {
             <PhoneRow label="인콜 모니터링" value={L.monitor} />
             <PhoneRow label="헬프데스크" value={L.helpdesk} />
             <PhoneRow label="보험금청구 FAX" value={L.fax} />
+            {/* 팩스번호를 묻는 전용 번호가 대표번호와 다르면 바로 걸 수 있게 한 줄 더 둔다 (삼성생명 1577-4118) */}
+            <PhoneRow
+              label="팩스번호 문의"
+              value={L.faxPhone && L.faxPhone.number !== L.cs ? `${L.faxPhone.number}(${L.faxPhone.label})` : undefined}
+            />
           </dl>
           {!hasFaxNumber && L.fax && (
             <p className="mt-1 rounded-xl bg-slate-50 px-3 py-2.5 text-xs leading-relaxed text-slate-500">
-              ※ {faxNoticeLine(carrier.name, L.fax, L.cs, L.mobileUpload)}
+              ※ {faxNoticeLine(carrier.name, L)}
             </p>
           )}
           {/* 로그인 없이 링크로 서류 사진을 올리는 창구 (2026-09-21 직접 확인한 3곳) */}
@@ -762,7 +785,7 @@ export default async function CarrierPage({ params }: Props) {
           <li>
             {hasFaxNumber
               ? `팩스 ${faxFirst} 로 보냅니다.${limitStepNote(carrier.name)}`
-              : faxNoticeLine(carrier.name, L.fax || "", L.cs, L.mobileUpload)}
+              : faxNoticeLine(carrier.name, L)}
           </li>
           <li>
             {L.cs
