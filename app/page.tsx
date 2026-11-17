@@ -9,6 +9,7 @@ import { MedCalculator } from "@/components/MedCalculator";
 import { CarrierIndexLinks } from "@/components/CarrierIndexLinks";
 import { JoinCTA } from "@/components/JoinCTA";
 import { JoinFab } from "@/components/JoinFab";
+import { BomateBar, BomateSlim } from "@/components/BomateBanner";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
     <>
       <Header />
       <Hero searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <BomateBar />
       <JoinCTA variant="cards" />
       <main className="maxw pb-20">
         <CarrierList
@@ -58,6 +60,7 @@ export default function Home() {
         <CarrierIndexLinks />
         <JoinCTA />
       </main>
+      <BomateSlim />
       <Footer />
       <JoinFab />
     </>

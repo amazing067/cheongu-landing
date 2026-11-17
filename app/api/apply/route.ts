@@ -29,6 +29,9 @@ export async function POST(req: NextRequest) {
   const career = String(body.career ?? "").trim();
   const motive = String(body.motive ?? "").trim();
   const source = String(body.source ?? "").trim();
+  // 보메이트 체험단 신청(/bomate)도 같은 접수 경로를 쓴다. type 으로만 구분한다.
+  const isBomate = body.type === "bomate";
+  const company = String(body.company ?? "").trim();
 
   if (!name || !phone) {
     return NextResponse.json({ ok: false, error: "이름과 연락처는 필수입니다." }, { status: 400 });
@@ -46,18 +49,28 @@ export async function POST(req: NextRequest) {
 
   const to = process.env.APPLY_TO || "induo@naver.com";
 
+  const title = isBomate ? "[청구닷컴] 보메이트 체험단 신청서" : "[청구닷컴] 설계사 지원서";
+  const subjectPrefix = isBomate ? "[청구닷컴·보메이트 체험단]" : "[청구닷컴·설계사 지원]";
+  const fromLabel = isBomate ? "청구닷컴 보메이트 체험단" : "청구닷컴 채용";
+  const footNote = isBomate
+    ? "청구닷컴 보메이트 체험단 페이지(/bomate)에서 접수된 신청입니다."
+    : "청구닷컴 채용 페이지(/join)에서 접수된 지원입니다.";
+  const extraRows = isBomate
+    ? `<tr><td style="padding:8px;background:#f5f5f5"><b>소속</b></td><td style="padding:8px">${esc(company) || "-"}</td></tr>`
+    : `<tr><td style="padding:8px;background:#f5f5f5"><b>경력</b></td><td style="padding:8px">${esc(career) || "-"}</td></tr>
+        <tr><td style="padding:8px;background:#f5f5f5"><b>남기실 말</b></td><td style="padding:8px;white-space:pre-wrap">${esc(motive) || "-"}</td></tr>`;
+
   const html = `
     <div style="font-family:sans-serif;max-width:560px">
-      <h2 style="margin:0 0 12px">[청구닷컴] 설계사 지원서</h2>
+      <h2 style="margin:0 0 12px">${title}</h2>
       <table style="border-collapse:collapse;width:100%;font-size:14px">
         <tr><td style="padding:8px;background:#f5f5f5;width:110px"><b>이름</b></td><td style="padding:8px">${esc(name)}</td></tr>
         <tr><td style="padding:8px;background:#f5f5f5"><b>연락처</b></td><td style="padding:8px">${esc(phone)}</td></tr>
         <tr><td style="padding:8px;background:#f5f5f5"><b>이메일</b></td><td style="padding:8px">${esc(email) || "-"}</td></tr>
-        <tr><td style="padding:8px;background:#f5f5f5"><b>경력</b></td><td style="padding:8px">${esc(career) || "-"}</td></tr>
-        <tr><td style="padding:8px;background:#f5f5f5"><b>남기실 말</b></td><td style="padding:8px;white-space:pre-wrap">${esc(motive) || "-"}</td></tr>
+        ${extraRows}
         <tr><td style="padding:8px;background:#f5f5f5"><b>유입</b></td><td style="padding:8px">${esc(source) || "-"}</td></tr>
       </table>
-      <p style="color:#888;font-size:12px;margin-top:14px">청구닷컴 채용 페이지(/join)에서 접수된 지원입니다.</p>
+      <p style="color:#888;font-size:12px;margin-top:14px">${footNote}</p>
     </div>`;
 
   try {
@@ -68,10 +81,10 @@ export async function POST(req: NextRequest) {
       tls: { rejectUnauthorized: false },
     });
     await transporter.sendMail({
-      from: `"청구닷컴 채용" <${EMAIL_USER}>`,
+      from: `"${fromLabel}" <${EMAIL_USER}>`,
       to,
       replyTo: email || undefined,
-      subject: `[청구닷컴·설계사 지원] ${name}님`,
+      subject: `${subjectPrefix} ${name}님`,
       html,
     });
     return NextResponse.json({ ok: true });

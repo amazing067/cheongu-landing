@@ -1,0 +1,575 @@
+/* 보메이트 체험단 신청 페이지. 본문은 밝은 바탕, 포인트만 남색과 연두(보메이트 카드뉴스 색). */
+.bm-page {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 36px 16px 64px;
+  display: grid;
+  gap: 36px;
+  color: #1b2430;
+}
+.bm-page h1,
+.bm-page h2,
+.bm-page h3,
+.bm-page p {
+  margin: 0;
+}
+.bm-hero {
+  text-align: center;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+.bm-hero img {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+}
+.bm-eb {
+  font-size: 13px;
+  font-weight: 800;
+  color: #5a6573;
+}
+.bm-hero h1 {
+  font-size: 27px;
+  line-height: 1.35;
+  font-weight: 900;
+  word-break: keep-all;
+}
+.bm-hero .u {
+  box-shadow: inset 0 -0.42em 0 rgba(240, 144, 24, 0.38);
+}
+.bm-lead {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #333d4a;
+  max-width: 460px;
+  word-break: keep-all;
+}
+.bm-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.bm-facts div {
+  border: 1px solid #e1e5ea;
+  border-radius: 10px;
+  padding: 12px;
+  display: grid;
+  gap: 2px;
+  background: #fff;
+}
+.bm-facts b {
+  font-size: 11px;
+  font-weight: 800;
+  color: #f09018;
+}
+.bm-facts span {
+  font-size: 14px;
+  font-weight: 700;
+  word-break: keep-all;
+}
+.bm-feat h2,
+.bm-form h2 {
+  font-size: 18px;
+  font-weight: 900;
+}
+.bm-feat ul {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.bm-feat li {
+  background: #fff;
+  border: 1px solid #e1e5ea;
+  border-top: 3px solid #0a1a5c;
+  border-radius: 10px;
+  padding: 14px;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+.bm-feat .n {
+  font-size: 12px;
+  font-weight: 800;
+  color: #f09018;
+}
+.bm-feat li b {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+.bm-feat li i {
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 800;
+  background: #d8ff3e;
+  color: #0a1240;
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-left: 6px;
+  vertical-align: 1px;
+}
+.bm-feat li p {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #5a6573;
+  word-break: keep-all;
+}
+.bm-feat .bm-sub {
+  margin-top: 6px;
+}
+.bm-h3 {
+  margin: 26px 0 0 !important;
+  font-size: 15px;
+  font-weight: 900;
+  color: #0a1a5c;
+}
+.bm-more {
+  grid-template-columns: 1fr !important;
+}
+.bm-more li {
+  border-top: 1px solid #e1e5ea !important;
+  border-left: 3px solid #f09018;
+}
+.bm-steps {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  gap: 8px;
+}
+.bm-steps li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #e1e5ea;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.bm-steps li span {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #0a1a5c;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+.bm-steps li p {
+  font-size: 14px;
+  line-height: 1.55;
+  word-break: keep-all;
+}
+.bm-note {
+  margin-top: 14px !important;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #8a94a1;
+  word-break: keep-all;
+}
+.bm-rail {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+}
+.bm-rail img {
+  height: 340px;
+  width: auto;
+  flex: none;
+  border-radius: 14px;
+  scroll-snap-align: start;
+  box-shadow: 0 6px 18px rgba(10, 26, 92, 0.22);
+}
+.bm-form {
+  border: 1px solid #e1e5ea;
+  border-radius: 14px;
+  padding: 24px 18px;
+  background: #fff;
+  display: grid;
+  gap: 14px;
+}
+.bm-sub {
+  font-size: 14px;
+  color: #5a6573;
+}
+.bm-form form {
+  display: grid;
+  gap: 14px;
+}
+.bm-field {
+  display: grid;
+  gap: 6px;
+}
+.bm-field label {
+  font-size: 13px;
+  font-weight: 800;
+}
+.bm-field .opt {
+  font-weight: 500;
+  color: #8a94a1;
+}
+.bm-field input {
+  font: inherit;
+  font-size: 16px; /* 16px 미만이면 아이폰이 입력할 때 화면을 확대한다 */
+  border: 1px solid #cdd3da;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #fff;
+}
+.bm-field input:focus {
+  outline: 2px solid #0a1a5c;
+  outline-offset: 1px;
+  border-color: #0a1a5c;
+}
+.bm-agree {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #5a6573;
+}
+.bm-agree input {
+  margin-top: 3px;
+  flex: none;
+}
+.bm-submit {
+  background: #e0342a;
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  padding: 14px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.bm-submit:hover {
+  background: #b8271e;
+}
+.bm-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.bm-fail {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e0342a;
+}
+.bm-thanks {
+  background: #fdeceb;
+  border-radius: 10px;
+  padding: 18px;
+  display: grid;
+  gap: 6px;
+}
+.bm-thanks h3 {
+  font-size: 17px;
+  font-weight: 900;
+}
+.bm-thanks p {
+  font-size: 14px;
+  color: #333d4a;
+}
+.bm-or {
+  text-align: center;
+  font-size: 12px;
+  color: #8a94a1;
+}
+.bm-kakao {
+  display: block;
+  text-align: center;
+  background: #fee500;
+  color: #191919;
+  font-weight: 800;
+  border-radius: 10px;
+  padding: 13px;
+  text-decoration: none;
+  font-size: 15px;
+}
+.bm-call,
+.bm-secure {
+  text-align: center;
+  font-size: 12px;
+  color: #5a6573;
+}
+.bm-call a {
+  font-weight: 800;
+  color: #1b2430;
+}
+@media (max-width: 480px) {
+  .bm-hero h1 {
+    font-size: 24px;
+  }
+  .bm-facts {
+    grid-template-columns: 1fr;
+  }
+  .bm-feat ul {
+    grid-template-columns: 1fr;
+  }
+  .bm-rail img {
+    height: 300px;
+  }
+}
+
+/* ===== 기기 틀 (앱 화면 캡처용) ===== */
+.dv-phone {
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+  margin: 0 auto;
+  padding: 9px;
+  border-radius: 40px;
+  background: linear-gradient(145deg, #2b303a, #0d1016);
+  box-shadow:
+    0 0 0 1.5px #4a505c inset,
+    0 24px 48px rgba(10, 26, 92, 0.28),
+    0 4px 10px rgba(10, 26, 92, 0.18);
+}
+.dv-phone-screen {
+  position: relative;
+  border-radius: 32px;
+  overflow: hidden;
+  aspect-ratio: 9 / 19.5;
+  background: #fff;
+}
+/* 폭에 맞추고 아래쪽을 잘라 보여 준다(좌우가 잘리면 화면이 어긋나 보인다) */
+.dv-phone-screen img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.dv-island {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 22px;
+  border-radius: 999px;
+  background: #0d1016;
+  z-index: 2;
+}
+.dv-btn {
+  position: absolute;
+  width: 3px;
+  border-radius: 2px;
+  background: #3a404c;
+}
+.dv-btn-a {
+  left: -3px;
+  top: 76px;
+  height: 22px;
+}
+.dv-btn-b {
+  left: -3px;
+  top: 112px;
+  height: 40px;
+}
+.dv-btn-c {
+  right: -3px;
+  top: 104px;
+  height: 58px;
+}
+.dv-browser {
+  border: 1px solid #d5dae1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow:
+    0 20px 40px rgba(10, 26, 92, 0.16),
+    0 3px 8px rgba(10, 26, 92, 0.1);
+}
+.dv-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #eef1f5;
+  border-bottom: 1px solid #d5dae1;
+}
+.dv-dots {
+  display: flex;
+  gap: 6px;
+}
+.dv-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #c3cad3;
+}
+.dv-url {
+  flex: 1;
+  max-width: 320px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #5a6573;
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+.dv-browser img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ===== 기능 소개 (대표 기능 + 좌우 번갈아 배치) ===== */
+.bm-hero,
+.bm-facts {
+  width: 100%;
+  max-width: 640px;
+  margin-inline: auto;
+}
+.bm-form {
+  width: 100%;
+  max-width: 640px;
+  margin-inline: auto;
+}
+.bm-feat {
+  display: grid;
+  gap: 0;
+}
+.bm-feat > h2 {
+  font-size: 20px;
+}
+.bm-feat > .bm-sub {
+  margin: 6px 0 22px;
+}
+.bm-flag {
+  background: #0a1a5c;
+  color: #fff;
+  border-radius: 16px;
+  padding: 30px 24px 0;
+  overflow: hidden;
+  margin-bottom: 56px;
+}
+.bm-flag-tag {
+  display: inline-block;
+  background: #d8ff3e;
+  color: #0a1240;
+  font-size: 12px;
+  font-weight: 800;
+  border-radius: 5px;
+  padding: 2px 8px;
+  margin-bottom: 10px;
+}
+.bm-flag h3 {
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+.bm-flag h3 em {
+  font-style: normal;
+  color: #d8ff3e;
+}
+.bm-flag > p {
+  font-size: 15px;
+  color: #c9d3ff;
+  margin-top: 8px;
+  max-width: 520px;
+  word-break: keep-all;
+}
+.bm-flag-shot {
+  margin-top: 26px;
+  max-height: 520px;
+  overflow: hidden;
+}
+.bm-flag-shot .dv-browser {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: none;
+}
+.bm-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  align-items: center;
+  margin-bottom: 56px;
+}
+.bm-row.rev .bm-row-tx {
+  order: 2;
+}
+.bm-row-tx,
+.bm-row-dev {
+  min-width: 0;
+}
+.bm-row-tx .k {
+  font-size: 12px;
+  font-weight: 800;
+  color: #f09018;
+  margin-bottom: 6px;
+}
+.bm-row-tx .k i {
+  font-style: normal;
+  background: #d8ff3e;
+  color: #0a1240;
+  font-size: 11px;
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-left: 6px;
+}
+.bm-row-tx h3 {
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.35;
+  word-break: keep-all;
+  text-wrap: balance;
+}
+.bm-row-tx .d {
+  font-size: 15px;
+  color: #5a6573;
+  margin-top: 8px;
+  word-break: keep-all;
+}
+.bm-combo {
+  position: relative;
+  padding: 100px 0 70px;
+}
+.bm-combo .dv-browser {
+  width: 88%;
+}
+.bm-combo-ph {
+  position: absolute;
+  right: -6px;
+  bottom: 0;
+  width: 44%;
+  max-width: 170px;
+}
+.bm-combo-ph .dv-phone {
+  max-width: none;
+}
+.bm-feat .bm-h3 {
+  margin-top: 8px !important;
+}
+@media (max-width: 720px) {
+  .bm-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 44px;
+  }
+  .bm-row.rev .bm-row-tx {
+    order: 0;
+  }
+  .bm-flag {
+    padding: 24px 16px 0;
+  }
+  .bm-flag h3 {
+    font-size: 22px;
+  }
+  .bm-combo .dv-browser {
+    width: 84%;
+  }
+}
